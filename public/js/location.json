@@ -1,0 +1,260 @@
+{
+  "nigeria":[
+    {
+      "state": "Abia State",
+      "lga":[
+        "Aba South",
+        "Arochukwu",
+        "Bende",
+        "Ikwuano",
+        "Isiala Ngwa North",
+        "Isiala Ngwa South",
+        "Isuikwuato",
+        "Obi Ngwa",
+        "Ohafia",
+        "Osisioma",
+        "Ugwunagbo",
+        "Ukwa East",
+        "Ukwa West",
+        "Umuahia North",
+        "Umuahia South",
+        "Umu Nneochi"
+      ]
+    },
+    {
+      "state": "Adamawa State",
+      "lga":[
+        "Fufure",
+        "Ganye",
+        "Gayuk",
+        "Gombi",
+        "Grie",
+        "Hong",
+        "Jada",
+        "Lamurde",
+        "Madagali",
+        "Maiha",
+        "Mayo Belwa",
+        "Michika",
+        "Mubi North",
+        "Mubi South",
+        "Numan",
+        "Shelleng",
+        "Song",
+        "Toungo",
+        "Yola North",
+        "Yola South"
+      ]
+    },
+    {
+      "state": "Akwa Ibom State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Anambra State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Bauchi State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Bayelsa State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Benue State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Borno State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Cross River State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Delta State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Ebonyi State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Edo State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Ekiti State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Enugu State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "FCT",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Gombe State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Imo State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Jigawa State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Kaduna State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Kano State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Katsina State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Kebbi State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Kogi State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Kwara State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Lagos State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Nasarawa State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Niger State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Ogun State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Ondo State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Osun State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Oyo State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Plateau State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Rivers State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Sokoto State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Taraba State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Yobe State",
+      "lga":[
+        ""
+      ]
+    },
+    {
+      "state": "Zamfara State",
+      "lga":[
+        ""
+      ]
+    }
+  ]
+}
