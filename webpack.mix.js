@@ -11,5 +11,26 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
+   .sass('resources/assets/sass/app.scss', 'public/css')
+   .styles([
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/bootstrap/dist/css/bootstrap.min.css',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/font-awesome/css/font-awesome.min.css',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/Ionicons/css/ionicons.min.css',
+     'resources/assets/lte/AdminLTE-2.4.3/plugins/iCheck/all.css',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/select2/dist/css/select2.min.css',
+     'resources/assets/lte/AdminLTE-2.4.3/dist/css/AdminLTE.min.css',
+     'resources/assets/lte/AdminLTE-2.4.3/dist/css/skins/_all-skins.min.css'
+   ], 'public/css/app.css')
+   .scripts([
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/jquery/dist/jquery.js',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/jquery-ui/jquery-ui.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/bootstrap/dist/js/bootstrap.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/select2/dist/js/select2.full.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/plugins/iCheck/icheck.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/fastclick/lib/fastclick.js',
+     'resources/assets/lte/AdminLTE-2.4.3/dist/js/adminlte.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/dist/js/demo.js',
+     'public/js/vue-app.js'
+   ], 'public/js/app.js');

@@ -15,9 +15,9 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('sic-inspection-doc', require('./components/SiteSuitablityInspectionReqDoc.vue'));
+Vue.component('sic', require('./components/SiteSuitablityInspectionReqDoc.vue'));
 Vue.component('app-doc-rev', require('./components/ApplicationDocumentReview.vue'));
-// Vue.component('example', require('./components/ExampleComponent.vue'));
+Vue.component('example', require('./components/ExampleComponent.vue'));
 
 const app = new Vue({
     el: '#app'

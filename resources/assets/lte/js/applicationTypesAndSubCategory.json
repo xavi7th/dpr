@@ -1,0 +1,104 @@
+{
+  "app_doc":[
+    {
+      "application_type": "LPG/CNG Retailer Outlets",
+      "sub_category":[
+        "Site Suitability Inspection",
+        "ATC",
+        "LTO",
+        "Renewal",
+        "Take-Over",
+        "Addon-ATI",
+        "Addon-LTO",
+        "Cat'D'LTO",
+        "Cat'D'Renewal"
+      ]
+    },
+    {
+      "application_type": "Gas Processing Facilities",
+      "sub_category":[
+        "Site Suitability Inspection",
+        "ATC",
+        "LTO",
+        "Renewal",
+        "Take-Over",
+        "Addon-ATI",
+        "Addon-LTO",
+        "Cat'D'LTO",
+        "Cat'D'Renewal"
+      ]
+    },
+    {
+      "application_type": "Gas Pipelines",
+      "sub_category":[
+        "Site Suitability Inspection",
+        "ATC",
+        "LTO",
+        "Renewal",
+        "Take-Over",
+        "Addon-ATI",
+        "Addon-LTO",
+        "Cat'D'LTO",
+        "Cat'D'Renewal"
+      ]
+    },
+    {
+      "application_type": "Project Monitoring",
+      "sub_category":[
+        "Site Suitability Inspection",
+        "ATC",
+        "LTO",
+        "Renewal",
+        "Take-Over",
+        "Addon-ATI",
+        "Addon-LTO",
+        "Cat'D'LTO",
+        "Cat'D'Renewal"
+      ]
+    },
+    {
+      "application_type": "Gas Production / Utilization",
+      "sub_category":[
+        "Upstream",
+        "Gas Plant",
+        "GTL Plants",
+        "LNG Plants",
+        "NGC / Industry Pipelines"
+      ]
+    },
+    {
+      "application_type": "Gas Production / Export",
+      "sub_category":[
+        "Upstream",
+        "Gas Plant",
+        "GTL Plants",
+        "LNG Plants",
+        "NGC / Industry Pipelines"
+      ]
+    },
+    {
+      "application_type": "Gas Sub-Surface",
+      "sub_category":[
+        "FDP",
+        "Wells / Drilling Survellance",
+        "Production Survellance"
+      ]
+    },
+    {
+      "application_type": "Gas Diary",
+      "sub_category":[
+        "FDP",
+        "Wells / Drilling Survellance",
+        "Production Survellance"
+      ]
+    },
+    {
+      "application_type": "Inspection",
+      "sub_category":[
+        "FDP",
+        "Wells / Drilling Survellance",
+        "Production Survellance"
+      ]
+    }
+  ]
+}
