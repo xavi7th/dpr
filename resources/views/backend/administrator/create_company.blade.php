@@ -5,19 +5,7 @@
 @endsection
 
 @section('pagestyles')
-  <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
-  <!-- Select2 -->
-  <link rel="stylesheet" href="../../bower_components/select2/dist/css/select2.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+
 @endsection
 
 @section('content')
@@ -37,7 +25,7 @@
       </section>
 
       <!-- Main content -->
-      <section class="content" ng-controller="locationController">
+      <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-md-6">
@@ -79,14 +67,12 @@
                     <label>State</label>
                     <select id="dropdown2" class="form-control select2" name="state" style="width: 100%;">
                       <option selected="selected">Select State</option>
-                      <option ng-repeat="data in states" value="@{{ data.state }}">@{{data.state}}</option>
                     </select>
                   </div>
                   <div class="form-group">
                     <label>L.G.A</label>
                     <select id="dropdown3" class="form-control select2" name="lga" style="width: 100%;">
                       <option selected="selected">Select LGA</option>
-                      <option ng-repeat="data in lga" value="@{{ data }}">@{{data}}</option>
                     </select>
                   </div>
                   <div class="form-group">
@@ -144,30 +130,5 @@
 @endsection
 
 @section('pagescript')
-  <!-- jQuery 3 -->
-  <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-  <!-- Bootstrap 3.3.7 -->
-  <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- Select2 -->
-  <script src="../../bower_components/select2/dist/js/select2.full.min.js"></script>
-  <!-- SlimScroll -->
-  <script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-  <!-- iCheck 1.0.1 -->
-  <script src="../../plugins/iCheck/icheck.min.js"></script>
-  <!-- FastClick -->
-  <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
-  <!-- AdminLTE App -->
-  <script src="../../dist/js/adminlte.min.js"></script>
-  <!-- AdminLTE for demo purposes -->
-  <script src="../../dist/js/demo.js"></script>
-  <!-- Page script -->
-  <script src="js/angular.js"></script>
-  <script src="js/appAngular.js"></script>
-  <script>
-    $(function () {
-      //Initialize Select2 Elements
-      $('.select2').select2()
-    })
 
-  </script>
 @endsection

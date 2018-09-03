@@ -105,7 +105,7 @@ class administratorController extends Controller
     // padding the number to 4 leading zeros
     $newCompanyIndex = sprintf('%05d', $indexIncremented);
 
-    //appending the new staff index to DPRST to create the staff's ID
+    //appending the new company index to DPRCOMP to create the company's ID
     $companyID = "DPR/COMP/".$newCompanyIndex;
 
     if((request('contract_type') == 'Select Contract Type')
@@ -113,7 +113,7 @@ class administratorController extends Controller
     || (request('town') == 'Select LGA')){
       // return custom error message
     }else{
-      // create and save the staff
+      // create and save the company
       Company::create([
         'company_id' => $companyID,
         'company_name' => request('comp_name'),

@@ -263,7 +263,7 @@ angular.module('applicationDocumentReviewUpload', []).directive('applicationDocu
         </div>
 
   `;
-  
+
   return {
     restrict: 'E',
     scope:{
