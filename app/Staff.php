@@ -9,4 +9,8 @@ class Staff extends Authenticatable
 {
     protected $guarded = [];
 
+    public function appDocReviews(){
+      return $this->hasMany(AppDocReview::class);
+    }
+
 }

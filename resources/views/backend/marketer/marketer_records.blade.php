@@ -5,19 +5,7 @@
 @endsection
 
 @section('pagestyles')
-  <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="../../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+
 @endsection
 
 @section('content')
@@ -55,6 +43,7 @@
                     <th>Application Type</th>
                     <th>Sub-Category</th>
                     <th>Plant Type</th>
+                    <th>Capacity of Tank</th>
                     <th>State</th>
                     <th>L.G.A</th>
                     <th>Town</th>
@@ -62,41 +51,21 @@
                   </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>DPR/APP/LPG/00023</td>
-                      <td>okoye gas</td>
-                      <td>Gas Piplines</td>
-                      <td>ATC</td>
-                      <td>Refilling Plant</td>
-                      <td>Abia</td>
-                      <td>Bende</td>
-                      <td>Bende</td>
-                      <td>Bende</td>
-                    </tr>
-                    {{-- @foreach ($companies as $company)
+                    @foreach ($appDocReviews as $item)
                       <tr>
-                        <td class="sorting_1">{{ $company->company_id }}</td>
-                        <td>{{ $company->company_name }}</td>
-                        <td>{{ $company->company_alias }}</td>
-                        <td>{{ $company->contract_type }}</td>
-                        <td>{{ $company->state }}</td>
-                        <td>{{ $company->lga }}</td>
-                        <td>{{ $company->town }}</td>
-                        <td>{{ $company->address }}</td>
-                        <td>{{ $company->mobile_number }}</td>
-                        <td>{{ $company->email_address }}</td>
+                        <td class="sorting_1">{{ $item->application_id }}</td>
+                        <td>{{ $item->name_of_gas_plant }}</td>
+                        <td>{{ $item->application_type }}</td>
+                        <td>{{ $item->sub_category }}</td>
+                        <td>{{ $item->plant_type }}</td>
+                        <td>{{ $item->capacity_of_tank }}</td>
+                        <td>{{ $item->state }}</td>
+                        <td>{{ $item->lga }}</td>
+                        <td>{{ $item->town }}</td>
+                        <td>{{ $item->address }}</td>
                       </tr>
-                    @endforeach --}}
+                    @endforeach
                   </tbody>
-                  {{-- <tfoot>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </tfoot> --}}
                 </table>
               </div>
               <!-- /.box-body -->
@@ -120,20 +89,6 @@
 @endsection
 
 @section('pagescript')
-  <!-- Bootstrap 3.3.7 -->
-  <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <!-- DataTables -->
-  <script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="../../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <!-- SlimScroll -->
-  <script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-  <!-- FastClick -->
-  <script src="../../bower_components/fastclick/lib/fastclick.js"></script>
-  <!-- AdminLTE App -->
-  <script src="../../dist/js/adminlte.min.js"></script>
-  <!-- AdminLTE for demo purposes -->
-  <script src="../../dist/js/demo.js"></script>
-  <!-- page script -->
   <script>
     $(function () {
       $('#example1').DataTable()

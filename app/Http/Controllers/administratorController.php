@@ -61,7 +61,7 @@ class administratorController extends Controller
     $newStaffIndex = sprintf('%05d', $indexIncremented);
 
     //appending the new staff index to DPRST to create the staff's ID
-    $staffID = "DPR/ST/".$newStaffIndex;
+    $staffID = "DPRSTAFF".$newStaffIndex;
 
     if(request('role') == 'Select Role'){
       // return custom error message
@@ -96,7 +96,7 @@ class administratorController extends Controller
       'email' => 'required'
     ]);
 
-    // getting the current number of created staffs
+    // getting the current number of created companies
     $companyCount = DB::table('companies')->get();
 
     // adding 1 to that number
@@ -106,8 +106,9 @@ class administratorController extends Controller
     $newCompanyIndex = sprintf('%05d', $indexIncremented);
 
     //appending the new company index to DPRCOMP to create the company's ID
-    $companyID = "DPR/COMP/".$newCompanyIndex;
+    $companyID = "DPRCOMP".$newCompanyIndex;
 
+    // Verification process to make sure contract_type, state, town all have values
     if((request('contract_type') == 'Select Contract Type')
     || (request('state') == 'Select State')
     || (request('town') == 'Select LGA')){

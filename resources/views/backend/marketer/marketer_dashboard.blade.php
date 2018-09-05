@@ -5,7 +5,7 @@
 @endsection
 
 @section('pagestyles')
-  
+
 @endsection
 
 @section('content')
@@ -64,7 +64,7 @@
             <!-- small box -->
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{$appDocReviews->count()}}</h3>
 
                 <p>Records</p>
               </div>
