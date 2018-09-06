@@ -20,11 +20,13 @@
 
   <div id="app">
     @yield('content')
+    @yield('footer')
   </div>
 
 
-  <script src="js/vue-app.js" charset="utf-8"></script>
-  <script src="js/app.js" charset="utf-8"></script>
+
+  <script src="/js/vue-app.js" charset="utf-8"></script>
+  <script src="/js/app.js" charset="utf-8"></script>
   @yield('pagescript')
 
 </body>

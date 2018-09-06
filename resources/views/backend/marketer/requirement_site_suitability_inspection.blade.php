@@ -60,7 +60,7 @@
       </section>
 
       <!-- Main content -->
-      <section class="content" ng-controller="appDocReviewUploadsController">
+      <section class="content">
         <div class="row">
           <div class="col-md-12">
             <div class="box box-primary">
@@ -118,13 +118,7 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-      <div class="pull-right hidden-xs">
-        <b>Version</b> 2.4.0
-      </div>
-      <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-      reserved.
-    </footer>
+    @include('partials.base_footer')
   </div>
 @endsection
 

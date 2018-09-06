@@ -29,6 +29,15 @@ class marketerController extends Controller
     return view('backend.marketer.requirement_site_suitability_inspection');
   }
 
+  public function showSiteSuitablityRequirement(SiteSuitabilityInspectionDocuments $applicationID){
+    return view('backend.marketer.view_application_docs', compact('applicationID'));
+  }
+
+  public function getDocs(Request $request){
+    $docs = SiteSuitabilityInspectionDocuments::where('application_id', $request->applicationID)->get();
+    return response()->json($docs);
+  }
+
   public function showMarketerRecords(){
     $appDocReviews = AppDocReview::where('marketer_id', Auth::user()->staff_id)->get();
     return view('backend.marketer.marketer_records', compact('appDocReviews'));
