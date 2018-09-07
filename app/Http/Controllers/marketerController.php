@@ -33,6 +33,12 @@ class marketerController extends Controller
     return view('backend.marketer.view_application_docs', compact('applicationID'));
   }
 
+  public function showSiteSuitablityRequirementDocEdit(SiteSuitabilityInspectionDocuments $applicationID){
+    $applicationReview = AppDocReview::where('application_id', $applicationID->application_id)->first();
+    // dd($applicationReview);
+    return view('backend.marketer.edit_application_docs', compact('applicationID','applicationReview'));
+  }
+
   public function getDocs(Request $request){
     $docs = SiteSuitabilityInspectionDocuments::where('application_id', $request->applicationID)->get();
     return response()->json($docs);
@@ -209,6 +215,26 @@ class marketerController extends Controller
 
     return redirect('/marketer');
 
+
+  }
+  public function applicationDocumentReviewPhaseUpdate(Request $request){
+    // dd($request);
+
+    $updatedDoc = '';
+
+    if($request->hasFile('updatedDocument')){
+      $request->updatedDocument->storeAs('comp_docs/'.request('marketer_id').'/'.request('application_id'), $request->updatedDocument->getClientOriginalName());
+
+      $updatedDoc = $request->updatedDocument->getClientOriginalName();
+    }
+
+    SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))
+    ->update([
+      request('doc_type') => request('selectedOption'),
+      request('doc_type').'_location_url' => $updatedDoc
+    ]);
+
+    return redirect('/marketer');
 
   }
 

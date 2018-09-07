@@ -27,9 +27,6 @@
 <script>
     export default {
         mounted() {
-          // axios.post('/getMarketerDocs', {applicationID: this.applicationid}).then(response => {
-          //   this.docsData = response.data[0];
-          // });
           if(this.imgurl != 'null'){
             this.picURL = '/storage/comp_docs/'+this.marketerid+'/'+this.applicationid+'/'+this.imgurl+'';
           }else{
@@ -49,16 +46,6 @@
             namevalModified: this.nameval,
             picURL: ''
           }
-        },
-        methods:{
-
-        },
-        updated(){
-          // if(this.nameval == 'null'){
-          //   this.namevalModified = 'Not Applicable';
-          // }else{
-          //   this.namevalModified = this.nameval
-          // }
         }
     }
 </script>

@@ -43,26 +43,28 @@
                     <th>Application Type</th>
                     <th>Sub-Category</th>
                     <th>Plant Type</th>
-                    <th>Capacity of Tank</th>
+                    <th>Action</th>
+                    {{-- <th>Capacity of Tank</th>
                     <th>State</th>
                     <th>L.G.A</th>
                     <th>Town</th>
-                    <th>Address</th>
+                    <th>Address</th> --}}
                   </tr>
                   </thead>
                   <tbody>
                     @foreach ($appDocReviews as $item)
                       <tr>
-                        <td class="sorting_1"><a href="/document_review/{{ $item->id }}">{{ $item->application_id }}</a></td>
+                        <td class="sorting_1"><a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
                         <td>{{ $item->name_of_gas_plant }}</td>
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->capacity_of_tank }}</td>
+                        <td><a href="/mDocument_edit/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Edit Document</a></td>
+                        {{-- <td>{{ $item->capacity_of_tank }}</td>
                         <td>{{ $item->state }}</td>
                         <td>{{ $item->lga }}</td>
                         <td>{{ $item->town }}</td>
-                        <td>{{ $item->address }}</td>
+                        <td>{{ $item->address }}</td> --}}
                       </tr>
                     @endforeach
                   </tbody>

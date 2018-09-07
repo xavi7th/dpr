@@ -30,11 +30,11 @@
           <li><a href="/app_doc_rev"><i class="fa fa-fax"></i>App Doc Review</a></li>
         </ul>
       </li>
-      <li>
+      {{-- <li>
         <a href="/marketer_records">
           <i class="fa fa-list"></i> <span>Records</span>
         </a>
-      </li>
+      </li> --}}
       <li>
         <a href="/preferences">
           <i class="ion ion-android-settings"></i> <span>Settings</span>

@@ -45,7 +45,7 @@
                   <div class="box-footer">
                     <button type="submit" class="btn btn-primary" style="float: right;">Save & Continue</button>
                   </div>
-                </form>
+              </form>
               </div>
             </div>
           </div>

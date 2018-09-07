@@ -36,11 +36,13 @@ Route::get('/marketer_records', 'marketerController@showMarketerRecords')->middl
 Route::get('/marketer_records', 'marketerController@showMarketerRecords')->middleware(['auth', 'marketer']);
 Route::get('/app_doc_rev', 'marketerController@applicationDocumentReview')->middleware(['auth', 'marketer']);
 Route::get('/site_suitability_requirement', 'marketerController@siteSuitablityRequirement')->middleware(['auth', 'marketer']);
-Route::get('/document_review/{applicationID}', 'marketerController@showSiteSuitablityRequirement')->middleware(['auth', 'marketer']);
+Route::get('/mDocument_review/{applicationID}', 'marketerController@showSiteSuitablityRequirement')->middleware(['auth', 'marketer']);
+Route::get('/mDocument_edit/{applicationID}', 'marketerController@showSiteSuitablityRequirementDocEdit')->middleware(['auth', 'marketer']);
 
 Route::post('/getMarketerDocs', 'marketerController@getDocs')->middleware(['auth', 'marketer']);
 Route::post('/app_doc_rev', 'marketerController@applicationDocumentReviewPhase1')->middleware(['auth', 'marketer']);
 Route::post('/site_suit_req_upload', 'marketerController@applicationDocumentReviewPhase2')->middleware(['auth', 'marketer']);
+Route::post('/edit_site_suit_req_upload', 'marketerController@applicationDocumentReviewPhaseUpdate')->middleware(['auth', 'marketer']);
 
 //STAFF-CONTROLLER
 Route::get('/staff', 'staffController@index')->middleware(['auth', 'staff']);
