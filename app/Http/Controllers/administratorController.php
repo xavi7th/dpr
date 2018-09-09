@@ -61,7 +61,7 @@ class administratorController extends Controller
     $newStaffIndex = sprintf('%05d', $indexIncremented);
 
     //appending the new staff index to DPRST to create the staff's ID
-    $staffID = "DPRSTAFF".$newStaffIndex;
+    $staffID = "DPRST".$newStaffIndex;
 
     if(request('role') == 'Select Role'){
       // return custom error message
@@ -131,6 +131,26 @@ class administratorController extends Controller
       return redirect('/admin');
     }
 
+  }
+
+  public function editStaffRecords(Staff $staffID){
+    return view('backend.administrator.edit_staff', compact('staffID'));
+  }
+
+  public function updateStaffRole(Request $request){
+    // dd($request);
+
+    if(request('role') == 'null'){
+      // send back to view with error messages
+      return back();
+    }else{
+      Staff::where('id', request('SID'))
+      ->update([
+        'role' => request('role')
+      ]);
+
+      return redirect('/backend');
+    }
   }
 
 }

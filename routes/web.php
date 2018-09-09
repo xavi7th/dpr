@@ -18,7 +18,9 @@ Route::post('/do_login', 'backendSessionController@do_login');
 
 // APP-CONTROLLER
 Route::get('/preferences', 'appController@index')->middleware('auth');
+
 Route::post('/change_password', 'appController@changePassword')->middleware('auth');
+Route::post('/update_staff_records', 'appController@updateStaffRecords')->middleware('auth');
 
 // ADMINISTRATOR-CONTROLLER
 Route::get('/admin', 'administratorController@index')->middleware(['auth', 'admin']);
@@ -27,8 +29,11 @@ Route::get('/companies_list', 'administratorController@showAllCompanies')->middl
 Route::get('/create_staff', 'administratorController@displayCreateStaffForm')->middleware(['auth', 'admin']);
 Route::get('/create_company', 'administratorController@displayCreateCompanyForm')->middleware(['auth', 'admin']);
 Route::get('/settings', 'administratorController@displayCreateCompanyForm')->middleware(['auth', 'admin']);
+Route::get('/edit_staff/{staffID}', 'administratorController@editStaffRecords')->middleware(['auth', 'admin']);
+
 Route::post('/create_staff', 'administratorController@createStaff')->middleware(['auth', 'admin']);
 Route::post('/create_company', 'administratorController@createCompany')->middleware(['auth', 'admin']);
+Route::post('/update_staff_role', 'administratorController@updateStaffRole')->middleware(['auth', 'admin']);
 
 // MARKETER-CONTROLLER
 Route::get('/marketer', 'marketerController@index')->middleware(['auth', 'marketer']);
@@ -39,6 +44,12 @@ Route::get('/site_suitability_requirement', 'marketerController@siteSuitablityRe
 Route::get('/mDocument_review/{applicationID}', 'marketerController@showSiteSuitablityRequirement')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_edit/{applicationID}', 'marketerController@showSiteSuitablityRequirementDocEdit')->middleware(['auth', 'marketer']);
 
+
+
+Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView')->middleware(['auth', 'marketer']);
+
+
+
 Route::post('/getMarketerDocs', 'marketerController@getDocs')->middleware(['auth', 'marketer']);
 Route::post('/app_doc_rev', 'marketerController@applicationDocumentReviewPhase1')->middleware(['auth', 'marketer']);
 Route::post('/site_suit_req_upload', 'marketerController@applicationDocumentReviewPhase2')->middleware(['auth', 'marketer']);
@@ -46,3 +57,9 @@ Route::post('/edit_site_suit_req_upload', 'marketerController@applicationDocumen
 
 //STAFF-CONTROLLER
 Route::get('/staff', 'staffController@index')->middleware(['auth', 'staff']);
+
+
+//TEAMLEAD-CONTROLLER
+Route::get('/teamlead', 'teamleadController@index')->middleware(['auth', 'teamlead']);
+Route::get('/tlDocument_review/{applicationID}', 'teamleadController@teamleadDocumentReview')->middleware(['auth', 'teamlead']);
+Route::get('/tlDocument_assign/{applicationID}', 'teamleadController@teamloeadDocumentAssign')->middleware(['auth', 'teamlead']);

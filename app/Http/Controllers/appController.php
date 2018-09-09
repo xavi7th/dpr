@@ -18,7 +18,7 @@ class appController extends Controller
       return view('partials.settings');
     }
 
-    public function changePassword(){
+    public function changePassword(Request $request){
 
       $this->validate(request(), [
         'password' => 'required|confirmed'
@@ -30,5 +30,23 @@ class appController extends Controller
       ]);
 
       return redirect('/logout');
+    }
+
+    public function updateStaffRecords(Request $request){
+      // dd($request);
+
+      if(request('record_name') == 'null'){
+        // send back to view with error messages
+        return back();
+      }else{
+        Staff::where('id', auth()->id())
+        ->update([
+          request('record_name') => request('record_value')
+        ]);
+
+        return back();
+      }
+
+
     }
 }

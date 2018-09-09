@@ -49,7 +49,7 @@
                   <tbody>
                     @foreach ($staffs as $staff)
                       <tr>
-                        <td class="sorting_1">{{ $staff->staff_id }}</td>
+                        <td class="sorting_1"><a href="/edit_staff/{{ $staff->id }}" class="label label-success" style="font-size: 14px;">{{ $staff->staff_id }}</a></td>
                         <td>{{ $staff->first_name }}</td>
                         <td>{{ $staff->last_name }}</td>
                         <td>{{ $staff->email_address }}</td>
@@ -79,13 +79,7 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-      <div class="pull-right hidden-xs">
-        <b>Version</b> 2.4.0
-      </div>
-      <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-      reserved.
-    </footer>
+    @include('partials.base_footer')
   </div>
 @endsection
 

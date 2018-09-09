@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('app-doc-rev-upload-component', require('./components/SiteSuitablityInspectionReqDoc.vue'));
+Vue.component('document-upload-component', require('./components/documentUploads.vue'));
 Vue.component('state-component', require('./components/StateComponent.vue'));
 Vue.component('app-doc-rev-component', require('./components/ApplicationDocumentReview.vue'));
 Vue.component('m-view-application-docs', require('./components/mViewApplicationDocs.vue'));

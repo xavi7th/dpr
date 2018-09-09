@@ -85,8 +85,8 @@
                 <div class="form-group">
                   <label>Select Document to modify</label>
                   <select class="form-control select2" name="doc_type" style="width: 100%;">
-                    <option selected="selected">Select Document</option>
-                    <option value="site_verification_inspection_report">Site Verification Inspection Report</option>
+                    <option selected="selected" value="null">Select Document</option>
+                    <option value="applications_letter_for_suitability_inspection">Applications Letter for Suitability Inspection</option>
                     <option value="article_and_memorandum_of_association">Article and Memorandum of Association</option>
                     <option value="current_tax_clearance">Current Tax Clearance</option>
                     <option value="certificate_of_incorporation">Certificate of Incorporation</option>

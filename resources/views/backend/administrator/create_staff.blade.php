@@ -81,14 +81,14 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label>Staff Role</label>
+                    <label>Select Staff Role</label>
                     <select class="form-control select2" name="role" style="width: 100%;">
                       <option selected="selected">Select Role</option>
                       <option value="Head Gas M&G Lagos">Head Gas M&G Lagos</option>
                       <option value="ZOPSCON">ZOPSCON</option>
                       <option value="ADO">ADO</option>
                       <option value="HOD">HOD</option>
-                      <option value="Team Lead">Team Lead</option
+                      <option value="Team Lead">Team Lead</option>
                       <option value="Staff">Staff</option>
                       <option value="Admin">Admin</option>
                       <option value="Marketer">Marketer</option>
@@ -110,13 +110,7 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-      <div class="pull-right hidden-xs">
-        <b>Version</b> 2.4.0
-      </div>
-      <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-      reserved.
-    </footer>
+    @include('partials.base_footer')
   </div>
 @endsection
 

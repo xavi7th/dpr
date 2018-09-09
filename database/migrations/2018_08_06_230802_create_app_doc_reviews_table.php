@@ -27,6 +27,7 @@ class CreateAppDocReviewsTable extends Migration
             $table->string('lga');
             $table->string('town');
             $table->string('address');
+            $table->string('application_status')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

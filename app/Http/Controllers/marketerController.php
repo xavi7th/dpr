@@ -81,26 +81,31 @@ class marketerController extends Controller
       'state' => request('state'),
       'lga' => request('lga'),
       'town' => request('town'),
-      'address' => request('address')
+      'address' => request('address'),
+      'application_status' => 'Application Pending'
     ]);
 
     return redirect('/site_suitability_requirement');
   }
 
   public function applicationDocumentReviewPhase2(Request $request){
-    $svirDoc = $amaDoc = $ctcDoc = $ciDoc = $fcDoc = $prcDoc = $cafDoc = $abpDoc = $spDoc = $dcDoc = $pidDoc = $eiaDoc = $bsfpDoc = $lcmlsDoc = $csatdDoc = $alacdDoc = 'null';
+    $alfsiDoc = $amaDoc = $ctcDoc = $ciDoc = $fcDoc = $prcDoc = $cafDoc = $abpDoc = $spDoc = $dcDoc = $pidDoc = $eiaDoc = $bsfpDoc = $lcmlsDoc = $csatdDoc = $alacdDoc = 'null';
 
     $marketerID = Auth::user()->staff_id;
 
     // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
-    if($request->hasFile('SVIR_doc')){
-      $request->SVIR_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->SVIR_doc->getClientOriginalName());
-      $svirDoc = $request->SVIR_doc->getClientOriginalName();
+    if($request->hasFile('ALFSI_doc')){
+      $request->ALFSI_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->ALFSI_doc->getClientOriginalName());
+      $ALFSIDoc = $request->ALFSI_doc->getClientOriginalName();
+    }else{
+      dd('Applications Letter for Suitability Inspection');
     }
 
     if($request->hasFile('AMA_doc')){
       $request->AMA_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->AMA_doc->getClientOriginalName());
       $amaDoc = $request->AMA_doc->getClientOriginalName();
+    }else{
+      dd('Article and Memorandum of Association');
     }
 
     if($request->hasFile('CTC_doc')){
@@ -136,6 +141,8 @@ class marketerController extends Controller
     if($request->hasFile('SP_doc')){
       $request->SP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->SP_doc->getClientOriginalName());
       $spDoc = $request->SP_doc->getClientOriginalName();
+    }else{
+      dd('Survey Plan');
     }
 
     if($request->hasFile('DC_doc')){
@@ -176,7 +183,7 @@ class marketerController extends Controller
     SiteSuitabilityInspectionDocuments::create([
       'application_id' => session('application_id'),
       'marketer_id' => $marketerID,
-      'site_verification_inspection_report' => request('SVIR'),
+      'applications_letter_for_suitability_inspection' => request('ALFSI'),
       'article_and_memorandum_of_association' => request('AMA'),
       'current_tax_clearance' => request('CTC'),
       'certificate_of_incorporation' => request('CI'),
@@ -192,7 +199,7 @@ class marketerController extends Controller
       'letter_confirmation_ministry_of_lands_and_survey' => request('LCMLS'),
       'codes_and_standard_adopted_in_the_tank_design' => request('CSATD'),
       'application_letter_addressed_to_the_controller' => request('ALACD'),
-      'site_verification_inspection_report_location_url' => $svirDoc,
+      'applications_letter_for_suitability_inspection_location_url' => $ALFSIDoc,
       'article_and_memorandum_of_association_location_url' => $amaDoc,
       'current_tax_clearance_location_url' => $ctcDoc,
       'certificate_of_incorporation_location_url' => $ciDoc,
@@ -217,25 +224,45 @@ class marketerController extends Controller
 
 
   }
+
+
   public function applicationDocumentReviewPhaseUpdate(Request $request){
     // dd($request);
 
-    $updatedDoc = '';
+    if(request('doc_type') == 'null'){
+      // send back to view with error messages
+      return back();
+    }else{
+      $updatedDoc = '';
 
-    if($request->hasFile('updatedDocument')){
-      $request->updatedDocument->storeAs('comp_docs/'.request('marketer_id').'/'.request('application_id'), $request->updatedDocument->getClientOriginalName());
+      if($request->hasFile('updatedDocument')){
+        $request->updatedDocument->storeAs('comp_docs/'.request('marketer_id').'/'.request('application_id'), $request->updatedDocument->getClientOriginalName());
 
-      $updatedDoc = $request->updatedDocument->getClientOriginalName();
+        $updatedDoc = $request->updatedDocument->getClientOriginalName();
+      }
+
+      SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))
+      ->update([
+        request('doc_type') => request('selectedOption'),
+        request('doc_type').'_location_url' => $updatedDoc
+      ]);
+
+      return redirect('/marketer');
     }
 
-    SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))
-    ->update([
-      request('doc_type') => request('selectedOption'),
-      request('doc_type').'_location_url' => $updatedDoc
-    ]);
+  }
 
-    return redirect('/marketer');
 
+
+
+
+
+
+
+
+
+  public function marketerUploadDocumentsView(){
+    return view('backend.marketer.marketer_upload_documents');
   }
 
 }

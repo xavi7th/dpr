@@ -50,6 +50,9 @@ class backendSessionController extends Controller
         }elseif($staff->role == 'Marketer'){
             //redirect to Admin dashboard
           return redirect('/marketer');
+        }elseif($staff->role == 'Team Lead'){
+            //redirect to Admin dashboard
+          return redirect('/teamlead');
         }
 
       }else{

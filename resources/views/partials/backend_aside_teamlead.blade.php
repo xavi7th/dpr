@@ -15,11 +15,11 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN NAVIGATION</li>
       <li>
-        <a href="/marketer">
+        <a href="/teamlead">
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
-      <li class="treeview">
+      {{-- <li class="treeview">
         <a href="#">
           <i class="ion ion-android-add-circle"></i> <span>New</span>
           <span class="pull-right-container">
@@ -42,7 +42,7 @@
           <li><a href="/view_atc_records"><i class="fa fa-fax"></i>ATC</a></li>
           <li><a href="/view_lto_records"><i class="fa fa-fax"></i>LTO</a></li>
         </ul>
-      </li>
+      </li> --}}
       {{-- <li>
         <a href="/mUpload_documents">
           <i class="fa fa-upload "></i> <span>Upload Documents</span>

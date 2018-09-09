@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | Requirement For Site Suitability Inspection
+  DPR Marketer | Upload Documents
 @endsection
 
 @section('pagestyles')
@@ -54,7 +54,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Requirement For Site Suitability Inspection
+          Upload Documents and Status
           <small>Marketer Control panel</small>
         </h1>
       </section>
@@ -65,7 +65,7 @@
           <div class="col-md-12">
             <div class="box box-primary">
               <div class="box-header with-border">
-                <h3 class="box-title">Application Document Review Contd.</h3>
+                <h3 class="box-title">Application Document Uploads</h3>
               </div>
               <!-- /.box-header -->
               <!-- form start -->
@@ -73,9 +73,9 @@
                 {{ csrf_field() }}
                 <div class="box-body">
                   {{-- Site Verification Inspection Report --}}
-                  <app-doc-rev-upload-component title="Applications Letter for Suitability Inspection" name="ALFSI" inputid="ALFSI_doc"></app-doc-rev-upload-component>
+                  <document-upload-component title="Site Verification Inspection Report" name="SVIR" inputid="SVIR_doc"></document-upload-component>
 
-                  <app-doc-rev-upload-component title="Article and Memorandum of Association" name="AMA" inputid="AMA_doc"></app-doc-rev-upload-component>
+                  {{-- <app-doc-rev-upload-component title="Article and Memorandum of Association" name="AMA" inputid="AMA_doc"></app-doc-rev-upload-component>
 
                   <app-doc-rev-upload-component title="Current Tax Clearance" name="CTC" inputid="CTC_doc"></app-doc-rev-upload-component>
 
@@ -103,13 +103,13 @@
 
                   <app-doc-rev-upload-component title="Codes and Standard Adopted in the Tank Design" name="CSATD" inputid="CSATD_doc"></app-doc-rev-upload-component>
 
-                  <app-doc-rev-upload-component title="Application Letter Addressed to the Controller DPR" name="ALACD" inputid="ALACD_doc"></app-doc-rev-upload-component>
+                  <app-doc-rev-upload-component title="Application Letter Addressed to the Controller DPR" name="ALACD" inputid="ALACD_doc"></app-doc-rev-upload-component> --}}
 
                 </div>
 
-                <div class="box-footer">
+                {{-- <div class="box-footer">
                   <button type="submit" class="btn btn-primary" style="float: right;">Submit Application Document</button>
-                </div>
+                </div> --}}
               </form>
             </div>
           </div>

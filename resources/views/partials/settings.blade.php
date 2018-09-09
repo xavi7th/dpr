@@ -20,6 +20,8 @@
       @include('partials.backend_aside_admin')
     @elseif (Auth::user()->role == 'Staff')
       @include('partials.backend_aside_admin')
+    @elseif (Auth::user()->role == 'Team Lead')
+      @include('partials.backend_aside_teamlead')
     @endif
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -61,6 +63,40 @@
               </form>
             </div>
           </div>
+
+          <div class="col-md-4">
+            <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Modify Records</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" method="POST" action="/update_staff_records">
+              {{ csrf_field() }}
+              <div class="box-body">
+                <div class="form-group">
+                  <label>Select Record to modify</label>
+                  <select class="form-control select2" name="record_name" style="width: 100%;">
+                    <option selected="selected" value="null">Select Record</option>
+                    <option value="first_name">First Name</option>
+                    <option value="last_name">Last Name</option>
+                    <option value="mobile_number">Mobile Number</option>
+                    <option value="email_address">Email Address</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Enter Value</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" name="record_value" placeholder="Enter Value">
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+          </div>
         </div>
 
 
@@ -68,13 +104,7 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-      <div class="pull-right hidden-xs">
-        <b>Version</b> 2.4.0
-      </div>
-      <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-      reserved.
-    </footer>
+    @include('partials.base_footer')
   </div>
 @endsection
 

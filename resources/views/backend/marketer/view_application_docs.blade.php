@@ -39,7 +39,7 @@
               <div class="box-body">
                 <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
                 <ul class="todo-list ui-sortable">
-                  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->site_verification_inspection_report_location_url }}" title="Site Verification Inspection Report" nameval="{{$applicationID->site_verification_inspection_report}}" modality="SVIR"></m-view-application-docs>
+                  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->applications_letter_for_suitability_inspection_location_url }}" title="Applications Letter for Suitability Inspection" nameval="{{$applicationID->applications_letter_for_suitability_inspection}}" modality="ALFS"></m-view-application-docs>
 
                   <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->article_and_memorandum_of_association_location_url }}" title="Article and Memorandum of Association" nameval="{{$applicationID->article_and_memorandum_of_association}}" modality="AMA"></m-view-application-docs>
 
