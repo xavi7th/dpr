@@ -19,7 +19,7 @@
     @elseif (Auth::user()->role == 'Admin')
       @include('partials.backend_aside_admin')
     @elseif (Auth::user()->role == 'Staff')
-      @include('partials.backend_aside_admin')
+      @include('partials.backend_aside_all')
     @elseif (Auth::user()->role == 'Team Lead')
       @include('partials.backend_aside_teamlead')
     @endif

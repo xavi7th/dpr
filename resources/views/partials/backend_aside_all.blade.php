@@ -14,14 +14,19 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN NAVIGATION</li>
-      <li class="active treeview">
+      <li>
         <a href="/staff">
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
-      <li class="active treeview">
+      {{-- <li class="active treeview">
         <a href="/staff">
-          <i class="fa fa-fax"></i> <span>ADR Records</span>
+          <i class="fa fa-folder"></i> <span>Job Assignments</span>
+        </a>
+      </li> --}}
+      <li>
+        <a href="/preferences">
+          <i class="ion ion-android-settings"></i> <span>Settings</span>
         </a>
       </li>
     </ul>

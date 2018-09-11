@@ -31,7 +31,6 @@
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
-                {{-- <h3 class="box-title">Data Table With Full Features</h3> --}}
               </div>
               <!-- /.box-header -->
               <div class="box-body">
@@ -58,15 +57,6 @@
                       </tr>
                     @endforeach
                   </tbody>
-                  {{-- <tfoot>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </tfoot> --}}
                 </table>
               </div>
               <!-- /.box-body -->

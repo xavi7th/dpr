@@ -21,6 +21,7 @@ Route::get('/preferences', 'appController@index')->middleware('auth');
 
 Route::post('/change_password', 'appController@changePassword')->middleware('auth');
 Route::post('/update_staff_records', 'appController@updateStaffRecords')->middleware('auth');
+Route::post('/make_report_comment', 'appController@makeReportComment')->middleware('auth');
 
 // ADMINISTRATOR-CONTROLLER
 Route::get('/admin', 'administratorController@index')->middleware(['auth', 'admin']);
@@ -43,9 +44,6 @@ Route::get('/app_doc_rev', 'marketerController@applicationDocumentReview')->midd
 Route::get('/site_suitability_requirement', 'marketerController@siteSuitablityRequirement')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_review/{applicationID}', 'marketerController@showSiteSuitablityRequirement')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_edit/{applicationID}', 'marketerController@showSiteSuitablityRequirementDocEdit')->middleware(['auth', 'marketer']);
-
-
-
 Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView')->middleware(['auth', 'marketer']);
 
 
@@ -57,9 +55,15 @@ Route::post('/edit_site_suit_req_upload', 'marketerController@applicationDocumen
 
 //STAFF-CONTROLLER
 Route::get('/staff', 'staffController@index')->middleware(['auth', 'staff']);
+Route::get('/stDocument_review/{applicationID}', 'staffController@staffDocumentReview')->middleware(['auth', 'staff']);
+Route::get('/create_company/{applicationID}', 'staffController@showCreateCompany')->middleware(['auth', 'staff']);
+
+Route::post('/staff_create_company', 'staffController@createCompany')->middleware(['auth', 'staff']);
+Route::post('/stUpload_report', 'staffController@uploadReport')->middleware(['auth', 'staff']);
 
 
 //TEAMLEAD-CONTROLLER
 Route::get('/teamlead', 'teamleadController@index')->middleware(['auth', 'teamlead']);
 Route::get('/tlDocument_review/{applicationID}', 'teamleadController@teamleadDocumentReview')->middleware(['auth', 'teamlead']);
-Route::get('/tlDocument_assign/{applicationID}', 'teamleadController@teamloeadDocumentAssign')->middleware(['auth', 'teamlead']);
+
+Route::post('/tlDocument_assign', 'teamleadController@teamleadDocumentAssign')->middleware(['auth', 'teamlead']);

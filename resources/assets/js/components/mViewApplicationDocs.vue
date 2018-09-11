@@ -14,8 +14,8 @@
       <i class="fa fa-eye"></i>
     </div>
     <div class="modal fade" :id="`${modality}`" style="display: none;">
-      <div class="modal-dialog">
-        <div class="modal-content">
+      <div class="modal-dialog" style="width: 1400px;">
+        <div class="modal-content" style="background: transparent;">
           <img :src="picURL" alt="">
         </div>
       </div>

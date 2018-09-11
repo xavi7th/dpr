@@ -32,22 +32,9 @@
           <!-- ./col -->
           <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-orange">
-              <div class="inner">
-                <h3>65</h3>
-                <p style="text-transform: uppercase;">Total applications</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $assignedApplications->count() }}</h3>
                 <p style="text-transform: uppercase;">Assigned</p>
               </div>
               <div class="icon">
@@ -60,7 +47,7 @@
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $pendingApplications->count() }}</h3>
                 <p style="text-transform: uppercase;">Pending</p>
               </div>
               <div class="icon">
@@ -73,7 +60,7 @@
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $approvedApplications->count() }}</h3>
                 <p style="text-transform: uppercase;">approved</p>
               </div>
               <div class="icon">
@@ -85,10 +72,9 @@
         <!-- /.row (main row) -->
 
         <div class="row">
-          <div class="col-xs-12">
-            <div class="box box-success">
+          <div class="col-md-12">
+            <div class="box">
               <div class="box-header">
-                {{-- <h3 class="box-title">Data Table With Full Features</h3> --}}
               </div>
               <!-- /.box-header -->
               <div class="box-body">
@@ -100,31 +86,32 @@
                     <th>Application Type</th>
                     <th>Sub-Category</th>
                     <th>Plant Type</th>
-                    <th>State</th>
-                    <th>L.G.A</th>
-                    <th>Town</th>
-                    <th>Address</th>
+                    <th>Application Status</th>
+                    <th>Application Date</th>
+                    {{-- <th>Action</th> --}}
                   </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>DPR/APP/LPG/00023</td>
-                      <td>okoye gas</td>
-                      <td>Gas Piplines</td>
-                      <td>ATC</td>
-                      <td>Refilling Plant</td>
-                      <td>Abia</td>
-                      <td>Bende</td>
-                      <td>Bende</td>
-                      <td>Bende</td>
-                    </tr>
+                    @foreach ($appDocReviews as $item)
+                      <tr>
+                        <td class="sorting_1"><a href="/stDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
+                        <td>{{ $item->name_of_gas_plant }}</td>
+                        <td>{{ $item->application_type }}</td>
+                        <td>{{ $item->sub_category }}</td>
+                        <td>{{ $item->plant_type }}</td>
+                        <td>{{ $item->job_application_status }}</td>
+                        <td>{{ $item->created_at }}</td>
+                        {{-- <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td> --}}
+                      </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
               <!-- /.box-body -->
             </div>
-            <!-- /.box -->
+
           </div>
+          <!-- ./col -->
         </div>
 
       </section>

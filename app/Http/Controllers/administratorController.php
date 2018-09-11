@@ -60,8 +60,16 @@ class administratorController extends Controller
     // padding the number to 4 leading zeros
     $newStaffIndex = sprintf('%05d', $indexIncremented);
 
+
+
+    if(request('role') == 'Marketer'){
+      $userTag = 'DPRMKT';
+    }else{
+      $userTag = 'DPRST';
+    }
+
     //appending the new staff index to DPRST to create the staff's ID
-    $staffID = "DPRST".$newStaffIndex;
+    $staffID = $userTag.$newStaffIndex;
 
     if(request('role') == 'Select Role'){
       // return custom error message

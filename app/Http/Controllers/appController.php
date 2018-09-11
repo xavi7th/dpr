@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Staff;
+use App\ApplicationComments;
 use Auth;
 
 class appController extends Controller
@@ -46,7 +47,15 @@ class appController extends Controller
 
         return back();
       }
-
-
     }
+
+    public function makeReportComment(Request $request){
+      ApplicationComments::create([
+        'staff_id' => Auth::user()->staff_id,
+        'application_id' => request('application_id'),
+        'comment' => request('comment'),
+      ]);
+      return back();
+    }
+
 }

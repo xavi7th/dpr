@@ -27,7 +27,7 @@
           </span>
         </a>
         <ul class="treeview-menu" style="display: none;">
-          <li><a href="/create_staff"><i class="fa fa-user"></i>New Staff</a></li>
+          <li><a href="/create_staff"><i class="fa fa-user"></i>New User</a></li>
           <li><a href="/create_company"><i class="fa fa-fax"></i>New Company</a></li>
         </ul>
       </li>

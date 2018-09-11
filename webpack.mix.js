@@ -20,6 +20,7 @@ mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
      'resources/assets/lte/AdminLTE-2.4.3/plugins/iCheck/all.css',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/select2/dist/css/select2.min.css',
+     'resources/assets/lte/AdminLTE-2.4.3/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
      'resources/assets/lte/AdminLTE-2.4.3/dist/css/AdminLTE.min.css',
      'resources/assets/lte/AdminLTE-2.4.3/dist/css/skins/_all-skins.min.css'
    ], 'public/css/app.css')
@@ -32,6 +33,7 @@ mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/datatables.net/js/jquery.dataTables.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/plugins/iCheck/icheck.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/fastclick/lib/fastclick.js',
      'resources/assets/lte/AdminLTE-2.4.3/dist/js/adminlte.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/dist/js/demo.js',

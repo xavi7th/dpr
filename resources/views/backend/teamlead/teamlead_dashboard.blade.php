@@ -30,7 +30,7 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
+          <div class="col-lg-2 col-xs-3">
             <!-- small box -->
             <div class="small-box bg-orange">
               <div class="inner">
@@ -43,7 +43,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
+          <div class="col-lg-2 col-xs-3">
             <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">
@@ -56,12 +56,25 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
+          <div class="col-lg-2 col-xs-3">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+              <div class="inner">
+                <h3>{{ $startedApplications->count() }}</h3>
+                <p style="text-transform: uppercase;">Started</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-2 col-xs-3">
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
                 <h3>{{ $pendingApplications->count() }}</h3>
-                <p style="text-transform: uppercase;">Pending</p>
+                <p style="text-transform: uppercase;">Pending approval</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
@@ -69,7 +82,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
+          <div class="col-lg-2 col-xs-3">
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
@@ -101,7 +114,7 @@
                     <th>Plant Type</th>
                     <th>Application Status</th>
                     <th>Application Date</th>
-                    <th>Action</th>
+                    {{-- <th>Action</th> --}}
                   </tr>
                   </thead>
                   <tbody>
@@ -112,9 +125,9 @@
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->application_status }}</td>
+                        <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
                         <td>{{ $item->created_at }}</td>
-                        <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td>
+                        {{-- <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td> --}}
                       </tr>
                     @endforeach
                   </tbody>
