@@ -21,7 +21,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          View Application Documents
+          Application Documents
           <small>Marketer Control panel</small>
         </h1>
       </section>
@@ -30,7 +30,51 @@
       <!-- Main content -->
       <section class="content">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-4">
+            <div class="box box-primary">
+            <div class="box-body box-profile">
+
+              <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
+
+              <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
+
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>Application type</b> <a class="pull-right">{{ $applicationReview->application_type }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Sub-category</b> <a class="pull-right">{{ $applicationReview->sub_category }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>State</b> <a class="pull-right">{{ $applicationReview->state }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>L.G.A</b> <a class="pull-right">{{ $applicationReview->lga }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Town</b> <a class="pull-right">{{ $applicationReview->town }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Address</b> <a class="pull-right">{{ $applicationReview->address }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
+                </li>
+                @if ($applicationReview->plant_type)
+
+                @endif
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          </div>
+          <div class="col-md-8">
             <div class="box box-primary">
               <div class="box-header ui-sortable-handle" style="cursor: move;">
                 <h3 class="box-title">Application ID: {{ $applicationID->application_id }}</h3>

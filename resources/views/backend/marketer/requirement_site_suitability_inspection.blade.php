@@ -62,7 +62,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
               <div class="box-header with-border">
                 <h3 class="box-title">Application Document Review Contd.</h3>
@@ -108,7 +108,7 @@
                 </div>
 
                 <div class="box-footer">
-                  <button type="submit" class="btn btn-primary" style="float: right;">Submit Application Document</button>
+                  <button type="submit" class="btn btn-primary" style="float: right;">Save Application Document</button>
                 </div>
               </form>
             </div>

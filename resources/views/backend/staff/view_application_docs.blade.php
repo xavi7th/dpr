@@ -132,7 +132,7 @@
                     <div>
                       <div class="direct-chat-msg">
                         <div class="direct-chat-info clearfix">
-                          <span class="direct-chat-name pull-left" style="text-transform: capitalize;">{{ $comment->staff['first_name'] }} {{ $comment->staff['last_name'] }}</span>
+                          <span class="direct-chat-name pull-left" style="text-transform: capitalize;">{{ $comment->staff['first_name'] }} {{ $comment->staff['last_name'] }} <i class="text-yellow"><b>({{ $comment->staff['role'] }})</b></i></span>
                           <span class="direct-chat-timestamp pull-right">{{ $comment->created_at->diffForHumans() }}</span>
                         </div>
                         <!-- /.direct-chat-info -->

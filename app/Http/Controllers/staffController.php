@@ -98,8 +98,8 @@ class staffController extends Controller
 
     // Verification process to make sure contract_type, state, town all have values
     if((request('contract_type') == 'Select Contract Type')
-    // || (request('state') == 'Select State')
-    // || (request('town') == 'Select LGA')
+    || (request('state') == 'Select State')
+    || (request('town') == 'Select LGA')
   ){
       return back();
     }else{

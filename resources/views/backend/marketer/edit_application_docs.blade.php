@@ -66,6 +66,20 @@
                 <li class="list-group-item">
                   <b>Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                 </li>
+                {{-- @if ($applicationReview->sub_category == 'Site Suitability Inspection' && $applicationReview->application_status == "Site Suitable")
+                  <form role="form" method="post" action="/tlDecide_site_suitability">
+                    {{ csrf_field() }}
+                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                    <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                    <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                    <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                    <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                    <div class="box-footer">
+                      <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
+                      <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
+                    </div>
+                  </form>
+                @endif --}}
               </ul>
             </div>
             <!-- /.box-body -->

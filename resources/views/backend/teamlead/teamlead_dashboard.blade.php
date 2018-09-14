@@ -30,7 +30,7 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-3">
+          <div class="col-lg-4 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-orange">
               <div class="inner">
@@ -43,7 +43,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-3">
+          <div class="col-lg-4 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">
@@ -56,44 +56,44 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-3">
+          <div class="col-lg-4 col-xs-4">
             <!-- small box -->
-            <div class="small-box bg-purple">
+            <div class="small-box bg-green">
               <div class="inner">
                 <h3>{{ $startedApplications->count() }}</h3>
                 <p style="text-transform: uppercase;">Started</p>
               </div>
               <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="fa fa-pie-chart"></i>
               </div>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-3">
+          {{-- <div class="col-lg-2 col-xs-3">
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
                 <h3>{{ $pendingApplications->count() }}</h3>
-                <p style="text-transform: uppercase;">Pending approval</p>
+                <p style="text-transform: uppercase;">Pending</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
             </div>
-          </div>
+          </div> --}}
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-3">
+          {{-- <div class="col-lg-2 col-xs-3">
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
                 <h3>{{ $approvedApplications->count() }}</h3>
-                <p style="text-transform: uppercase;">approved</p>
+                <p style="text-transform: uppercase;" class="text-white">approved</p>
               </div>
               <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="fa fa-check-circle"></i>
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
         <!-- /.row (main row) -->
 

@@ -69,7 +69,7 @@
                   @if ($applicationStatus != null)
                     <li class="list-group-item">
                       <b>Application Status</b>
-                      @if ($applicationStatus->job_application_status == "Report Submitted")
+                      @if ($reportDocument != null)
                         <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
                           <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
                         </div>
@@ -79,12 +79,27 @@
                     <li class="list-group-item">
                       <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                     </li>
+                    @if ($applicationReview->sub_category == 'Site Suitability Inspection' && $applicationStatus->job_application_status == "Report Submitted")
+                      <form role="form" method="post" action="/tlDecide_site_suitability">
+                        {{ csrf_field() }}
+                        <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                        <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                        <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                        <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                        <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                        <div class="box-footer">
+                          <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
+                          <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
+                        </div>
+                      </form>
+                    @endif
+
                   @endif
                 </ul>
                 <div class="modal fade" id="report" style="display: none;">
                   <div class="modal-dialog" style="width: 1400px;">
                     <div class="modal-content" style="background: transparent;">
-                      @if ($applicationStatus->job_application_status == "Report Submitted")
+                      @if ($reportDocument != null)
                         <img src="/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" alt="">
                       @endif
                     </div>
@@ -111,7 +126,7 @@
                     <div>
                       <div class="direct-chat-msg">
                         <div class="direct-chat-info clearfix">
-                          <span class="direct-chat-name pull-left" style="text-transform: capitalize;">{{ $comment->staff['first_name'] }} {{ $comment->staff['last_name'] }}</span>
+                          <span class="direct-chat-name pull-left" style="text-transform: capitalize;">{{ $comment->staff['first_name'] }} {{ $comment->staff['last_name'] }} <i class="text-yellow"><b>({{ $comment->staff['role'] }})</b></i></span>
                           <span class="direct-chat-timestamp pull-right">{{ $comment->created_at->diffForHumans() }}</span>
                         </div>
                         <!-- /.direct-chat-info -->
@@ -148,47 +163,55 @@
 
           </div>
           <div class="col-md-8">
-            <div class="box">
-              <div class="box-header with-border">
-                <h3 class="box-title">Select Staff To Assign</h3>
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                <table id="example1" class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>Staff ID</th>
-                      <th>Firstname</th>
-                      <th>Lastname</th>
-                      <th>Email Address</th>
-                      <th>Mobile Number</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($staffs as $staff)
+            @if (optional($applicationStatus)->job_application_status != "Site Suitable")
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Select Staff To Assign</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <table id="example1" class="table table-bordered table-hover">
+                    <thead>
                       <tr>
-                        <td class="sorting_1"><a class="label label-success" style="font-size: 14px;">{{ $staff->staff_id }}</a></td>
-                        <td>{{ $staff->first_name }}</td>
-                        <td>{{ $staff->last_name }}</td>
-                        <td>{{ $staff->email_address }}</td>
-                        <td>{{ $staff->mobile_number }}</td>
-                        <td>
-                          <form action="/tlDocument_assign" method="post">
-                            {{ csrf_field() }}
-                            <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                            <input type="text" hidden name="staff_id" value="{{ $staff->staff_id }}">
-                            <input type="submit" class="btn btn-danger" value="Assign" style="padding: 2px 25px;">
-                          </form>
-                          {{-- <a href="/tlDocument_assign/{{ $applicationReview->id }}" class="label label-danger" style="font-size: 13px;">Assign</a> --}}
-                        </td>
+                        <th>Staff ID</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email Address</th>
+                        <th>Mobile Number</th>
+                        <th>Action</th>
                       </tr>
-                    @endforeach
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      @foreach ($staffs as $staff)
+                        <tr>
+                          <td class="sorting_1"><a class="label label-success" style="font-size: 14px;">{{ $staff->staff_id }}</a></td>
+                          <td>{{ $staff->first_name }}</td>
+                          <td>{{ $staff->last_name }}</td>
+                          <td>{{ $staff->email_address }}</td>
+                          <td>{{ $staff->mobile_number }}</td>
+                          <td>
+                            <form action="/tlDocument_assign" method="post">
+                              {{ csrf_field() }}
+                              <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                              <input type="text" hidden name="staff_id" value="{{ $staff->staff_id }}">
+                              @if (optional($applicationStatus)->job_application_status == "Assigned")
+                                <input type="submit" class="btn btn-danger" value="Re-Assign" style="padding: 2px 25px;">
+                              @else
+                                <input type="submit" class="btn btn-primary" value="Assign" style="padding: 2px 25px;">
+                              @endif
+
+                            </form>
+                            {{-- <a href="/tlDocument_assign/{{ $applicationReview->id }}" class="label label-danger" style="font-size: 13px;">Assign</a> --}}
+                          </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.box-body -->
               </div>
-              <!-- /.box-body -->
-            </div>
+            @endif
+
           </div>
           <div class="col-md-8">
             <div class="box box-primary">

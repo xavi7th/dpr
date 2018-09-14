@@ -41,7 +41,8 @@ Route::get('/marketer', 'marketerController@index')->middleware(['auth', 'market
 Route::get('/marketer_records', 'marketerController@showMarketerRecords')->middleware(['auth', 'marketer']);
 Route::get('/marketer_records', 'marketerController@showMarketerRecords')->middleware(['auth', 'marketer']);
 Route::get('/app_doc_rev', 'marketerController@applicationDocumentReview')->middleware(['auth', 'marketer']);
-Route::get('/site_suitability_requirement', 'marketerController@siteSuitablityRequirement')->middleware(['auth', 'marketer']);
+Route::get('/site_suitability_requirement', 'marketerController@getSiteSuitablityInspectionView')->middleware(['auth', 'marketer']);
+Route::get('/atc_requirement', 'marketerController@getATCRequirementView')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_review/{applicationID}', 'marketerController@showSiteSuitablityRequirement')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_edit/{applicationID}', 'marketerController@showSiteSuitablityRequirementDocEdit')->middleware(['auth', 'marketer']);
 Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView')->middleware(['auth', 'marketer']);
@@ -49,9 +50,10 @@ Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView
 
 
 Route::post('/getMarketerDocs', 'marketerController@getDocs')->middleware(['auth', 'marketer']);
-Route::post('/app_doc_rev', 'marketerController@applicationDocumentReviewPhase1')->middleware(['auth', 'marketer']);
-Route::post('/site_suit_req_upload', 'marketerController@applicationDocumentReviewPhase2')->middleware(['auth', 'marketer']);
+Route::post('/app_doc_rev', 'marketerController@applicationDocumentReviewPhase')->middleware(['auth', 'marketer']);
+Route::post('/site_suit_req_upload', 'marketerController@handleSiteSuitablityInspection')->middleware(['auth', 'marketer']);
 Route::post('/edit_site_suit_req_upload', 'marketerController@applicationDocumentReviewPhaseUpdate')->middleware(['auth', 'marketer']);
+Route::post('/atc_req_upload', 'marketerController@handleATC')->middleware(['auth', 'marketer']);
 
 //STAFF-CONTROLLER
 Route::get('/staff', 'staffController@index')->middleware(['auth', 'staff']);
@@ -67,3 +69,4 @@ Route::get('/teamlead', 'teamleadController@index')->middleware(['auth', 'teamle
 Route::get('/tlDocument_review/{applicationID}', 'teamleadController@teamleadDocumentReview')->middleware(['auth', 'teamlead']);
 
 Route::post('/tlDocument_assign', 'teamleadController@teamleadDocumentAssign')->middleware(['auth', 'teamlead']);
+Route::post('/tlDecide_site_suitability', 'teamleadController@teamleadDecideSSI')->middleware(['auth', 'teamlead']);

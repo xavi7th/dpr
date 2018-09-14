@@ -25,7 +25,7 @@
     export default {
         mounted() {
             console.log('Component hmm.');
-            axios.get('js/location.json').then(response => {
+            axios.get('/js/location.json').then(response => {
               this.states = response.data.nigeria;
             });
         },
@@ -39,7 +39,7 @@
         methods:{
           onChange(){
             console.log(this.state);
-            axios.get('js/location.json').then(response => {
+            axios.get('/js/location.json').then(response => {
               var stateCount = this.states.length;
               for (let i = 0; i < stateCount; i++) {
                 if(this.states[i].state == this.state){

@@ -58,7 +58,7 @@
                     <th>Application Type</th>
                     <th>Sub-Category</th>
                     <th>Plant Type</th>
-                    {{-- <th>Application Status</th> --}}
+                    <th>Application Status</th>
                     <th>Application Date</th>
                     <th>Action</th>
                   </tr>
@@ -71,7 +71,7 @@
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         <td>{{ $item->plant_type }}</td>
-                        {{-- <td>{{ $item->application_status }}</td> --}}
+                        <td>{{ $item->application_status }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td><a href="/mDocument_edit/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Edit Document</a></td>
                       </tr>
@@ -110,44 +110,3 @@
     })
   </script>
 @endsection
-
-
-{{-- <div class="col-md-3">
-
-<!-- Profile Image -->
-  <div class="box box-primary">
-    <div class="box-body box-profile">
-      <img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
-
-      <h3 class="profile-username text-center">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h3>
-
-      <ul class="list-group list-group-unbordered">
-        <li class="list-group-item">
-          <b>Staff ID</b> <a class="pull-right">{{ Auth::user()->staff_id }}</a>
-        </li>
-        <li class="list-group-item">
-          <b>Email</b> <a class="pull-right">{{ Auth::user()->email_address }}</a>
-        </li>
-        <li class="list-group-item">
-          <b>Mobile</b> <a class="pull-right">{{ Auth::user()->mobile_number }}</a>
-        </li>
-      </ul>
-
-      <a class="btn btn-primary btn-block"><b>{{ Auth::user()->role }}</b></a>
-    </div>
-    <!-- /.box-body -->
-  </div>
-  <!-- /.box -->
-  <div class="small-box bg-aqua">
-    <div class="inner">
-      <h3>{{$appDocReviews->count()}}</h3>
-
-      <p>Records</p>
-    </div>
-    <div class="icon">
-      <i class="ion ion-pie-graph"></i>
-    </div>
-
-  </div>
-
-</div> --}}
