@@ -66,8 +66,13 @@
                 <li class="list-group-item">
                   <b>Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                 </li>
-                @if ($applicationReview->plant_type)
-
+                <br>
+                @if ($applicationReview->application_status == 'Not Submitted')
+                  <form class="" action="/mSubmitApplication" method="post">
+                    {{ csrf_field() }}
+                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                    <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+                  </form>
                 @endif
               </ul>
             </div>

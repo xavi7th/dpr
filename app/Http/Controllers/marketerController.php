@@ -54,8 +54,15 @@ class marketerController extends Controller
 
 
 
-  public function showSiteSuitablityRequirement(SiteSuitabilityInspectionDocuments $applicationID){
-    $applicationReview = AppDocReview::where('application_id', $applicationID->application_id)->first();
+  public function showDocumentsRequirement($id){
+    $applicationReview = AppDocReview::where('id', $id)->first();
+
+    if($applicationReview->sub_category == "Site Suitability Inspection"){
+      $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "ATC") {
+      $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+    }
+
     return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview'));
   }
 
@@ -65,8 +72,15 @@ class marketerController extends Controller
 
 
 
-  public function showSiteSuitablityRequirementDocEdit(SiteSuitabilityInspectionDocuments $applicationID){
-    $applicationReview = AppDocReview::where('application_id', $applicationID->application_id)->first();
+  public function showDocumentsRequirementDocEdit($id){
+    $applicationReview = AppDocReview::where('id', $id)->first();
+
+    if($applicationReview->sub_category == "Site Suitability Inspection"){
+      $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "ATC") {
+      $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+    }
+
     return view('backend.marketer.edit_application_docs', compact('applicationID','applicationReview'));
   }
 
@@ -134,7 +148,7 @@ class marketerController extends Controller
       'lga' => request('lga'),
       'town' => request('town'),
       'address' => request('address'),
-      'application_status' => 'Not Submited'
+      'application_status' => 'Not Submitted'
     ]);
 
     // check to see which application ths marketer is applying for
@@ -171,7 +185,7 @@ class marketerController extends Controller
 
 
 
-  public function handleSiteSuitablityInspectionPOST(Request $request){
+  public function handleSiteSuitablityInspection(Request $request){
     $alfsiDoc = $amaDoc = $ctcDoc = $ciDoc = $fcDoc = $prcDoc = $cafDoc = $abpDoc = $spDoc = $dcDoc = $pidDoc = $eiaDoc = $bsfpDoc = $lcmlsDoc = $csatdDoc = $alacdDoc = 'null';
 
     $marketerID = Auth::user()->staff_id;
@@ -282,7 +296,7 @@ class marketerController extends Controller
       'letter_confirmation_ministry_of_lands_and_survey' => request('LCMLS'),
       'codes_and_standard_adopted_in_the_tank_design' => request('CSATD'),
       'application_letter_addressed_to_the_controller' => request('ALACD'),
-      'applications_letter_for_suitability_inspection_location_url' => $ALFSIDoc,
+      'applications_letter_for_suitability_inspection_location_url' => $alfsiDoc,
       'article_and_memorandum_of_association_location_url' => $amaDoc,
       'current_tax_clearance_location_url' => $ctcDoc,
       'certificate_of_incorporation_location_url' => $ciDoc,
@@ -297,23 +311,7 @@ class marketerController extends Controller
       'bankdraft_of_statutory_fees_location_url' => $bsfpDoc,
       'letter_confirmation_ministry_of_lands_and_survey_location_url' => $lcmlsDoc,
       'codes_and_standard_adopted_in_the_tank_design_location_url' => $csatdDoc,
-      'application_letter_addressed_to_the_controller_location_url' => $alacdDoc,
-      'applications_letter_for_suitability_inspection' => request('ALFSI_reason'),
-      'article_and_memorandum_of_association' => request('AMA_reason'),
-      'current_tax_clearance' => request('CTC_reason'),
-      'certificate_of_incorporation' => request('CI_reason'),
-      'fire_certificate' => request('FC_reason'),
-      'police_report' => request('PRC_reason'),
-      'completed_application_form' => request('CAF_reason'),
-      'approved_building_plan' => request('ABP_reason'),
-      'survey_plan' => request('SP_reason'),
-      'deed_of_conveyance' => request('DC_reason'),
-      'piping_and_instrumentation_diagram' => request('PID_reason'),
-      'environmental_impact_accessment' => request('EIA_reason'),
-      'bankdraft_of_statutory_fees' => request('BSFP_reason'),
-      'letter_confirmation_ministry_of_lands_and_survey' => request('LCMLS_reason'),
-      'codes_and_standard_adopted_in_the_tank_design' => request('CSATD_reason'),
-      'application_letter_addressed_to_the_controller' => request('ALACD_reason')
+      'application_letter_addressed_to_the_controller_location_url' => $alacdDoc
     ]);
 
     // clear the application ID from the session
@@ -455,7 +453,23 @@ class marketerController extends Controller
       'bankdraft_of_statutory_fees_location_url' => $bsfpDoc,
       'letter_confirmation_ministry_of_lands_and_survey_location_url' => $lcmlsDoc,
       'codes_and_standard_adopted_in_the_tank_design_location_url' => $csatdDoc,
-      'application_letter_addressed_to_the_controller_location_url' => $alacdDoc
+      'application_letter_addressed_to_the_controller_location_url' => $alacdDoc,
+      'applications_letter_for_suitability_inspection_reason' => request('ALFSI_reason'),
+      'article_and_memorandum_of_association_reason' => request('AMA_reason'),
+      'current_tax_clearance_reason' => request('CTC_reason'),
+      'certificate_of_incorporation_reason' => request('CI_reason'),
+      'fire_certificate_reason' => request('FC_reason'),
+      'police_report_reason' => request('PRC_reason'),
+      'completed_application_form_reason' => request('CAF_reason'),
+      'approved_building_plan_reason' => request('ABP_reason'),
+      'survey_plan_reason' => request('SP_reason'),
+      'deed_of_conveyance_reason' => request('DC_reason'),
+      'piping_and_instrumentation_diagram_reason' => request('PID_reason'),
+      'environmental_impact_accessment_reason' => request('EIA_reason'),
+      'bankdraft_of_statutory_fees_reason' => request('BSFP_reason'),
+      'letter_confirmation_ministry_of_lands_and_survey_reason' => request('LCMLS_reason'),
+      'codes_and_standard_adopted_in_the_tank_design_reason' => request('CSATD_reason'),
+      'application_letter_addressed_to_the_controller_reason' => request('ALACD_reason')
     ]);
 
     // clear the application ID from the session
@@ -486,11 +500,23 @@ class marketerController extends Controller
         $updatedDoc = $request->updatedDocument->getClientOriginalName();
       }
 
-      SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))
-      ->update([
-        request('doc_type') => request('selectedOption'),
-        request('doc_type').'_location_url' => $updatedDoc
-      ]);
+      if(request('sub_category') == "Site Suitability Inspection"){
+        SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))
+        ->update([
+          request('doc_type') => request('selectedOption'),
+          request('doc_type').'_location_url' => $updatedDoc
+        ]);
+      }elseif (request('sub_category') == "ATC") {
+        // dd($request);
+        AtcInspectionDocuments::where('application_id', request('application_id'))
+        ->update([
+          request('doc_type') => request('selectedOption'),
+          request('doc_type').'_reason' => request('reason'),
+          request('doc_type').'_location_url' => $updatedDoc
+        ]);
+      }
+
+
 
       return redirect('/marketer');
     }
@@ -500,11 +526,21 @@ class marketerController extends Controller
 
 
 
-
-
-
   public function marketerUploadDocumentsView(){
     return view('backend.marketer.marketer_upload_documents');
+  }
+
+
+  public function submitApplicationRequest(Request $request){
+
+    AppDocReview::where('application_id', request('application_id'))
+    ->update([
+      'application_status' => 'Application Pending',
+      'to_zopscon' => 'true'
+    ]);
+
+    return redirect('/marketer');
+
   }
 
 

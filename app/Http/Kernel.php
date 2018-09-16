@@ -63,6 +63,8 @@ class Kernel extends HttpKernel
         'staff' => \App\Http\Middleware\Staff::class,
         'marketer' => \App\Http\Middleware\Marketer::class,
         'teamlead' => \App\Http\Middleware\TeamLead::class,
-        'hod' => \App\Http\Middleware\HOD::class,
+        'headgas' => \App\Http\Middleware\HeadGas::class,
+        'ado' => \App\Http\Middleware\ADO::class,
+        'zopscon' => \App\Http\Middleware\zopscon::class,
     ];
 }

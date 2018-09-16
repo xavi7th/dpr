@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Team Lead | Application Review / Assignment
+  DPR ZOPSCON | Application Review / Assignment
 @endsection
 
 @section('pagestyles')
@@ -14,7 +14,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_teamlead')
+    @include('partials.backend_aside_zopscon')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -22,7 +22,7 @@
       <section class="content-header">
         <h1>
           Application Review / Assignment
-          <small>Team Lead Control panel</small>
+          <small>ZOPSCON Control panel</small>
         </h1>
       </section>
 
@@ -66,6 +66,23 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
+
+                  @if ($applicationReview->to_ADO == 'true')
+                    <li class="list-group-item">
+                      <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwared to ADO</a>
+                    </li>
+                  @endif
+
+                  @if ($applicationReview->to_ADO != 'true')
+                    <form role="form" method="post" action="/push_down_to_ADO">
+                      {{ csrf_field() }}
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <div class="box-footer">
+                        <input type="submit" name="to_ADO" value="Forward to ADO" class="pull btn btn-primary btn-block">
+                      </div>
+                    </form>
+                  @endif
+
                   @if ($applicationStatus != null)
                     <li class="list-group-item">
                       <b>Application Status</b>
@@ -80,34 +97,19 @@
                       <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                     </li>
                     @if ($applicationStatus->job_application_status == "Report Submitted")
-                      @if ($applicationReview->sub_category == 'Site Suitability Inspection')
-                        <form role="form" method="post" action="/tlDecide_site_suitability">
-                          {{ csrf_field() }}
-                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                          <div class="box-footer">
-                            <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
-                            <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
-                          </div>
-                        </form>
-                      @elseif ($applicationReview->sub_category == 'ATC')
-                        <form role="form" method="post" action="/tl_atc_to_hod">
-                          {{ csrf_field() }}
-                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                          <div class="box-footer">
-                            <input type="submit" name="sendToHOD" value="Send to HOD" class="pull-right btn btn-success">
-                          </div>
-                        </form>
-                      @endif
+                      <form role="form" method="post" action="/zopscon_decides">
+                        {{ csrf_field() }}
+                        <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                        <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                        <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                        <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                        <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                        <div class="box-footer">
+                          <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
+                          <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
+                        </div>
+                      </form>
                     @endif
-
                   @endif
                 </ul>
                 <div class="modal fade" id="report" style="display: none;">
@@ -174,65 +176,25 @@
               </div>
               <!-- /.box-footer-->
             </div>
-
           </div>
+
+
+
           <div class="col-md-8">
-            @if (optional($applicationStatus)->job_application_status != "Started")
+
+            {{-- @if (optional($applicationStatus)->job_application_status != "Started")
               @if (optional($applicationStatus)->job_application_status != "Report Submitted")
                 @if (optional($applicationStatus)->job_application_status != "Site Suitable")
                   @if (optional($applicationStatus)->job_application_status != "Pending Approval")
-                    <div class="box">
-                      <div class="box-header with-border">
-                        <h3 class="box-title">Select Staff To Assign</h3>
-                      </div>
-                      <!-- /.box-header -->
-                      <div class="box-body">
-                        <table id="example1" class="table table-bordered table-hover">
-                          <thead>
-                            <tr>
-                              <th>Staff ID</th>
-                              <th>Firstname</th>
-                              <th>Lastname</th>
-                              <th>Email Address</th>
-                              <th>Mobile Number</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @foreach ($staffs as $staff)
-                              <tr>
-                                <td class="sorting_1"><a class="label label-success" style="font-size: 14px;">{{ $staff->staff_id }}</a></td>
-                                <td>{{ $staff->first_name }}</td>
-                                <td>{{ $staff->last_name }}</td>
-                                <td>{{ $staff->email_address }}</td>
-                                <td>{{ $staff->mobile_number }}</td>
-                                <td>
-                                  <form action="/tlDocument_assign" method="post">
-                                    {{ csrf_field() }}
-                                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                                    <input type="text" hidden name="staff_id" value="{{ $staff->staff_id }}">
-                                    @if (optional($applicationStatus)->job_application_status == "Assigned")
-                                      <input type="submit" class="btn btn-danger" value="Re-Assign" style="padding: 2px 25px;">
-                                    @else
-                                      <input type="submit" class="btn btn-primary" value="Assign" style="padding: 2px 25px;">
-                                    @endif
-
-                                  </form>
-                                  {{-- <a href="/tlDocument_assign/{{ $applicationReview->id }}" class="label label-danger" style="font-size: 13px;">Assign</a> --}}
-                                </td>
-                              </tr>
-                            @endforeach
-                          </tbody>
-                        </table>
-                      </div>
-                      <!-- /.box-body -->
-                    </div>
+                    @include('partials.staff_assign')
                   @endif
                 @endif
               @endif
-            @endif
-
+            @endif --}}
           </div>
+
+
+
           <div class="col-md-8">
             <div class="box box-primary">
               <!-- /.box-header -->

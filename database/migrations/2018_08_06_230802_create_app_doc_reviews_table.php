@@ -28,6 +28,10 @@ class CreateAppDocReviewsTable extends Migration
             $table->string('town');
             $table->string('address');
             $table->string('application_status')->nullable();
+            $table->string('to_zopscon')->nullable();
+            $table->string('to_ADO')->nullable();
+            $table->string('to_head_gas')->nullable();
+            $table->string('to_team_lead')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

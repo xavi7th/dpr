@@ -22,7 +22,8 @@ class backendSessionController extends Controller
       return view('backend.sessions.backend_login');
     }
 
-    public function do_login(){
+    public function do_login(Request $request){
+
       // validate the form requests
       $this->validate(request(), [
         'staff_id' => 'required',
@@ -39,20 +40,29 @@ class backendSessionController extends Controller
 
         //sign the user in
         auth()->login($staff);
-
+        // dd($staff);
         // making redirection checks
         if($staff->role == 'Admin'){
           //redirect to Admin dashboard
           return redirect('/admin');
         }elseif($staff->role == 'Staff'){
-          //redirect to Admin dashboard
+          //redirect to staff dashboard
           return redirect('/staff');
         }elseif($staff->role == 'Marketer'){
-            //redirect to Admin dashboard
+            //redirect to marketer dashboard
           return redirect('/marketer');
         }elseif($staff->role == 'Team Lead'){
-            //redirect to Admin dashboard
+            //redirect to teamlead dashboard
           return redirect('/teamlead');
+        }elseif($staff->role == 'Head Gas M&G Lagos'){
+            //redirect to head gas dashboard
+          return redirect('/headgas');
+        }elseif($staff->role == 'ADO'){
+            //redirect to ADO dashboard
+          return redirect('/ado');
+        }elseif($staff->role == 'ZOPSCON'){
+            //redirect to zopscon dashboard
+          return redirect('/zopscon');
         }
 
       }else{

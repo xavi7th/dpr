@@ -43,8 +43,8 @@ Route::get('/marketer_records', 'marketerController@showMarketerRecords')->middl
 Route::get('/app_doc_rev', 'marketerController@applicationDocumentReview')->middleware(['auth', 'marketer']);
 Route::get('/site_suitability_requirement', 'marketerController@getSiteSuitablityInspectionView')->middleware(['auth', 'marketer']);
 Route::get('/atc_requirement', 'marketerController@getATCRequirementView')->middleware(['auth', 'marketer']);
-Route::get('/mDocument_review/{applicationID}', 'marketerController@showSiteSuitablityRequirement')->middleware(['auth', 'marketer']);
-Route::get('/mDocument_edit/{applicationID}', 'marketerController@showSiteSuitablityRequirementDocEdit')->middleware(['auth', 'marketer']);
+Route::get('/mDocument_review/{id}', 'marketerController@showDocumentsRequirement')->middleware(['auth', 'marketer']);
+Route::get('/mDocument_edit/{id}', 'marketerController@showDocumentsRequirementDocEdit')->middleware(['auth', 'marketer']);
 Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView')->middleware(['auth', 'marketer']);
 
 
@@ -52,8 +52,9 @@ Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView
 Route::post('/getMarketerDocs', 'marketerController@getDocs')->middleware(['auth', 'marketer']);
 Route::post('/app_doc_rev', 'marketerController@applicationDocumentReviewPhase')->middleware(['auth', 'marketer']);
 Route::post('/site_suit_req_upload', 'marketerController@handleSiteSuitablityInspection')->middleware(['auth', 'marketer']);
-Route::post('/edit_site_suit_req_upload', 'marketerController@applicationDocumentReviewPhaseUpdate')->middleware(['auth', 'marketer']);
+Route::post('/edit_document_upload', 'marketerController@applicationDocumentReviewPhaseUpdate')->middleware(['auth', 'marketer']);
 Route::post('/atc_req_upload', 'marketerController@handleATC')->middleware(['auth', 'marketer']);
+Route::post('/mSubmitApplication', 'marketerController@submitApplicationRequest')->middleware(['auth', 'marketer']);
 
 //STAFF-CONTROLLER
 Route::get('/staff', 'staffController@index')->middleware(['auth', 'staff']);
@@ -70,3 +71,23 @@ Route::get('/tlDocument_review/{applicationID}', 'teamleadController@teamleadDoc
 
 Route::post('/tlDocument_assign', 'teamleadController@teamleadDocumentAssign')->middleware(['auth', 'teamlead']);
 Route::post('/tlDecide_site_suitability', 'teamleadController@teamleadDecideSSI')->middleware(['auth', 'teamlead']);
+Route::post('/tl_atc_to_hod', 'teamleadController@sendATCApplicationToHOD')->middleware(['auth', 'teamlead']);
+
+
+//HEAD GAS
+Route::get('/headgas', 'headgasController@index')->middleware(['auth', 'headgas']);
+
+
+
+//ADO
+Route::get('/ado', 'adoController@index')->middleware(['auth', 'ado']);
+Route::get('/ado_document_review/{applicationID}', 'adoController@adoDocumentReview')->middleware(['auth', 'ado']);
+
+
+
+//ZOPSCON
+Route::get('/zopscon', 'zopsconController@index')->middleware(['auth', 'zopscon']);
+Route::get('/zopscon_document_review/{applicationID}', 'zopsconController@zopsconDocumentReview')->middleware(['auth', 'zopscon']);
+
+
+Route::post('/push_down_to_ADO', 'zopsconController@forwardApplicationToADO')->middleware(['auth', 'zopscon']);

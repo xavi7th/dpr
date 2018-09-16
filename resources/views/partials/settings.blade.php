@@ -22,6 +22,12 @@
       @include('partials.backend_aside_all')
     @elseif (Auth::user()->role == 'Team Lead')
       @include('partials.backend_aside_teamlead')
+    @elseif (Auth::user()->role == 'Head Gas M&G Lagos')
+      @include('partials.backend_aside_headgas')
+    @elseif (Auth::user()->role == 'ADO')
+      @include('partials.backend_aside_ado')
+    @elseif (Auth::user()->role == 'ZOPSCON')
+      @include('partials.backend_aside_zopscon')
     @endif
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

@@ -10,9 +10,13 @@
     {'label-warning' : nameval == 'null'}
     ]">{{ namevalModified }}</small>
     <!-- General tools such as edit or delete-->
-    <div class="tools" data-toggle="modal" :data-target="`#${modality}`">
+    <div v-show="!reasonBtn" class="tools" data-toggle="modal" :data-target="`#${modality}`">
       <i class="fa fa-eye"></i>
     </div>
+    <div v-show="reasonBtn" class="tools" data-toggle="modal" :data-target="`#${modality}`">
+      <i class="fa fa-edit text-edit"></i>
+    </div>
+    <!-- <i v-show="reasonBtn" id="reason-btn" class="fa fa-edit text-red" data-toggle="modal" :data-target="`#${modality}`"></i> -->
     <div class="modal fade" :id="`${modality}`" style="display: none;">
       <div class="modal-dialog" style="width: 1400px;">
         <div class="modal-content" style="background: transparent;">
@@ -38,13 +42,18 @@
           }else{
             this.namevalModified = this.nameval
           }
+
+          if(this.nameval == 'no' || this.nameval == 'null'){
+            this.reasonBtn = true;
+          }
         },
         props:['applicationid','marketerid','imgurl','title','nameval','modality'],
         data(){
           return{
             docsData: [],
             namevalModified: this.nameval,
-            picURL: ''
+            picURL: '',
+            reasonBtn: false
           }
         }
     }

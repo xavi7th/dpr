@@ -10,6 +10,7 @@ use App\Company;
 use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
+use App\AtcInspectionDocuments;
 use DB;
 
 use Auth;
@@ -53,15 +54,22 @@ class staffController extends Controller
     return view('backend.staff.create_company', compact('applicationID'));
   }
 
-  public function staffDocumentReview(SiteSuitabilityInspectionDocuments $applicationID){
-    $applicationReview = AppDocReview::where('application_id', $applicationID->application_id)->first();    // retrieve application review
-    $applicationStatus = JobAssignment::where('application_id', $applicationID->application_id)->first();    // retrieve application status
-    $reportDocument = ReportDocument::where('application_id', $applicationID->application_id)->first();    // retrieve report document
-    $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationID->application_id)->get();
+  public function staffDocumentReview($id){
+    $applicationReview = AppDocReview::where('id', $id)->first();    // retrieve application review
+
+    $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
+    $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
+    $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
 
     // check if the company that has this application has been registered into the system
     if($applicationReview->company_id != null){
       // redirect the staff to the document review area
+      // check the pplication that is being assigned to this staff
+      if($applicationReview->sub_category == "Site Suitability Inspection"){
+        $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+      }elseif($applicationReview->sub_category == "ATC") {
+        $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+      }
       return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments'));
     }else{
       // redirect the staff to register this company
@@ -71,6 +79,8 @@ class staffController extends Controller
   }
 
   public function createCompany(Request $request){
+
+    // dd($request);
 
     // validate this form
     $this->validate(request(), [

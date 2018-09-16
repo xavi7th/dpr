@@ -49456,6 +49456,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -49470,6 +49474,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     } else {
       this.namevalModified = this.nameval;
     }
+
+    if (this.nameval == 'no' || this.nameval == 'null') {
+      this.reasonBtn = true;
+    }
   },
 
   props: ['applicationid', 'marketerid', 'imgurl', 'title', 'nameval', 'modality'],
@@ -49477,7 +49485,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       docsData: [],
       namevalModified: this.nameval,
-      picURL: ''
+      picURL: '',
+      reasonBtn: false
     };
   }
 });
@@ -49509,10 +49518,35 @@ var render = function() {
     _c(
       "div",
       {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: !_vm.reasonBtn,
+            expression: "!reasonBtn"
+          }
+        ],
         staticClass: "tools",
         attrs: { "data-toggle": "modal", "data-target": "#" + _vm.modality }
       },
       [_c("i", { staticClass: "fa fa-eye" })]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.reasonBtn,
+            expression: "reasonBtn"
+          }
+        ],
+        staticClass: "tools",
+        attrs: { "data-toggle": "modal", "data-target": "#" + _vm.modality }
+      },
+      [_c("i", { staticClass: "fa fa-edit text-edit" })]
     ),
     _vm._v(" "),
     _c(

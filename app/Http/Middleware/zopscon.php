@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 
-class HOD
+class zopscon
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class HOD
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->role != 'HOD') {
+        if (Auth::user()->role != 'ZOPSCON') {
           Auth::logout();
           session()->invalidate();
           return redirect('/backend');

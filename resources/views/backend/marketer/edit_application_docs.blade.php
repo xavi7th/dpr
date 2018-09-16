@@ -66,20 +66,6 @@
                 <li class="list-group-item">
                   <b>Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                 </li>
-                {{-- @if ($applicationReview->sub_category == 'Site Suitability Inspection' && $applicationReview->application_status == "Site Suitable")
-                  <form role="form" method="post" action="/tlDecide_site_suitability">
-                    {{ csrf_field() }}
-                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                    <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                    <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                    <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                    <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                    <div class="box-footer">
-                      <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
-                      <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
-                    </div>
-                  </form>
-                @endif --}}
               </ul>
             </div>
             <!-- /.box-body -->
@@ -90,12 +76,34 @@
             <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Modify Uploads</h3>
+              @if ($applicationReview->sub_category == "ATC")
+                <div class="tools pull-right" data-toggle="modal" data-target="#reason" style="cursor: pointer;">
+                  <i class="fa fa-edit text-red"></i>
+                </div>
+              @endif
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" method="POST" action="/edit_site_suit_req_upload" enctype="multipart/form-data">
+            <form role="form" method="POST" action="/edit_document_upload" enctype="multipart/form-data">
               {{ csrf_field() }}
               <div class="box-body">
+                <div class="modal modal-danger fade" id="reason">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Specify a reason why this document is not available</h4>
+                      </div>
+                      <div class="modal-body" style="padding: 5px;">
+                        <textarea name="reason" rows="8" cols="80" style="width: 100%; resize: none; height: 200px; color: #000; padding: 5px;" placeholder="Give reason..."></textarea>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" data-dismiss="modal">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-group">
                   <label>Select Document to modify</label>
                   <select class="form-control select2" name="doc_type" style="width: 100%;">
@@ -105,7 +113,7 @@
                     <option value="current_tax_clearance">Current Tax Clearance</option>
                     <option value="certificate_of_incorporation">Certificate of Incorporation</option>
                     <option value="fire_certificate">Fire Certificate</option>
-                    <option value="police_report">Police Report / Certificate/option>
+                    <option value="police_report">Police Report / Certificate</option>
                     <option value="completed_application_form">Completed Application Form</option>
                     <option value="approved_building_plan">Approved Building Plan</option>
                     <option value="survey_plan">Survey Plan</option>
@@ -143,6 +151,7 @@
                 </div>
                 <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                 <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
 
                 {{-- <m-app-doc-rev-upload-component>
 

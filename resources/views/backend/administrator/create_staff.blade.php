@@ -84,10 +84,9 @@
                     <label>Select Staff Role</label>
                     <select class="form-control select2" name="role" style="width: 100%;">
                       <option selected="selected">Select Role</option>
-                      <option value="Head Gas M&G Lagos">Head Gas M&G Lagos</option>
                       <option value="ZOPSCON">ZOPSCON</option>
                       <option value="ADO">ADO</option>
-                      <option value="HOD">HOD</option>
+                      <option value="Head Gas M&G Lagos">Head Gas M&G Lagos</option>
                       <option value="Team Lead">Team Lead</option>
                       <option value="Staff">Staff</option>
                       <option value="Admin">Admin</option>
