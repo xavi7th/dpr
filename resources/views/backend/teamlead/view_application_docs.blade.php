@@ -81,9 +81,10 @@
                     </li>
                     @if ($applicationStatus->job_application_status == "Report Submitted")
                       @if ($applicationReview->sub_category == 'Site Suitability Inspection')
-                        <form role="form" method="post" action="/tlDecide_site_suitability">
+                        <form role="form" method="post" action="/tlApproves">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
                           <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
                           <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
@@ -94,9 +95,10 @@
                           </div>
                         </form>
                       @elseif ($applicationReview->sub_category == 'ATC')
-                        <form role="form" method="post" action="/tl_atc_to_hod">
+                        <form role="form" method="post" action="/tl_atc_to_headgas">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
                           <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
                           <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">

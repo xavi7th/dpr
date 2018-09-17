@@ -34,7 +34,7 @@
             <!-- small box -->
             <div class="small-box bg-orange">
               <div class="inner">
-                <h3>{{ $hodDocuments->count() }}</h3>
+                <h3>{{ $appDocReviews->count() }}</h3>
                 <p style="text-transform: uppercase;">Total applications</p>
               </div>
               <div class="icon">
@@ -47,7 +47,7 @@
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
-                <h3>{{ $pendingApplications->count() }}</h3>
+                <h3>0</h3>
                 <p style="text-transform: uppercase;">Pending</p>
               </div>
               <div class="icon">
@@ -57,7 +57,46 @@
           </div>
         </div>
         <!-- /.row (main row) -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box">
+              <div class="box-header">
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <table id="example1" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>Application ID</th>
+                    <th>Name of Gas Plant</th>
+                    <th>Application Type</th>
+                    <th>Sub-Category</th>
+                    <th>Plant Type</th>
+                    <th>Application Status</th>
+                    <th>Application Date</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($appDocReviews as $item)
+                      <tr>
+                        <td class="sorting_1"><a href="/headgas_document_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
+                        <td>{{ $item->name_of_gas_plant }}</td>
+                        <td>{{ $item->application_type }}</td>
+                        <td>{{ $item->sub_category }}</td>
+                        <td>{{ $item->plant_type }}</td>
+                        <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
+                        <td>{{ $item->created_at }}</td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
 
+          </div>
+          <!-- ./col -->
+        </div>
         {{-- <div class="row">
           <div class="col-md-12">
             <div class="box">

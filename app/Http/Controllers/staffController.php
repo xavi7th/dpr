@@ -136,7 +136,8 @@ class staffController extends Controller
       // update application status in Job Assignments Table to STARTED
       JobAssignment::where('application_id', request('application_id'))
       ->update([
-        'job_application_status' => 'Started'
+        'job_application_status' => 'Started',
+        'company_id' => $companyID
       ]);
 
       // redirect to staff view document

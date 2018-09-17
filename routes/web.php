@@ -70,19 +70,23 @@ Route::get('/teamlead', 'teamleadController@index')->middleware(['auth', 'teamle
 Route::get('/tlDocument_review/{applicationID}', 'teamleadController@teamleadDocumentReview')->middleware(['auth', 'teamlead']);
 
 Route::post('/tlDocument_assign', 'teamleadController@teamleadDocumentAssign')->middleware(['auth', 'teamlead']);
-Route::post('/tlDecide_site_suitability', 'teamleadController@teamleadDecideSSI')->middleware(['auth', 'teamlead']);
-Route::post('/tl_atc_to_hod', 'teamleadController@sendATCApplicationToHOD')->middleware(['auth', 'teamlead']);
+Route::post('/tlApproves', 'teamleadController@teamleadApproves')->middleware(['auth', 'teamlead']);
+Route::post('/tl_atc_to_headgas', 'teamleadController@sendATCApplicationToHeadGas')->middleware(['auth', 'teamlead']);
 
 
 //HEAD GAS
 Route::get('/headgas', 'headgasController@index')->middleware(['auth', 'headgas']);
+Route::get('/headgas_document_review/{applicationID}', 'headgasController@headGasDocumentReview')->middleware(['auth', 'headgas']);
 
+Route::post('/push_down_to_teamlead', 'headgasController@forwardApplicationToTeamLead')->middleware(['auth', 'headgas']);
+Route::post('/hgApproves', 'headgasController@headGasApproves')->middleware(['auth', 'headgas']);
 
 
 //ADO
 Route::get('/ado', 'adoController@index')->middleware(['auth', 'ado']);
 Route::get('/ado_document_review/{applicationID}', 'adoController@adoDocumentReview')->middleware(['auth', 'ado']);
 
+Route::post('/push_down_to_headgas', 'adoController@forwardApplicationToHeadGas')->middleware(['auth', 'ado']);
 
 
 //ZOPSCON

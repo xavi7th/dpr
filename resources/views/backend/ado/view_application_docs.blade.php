@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR ZOPSCON | Application Review / Assignment
+  DPR ADO | Application Review / Assignment
 @endsection
 
 @section('pagestyles')
@@ -22,7 +22,7 @@
       <section class="content-header">
         <h1>
           Application Review / Assignment
-          <small>ZOPSCON Control panel</small>
+          <small>ADO Control panel</small>
         </h1>
       </section>
 
@@ -67,18 +67,18 @@
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
 
-                  @if ($applicationReview->to_ADO == 'true')
+                  @if ($applicationReview->to_head_gas == 'true')
                     <li class="list-group-item">
-                      <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwared to ADO</a>
+                      <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to Head Gas M&G Lagos</a>
                     </li>
                   @endif
 
-                  @if ($applicationReview->to_ADO != 'true')
-                    <form role="form" method="post" action="/push_down_to_ADO">
+                  @if ($applicationReview->to_head_gas != 'true')
+                    <form role="form" method="post" action="/push_down_to_headgas">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                       <div class="box-footer">
-                        <input type="submit" name="to_ADO" value="Forward to ADO" class="pull btn btn-primary btn-block">
+                        <input type="submit" name="to_headgas" value="Forward to Head Gas" class="pull btn btn-primary btn-block">
                       </div>
                     </form>
                   @endif

@@ -15,7 +15,7 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN NAVIGATION</li>
       <li>
-        <a href="/headgas">
+        <a href="/ado">
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>

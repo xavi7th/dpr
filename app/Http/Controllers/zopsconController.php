@@ -52,7 +52,7 @@ class zopsconController extends Controller
         'to_ADO' => 'true'
       ]);
 
-      return redirect('/zopscon');
+      return back();
     }
 
 

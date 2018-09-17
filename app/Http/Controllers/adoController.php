@@ -44,4 +44,14 @@ class adoController extends Controller
     return view('backend.ado.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));
 
   }
+
+  public function forwardApplicationToHeadGas(Request $request){
+    AppDocReview::where('application_id', request('application_id'))
+    ->update([
+      'to_head_gas' => 'true'
+    ]);
+
+    return back();
+  }
+
 }

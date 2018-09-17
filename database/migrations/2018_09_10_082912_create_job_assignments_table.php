@@ -17,8 +17,10 @@ class CreateJobAssignmentsTable extends Migration
             $table->increments('id');
             $table->string('application_id');
             $table->string('staff_id');
+            $table->string('teamlead_id');
             $table->string('company_id')->nullable();
             $table->string('job_application_status')->nullable();
+            $table->string('approved_by')->nullable();
             $table->timestamps();
         });
     }

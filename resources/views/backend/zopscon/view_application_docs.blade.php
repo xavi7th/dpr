@@ -69,7 +69,7 @@
 
                   @if ($applicationReview->to_ADO == 'true')
                     <li class="list-group-item">
-                      <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwared to ADO</a>
+                      <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to ADO</a>
                     </li>
                   @endif
 

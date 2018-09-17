@@ -74,6 +74,13 @@
                     <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
                   </form>
                 @endif
+                @if ($applicationReview->application_status == 'Site Suitable')
+                  <form class="" action="/apply_for_atc_contd" method="post">
+                    {{ csrf_field() }}
+                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                    <button type="submit" class="btn btn-primary btn-block">Apply For ATC</button>
+                  </form>
+                @endif
               </ul>
             </div>
             <!-- /.box-body -->

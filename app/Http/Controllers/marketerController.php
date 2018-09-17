@@ -438,7 +438,7 @@ class marketerController extends Controller
       'letter_confirmation_ministry_of_lands_and_survey' => request('LCMLS'),
       'codes_and_standard_adopted_in_the_tank_design' => request('CSATD'),
       'application_letter_addressed_to_the_controller' => request('ALACD'),
-      'applications_letter_for_suitability_inspection_location_url' => $ALFSIDoc,
+      'applications_letter_for_suitability_inspection_location_url' => $alfsiDoc,
       'article_and_memorandum_of_association_location_url' => $amaDoc,
       'current_tax_clearance_location_url' => $ctcDoc,
       'certificate_of_incorporation_location_url' => $ciDoc,

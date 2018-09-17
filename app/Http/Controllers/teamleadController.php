@@ -64,7 +64,7 @@ class teamleadController extends Controller
     return redirect('/teamlead');
   }
 
-  public function teamleadDecideSSI(Request $request){
+  public function teamleadApproves(Request $request){
     $verdict = "";
 
     if(request('approve')){
@@ -83,7 +83,8 @@ class teamleadController extends Controller
     // update job_assignments
     JobAssignment::where('application_id', request('application_id'))
     ->update([
-      'job_application_status' => $verdict
+      'job_application_status' => $verdict,
+      'approved_by' => Auth::user()->staff_id
     ]);
 
     // record this application inside site suitability reports
@@ -99,7 +100,7 @@ class teamleadController extends Controller
     return redirect('/teamlead');
   }
 
-  public function sendATCApplicationToHOD(Request $request){
+  public function sendATCApplicationToHeadGas(Request $request){
 
     // send this application request to the HOD
     HodLpgDocument::create([

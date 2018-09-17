@@ -68,7 +68,7 @@
                   </li>
                   <li class="list-group-item">
                     <b>Application Status</b>
-                    @if ($applicationStatus->job_application_status == "Report Submitted")
+                    @if ($reportDocument != null)
                       <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
                         <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
                       </div>
@@ -108,7 +108,7 @@
             <div class="modal fade" id="report" style="display: none;">
               <div class="modal-dialog" style="width: 1400px;">
                 <div class="modal-content" style="background: transparent;">
-                  @if ($applicationStatus->job_application_status == "Report Submitted")
+                  @if ($reportDocument != null)
                     <img src="/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" alt="">
                   @endif
                 </div>
