@@ -11,7 +11,10 @@ use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
+use App\LtoInspectionDocument;
+use App\IssuedAtcLicense;
 use DB;
+use Carbon\Carbon;
 
 use Auth;
 
@@ -69,6 +72,8 @@ class staffController extends Controller
         $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "ATC") {
         $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+      }elseif($applicationReview->sub_category == "LTO") {
+        $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
       }
       return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments'));
     }else{
@@ -86,8 +91,8 @@ class staffController extends Controller
     $this->validate(request(), [
       'comp_name' => 'required',
       'contract_type' => 'required',
-      // 'state' => 'required',
-      // 'lga' => 'required',
+      'state' => 'required',
+      'lga' => 'required',
       'town' => 'required',
       'address' => 'required',
       'mobile_number' => 'required',
@@ -140,6 +145,22 @@ class staffController extends Controller
         'company_id' => $companyID
       ]);
 
+      $currentApplication = AppDocReview::where('application_id', request('application_id'))->first();
+
+      if($currentApplication->sub_category == 'Site Suitability Inspection'){
+        SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))
+        ->update([
+          'company_id' => $companyID
+        ]);
+      }elseif($currentApplication->sub_category == 'ATC') {
+        AtcInspectionDocuments::where('application_id', request('application_id'))
+        ->update([
+          'company_id' => $companyID
+        ]);
+      }elseif ($currentApplication->sub_category == 'LTO') {
+        // code...
+      }
+
       // redirect to staff view document
       return redirect('/stDocument_review/'.request('id'));
     }
@@ -169,6 +190,37 @@ class staffController extends Controller
       JobAssignment::where('application_id', request('application_id'))
       ->update([
         'job_application_status' => 'Report Submitted'
+      ]);
+
+      // return back
+      return back();
+    }else{
+      // return back with errors
+      return back();
+    }
+  }
+
+  public function uploadContructionReportATC(Request $request){
+    $report_document = "";
+    // check if request has the document
+    if($request->hasFile('reportDocument')){
+      // store the document to the company folder in company reports folder
+      $request->reportDocument->storeAs('atc_construction_reports/'.request('company_id').'/'.request('staff_id').'/'.request('application_id'), $request->reportDocument->getClientOriginalName());
+
+      $report_document = $request->reportDocument->getClientOriginalName();
+
+      $expiryDate = Carbon::now()->addYears(2);
+
+      // if this record exist, update the record else create a new record.
+      IssuedAtcLicense::updateOrCreate([
+        'application_id' => request('application_id')
+      ],
+      [
+        'application_id' => request('application_id'),
+        'staff_id' => request('staff_id'),
+        'company_id' => request('company_id'),
+        'construction_report' => $report_document,
+        'expiry_date' => $expiryDate
       ]);
 
       // return back

@@ -13,14 +13,31 @@
     <div v-show="!reasonBtn" class="tools" data-toggle="modal" :data-target="`#${modality}`">
       <i class="fa fa-eye"></i>
     </div>
-    <div v-show="reasonBtn" class="tools" data-toggle="modal" :data-target="`#${modality}`">
+    <div v-show="reasonBtn" class="tools" data-toggle="modal" :data-target="`#${reason}`" v-on:click="getReason()">
       <i class="fa fa-edit text-edit"></i>
     </div>
     <!-- <i v-show="reasonBtn" id="reason-btn" class="fa fa-edit text-red" data-toggle="modal" :data-target="`#${modality}`"></i> -->
-    <div class="modal fade" :id="`${modality}`" style="display: none;">
+    <div v-show="!reasonBtn" class="modal fade" :id="`${modality}`" style="display: none;">
       <div class="modal-dialog" style="width: 1400px;">
         <div class="modal-content" style="background: transparent;">
           <img :src="picURL" alt="">
+        </div>
+      </div>
+    </div>
+    <div v-show="reasonBtn" class="modal modal-danger fade" :id="`${reason}`">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{specifiedReason}}</h4>
+          </div>
+          <div class="modal-body" style="padding: 5px;">
+            <textarea name="reason" rows="8" cols="80" style="width: 100%; resize: none; height: 200px; color: #000; padding: 5px;" placeholder="Give reason...">{{reasonspecified}}</textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-dismiss="modal">Submit</button>
+          </div>
         </div>
       </div>
     </div>
@@ -47,13 +64,22 @@
             this.reasonBtn = true;
           }
         },
-        props:['applicationid','marketerid','imgurl','title','nameval','modality'],
+        props:['applicationid','marketerid','imgurl','title','nameval','modality','reason','reasonspecified'],
         data(){
           return{
             docsData: [],
             namevalModified: this.nameval,
             picURL: '',
-            reasonBtn: false
+            reasonBtn: false,
+            specifiedReason: ''
+          }
+        },
+        methods:{
+          getReason(){
+            // axios.get('/getReson',{params: {data:''}}).then(response => {
+            //   this.states = response.data.nigeria;
+            // });
+            this.specifiedReason = this.title;
           }
         }
     }

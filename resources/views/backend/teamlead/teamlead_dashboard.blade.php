@@ -47,7 +47,7 @@
             <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">
-                <h3>{{ $assignedApplications->count() }}</h3>
+                <h3>0</h3>
                 <p style="text-transform: uppercase;">Assigned</p>
               </div>
               <div class="icon">
@@ -60,7 +60,7 @@
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
-                <h3>{{ $startedApplications->count() }}</h3>
+                <h3>0</h3>
                 <p style="text-transform: uppercase;">Started</p>
               </div>
               <div class="icon">

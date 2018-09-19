@@ -10,6 +10,8 @@ use App\Staff;
 use Auth;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
+use App\LtoInspectionDocument;
+use Storage;
 
 class marketerController extends Controller
 {
@@ -53,6 +55,12 @@ class marketerController extends Controller
 
 
 
+  public function getLTORequirementView(){
+    return view('backend.marketer.requirement_lto');
+  }
+
+
+
 
   public function showDocumentsRequirement($id){
     $applicationReview = AppDocReview::where('id', $id)->first();
@@ -61,6 +69,8 @@ class marketerController extends Controller
       $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "ATC") {
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "LTO") {
+      $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
     }
 
     return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview'));
@@ -414,10 +424,8 @@ class marketerController extends Controller
       $alacdDoc = $request->ALACD_doc->getClientOriginalName();
     }
 
-    // if($alfsiDoc || $amaDoc || $ctcDoc || $ciDoc || $fcDoc || $prcDoc || $cafDoc || $abpDoc || $spDoc || $dcDoc || $pidDoc || $eiaDoc || $bsfpDoc || $lcmlsDoc || $csatdDoc || $alacdDoc == "null"){
-    //
-    //   dd();
-    // }
+
+
 
     AtcInspectionDocuments::create([
       'application_id' => session('application_id'),
@@ -524,6 +532,27 @@ class marketerController extends Controller
   }
 
 
+  public function applicationDocumentReviewPhaseUpdate2(Request $request){
+    // dd($request);
+
+    //++++++++++++++++++ validations missing
+
+    AppDocReview::where('application_id', request('application_id'))
+    ->update([
+      'name_of_gas_plant' => request('gas_plant_name'),
+      'plant_type' => request('plant_type'),
+      'capacity_of_tank' => request('capacity_of_tank'),
+      'state' => request('state'),
+      'lga' => request('lga'),
+      'town' => request('town'),
+      'address' => request('address')
+    ]);
+
+    return back();
+
+  }
+
+
 
 
   public function marketerUploadDocumentsView(){
@@ -538,6 +567,313 @@ class marketerController extends Controller
       'application_status' => 'Application Pending',
       'to_zopscon' => 'true'
     ]);
+
+    return redirect('/marketer');
+
+  }
+
+
+  public function applyForATC(Request $request){
+    // dd($request);
+    // $testCase = DB::table('job_assignments')
+    // ->join('report_documents', 'report_documents.application_id', '=', 'job_assignments.application_id')
+    // ->get();
+
+
+
+    // retrieve site suitability fields for this company from app_doc_reviews using the application_id from request
+    $companyATODetails = AppDocReview::where('application_id', request('application_id'))->first();
+
+    // create a new application for ATC for this company inside app_doc_reviews (Set status to Not Submitted)
+    // getting the current number of created applications
+    $applicationCount = DB::table('app_doc_reviews')->get();
+
+    // adding 1 to that number
+    $indexIncremented = $applicationCount->count() + 1;
+
+    // padding the number to 4 leading zeros
+    $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+    //appending the new application index to DPRAPPLICATION to create the applications's ID
+    $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+    // add the application ID to session
+    // session(['application_id'=>$applicationID]);
+
+    // +++++ might need to do some custom verification here with decision statements
+    AppDocReview::create([
+      'application_id' => $applicationID,
+      'marketer_id' => Auth::user()->staff_id,
+      'company_id' => $companySSIDetails->company_id,
+      'name_of_gas_plant' => $companySSIDetails->name_of_gas_plant,
+      'application_type' => $companySSIDetails->application_type,
+      'sub_category' => 'ATC',
+      'plant_type' => $companySSIDetails->plant_type,
+      'state' => $companySSIDetails->state,
+      'lga' => $companySSIDetails->lga,
+      'town' => $companySSIDetails->town,
+      'address' => $companySSIDetails->address,
+      'application_status' => 'Not Submitted'
+    ]);
+
+    // Carry out file transfer process from site_suitability_inspection_documents to atc_inspection_documents
+    $companySSIDocuments = SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))->first();
+    $mID = $companySSIDocuments->marketer_id; // marketer's id
+    $cID = $companySSIDocuments->company_id; // company's id
+    $aID = $companySSIDocuments->application_id; // company's id
+
+
+    if($companySSIDocuments->applications_letter_for_suitability_inspection_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->applications_letter_for_suitability_inspection_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->applications_letter_for_suitability_inspection_location_url);
+    }
+
+    if($companySSIDocuments->article_and_memorandum_of_association_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->article_and_memorandum_of_association_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->article_and_memorandum_of_association_location_url);
+    }
+
+    if($companySSIDocuments->current_tax_clearance_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->current_tax_clearance_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->current_tax_clearance_location_url);
+    }
+
+    if($companySSIDocuments->certificate_of_incorporation_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->certificate_of_incorporation_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->certificate_of_incorporation_location_url);
+    }
+
+    if($companySSIDocuments->fire_certificate_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->fire_certificate_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->fire_certificate_location_url);
+    }
+
+    if($companySSIDocuments->police_report_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->police_report_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->police_report_location_url);
+    }
+
+    if($companySSIDocuments->completed_application_form_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->completed_application_form_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->completed_application_form_location_url);
+    }
+
+    if($companySSIDocuments->approved_building_plan_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->approved_building_plan_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->approved_building_plan_location_url);
+    }
+
+    if($companySSIDocuments->survey_plan_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->survey_plan_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->survey_plan_location_url);
+    }
+
+    if($companySSIDocuments->deed_of_conveyance_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->deed_of_conveyance_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->deed_of_conveyance_location_url);
+    }
+
+    if($companySSIDocuments->piping_and_instrumentation_diagram_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->piping_and_instrumentation_diagram_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->piping_and_instrumentation_diagram_location_url);
+    }
+
+    if($companySSIDocuments->environmental_impact_accessment_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->environmental_impact_accessment_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->environmental_impact_accessment_location_url);
+    }
+
+    if($companySSIDocuments->bankdraft_of_statutory_fees_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->bankdraft_of_statutory_fees_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->bankdraft_of_statutory_fees_location_url);
+    }
+
+    if($companySSIDocuments->letter_confirmation_ministry_of_lands_and_survey_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->letter_confirmation_ministry_of_lands_and_survey_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->letter_confirmation_ministry_of_lands_and_survey_location_url);
+    }
+
+    if($companySSIDocuments->codes_and_standard_adopted_in_the_tank_design_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->codes_and_standard_adopted_in_the_tank_design_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->codes_and_standard_adopted_in_the_tank_design_location_url);
+    }
+
+    if($companySSIDocuments->application_letter_addressed_to_the_controller_location_url != "null"){
+      Storage::copy('comp_docs/'.$mID.'/'.$aID.'/'.$companySSIDocuments->application_letter_addressed_to_the_controller_location_url, 'comp_docs/'.$mID.'/'.$applicationID.'/'.$companySSIDocuments->application_letter_addressed_to_the_controller_location_url);
+    }
+
+    AtcInspectionDocuments::create([
+      'application_id' => $applicationID,
+      'marketer_id' => $mID,
+      'company_id' => $cID,
+      'applications_letter_for_suitability_inspection' => $companySSIDocuments->applications_letter_for_suitability_inspection,
+      'article_and_memorandum_of_association' => $companySSIDocuments->article_and_memorandum_of_association,
+      'current_tax_clearance' => $companySSIDocuments->current_tax_clearance,
+      'certificate_of_incorporation' => $companySSIDocuments->certificate_of_incorporation,
+      'fire_certificate' => $companySSIDocuments->fire_certificate,
+      'police_report' => $companySSIDocuments->police_report,
+      'completed_application_form' => $companySSIDocuments->completed_application_form,
+      'approved_building_plan' => $companySSIDocuments->approved_building_plan,
+      'survey_plan' => $companySSIDocuments->survey_plan,
+      'deed_of_conveyance' => $companySSIDocuments->deed_of_conveyance,
+      'piping_and_instrumentation_diagram' => $companySSIDocuments->piping_and_instrumentation_diagram,
+      'environmental_impact_accessment' => $companySSIDocuments->environmental_impact_accessment,
+      'bankdraft_of_statutory_fees' => $companySSIDocuments->bankdraft_of_statutory_fees,
+      'letter_confirmation_ministry_of_lands_and_survey' => $companySSIDocuments->letter_confirmation_ministry_of_lands_and_survey,
+      'codes_and_standard_adopted_in_the_tank_design' => $companySSIDocuments->codes_and_standard_adopted_in_the_tank_design,
+      'application_letter_addressed_to_the_controller' => $companySSIDocuments->application_letter_addressed_to_the_controller,
+      'applications_letter_for_suitability_inspection_location_url' => $companySSIDocuments->applications_letter_for_suitability_inspection_location_url,
+      'article_and_memorandum_of_association_location_url' => $companySSIDocuments->article_and_memorandum_of_association_location_url,
+      'current_tax_clearance_location_url' => $companySSIDocuments->current_tax_clearance_location_url,
+      'certificate_of_incorporation_location_url' => $companySSIDocuments->certificate_of_incorporation_location_url,
+      'fire_certificate_location_url' => $companySSIDocuments->fire_certificate_location_url,
+      'police_report_location_url' => $companySSIDocuments->police_report_location_url,
+      'completed_application_form_location_url' => $companySSIDocuments->completed_application_form_location_url,
+      'approved_building_plan_location_url' => $companySSIDocuments->approved_building_plan_location_url,
+      'survey_plan_location_url' => $companySSIDocuments->survey_plan_location_url,
+      'deed_of_conveyance_location_url' => $companySSIDocuments->deed_of_conveyance_location_url,
+      'piping_and_instrumentation_diagram_location_url' => $companySSIDocuments->piping_and_instrumentation_diagram_location_url,
+      'environmental_impact_accessment_location_url' => $companySSIDocuments->environmental_impact_accessment_location_url,
+      'bankdraft_of_statutory_fees_location_url' => $companySSIDocuments->bankdraft_of_statutory_fees_location_url,
+      'letter_confirmation_ministry_of_lands_and_survey_location_url' => $companySSIDocuments->letter_confirmation_ministry_of_lands_and_survey_location_url,
+      'codes_and_standard_adopted_in_the_tank_design_location_url' => $companySSIDocuments->codes_and_standard_adopted_in_the_tank_design_location_url,
+      'application_letter_addressed_to_the_controller_location_url' => $companySSIDocuments->application_letter_addressed_to_the_controller_location_url,
+    ]);
+
+    // return to marketer dashboard
+    return redirect('/marketer');
+
+
+  }
+
+
+  public function applyForLTO(Request $request){
+
+    // retrieve site suitability fields for this company from app_doc_reviews using the application_id from request
+    $companyATODetails = AppDocReview::where('application_id', request('application_id'))->first();
+
+    // create a new application for ATC for this company inside app_doc_reviews (Set status to Not Submitted)
+    // getting the current number of created applications
+    $applicationCount = DB::table('app_doc_reviews')->get();
+
+    // adding 1 to that number
+    $indexIncremented = $applicationCount->count() + 1;
+
+    // padding the number to 4 leading zeros
+    $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+    //appending the new application index to DPRAPPLICATION to create the applications's ID
+    $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+    // add the application ID to session
+    // session(['application_id'=>$applicationID]);
+
+    // +++++ might need to do some custom verification here with decision statements
+    AppDocReview::create([
+      'application_id' => $applicationID,
+      'marketer_id' => Auth::user()->staff_id,
+      'company_id' => $companyATODetails->company_id,
+      'name_of_gas_plant' => $companyATODetails->name_of_gas_plant,
+      'application_type' => $companyATODetails->application_type,
+      'sub_category' => 'LTO',
+      'plant_type' => $companyATODetails->plant_type,
+      'state' => $companyATODetails->state,
+      'lga' => $companyATODetails->lga,
+      'town' => $companyATODetails->town,
+      'address' => $companyATODetails->address,
+      'application_status' => 'Not Submitted'
+    ]);
+
+    // add the application ID to session
+    session(['application_id'=>$applicationID]);
+
+
+    // redirect the marketer to uploads area
+    return redirect('/lto_requirement');
+
+
+  }
+
+
+  public function handleLTO(Request $request){
+    // dd($request);
+    $cafDoc = $bsfpDoc = $paclpgDoc = $cwmcvDoc = $alacdDoc = $frcDoc = $cptrcDoc = $ctyitcDoc = $appDoc = $sopDoc = 'null';
+    $marketerID = Auth::user()->staff_id;
+
+    // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+    if($request->hasFile('CAF_doc')){
+      $request->CAF_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CAF_doc->getClientOriginalName());
+      $cafDoc = $request->CAF_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('BSFP_doc')){
+      $request->BSFP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->BSFP_doc->getClientOriginalName());
+      $bsfpDoc = $request->BSFP_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('PACLPG_doc')){
+      $request->PACLPG_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->PACLPG_doc->getClientOriginalName());
+      $paclpgDoc = $request->PACLPG_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CWMCV_doc')){
+      $request->CWMCV_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CWMCV_doc->getClientOriginalName());
+      $cwmcvDoc = $request->CWMCV_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('ALACD_doc')){
+      $request->ALACD_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->ALACD_doc->getClientOriginalName());
+      $alacdDoc = $request->ALACD_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('FRC_doc')){
+      $request->FRC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->FRC_doc->getClientOriginalName());
+      $frcDoc = $request->FRC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CPTRC_doc')){
+      $request->CPTRC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CPTRC_doc->getClientOriginalName());
+      $cptrcDoc = $request->CPTRC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CTYITC_doc')){
+      $request->CTYITC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CTYITC_doc->getClientOriginalName());
+      $ctyitcDoc = $request->CTYITC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('APP_doc')){
+      $request->APP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->APP_doc->getClientOriginalName());
+      $appDoc = $request->APP_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('SOP_doc')){
+      $request->SOP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->SOP_doc->getClientOriginalName());
+      $sopDoc = $request->SOP_doc->getClientOriginalName();
+    }
+
+
+    LtoInspectionDocument::create([
+      'application_id' => session('application_id'),
+      'marketer_id' => $marketerID,
+      'completed_application_form' => request('CAF'),
+      'bankdraft_of_statutory_fees' => request('BSFP'),
+      'photocopy_of_approval_to_construct_lpg' => request('PACLPG'),
+      'current_weight_measures_cert_of_verification' => request('CWMCV'),
+      'application_letter_addressed_to_the_controller' => request('ALACD'),
+      'fire_report_certificate' => request('FRC'),
+      'current_pressure_test_report_certificate' => request('CPTRC'),
+      'current_three_years_income_tax_clearance' => request('CTYITC'),
+      'appropriate_plant_photography' => request('APP'),
+      'standard_operating_procedure' => request('SOP'),
+      'completed_application_form_location_url' => $cafDoc,
+      'bankdraft_of_statutory_fees_location_url' => $bsfpDoc,
+      'photocopy_of_approval_to_construct_lpg_location_url' => $paclpgDoc,
+      'current_weight_measures_cert_of_verification_location_url' => $cwmcvDoc,
+      'application_letter_addressed_to_the_controller_location_url' => $alacdDoc,
+      'fire_report_certificate_location_url' => $frcDoc,
+      'current_pressure_test_report_certificate_location_url' => $cptrcDoc,
+      'current_three_years_income_tax_clearance_location_url' => $ctyitcDoc,
+      'appropriate_plant_photography_location_url' => $appDoc,
+      'standard_operating_procedure_location_url' => $sopDoc,
+      'completed_application_form_reason' => request('CAF_reason'),
+      'bankdraft_of_statutory_fees_reason' => request('BSFP_reason'),
+      'photocopy_of_approval_to_construct_lpg_reason' => request('PACLPG_reason'),
+      'current_weight_measures_cert_of_verification_reason' => request('CWMCV_reason'),
+      'application_letter_addressed_to_the_controller_reason' => request('ALACD_reason'),
+      'fire_report_certificate_reason' => request('FRC_reason'),
+      'current_pressure_test_report_certificate_reason' => request('CPTRC_reason'),
+      'current_three_years_income_tax_clearance_reason' => request('CTYITC_reason'),
+      'appropriate_plant_photography_reason' => request('APP_reason'),
+      'standard_operating_procedure_reason' => request('SOP_reason')
+    ]);
+
+    // clear the application ID from the session
+    $request->session()->forget('application_id');
 
     return redirect('/marketer');
 

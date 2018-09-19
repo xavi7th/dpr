@@ -94,7 +94,7 @@
                             <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
                           </div>
                         </form>
-                      @elseif ($applicationReview->sub_category == 'ATC')
+                      @elseif ($applicationReview->sub_category == 'ATCs')
                         <form role="form" method="post" action="/tl_atc_to_headgas">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
@@ -239,7 +239,7 @@
             <div class="box box-primary">
               <!-- /.box-header -->
               <div class="box-body">
-                <ul class="todo-list ui-sortable">
+                {{-- <ul class="todo-list ui-sortable">
                   <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->applications_letter_for_suitability_inspection_location_url }}" title="Applications Letter for Suitability Inspection" nameval="{{$applicationID->applications_letter_for_suitability_inspection}}" modality="ALFS"></m-view-application-docs>
 
                   <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->article_and_memorandum_of_association_location_url }}" title="Article and Memorandum of Association" nameval="{{$applicationID->article_and_memorandum_of_association}}" modality="AMA"></m-view-application-docs>
@@ -271,7 +271,12 @@
                   <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->codes_and_standard_adopted_in_the_tank_design_location_url }}" title="Codes and Standard Adopted in the Tank Design" nameval="{{$applicationID->codes_and_standard_adopted_in_the_tank_design}}" modality="CSATD"></m-view-application-docs>
 
                   <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->application_letter_addressed_to_the_controller_location_url }}" title="Application Letter Addressed to the Controller DPR" nameval="{{$applicationID->application_letter_addressed_to_the_controller}}" modality="ALACD"></m-view-application-docs>
-                </ul>
+                </ul> --}}
+                @if($applicationReview->sub_category == 'Site Suitability Inspection' || $applicationReview->sub_category == 'ATC')
+                  @include('partials.m_view_application_docs')
+                @elseif($applicationReview->sub_category == 'LTO')
+                  @include('partials.m_view_application_docs_lto')
+                @endif
               </div>
               <!-- /.box-body -->
             </div>

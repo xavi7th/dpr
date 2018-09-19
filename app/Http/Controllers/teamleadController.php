@@ -12,7 +12,8 @@ use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
 use App\SiteSuitabilityReports;
-use App\HodLpgDocument;
+use App\LtoInspectionDocument;
+use Carbon\Carbon;
 
 use Auth;
 
@@ -23,12 +24,14 @@ class teamleadController extends Controller
   }
 
   public function index(){
-    $appDocReviews = AppDocReview::with('job_assignment')->where('application_status', '!=', 'Not Submitted')->get();    // Retrieve all application documents
-    $pendingApplications = AppDocReview::where('application_status', 'Application Pending')->get();   // Retrieve all pending application documents
-    $assignedApplications = JobAssignment::where('job_application_status', 'Assigned')->get();   // Retrieve all assigned application documents
-    $startedApplications = JobAssignment::where('job_application_status', 'Started')->get();   // Retrieve all started application documents
+    // $appDocReviews = AppDocReview::with('job_assignment')->where('application_status', '!=', 'Not Submitted')->get();    // Retrieve all application documents
+    // $pendingApplications = AppDocReview::where('application_status', 'Application Pending')->get();   // Retrieve all pending application documents
+    // $assignedApplications = JobAssignment::where('job_application_status', 'Assigned')->get();   // Retrieve all assigned application documents
+    // $startedApplications = JobAssignment::where('job_application_status', 'Started')->get();   // Retrieve all started application documents
     // $approvedApplications = JobAssignment::where('job_application_status', 'Approved')->get();   // Retrieve all approved application documents
-    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','pendingApplications','assignedApplications','approvedApplications','startedApplications'));
+
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
+    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews'));
   }
 
   public function teamleadDocumentReview($id){
@@ -44,6 +47,8 @@ class teamleadController extends Controller
       $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "ATC") {
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "LTO") {
+      $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
     }
 
     // dd($applicationStatus);

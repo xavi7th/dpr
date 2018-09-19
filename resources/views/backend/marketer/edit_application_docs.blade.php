@@ -75,6 +75,74 @@
           <div class="col-md-6">
             <div class="box box-info">
             <div class="box-header with-border">
+              <h3 class="box-title">Update Application Data</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" method="POST" action="/edit_document_application" enctype="multipart/form-data">
+              {{ csrf_field() }}
+              <div class="box-body">
+                <div>
+                  <div class="form-group">
+                    <label>Name of Gas Plant</label>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
+                      <input type="text" name="gas_plant_name" class="form-control" placeholder="Enter Name of Gas Plant" value="{{ $applicationReview->name_of_gas_plant }}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Plant Type</label>
+                    <select class="form-control select2" name="plant_type" style="width: 100%;">
+                      <option selected="selected">Select Type</option>
+                      <option value="Refilling Plant">Refilling Plant</option>
+                      <option value="Industrial Plant">Industrial Plant</option>
+                      <option value="Auto Gas Plant">Auto Gas Plant</option>
+                    </select>
+                  </div>
+                  <div class="form-group" id="capacity_of_tank">
+                    <label>Capacity of Tank (MT)</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ion-beaker"></i></span>
+                        <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank" value="{{ $applicationReview->capacity_of_tank }}">
+                    </div>
+                  </div>
+                  <state-component></state-component>
+                  <div class="form-group">
+                    <label>Town</label>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="ion ion-location"></i></span>
+                      <input type="text" name="town" class="form-control" placeholder="Enter Town" value="{{ $applicationReview->town }}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Address</label>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="ion ion-location"></i></span>
+                      <input type="text" name="address" class="form-control" placeholder="Enter Address" value="{{ $applicationReview->address }}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary pull-right">Update</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+          </div>
+
+
+
+
+
+
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="box box-info">
+            <div class="box-header with-border">
               <h3 class="box-title">Modify Uploads</h3>
               @if ($applicationReview->sub_category == "ATC")
                 <div class="tools pull-right" data-toggle="modal" data-target="#reason" style="cursor: pointer;">
@@ -165,12 +233,6 @@
             </form>
           </div>
           </div>
-
-
-
-
-
-
         </div>
       </section>
       <!-- /.content -->

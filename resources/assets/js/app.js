@@ -17,6 +17,7 @@ window.Vue = require('vue');
 
 Vue.component('app-doc-rev-upload-component', require('./components/SiteSuitablityInspectionReqDoc.vue'));
 Vue.component('atc-inspection-upload-component', require('./components/ATCInspectionDoc.vue'));
+Vue.component('lto-inspection-upload-component', require('./components/LTOInspectionDoc.vue'));
 Vue.component('document-upload-component', require('./components/documentUploads.vue'));
 Vue.component('state-component', require('./components/StateComponent.vue'));
 Vue.component('app-doc-rev-component', require('./components/ApplicationDocumentReview.vue'));

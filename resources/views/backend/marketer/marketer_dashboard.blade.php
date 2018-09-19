@@ -61,6 +61,7 @@
                     <th>Application Status</th>
                     <th>Application Date</th>
                     <th>Action</th>
+                    <th>Mails</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -74,6 +75,7 @@
                         <td>{{ $item->application_status }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td><a href="/mDocument_edit/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Edit Document</a></td>
+                        <td><a href="/mDocument_messages/{{ $item->id }}" class="label label-primary" style="font-size: 13px;">View</a></td>
                       </tr>
                     @endforeach
                   </tbody>

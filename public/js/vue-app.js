@@ -14324,6 +14324,7 @@ window.Vue = __webpack_require__(39);
 
 Vue.component('app-doc-rev-upload-component', __webpack_require__(42));
 Vue.component('atc-inspection-upload-component', __webpack_require__(48));
+Vue.component('lto-inspection-upload-component', __webpack_require__(76));
 Vue.component('document-upload-component', __webpack_require__(53));
 Vue.component('state-component', __webpack_require__(58));
 Vue.component('app-doc-rev-component', __webpack_require__(61));
@@ -49460,6 +49461,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -49480,14 +49498,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
 
-  props: ['applicationid', 'marketerid', 'imgurl', 'title', 'nameval', 'modality'],
+  props: ['applicationid', 'marketerid', 'imgurl', 'title', 'nameval', 'modality', 'reason', 'reasonspecified'],
   data: function data() {
     return {
       docsData: [],
       namevalModified: this.nameval,
       picURL: '',
-      reasonBtn: false
+      reasonBtn: false,
+      specifiedReason: ''
     };
+  },
+
+  methods: {
+    getReason: function getReason() {
+      // axios.get('/getReson',{params: {data:''}}).then(response => {
+      //   this.states = response.data.nigeria;
+      // });
+      this.specifiedReason = this.title;
+    }
   }
 });
 
@@ -49544,7 +49572,12 @@ var render = function() {
           }
         ],
         staticClass: "tools",
-        attrs: { "data-toggle": "modal", "data-target": "#" + _vm.modality }
+        attrs: { "data-toggle": "modal", "data-target": "#" + _vm.reason },
+        on: {
+          click: function($event) {
+            _vm.getReason()
+          }
+        }
       },
       [_c("i", { staticClass: "fa fa-edit text-edit" })]
     ),
@@ -49552,6 +49585,14 @@ var render = function() {
     _c(
       "div",
       {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: !_vm.reasonBtn,
+            expression: "!reasonBtn"
+          }
+        ],
         staticClass: "modal fade",
         staticStyle: { display: "none" },
         attrs: { id: "" + _vm.modality }
@@ -49572,10 +49613,100 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.reasonBtn,
+            expression: "reasonBtn"
+          }
+        ],
+        staticClass: "modal modal-danger fade",
+        attrs: { id: "" + _vm.reason }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("h4", { staticClass: "modal-title" }, [
+                _vm._v(_vm._s(_vm.specifiedReason))
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "modal-body", staticStyle: { padding: "5px" } },
+              [
+                _c(
+                  "textarea",
+                  {
+                    staticStyle: {
+                      width: "100%",
+                      resize: "none",
+                      height: "200px",
+                      color: "#000",
+                      padding: "5px"
+                    },
+                    attrs: {
+                      name: "reason",
+                      rows: "8",
+                      cols: "80",
+                      placeholder: "Give reason..."
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.reasonspecified))]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(1)
+          ])
+        ])
+      ]
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-outline",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Submit")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -49590,6 +49721,408 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(77)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(79)
+/* template */
+var __vue_template__ = __webpack_require__(80)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/LTOInspectionDoc.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-08ef4398", Component.options)
+  } else {
+    hotAPI.reload("data-v-08ef4398", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(78);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("403a144e", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-08ef4398\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LTOInspectionDoc.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-08ef4398\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LTOInspectionDoc.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#doc_icon{\n  color: #ccc;\n}\n#req{\n  margin-right: 10px;\n}\n#reason-btn{\n  cursor: pointer;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    console.log('Component hmm.');
+  },
+
+  props: ['title', 'name', 'inputid', 'reason'],
+  data: function data() {
+    return {
+      optionSelected: 'no',
+      docIcon: 'ion-android-cancel text-red',
+      fileInputStatus: true,
+      showReasonBtn: true,
+      fileValue: null,
+      fileColor: '#ccc'
+    };
+  },
+
+  methods: {
+    previewFile: function previewFile(event) {
+      console.log(event.target.files[0].name);
+      this.fileValue = event.target.files[0].name;
+      this.fileColor = 'green';
+    }
+  },
+  updated: function updated() {
+    if (this.optionSelected == 'no') {
+      this.docIcon = 'ion-android-cancel text-red';
+      this.fileInputStatus = true;
+      this.fileValue = null;
+      this.fileColor = '#ccc';
+      this.showReasonBtn = true;
+    } else if (this.optionSelected == 'yes') {
+      this.docIcon = 'ion-checkmark-circled';
+      this.fileInputStatus = false;
+      this.showReasonBtn = false;
+    } else if (this.optionSelected == 'null') {
+      this.docIcon = 'ion-android-remove-circle text-yellow';
+      this.fileInputStatus = true;
+      this.fileValue = null;
+      this.fileColor = '#ccc';
+      this.showReasonBtn = true;
+    }
+  }
+});
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group" }, [
+    _c(
+      "div",
+      { staticClass: "modal modal-danger fade", attrs: { id: "" + _vm.name } },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("h4", { staticClass: "modal-title" }, [
+                _vm._v("Specify a reason why "),
+                _c("b", [_c("i", [_vm._v(_vm._s(_vm.title))])]),
+                _vm._v(" is not available")
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "modal-body", staticStyle: { padding: "5px" } },
+              [
+                _c("textarea", {
+                  staticStyle: {
+                    width: "100%",
+                    resize: "none",
+                    height: "200px",
+                    color: "#000",
+                    padding: "5px"
+                  },
+                  attrs: {
+                    name: _vm.reason,
+                    rows: "8",
+                    cols: "80",
+                    placeholder: "Give reason..."
+                  }
+                })
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(1)
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c("input", {
+      attrs: { type: "text", name: _vm.title, hidden: "" },
+      domProps: { value: _vm.title }
+    }),
+    _vm._v(" "),
+    _c("label", { attrs: { id: "req" } }, [_vm._v(_vm._s(_vm.title))]),
+    _c("i", {
+      directives: [
+        {
+          name: "show",
+          rawName: "v-show",
+          value: _vm.showReasonBtn,
+          expression: "showReasonBtn"
+        }
+      ],
+      staticClass: "fa fa-edit text-red",
+      attrs: {
+        id: "reason-btn",
+        "data-toggle": "modal",
+        "data-target": "#" + _vm.name
+      }
+    }),
+    _vm._v(" "),
+    _c("span", { attrs: { id: "req_ind" } }, [
+      _c("label", [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.optionSelected,
+              expression: "optionSelected"
+            }
+          ],
+          attrs: { type: "radio", name: _vm.name, value: "no", checked: "" },
+          domProps: { checked: _vm._q(_vm.optionSelected, "no") },
+          on: {
+            change: function($event) {
+              _vm.optionSelected = "no"
+            }
+          }
+        }),
+        _vm._v("\n        No\n      ")
+      ]),
+      _vm._v(" "),
+      _c("label", [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.optionSelected,
+              expression: "optionSelected"
+            }
+          ],
+          attrs: { type: "radio", name: _vm.name, value: "yes" },
+          domProps: { checked: _vm._q(_vm.optionSelected, "yes") },
+          on: {
+            change: function($event) {
+              _vm.optionSelected = "yes"
+            }
+          }
+        }),
+        _vm._v("\n        Yes\n      ")
+      ]),
+      _vm._v(" "),
+      _c("label", [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.optionSelected,
+              expression: "optionSelected"
+            }
+          ],
+          attrs: { type: "radio", name: _vm.name, value: "null" },
+          domProps: { checked: _vm._q(_vm.optionSelected, "null") },
+          on: {
+            change: function($event) {
+              _vm.optionSelected = "null"
+            }
+          }
+        }),
+        _vm._v("\n        Not Applicable\n      ")
+      ]),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "btn btn-success", attrs: { for: _vm.inputid } },
+        [_vm._v("Select file")]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        staticStyle: { display: "none" },
+        attrs: {
+          type: "file",
+          id: _vm.inputid,
+          name: _vm.inputid,
+          disabled: _vm.fileInputStatus
+        },
+        on: { change: _vm.previewFile }
+      }),
+      _vm._v(" "),
+      _c("span", { attrs: { id: "doc_icon" } }, [
+        _c("i", { class: _vm.docIcon, style: { color: _vm.fileColor } })
+      ])
+    ]),
+    _vm._v(" "),
+    _c("hr")
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-outline",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Submit")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-08ef4398", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
