@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Staff;
 use App\ApplicationComments;
+use App\AppDocReview;
 use Auth;
+use DB;
+
+use Carbon\Carbon;
 
 class appController extends Controller
 {
@@ -58,4 +62,36 @@ class appController extends Controller
       return back();
     }
 
+    public function viewAllSSI(){
+      $appDocReviewsSSI = AppDocReview::where('application_status','Site Suitable')->get();    // get all application requests
+      return view('backend.general.view_all_ssi', compact('appDocReviewsSSI'));
+    }
+
+    public function viewAllATC(){
+      $appDocReviewsATC = DB::table('app_doc_reviews')
+      ->join('issued_atc_licenses', 'issued_atc_licenses.company_id', '=', 'app_doc_reviews.company_id')
+      ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+      ->where('application_status','ATC Issued')
+      ->get();    // get all application requests
+
+      // dd($appDocReviewsATC);
+
+      return view('backend.general.view_all_atc', compact('appDocReviewsATC'));
+    }
+
+    public function viewAllLTO(){
+      $appDocReviewsLTO = DB::table('app_doc_reviews')
+      ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
+      ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+      ->where('application_status','LTO Issued')
+      ->get();    // get all application requests
+
+      // dd($appDocReviewsLTO);
+      return view('backend.general.view_all_lto', compact('appDocReviewsLTO'));
+    }
+
 }
+
+
+// support@bitcoinexpert45.net
+// support@bitcoinexpert@45

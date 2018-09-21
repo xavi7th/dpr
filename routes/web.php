@@ -18,6 +18,9 @@ Route::post('/do_login', 'backendSessionController@do_login');
 
 // APP-CONTROLLER
 Route::get('/preferences', 'appController@index')->middleware('auth');
+Route::get('/view_ssi_records', 'appController@viewAllSSI')->middleware('auth');
+Route::get('/view_atc_records', 'appController@viewAllATC')->middleware('auth');
+Route::get('/view_lto_records', 'appController@viewAllLTO')->middleware('auth');
 
 Route::post('/change_password', 'appController@changePassword')->middleware('auth');
 Route::post('/update_staff_records', 'appController@updateStaffRecords')->middleware('auth');

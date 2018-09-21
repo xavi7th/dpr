@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Head Gas | Dashboard
+  DPR | Site Suitability Records
 @endsection
 
 @section('pagestyles')
@@ -13,22 +13,35 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_headgas')
+    @if (Auth::user()->role == 'Marketer')
+      @include('partials.backend_aside_marketer')
+    @elseif (Auth::user()->role == 'Admin')
+      @include('partials.backend_aside_admin')
+    @elseif (Auth::user()->role == 'Staff')
+      @include('partials.backend_aside_all')
+    @elseif (Auth::user()->role == 'Team Lead')
+      @include('partials.backend_aside_teamlead')
+    @elseif (Auth::user()->role == 'Head Gas M&G Lagos')
+      @include('partials.backend_aside_headgas')
+    @elseif (Auth::user()->role == 'ADO')
+      @include('partials.backend_aside_ado')
+    @elseif (Auth::user()->role == 'ZOPSCON')
+      @include('partials.backend_aside_zopscon')
+    @endif
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Dashboard
-          <small>Head Gas Control panel</small>
+          Site Suitability Records
         </h1>
       </section>
 
       <!-- Main content -->
       <section class="content">
         <!-- Small boxes (Stat box) -->
-        <div class="row">
+        {{-- <div class="row">
           <!-- ./col -->
           <div class="col-lg-4 col-xs-4">
             <!-- small box -->
@@ -79,7 +92,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
         <!-- /.row (main row) -->
         <div class="row">
           <div class="col-md-12">
@@ -101,7 +114,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($appDocReviews as $item)
+                    @foreach ($appDocReviewsSSI as $item)
                       <tr>
                         <td class="sorting_1"><a href="/headgas_document_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
                         <td>{{ $item->name_of_gas_plant }}</td>

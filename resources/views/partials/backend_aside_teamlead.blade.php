@@ -29,7 +29,7 @@
         <ul class="treeview-menu" style="display: none;">
           <li><a href="/app_doc_rev"><i class="fa fa-fax"></i>App Doc Review</a></li>
         </ul>
-      </li>
+      </li> --}}
       <li class="treeview">
         <a href="#">
           <i class="ion ion-eye"></i> <span>LPG/CNG</span>
@@ -42,7 +42,7 @@
           <li><a href="/view_atc_records"><i class="fa fa-fax"></i>ATC</a></li>
           <li><a href="/view_lto_records"><i class="fa fa-fax"></i>LTO</a></li>
         </ul>
-      </li> --}}
+      </li>
       {{-- <li>
         <a href="/mUpload_documents">
           <i class="fa fa-upload "></i> <span>Upload Documents</span>

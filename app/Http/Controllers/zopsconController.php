@@ -97,6 +97,7 @@ class zopsconController extends Controller
         IssuedAtcLicense::create([
           'application_id' => request('application_id'),
           'company_id' => request('company_id'),
+          'staff_id' => request('staff_id'),
           'date_issued' => $dateIssued->toDateTimeString(),
           'expiry_date' => $expiryDate->toDateTimeString(),
         ]);
@@ -112,8 +113,15 @@ class zopsconController extends Controller
         IssuedLtoLicense::create([
           'application_id' => request('application_id'),
           'company_id' => request('company_id'),
+          'staff_id' => request('staff_id'),
           'date_issued' => $dateIssued->toDateTimeString(),
           'expiry_date' => $expiryDate->toDateTimeString(),
+        ]);
+
+        // lto inspection document
+        LtoInspectionDocument::where('application_id', request('application_id'))
+        ->update([
+          'company_id' => request('company_id')
         ]);
       }
 
@@ -128,8 +136,11 @@ class zopsconController extends Controller
       JobAssignment::where('application_id', request('application_id'))
       ->update([
         'job_application_status' => $verdict,
+        'company_id' => request('company_id'),
         'approved_by' => Auth::user()->staff_id
       ]);
+
+
 
       return back();
     }

@@ -67,7 +67,7 @@
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
 
-                  @if ($applicationReview->to_ADO == 'true')
+                  @if ($applicationReview->to_ADO == 'true' && $applicationStatus->job_application_status != 'Report Submitted')
                     <li class="list-group-item">
                       <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to ADO</a>
                     </li>

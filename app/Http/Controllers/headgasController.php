@@ -28,14 +28,17 @@ class headgasController extends Controller
 
   public function index(){
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
-    return view('backend.headgas.headgas_dashboard', compact('appDocReviews'));
+    $pending = JobAssignment::where('job_application_status', 'Report Submitted')->get();    // retrieve pending applications
+    $approved = JobAssignment::whereIn('job_application_status', ['Site Suitable','ATC Issued','LTO Issued'])->get();    // retrieve approved applications
+    $declined = JobAssignment::whereIn('job_application_status', ['Site Not Suitable','ATC Not Issued','LTO Not Issued'])->get();    // retrieve decliined applications
+    return view('backend.headgas.headgas_dashboard', compact('appDocReviews','pending','approved','declined'));
   }
 
   public function headGasDocumentReview($id){
     $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
-    $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
+
     $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
     $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 
@@ -99,6 +102,7 @@ class headgasController extends Controller
       IssuedAtcLicense::create([
         'application_id' => request('application_id'),
         'company_id' => request('company_id'),
+        'staff_id' => request('staff_id'),
         'date_issued' => $dateIssued->toDateTimeString(),
         'expiry_date' => $expiryDate->toDateTimeString(),
       ]);
@@ -114,8 +118,15 @@ class headgasController extends Controller
       IssuedLtoLicense::create([
         'application_id' => request('application_id'),
         'company_id' => request('company_id'),
+        'staff_id' => request('staff_id'),
         'date_issued' => $dateIssued->toDateTimeString(),
         'expiry_date' => $expiryDate->toDateTimeString(),
+      ]);
+
+      // lto inspection document
+      LtoInspectionDocument::where('application_id', request('application_id'))
+      ->update([
+        'company_id' => request('company_id')
       ]);
     }
 
@@ -130,6 +141,7 @@ class headgasController extends Controller
     JobAssignment::where('application_id', request('application_id'))
     ->update([
       'job_application_status' => $verdict,
+      'company_id' => request('company_id'),
       'approved_by' => Auth::user()->staff_id
     ]);
 

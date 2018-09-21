@@ -19,11 +19,19 @@
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
-      {{-- <li class="active treeview">
-        <a href="/staff">
-          <i class="fa fa-folder"></i> <span>Job Assignments</span>
+      <li class="treeview">
+        <a href="#">
+          <i class="ion ion-eye"></i> <span>LPG/CNG</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
-      </li> --}}
+        <ul class="treeview-menu" style="display: none;">
+          <li><a href="/view_ssi_records"><i class="fa fa-fax"></i>SSI</a></li>
+          <li><a href="/view_atc_records"><i class="fa fa-fax"></i>ATC</a></li>
+          <li><a href="/view_lto_records"><i class="fa fa-fax"></i>LTO</a></li>
+        </ul>
+      </li>
       <li>
         <a href="/preferences">
           <i class="ion ion-android-settings"></i> <span>Settings</span>
