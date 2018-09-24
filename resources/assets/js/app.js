@@ -21,6 +21,9 @@ Vue.component('lto-inspection-upload-component', require('./components/LTOInspec
 Vue.component('document-upload-component', require('./components/documentUploads.vue'));
 Vue.component('state-component', require('./components/StateComponent.vue'));
 Vue.component('app-doc-rev-component', require('./components/ApplicationDocumentReview.vue'));
+Vue.component('apply-for-site-suitability-inspection-component', require('./components/SiteSuitablityInspectionApplicationForm.vue'));
+Vue.component('apply-for-atc-component', require('./components/AtcApplicationForm.vue'));
+Vue.component('apply-for-lto-component', require('./components/LtoApplicationForm.vue'));
 Vue.component('m-view-application-docs', require('./components/mViewApplicationDocs.vue'));
 
 const app = new Vue({

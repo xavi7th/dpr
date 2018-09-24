@@ -1,7 +1,7 @@
 {
   "app_doc":[
     {
-      "application_type": "LPG/CNG Retailer Outlets",
+      "application_type": "LPG Retailer Outlets",
       "sub_category":[
         "Site Suitability Inspection",
         "ATC",
@@ -10,8 +10,18 @@
         "Take-Over",
         "Addon-ATI",
         "Addon-LTO",
-        "Cat'D'LTO",
-        "Cat'D'Renewal"
+        "Cat-D-LTO",
+        "Cat-D-Renewal",
+        "Pressure Testing"
+      ]
+    },
+    {
+      "application_type": "CNG Retailer Outlets",
+      "sub_category":[
+        "ATC",
+        "LTO",
+        "Renewal",
+        "Take-Over"
       ]
     },
     {

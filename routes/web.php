@@ -21,6 +21,7 @@ Route::get('/preferences', 'appController@index')->middleware('auth');
 Route::get('/view_ssi_records', 'appController@viewAllSSI')->middleware('auth');
 Route::get('/view_atc_records', 'appController@viewAllATC')->middleware('auth');
 Route::get('/view_lto_records', 'appController@viewAllLTO')->middleware('auth');
+Route::get('/document_review/{id}', 'appController@renewLtoLicense')->middleware(['auth']);
 
 Route::post('/change_password', 'appController@changePassword')->middleware('auth');
 Route::post('/update_staff_records', 'appController@updateStaffRecords')->middleware('auth');
@@ -41,27 +42,50 @@ Route::post('/update_staff_role', 'administratorController@updateStaffRole')->mi
 
 // MARKETER-CONTROLLER
 Route::get('/marketer', 'marketerController@index')->middleware(['auth', 'marketer']);
+Route::get('/marketer_app_doc_review', 'marketerController@marketerAppDocReview')->middleware(['auth', 'marketer']);
 Route::get('/marketer_records', 'marketerController@showMarketerRecords')->middleware(['auth', 'marketer']);
 Route::get('/app_doc_rev', 'marketerController@applicationDocumentReview')->middleware(['auth', 'marketer']);
+Route::get('/lpg_retailer_outlet', 'marketerController@LPGRetailerOutletView')->middleware(['auth', 'marketer']);
 Route::get('/site_suitability_requirement', 'marketerController@getSiteSuitablityInspectionView')->middleware(['auth', 'marketer']);
 Route::get('/atc_requirement', 'marketerController@getATCRequirementView')->middleware(['auth', 'marketer']);
 Route::get('/lto_requirement', 'marketerController@getLTORequirementView')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_review/{id}', 'marketerController@showDocumentsRequirement')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_edit/{id}', 'marketerController@showDocumentsRequirementDocEdit')->middleware(['auth', 'marketer']);
 Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView')->middleware(['auth', 'marketer']);
+Route::get('/m_view_lto_records', 'marketerController@viewAllLTO')->middleware(['auth', 'marketer']);
+Route::get('/m_view_lto_records', 'marketerController@viewAllLTO')->middleware(['auth', 'marketer']);
 
+Route::get('/apply_for_ssi_get', 'marketerController@applyForSSIGet')->middleware(['auth', 'marketer']);
+Route::get('/apply_for_atc_get', 'marketerController@applyForATCGet')->middleware(['auth', 'marketer']);
+Route::get('/apply_for_lto_get', 'marketerController@applyForLTOGet')->middleware(['auth', 'marketer']);
+
+
+
+
+
+
+Route::post('/apply_for_site_suitability_inspection', 'marketerController@handleSiteSuitablityInspectionPhase1')->middleware(['auth', 'marketer']);
+Route::post('/site_suit_req_upload', 'marketerController@handleSiteSuitablityInspection')->middleware(['auth', 'marketer']);
+
+Route::post('/apply_for_approval_to_construct', 'marketerController@handleATCPhase1')->middleware(['auth', 'marketer']);
+Route::post('/atc_req_upload', 'marketerController@handleATC')->middleware(['auth', 'marketer']);
+
+Route::post('/apply_for_license_to_operate', 'marketerController@handleLTOPhase1')->middleware(['auth', 'marketer']);
+Route::post('/lto_req_upload', 'marketerController@handleLTO')->middleware(['auth', 'marketer']);
+
+
+
+Route::post('/apply_for_atc', 'marketerController@applyForATC')->middleware(['auth', 'marketer']);
+Route::post('/apply_for_lto', 'marketerController@applyForLTO')->middleware(['auth', 'marketer']);
 
 
 Route::post('/getMarketerDocs', 'marketerController@getDocs')->middleware(['auth', 'marketer']);
 Route::post('/app_doc_rev', 'marketerController@applicationDocumentReviewPhase')->middleware(['auth', 'marketer']);
-Route::post('/site_suit_req_upload', 'marketerController@handleSiteSuitablityInspection')->middleware(['auth', 'marketer']);
+
 Route::post('/edit_document_upload', 'marketerController@applicationDocumentReviewPhaseUpdate')->middleware(['auth', 'marketer']);
 Route::post('/edit_document_application', 'marketerController@applicationDocumentReviewPhaseUpdate2')->middleware(['auth', 'marketer']);
-Route::post('/atc_req_upload', 'marketerController@handleATC')->middleware(['auth', 'marketer']);
 Route::post('/mSubmitApplication', 'marketerController@submitApplicationRequest')->middleware(['auth', 'marketer']);
-Route::post('/apply_for_atc', 'marketerController@applyForATC')->middleware(['auth', 'marketer']);
-Route::post('/apply_for_lto', 'marketerController@applyForLTO')->middleware(['auth', 'marketer']);
-Route::post('/lto_req_upload', 'marketerController@handleLTO')->middleware(['auth', 'marketer']);
+
 
 //STAFF-CONTROLLER
 Route::get('/staff', 'staffController@index')->middleware(['auth', 'staff']);

@@ -11,6 +11,8 @@ use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
+use App\IssuedLtoLicense;
+use App\IssuedAtcLicense;
 use App\SiteSuitabilityReports;
 use App\LtoInspectionDocument;
 use Carbon\Carbon;
@@ -59,7 +61,7 @@ class adoController extends Controller
   }
 
   public function adoApproves(Request $request){
-    dd($request);
+    // dd($request);
     $verdict = "";
 
     if(request('approve')){

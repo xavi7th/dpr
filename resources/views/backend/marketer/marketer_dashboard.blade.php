@@ -5,7 +5,18 @@
 @endsection
 
 @section('pagestyles')
-
+  <style>
+    #lpg{
+      background-color: #1c2141;
+    }
+    #lpg .inner{
+      height: 200px;
+      background: url('images/Liquefied-Petroleum-Gas-.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(60%);
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -28,67 +39,17 @@
 
       <!-- Main content -->
       <section class="content">
-        <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-md-3">
-            <div class="small-box bg-aqua">
+          <div class="col-md-8">
+            <div class="small-box" id="lpg">
               <div class="inner">
-                <h3>{{$appDocReviews->count()}}</h3>
-
-                <p>Records</p>
+                {{-- <p>Records</p> --}}
               </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
+              <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">LPG Retailer Outlet</h3>
+              <a href="/lpg_retailer_outlet" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="box">
-              <div class="box-header">
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                <table id="example1" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <th>Application ID</th>
-                    <th>Name of Gas Plant</th>
-                    <th>Application Type</th>
-                    <th>Sub-Category</th>
-                    <th>Plant Type</th>
-                    <th>Application Status</th>
-                    <th>Application Date</th>
-                    <th>Action</th>
-                    <th>Mails</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($appDocReviews as $item)
-                      <tr>
-                        <td class="sorting_1"><a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
-                        <td>{{ $item->name_of_gas_plant }}</td>
-                        <td>{{ $item->application_type }}</td>
-                        <td>{{ $item->sub_category }}</td>
-                        <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->application_status }}</td>
-                        <td>{{ $item->created_at }}</td>
-                        <td><a href="/mDocument_edit/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Edit Document</a></td>
-                        <td><a href="/mDocument_messages/{{ $item->id }}" class="label label-primary" style="font-size: 13px;">View</a></td>
-                      </tr>
-                    @endforeach
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.box-body -->
-            </div>
-
-          </div>
-          <!-- ./col -->
-        </div>
-        <!-- /.row (main row) -->
-
       </section>
       <!-- /.content -->
     </div>

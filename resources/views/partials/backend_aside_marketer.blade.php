@@ -19,7 +19,12 @@
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
-      <li class="treeview">
+      <li>
+        <a href="/marketer_app_doc_review">
+          <i class="fa fa-dashboard"></i> <span>App. Document Review</span>
+        </a>
+      </li>
+      {{-- <li class="treeview">
         <a href="#">
           <i class="ion ion-android-add-circle"></i> <span>New</span>
           <span class="pull-right-container">
@@ -29,7 +34,7 @@
         <ul class="treeview-menu" style="display: none;">
           <li><a href="/app_doc_rev"><i class="fa fa-fax"></i>App Doc Review</a></li>
         </ul>
-      </li>
+      </li> --}}
       <li class="treeview">
         <a href="#">
           <i class="ion ion-eye"></i> <span>LPG/CNG</span>
@@ -40,7 +45,7 @@
         <ul class="treeview-menu" style="display: none;">
           <li><a href="/view_ssi_records"><i class="fa fa-fax"></i>SSI</a></li>
           <li><a href="/view_atc_records"><i class="fa fa-fax"></i>ATC</a></li>
-          <li><a href="/view_lto_records"><i class="fa fa-fax"></i>LTO</a></li>
+          <li><a href="/m_view_lto_records"><i class="fa fa-fax"></i>LTO</a></li>
         </ul>
       </li>
       {{-- <li>

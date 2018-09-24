@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Staff;
 use App\ApplicationComments;
 use App\AppDocReview;
+use App\LtoInspectionDocument;
 use Auth;
 use DB;
 
@@ -80,14 +81,28 @@ class appController extends Controller
     }
 
     public function viewAllLTO(){
-      $appDocReviewsLTO = DB::table('app_doc_reviews')
-      ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
+      $appDocReviewsLTO = DB::table('issued_lto_licenses')
+      ->join('app_doc_reviews', 'app_doc_reviews.company_id', '=', 'issued_lto_licenses.company_id')
       ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
       ->where('application_status','LTO Issued')
       ->get();    // get all application requests
 
       // dd($appDocReviewsLTO);
       return view('backend.general.view_all_lto', compact('appDocReviewsLTO'));
+    }
+
+    public function renewLtoLicense($application_id){
+      $appDocReviewsLTO = DB::table('app_doc_reviews')
+      ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
+      ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+      ->where('application_id','$application_id')
+      ->get();    // get all application requests
+      // dd($appDocReviewsLTO);
+      // $applicationReview = AppDocReview::where('application_id', $application_id)->first();
+      // dd($applicationReview);
+      // $applicationID = LtoInspectionDocument::where('application_id', $application_id)->first();
+      // dd($applicationID);
+      return view('backend.marketer.view_application_docs', compact('appDocReviewsLTO'));
     }
 
 }

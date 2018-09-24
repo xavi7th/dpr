@@ -32,9 +32,10 @@ class zopsconController extends Controller
 
     public function zopsconDocumentReview($id){
       $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
+      // dd($applicationReview);
       $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
       $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
-      $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
+      // dd($applicationStatus);
       $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
       $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 
