@@ -63,14 +63,26 @@
                     @foreach ($appDocReviewsLTO as $item)
                       <tr>
                         <td class="sorting_1">
-                          @if (now()->gte($item->expiry_date))
-                            <a href="/mDocument_review/{{ $item->id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
-                          @elseif (now()->addMonths(3)->gte($item->expiry_date))
-                            <a href="/mDocument_review/{{ $item->id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
+                          @if (Auth::user()->role == 'Marketer')
+                            @if (now()->gte($item->expiry_date))
+                              <a href="/mDocument_review/{{ $item->id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @elseif (now()->addMonths(3)->gte($item->expiry_date))
+                              <a href="/mDocument_review/{{ $item->id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @else
+                              {{-- if (now()->lte($item->expiry_date)) --}}
+                              <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @endif
                           @else
-                            {{-- if (now()->lte($item->expiry_date)) --}}
-                            <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @if (now()->gte($item->expiry_date))
+                              <a href="/document_review/{{ $item->application_id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @elseif (now()->addMonths(3)->gte($item->expiry_date))
+                              <a href="/document_review/{{ $item->application_id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @else
+                              {{-- if (now()->lte($item->expiry_date)) --}}
+                              <a href="/document_review/{{ $item->application_id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @endif
                           @endif
+
                         </td>
                         <td>{{ $item->name_of_gas_plant }}</td>
                         <td>{{ $item->application_type }}</td>

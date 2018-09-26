@@ -24,7 +24,10 @@ Vue.component('app-doc-rev-component', require('./components/ApplicationDocument
 Vue.component('apply-for-site-suitability-inspection-component', require('./components/SiteSuitablityInspectionApplicationForm.vue'));
 Vue.component('apply-for-atc-component', require('./components/AtcApplicationForm.vue'));
 Vue.component('apply-for-lto-component', require('./components/LtoApplicationForm.vue'));
+Vue.component('apply-for-lto-renewal-component', require('./components/LtoRenewalApplicationForm.vue'));
+Vue.component('apply-for-takeover-component', require('./components/TakeoverApplicationForm.vue'));
 Vue.component('m-view-application-docs', require('./components/mViewApplicationDocs.vue'));
+Vue.component('m-view-application-docs-lto-renewal', require('./components/mViewApplicationDocsLtoRenewal.vue'));
 
 const app = new Vue({
     el: '#app'

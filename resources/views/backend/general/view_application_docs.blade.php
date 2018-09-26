@@ -47,61 +47,61 @@
             <div class="box box-primary">
             <div class="box-body box-profile">
 
-              <h3 class="profile-username text-center">{{ $appDocReviewsLTO->name_of_gas_plant }}</h3>
+              <h3 class="profile-username text-center">{{ $appDocReviewed->name_of_gas_plant }}</h3>
 
-              <p class="text-muted text-center">{{ $appDocReviewsLTO->application_id }}</p>
+              <p class="text-muted text-center">{{ $appDocReviewed->application_id }}</p>
 
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
-                  <b>Application type</b> <a class="pull-right">{{ $appDocReviewsLTO->application_type }}</a>
+                  <b>Application type</b> <a class="pull-right">{{ $appDocReviewed->application_type }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Sub-category</b> <a class="pull-right">{{ $appDocReviewsLTO->sub_category }}</a>
+                  <b>Sub-category</b> <a class="pull-right">{{ $appDocReviewed->sub_category }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Plant type</b> <a class="pull-right">{{ $appDocReviewsLTO->plant_type }}</a>
+                  <b>Plant type</b> <a class="pull-right">{{ $appDocReviewed->plant_type }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Capacity of tank</b> <a class="pull-right">{{ $appDocReviewsLTO->capacity_of_tank }}</a>
+                  <b>Capacity of tank</b> <a class="pull-right">{{ $appDocReviewed->capacity_of_tank }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>State</b> <a class="pull-right">{{ $appDocReviewsLTO->state }}</a>
+                  <b>State</b> <a class="pull-right">{{ $appDocReviewed->state }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>L.G.A</b> <a class="pull-right">{{ $appDocReviewsLTO->lga }}</a>
+                  <b>L.G.A</b> <a class="pull-right">{{ $appDocReviewed->lga }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Town</b> <a class="pull-right">{{ $appDocReviewsLTO->town }}</a>
+                  <b>Town</b> <a class="pull-right">{{ $appDocReviewed->town }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Address</b> <a class="pull-right">{{ $appDocReviewsLTO->address }}</a>
+                  <b>Address</b> <a class="pull-right">{{ $appDocReviewed->address }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Date</b> <a class="pull-right">{{ $appDocReviewsLTO->created_at->diffForHumans() }}</a>
+                  <b>Date</b> <a class="pull-right">{{ $appDocReviewed->created_at }}</a>
                 </li>
                 {{-- now()->addMonths(3)->gte($item->expiry_date) --}}
                 <br>
-                @if ($appDocReviewsLTO->application_status == 'Not Submitted')
+                {{-- @if ($appDocReviewed->application_status == 'Not Submitted')
                   <form class="" action="/mSubmitApplication" method="post">
                     {{ csrf_field() }}
-                    <input type="text" hidden name="application_id" value="{{ $appDocReviewsLTO->application_id }}">
+                    <input type="text" hidden name="application_id" value="{{ $appDocReviewed->application_id }}">
                     <button type="submit" class="btn btn-primary btn-block">Renew License</button>
                   </form>
                 @endif
-                @if ($appDocReviewsLTO->application_status == 'Site Suitable')
+                @if ($appDocReviewed->application_status == 'Site Suitable')
                   <form class="" action="/apply_for_atc" method="post">
                     {{ csrf_field() }}
-                    <input type="text" hidden name="application_id" value="{{ $appDocReviewsLTO->application_id }}">
+                    <input type="text" hidden name="application_id" value="{{ $appDocReviewed->application_id }}">
                     <button type="submit" class="btn btn-primary btn-block">Apply For ATC</button>
                   </form>
                 @endif
-                @if ($appDocReviewsLTO->application_status == 'ATC Issued')
+                @if ($appDocReviewed->application_status == 'ATC Issued')
                   <form class="" action="/apply_for_lto" method="post">
                     {{ csrf_field() }}
-                    <input type="text" hidden name="application_id" value="{{ $appDocReviewsLTO->application_id }}">
+                    <input type="text" hidden name="application_id" value="{{ $appDocReviewed->application_id }}">
                     <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
                   </form>
-                @endif
+                @endif --}}
               </ul>
             </div>
             <!-- /.box-body -->
@@ -114,9 +114,11 @@
               </div>
               <!-- /.box-header -->
               <div class="box-body">
-                @if($appDocReviewsLTO->sub_category == 'Site Suitability Inspection' || $appDocReviewsLTO->sub_category == 'ATC')
+                @if($appDocReviewed->sub_category == 'Site Suitability Inspection' || $appDocReviewed->sub_category == 'ATC')
                   @include('partials.m_view_application_docs')
-                @elseif($appDocReviewsLTO->sub_category == 'LTO')
+                @elseif($appDocReviewed->sub_category == 'ATC')
+                  @include('partials.m_view_application_docs_atc')
+                @elseif($appDocReviewed->sub_category == 'LTO')
                   @include('partials.m_view_application_docs_lto')
                 @endif
               </div>

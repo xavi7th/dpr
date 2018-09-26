@@ -11,13 +11,16 @@ use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
-use App\IssuedLtoLicense;
-use App\IssuedAtcLicense;
 use App\SiteSuitabilityReports;
 use App\LtoInspectionDocument;
+use App\LtoLicenseRenewal;
+use App\IssuedAtcLicense;
+use App\IssuedLtoLicense;
+use App\RenewedLtoLicense;
 use Carbon\Carbon;
 
 use Auth;
+use DB;
 
 class adoController extends Controller
 {
@@ -35,7 +38,6 @@ class adoController extends Controller
     $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
-    $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
     $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
     $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 
@@ -45,6 +47,11 @@ class adoController extends Controller
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "LTO") {
       $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "Renewal") {
+      $applicationID = DB::table('lto_inspection_documents')
+      ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+      // ->where()
+      ->first();
     }
 
     return view('backend.ado.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));
@@ -64,82 +71,123 @@ class adoController extends Controller
     // dd($request);
     $verdict = "";
 
-    if(request('approve')){
-      $verdict = 'Site Suitable';
-    }elseif (request('decline')) {
-      $verdict = 'Site Not Suitable';
-    }
+    // if(request('approve')){
+    //   $verdict = 'Site Suitable';
+    // }elseif (request('decline')) {
+    //   $verdict = 'Site Not Suitable';
+    // }
 
     if(request('sub_category') == 'Site Suitability Inspection'){
       if(request('approve')){
         $verdict = 'Site Suitable';
+        // record this application inside site suitability reports
+        SiteSuitabilityReports::create([
+          'application_id' => request('application_id'),
+          'staff_id' => request('staff_id'),
+          'company_id' => request('company_id'),
+          'marketer_id' => request('marketer_id'),
+          'report_location' => request('report_url')
+        ]);
       }elseif (request('decline')) {
         $verdict = 'Site Not Suitable';
       }
 
-      // record this application inside site suitability reports
-      SiteSuitabilityReports::create([
-        'application_id' => request('application_id'),
-        'staff_id' => request('staff_id'),
-        'company_id' => request('company_id'),
-        'marketer_id' => request('marketer_id'),
-        'report_location' => request('report_url')
-      ]);
+
     }elseif (request('sub_category') == 'ATC') {
       $dateIssued = Carbon::now();
       $expiryDate = Carbon::now()->addMonths(6);
       if(request('approve')){
         $verdict = 'ATC Issued';
+        // update or create a record for this application inside issued atc_licences table
+        IssuedAtcLicense::create([
+          'application_id' => request('application_id'),
+          'company_id' => request('company_id'),
+          'staff_id' => request('staff_id'),
+          'date_issued' => $dateIssued->toDateTimeString(),
+          'expiry_date' => $expiryDate->toDateTimeString(),
+        ]);
       }elseif (request('decline')) {
         $verdict = 'ATC Not Issued';
       }
 
-      // update or create a record for this application inside issued atc_licences table
-      IssuedAtcLicense::create([
-        'application_id' => request('application_id'),
-        'company_id' => request('company_id'),
-        'staff_id' => request('staff_id'),
-        'date_issued' => $dateIssued->toDateTimeString(),
-        'expiry_date' => $expiryDate->toDateTimeString(),
-      ]);
+
     }elseif (request('sub_category') == 'LTO') {
       $dateIssued = Carbon::now();
       $expiryDate = Carbon::now()->addYears(2);
       if(request('approve')){
         $verdict = 'LTO Issued';
+
+        // update or create a record for this application inside issued atc_licences table
+        IssuedLtoLicense::create([
+          'application_id' => request('application_id'),
+          'company_id' => request('company_id'),
+          'staff_id' => request('staff_id'),
+          'date_issued' => $dateIssued->toDateTimeString(),
+          'expiry_date' => $expiryDate->toDateTimeString(),
+        ]);
+
+        // lto inspection document
+        LtoInspectionDocument::where('application_id', request('application_id'))
+        ->update([
+          'company_id' => request('company_id')
+        ]);
       }elseif (request('decline')) {
         $verdict = 'LTO Not Issued';
       }
-      // update or create a record for this application inside issued atc_licences table
-      IssuedLtoLicense::create([
-        'application_id' => request('application_id'),
-        'company_id' => request('company_id'),
-        'staff_id' => request('staff_id'),
-        'date_issued' => $dateIssued->toDateTimeString(),
-        'expiry_date' => $expiryDate->toDateTimeString(),
+
+    }elseif (request('sub_category') == 'Renewal') {
+      $dateIssued = Carbon::now();
+      $dateEx = Carbon::now()->addYear();
+
+      if(request('approve')){
+        $verdict = 'Renewal Approved';
+        $ltolicenseRenDetails = DB::table('lto_license_renewals')
+        ->leftJoin('issued_lto_licenses', 'issued_lto_licenses.application_id', '=', 'lto_license_renewals.comp_license_id')
+        ->first();
+
+        // dd($ltolicenseRenDetails->comp_license_id);
+
+        $k = 12 - $dateEx->month; // where k = the number of months remaining for that particular year
+
+        $dateEx = $dateEx->addMonth($k);
+
+        RenewedLtoLicense::create([
+          'comp_license_id' => $ltolicenseRenDetails->comp_license_id,
+          'company_id' => $ltolicenseRenDetails->company_id,
+          'previous_date_issued' => $ltolicenseRenDetails->date_issued,
+          'previous_expiry_date' => $ltolicenseRenDetails->expiry_date,
+          'current_date_issued' => $dateIssued->toDateTimeString(),
+          'current_expiry_date' => $dateEx->toDateTimeString()
+        ]);
+
+
+        // Update The current dates inside issued lto license
+        IssuedLtoLicense::where('application_id', $ltolicenseRenDetails->comp_license_id)
+        ->update([
+          'date_issued' => $dateIssued->toDateTimeString(),
+          'expiry_date' => $dateEx->toDateTimeString()
+        ]);
+      }
+
+
+      // update app_doc_review
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'application_status' => $verdict
       ]);
 
-      // lto inspection document
-      LtoInspectionDocument::where('application_id', request('application_id'))
+      // update job_assignments
+      JobAssignment::where('application_id', request('application_id'))
       ->update([
-        'company_id' => request('company_id')
+        'job_application_status' => $verdict,
+        'company_id' => request('company_id'),
+        'approved_by' => Auth::user()->staff_id
       ]);
+    }elseif (request('decline')) {
+      $verdict = 'Renewal Not Approved';
     }
 
 
-    // update app_doc_review
-    AppDocReview::where('application_id', request('application_id'))
-    ->update([
-      'application_status' => $verdict
-    ]);
-
-    // update job_assignments
-    JobAssignment::where('application_id', request('application_id'))
-    ->update([
-      'job_application_status' => $verdict,
-      'company_id' => request('company_id'),
-      'approved_by' => Auth::user()->staff_id
-    ]);
 
     return back();
   }

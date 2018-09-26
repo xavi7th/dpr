@@ -56,7 +56,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="apply_for_atc_get" class="small-box-footer">
+              <a href="/apply_for_atc_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
@@ -72,7 +72,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="apply_for_lto_get" class="small-box-footer">
+              <a href="/apply_for_lto_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
@@ -88,7 +88,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="#" class="small-box-footer">
+              <a href="/apply_for_lto_renewal_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
@@ -104,7 +104,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="#" class="small-box-footer">
+              <a href="/apply_for_takeover_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>

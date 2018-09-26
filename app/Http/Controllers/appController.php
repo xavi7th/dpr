@@ -8,6 +8,7 @@ use App\Staff;
 use App\ApplicationComments;
 use App\AppDocReview;
 use App\LtoInspectionDocument;
+use App\AtcInspectionDocuments;
 use Auth;
 use DB;
 
@@ -69,8 +70,8 @@ class appController extends Controller
     }
 
     public function viewAllATC(){
-      $appDocReviewsATC = DB::table('app_doc_reviews')
-      ->join('issued_atc_licenses', 'issued_atc_licenses.company_id', '=', 'app_doc_reviews.company_id')
+      $appDocReviewsATC = DB::table('issued_atc_licenses')
+      ->join('app_doc_reviews', 'app_doc_reviews.company_id', '=', 'issued_atc_licenses.company_id')
       ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
       ->where('application_status','ATC Issued')
       ->get();    // get all application requests
@@ -91,18 +92,33 @@ class appController extends Controller
       return view('backend.general.view_all_lto', compact('appDocReviewsLTO'));
     }
 
-    public function renewLtoLicense($application_id){
-      $appDocReviewsLTO = DB::table('app_doc_reviews')
-      ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
-      ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
-      ->where('application_id','$application_id')
-      ->get();    // get all application requests
-      // dd($appDocReviewsLTO);
-      // $applicationReview = AppDocReview::where('application_id', $application_id)->first();
-      // dd($applicationReview);
-      // $applicationID = LtoInspectionDocument::where('application_id', $application_id)->first();
+    public function viewDocument($application_id){
+
+      $applicationReview = AppDocReview::where('application_id', $application_id)->first();
+
+      if($applicationReview->sub_category == 'ATC'){
+        $applicationID = AtcInspectionDocuments::where('application_id', $application_id)->first();
+        $appDocReviewed = DB::table('app_doc_reviews')
+        ->join('issued_atc_licenses', 'issued_atc_licenses.company_id', '=', 'app_doc_reviews.company_id')
+        ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+        ->where('app_doc_reviews.application_id', $application_id)
+        ->first();    // get all application requests
+      }elseif ($applicationReview->sub_category == 'LTO') {
+        $applicationID = LtoInspectionDocument::where('application_id', $application_id)->first();
+        $appDocReviewed = DB::table('app_doc_reviews')
+        ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
+        ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+        ->where('app_doc_reviews.application_id', $application_id)
+        ->first();    // get all application requests
+      }
+
+
+      // dd($appDocReviewed);
+
+
+
       // dd($applicationID);
-      return view('backend.marketer.view_application_docs', compact('appDocReviewsLTO'));
+      return view('backend.general.view_application_docs', compact('appDocReviewed','applicationReview','applicationID'));
     }
 
 }

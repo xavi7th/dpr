@@ -11,6 +11,8 @@ use Auth;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
 use App\LtoInspectionDocument;
+use App\IssuedLtoLicense;
+use App\LtoLicenseRenewal;
 use Storage;
 
 class marketerController extends Controller
@@ -32,10 +34,10 @@ class marketerController extends Controller
 
   public function marketerAppDocReview(){
     $appDocReviews = AppDocReview::where('marketer_id', Auth::user()->staff_id)
-    ->where('application_status', 'Application Pending')
-    ->orWhere('application_status', 'Not Submitted')
-    ->orWhere('application_status', 'ATC Not Issued')
-    ->orWhere('application_status', 'LTO Not Issued')
+    // ->where('application_status', 'Application Pending')
+    // ->orWhere('application_status', 'Not Submitted')
+    // ->orWhere('application_status', 'ATC Not Issued')
+    // ->orWhere('application_status', 'LTO Not Issued')
     ->get();
     return view('backend.marketer.marketer_app_doc_review', compact('appDocReviews'));
   }
@@ -71,6 +73,16 @@ class marketerController extends Controller
   }
 
 
+  public function applyForLTORenewalGet(){
+    return view('backend.marketer.apply_for_lto_renewal_get');
+  }
+
+
+  public function applyForTakeOverGet(){
+    return view('backend.marketer.apply_for_takeover_get');
+  }
+
+
 
 
 
@@ -96,15 +108,28 @@ class marketerController extends Controller
   public function showDocumentsRequirement($id){
     $applicationReview = AppDocReview::where('id', $id)->first();
 
+    $licenseDetail = IssuedLtoLicense::where('application_id', $applicationReview->application_id)->first();
+    $licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id],['sub_category','Renewal'],['application_status','Application Pending']])
+    ->first();
+
+    // dd($licenseDetail);
+
     if($applicationReview->sub_category == "Site Suitability Inspection"){
       $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "ATC") {
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "LTO") {
       $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "Renewal") {
+      $applicationID = DB::table('lto_inspection_documents')
+      ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+      // ->where()
+      ->first();
     }
 
-    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview'));
+    // dd($applicationID);
+
+    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail'));
   }
 
 
@@ -1085,7 +1110,86 @@ class marketerController extends Controller
   }
 
 
+  public function applyForLTORenewal(Request $request){
+    // dd($request);
+    if(request('COLEL_doc') && request('PR_doc')){
 
+      // retrieve site suitability fields for this company from app_doc_reviews using the application_id from request
+      $companyATODetails = AppDocReview::where('application_id', request('application_id'))->first();
+
+      // create a new application for ATC for this company inside app_doc_reviews (Set status to Not Submitted)
+      // getting the current number of created applications
+      $applicationCount = DB::table('app_doc_reviews')->get();
+
+      // adding 1 to that number
+      $indexIncremented = $applicationCount->count() + 1;
+
+      // padding the number to 4 leading zeros
+      $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+      //appending the new application index to DPRAPPLICATION to create the applications's ID
+      $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+      // add the application ID to session
+      // session(['application_id'=>$applicationID]);
+      $marketerID = Auth::user()->staff_id;
+
+      // +++++ might need to do some custom verification here with decision statements
+      AppDocReview::create([
+        'application_id' => $applicationID,
+        'marketer_id' => $marketerID,
+        'company_id' => $companyATODetails->company_id,
+        'name_of_gas_plant' => $companyATODetails->name_of_gas_plant,
+        'application_type' => 'LPG Retailer Outlets',
+        'sub_category' => 'Renewal',
+        'plant_type' => $companyATODetails->plant_type,
+        'state' => $companyATODetails->state,
+        'lga' => $companyATODetails->lga,
+        'town' => $companyATODetails->town,
+        'address' => $companyATODetails->address,
+        'application_status' => 'Application Pending',
+        'to_zopscon' => 'true'
+      ]);
+
+      // dd($request);
+      $colelDoc = $prDoc = 'null';
+
+
+      // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+      if($request->hasFile('COLEL_doc')){
+        $request->COLEL_doc->storeAs('license_docs/'.$marketerID.'/'.$applicationID, $request->COLEL_doc->getClientOriginalName());
+        $colelDoc = $request->COLEL_doc->getClientOriginalName();
+      }
+
+      if($request->hasFile('PR_doc')){
+        $request->PR_doc->storeAs('license_docs/'.$marketerID.'/'.$applicationID, $request->PR_doc->getClientOriginalName());
+        $prDoc = $request->PR_doc->getClientOriginalName();
+      }
+
+      LtoLicenseRenewal::create([
+        'application_id' => $applicationID,
+        'comp_license_id' => $companyATODetails->application_id,
+        'marketer_id' => $marketerID,
+        'company_id' => $companyATODetails->company_id,
+        'copy_of_last_expired_license' => 'yes',
+        'payment_receipt' => 'yes',
+        'copy_of_last_expired_license_location_url' => $colelDoc,
+        'payment_receipt_location_url' => $prDoc
+      ]);
+
+      // clear the application ID from the session
+      $request->session()->forget('application_id');
+
+      return redirect('/marketer');
+
+    }else{
+      // return with error messages
+      return back();
+    }
+
+
+
+  }
 
 
 

@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\AppDocReview;
 use App\JobAssignment;
 use App\Staff;
-use App\Company;
 use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
-use App\LtoInspectionDocument;
+use App\SiteSuitabilityReports;
 use App\IssuedAtcLicense;
-use DB;
+use App\IssuedLtoLicense;
+use App\LtoInspectionDocument;
+use App\LtoLicenseRenewal;
 use Carbon\Carbon;
 
 use Auth;
+use DB;
 
 class staffController extends Controller
 {
@@ -74,6 +77,11 @@ class staffController extends Controller
         $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "LTO") {
         $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+      }elseif($applicationReview->sub_category == "Renewal") {
+        $applicationID = DB::table('lto_inspection_documents')
+        ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+        // ->where()
+        ->first();
       }
       return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments'));
     }else{

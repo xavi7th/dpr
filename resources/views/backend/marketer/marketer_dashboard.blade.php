@@ -40,7 +40,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-6">
             <div class="small-box" id="lpg">
               <div class="inner">
                 {{-- <p>Records</p> --}}

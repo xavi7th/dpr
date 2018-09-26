@@ -21,7 +21,7 @@ Route::get('/preferences', 'appController@index')->middleware('auth');
 Route::get('/view_ssi_records', 'appController@viewAllSSI')->middleware('auth');
 Route::get('/view_atc_records', 'appController@viewAllATC')->middleware('auth');
 Route::get('/view_lto_records', 'appController@viewAllLTO')->middleware('auth');
-Route::get('/document_review/{id}', 'appController@renewLtoLicense')->middleware(['auth']);
+Route::get('/document_review/{id}', 'appController@viewDocument')->middleware(['auth']);
 
 Route::post('/change_password', 'appController@changePassword')->middleware('auth');
 Route::post('/update_staff_records', 'appController@updateStaffRecords')->middleware('auth');
@@ -58,6 +58,8 @@ Route::get('/m_view_lto_records', 'marketerController@viewAllLTO')->middleware([
 Route::get('/apply_for_ssi_get', 'marketerController@applyForSSIGet')->middleware(['auth', 'marketer']);
 Route::get('/apply_for_atc_get', 'marketerController@applyForATCGet')->middleware(['auth', 'marketer']);
 Route::get('/apply_for_lto_get', 'marketerController@applyForLTOGet')->middleware(['auth', 'marketer']);
+Route::get('/apply_for_lto_renewal_get', 'marketerController@applyForLTORenewalGet')->middleware(['auth', 'marketer']);
+Route::get('/apply_for_takeover_get', 'marketerController@applyForTakeOverGet')->middleware(['auth', 'marketer']);
 
 
 
@@ -73,10 +75,17 @@ Route::post('/atc_req_upload', 'marketerController@handleATC')->middleware(['aut
 Route::post('/apply_for_license_to_operate', 'marketerController@handleLTOPhase1')->middleware(['auth', 'marketer']);
 Route::post('/lto_req_upload', 'marketerController@handleLTO')->middleware(['auth', 'marketer']);
 
+// Route::post('/apply_for_renewal', 'marketerController@handleLTORenewalPhase1')->middleware(['auth', 'marketer']);
+// Route::post('/renewal_req_upload', 'marketerController@handleLTORenewal')->middleware(['auth', 'marketer']);
+
+Route::post('/apply_for_renewal', 'marketerController@handleLTORenewalPhase1')->middleware(['auth', 'marketer']);
+Route::post('/renewal_req_upload', 'marketerController@handleLTORenewal')->middleware(['auth', 'marketer']);
+
 
 
 Route::post('/apply_for_atc', 'marketerController@applyForATC')->middleware(['auth', 'marketer']);
 Route::post('/apply_for_lto', 'marketerController@applyForLTO')->middleware(['auth', 'marketer']);
+Route::post('/apply_for_lto_renewal', 'marketerController@applyForLTORenewal')->middleware(['auth', 'marketer']);
 
 
 Route::post('/getMarketerDocs', 'marketerController@getDocs')->middleware(['auth', 'marketer']);

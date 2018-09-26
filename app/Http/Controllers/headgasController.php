@@ -15,9 +15,11 @@ use App\SiteSuitabilityReports;
 use App\IssuedAtcLicense;
 use App\IssuedLtoLicense;
 use App\LtoInspectionDocument;
+use App\LtoLicenseRenewal;
 use Carbon\Carbon;
 
 use Auth;
+use DB;
 
 class headgasController extends Controller
 {
@@ -48,6 +50,11 @@ class headgasController extends Controller
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "LTO") {
       $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "Renewal") {
+      $applicationID = DB::table('lto_inspection_documents')
+      ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+      // ->where()
+      ->first();
     }
 
     return view('backend.headgas.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));

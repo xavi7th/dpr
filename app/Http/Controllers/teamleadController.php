@@ -12,10 +12,14 @@ use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
 use App\SiteSuitabilityReports;
+use App\IssuedAtcLicense;
+use App\IssuedLtoLicense;
 use App\LtoInspectionDocument;
+use App\LtoLicenseRenewal;
 use Carbon\Carbon;
 
 use Auth;
+use DB;
 
 class teamleadController extends Controller
 {
@@ -39,7 +43,6 @@ class teamleadController extends Controller
     $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
-    $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
     $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
     $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 
@@ -49,6 +52,11 @@ class teamleadController extends Controller
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "LTO") {
       $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "Renewal") {
+      $applicationID = DB::table('lto_inspection_documents')
+      ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+      // ->where()
+      ->first();
     }
 
     // dd($applicationStatus);

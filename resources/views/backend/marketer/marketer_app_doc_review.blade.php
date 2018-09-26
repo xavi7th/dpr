@@ -58,24 +58,53 @@
                     <th>Application Type</th>
                     <th>Sub-Category</th>
                     <th>Plant Type</th>
-                    <th>Application Status</th>
+                    <th>Document Status</th>
+                    <th>Status</th>
                     <th>Application Date</th>
-                    <th>Action</th>
-                    <th>Mails</th>
+                    {{-- <th>Mails</th> --}}
                   </tr>
                   </thead>
                   <tbody>
                     @foreach ($appDocReviews as $item)
                       <tr>
-                        <td class="sorting_1"><a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
+                        <td class="sorting_1">
+                          @if ($item->application_status == 'Application Pending'
+                          || $item->application_status == 'Site Not Suitable'
+                          || $item->application_status == 'ATC Not Issued'
+                          || $item->application_status == 'LTO Not Issued'
+                          || $item->application_status == 'Renewal Declined'
+                          )
+                            <a class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                          @else
+                            <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                          @endif
+                        </td>
                         <td>{{ $item->name_of_gas_plant }}</td>
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         <td>{{ $item->plant_type }}</td>
                         <td>{{ $item->application_status }}</td>
+                        <td>
+                          @if ($item->application_status == 'Site Not Suitable'
+                          || $item->application_status == 'ATC Not Issued'
+                          || $item->application_status == 'LTO Not Issued'
+                          || $item->application_status == 'Renewal Declined'
+                          )
+                            <i class="fa fa-close text-red"></i>
+                          @elseif ($item->application_status == 'Site Suitable'
+                          || $item->application_status == 'ATC Issued'
+                          || $item->application_status == 'LTO Issued'
+                          || $item->application_status == 'Renewal Approved'
+                          )
+                            <i class="fa fa-check-circle text-green"></i>
+                          @elseif ($item->application_status == 'Application Pending')
+                            <i class="fa fa-send text-blue"></i>
+                          @else
+                            <a href="/mDocument_edit/{{ $item->id }}" class="" style="font-size: 13px;"><i class="fa fa-gears text-black"></i></a>
+                          @endif
+                        </td>
                         <td>{{ $item->created_at }}</td>
-                        <td><a href="/mDocument_edit/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Edit Document</a></td>
-                        <td><a href="/mDocument_messages/{{ $item->id }}" class="label label-primary" style="font-size: 13px;">View</a></td>
+                        {{-- <td><a href="/mDocument_messages/{{ $item->id }}" class="label label-primary" style="font-size: 13px;">View</a></td> --}}
                       </tr>
                     @endforeach
                   </tbody>

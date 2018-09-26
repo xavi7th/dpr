@@ -13,9 +13,13 @@ use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
 use App\SiteSuitabilityReports;
 use App\LtoInspectionDocument;
+use App\IssuedAtcLicense;
+use App\IssuedLtoLicense;
+use App\LtoLicenseRenewal;
 use Carbon\Carbon;
 
 use Auth;
+use DB;
 
 class zopsconController extends Controller
 {
@@ -45,7 +49,14 @@ class zopsconController extends Controller
         $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "LTO") {
         $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+      }elseif($applicationReview->sub_category == "Renewal") {
+        $applicationID = DB::table('lto_inspection_documents')
+        ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+        // ->where()
+        ->first();
       }
+
+      // dd($applicationID);
 
       return view('backend.zopscon.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));
 
@@ -148,3 +159,10 @@ class zopsconController extends Controller
 
 
 }
+
+
+// $appDocReviewsLTO = DB::table('app_doc_reviews')
+// ->rightJoin('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
+// ->select('app_doc_reviews.*','issued_lto_licenses.expiry_date')
+// ->where([['application_status','LTO Issued'],['marketer_id', Auth::user()->staff_id]])
+// ->get();    // get all application requests

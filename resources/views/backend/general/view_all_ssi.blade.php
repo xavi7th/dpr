@@ -116,7 +116,7 @@
                   <tbody>
                     @foreach ($appDocReviewsSSI as $item)
                       <tr>
-                        <td class="sorting_1"><a href="/headgas_document_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
+                        <td class="sorting_1"><a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
                         <td>{{ $item->name_of_gas_plant }}</td>
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
