@@ -18,6 +18,7 @@ window.Vue = require('vue');
 Vue.component('app-doc-rev-upload-component', require('./components/SiteSuitablityInspectionReqDoc.vue'));
 Vue.component('atc-inspection-upload-component', require('./components/ATCInspectionDoc.vue'));
 Vue.component('lto-inspection-upload-component', require('./components/LTOInspectionDoc.vue'));
+Vue.component('takeover-inspection-upload-component', require('./components/TakeoverInspectionDoc.vue'));
 Vue.component('document-upload-component', require('./components/documentUploads.vue'));
 Vue.component('state-component', require('./components/StateComponent.vue'));
 Vue.component('app-doc-rev-component', require('./components/ApplicationDocumentReview.vue'));
@@ -26,6 +27,7 @@ Vue.component('apply-for-atc-component', require('./components/AtcApplicationFor
 Vue.component('apply-for-lto-component', require('./components/LtoApplicationForm.vue'));
 Vue.component('apply-for-lto-renewal-component', require('./components/LtoRenewalApplicationForm.vue'));
 Vue.component('apply-for-takeover-component', require('./components/TakeoverApplicationForm.vue'));
+Vue.component('apply-for-pressure-test-component', require('./components/PressureTestApplicationForm.vue'));
 Vue.component('m-view-application-docs', require('./components/mViewApplicationDocs.vue'));
 Vue.component('m-view-application-docs-lto-renewal', require('./components/mViewApplicationDocsLtoRenewal.vue'));
 

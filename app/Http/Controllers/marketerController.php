@@ -13,6 +13,9 @@ use App\AtcInspectionDocuments;
 use App\LtoInspectionDocument;
 use App\IssuedLtoLicense;
 use App\LtoLicenseRenewal;
+use App\TakeoverReviews;
+use App\Company;
+use App\TakeoverInspectionDocuments;
 use Storage;
 
 class marketerController extends Controller
@@ -84,6 +87,12 @@ class marketerController extends Controller
 
 
 
+  public function applyForPressureTestGet(){
+    return view('backend.marketer.apply_for_pressure_test_get');
+  }
+
+
+
 
 
   public function getSiteSuitablityInspectionView(){
@@ -100,6 +109,12 @@ class marketerController extends Controller
 
   public function getLTORequirementView(){
     return view('backend.marketer.requirement_lto');
+  }
+
+
+
+  public function getTakeoverRequirementView(){
+    return view('backend.marketer.requirement_takeover');
   }
 
 
@@ -125,9 +140,14 @@ class marketerController extends Controller
       ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
       // ->where()
       ->first();
+    }elseif($applicationReview->sub_category == "Take Over") {
+      $applicationID = DB::table('takeover_inspection_documents')
+      ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
+      // ->where()
+      ->first();
     }
 
-    // dd($applicationID);
+    // dd($applicationReview);
 
     return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail'));
   }
@@ -820,7 +840,248 @@ class marketerController extends Controller
   }
 
 
+  public function handleTakeoverPhase1(Request $request){
 
+    // dd($request);
+
+    $this->validate(request(), [
+      'gas_plant_name' => 'required',
+      'company_id' => 'required',
+      'gas_plant_name' => 'required',
+      'new_name_of_gas_plant' => 'required',
+      'capacity_of_tank' => 'required',
+      'last_lto_issue_date' => 'required',
+      'expiry_date_of_lto' => 'required'
+    ]);
+
+    $proposedCompany = Company::where('company_id', request('company_id'))->first();
+
+    if($proposedCompany == null){
+      // dd($proposedCompany);
+      // return with errors
+      return back();
+    }else{
+      // dd($proposedCompany);
+      // getting the current number of created applications
+      $applicationCount = DB::table('app_doc_reviews')->get();
+
+      // adding 1 to that number
+      $indexIncremented = $applicationCount->count() + 1;
+
+      // padding the number to 4 leading zeros
+      $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+      //appending the new application index to DPRCOMP to create the applications's ID
+      $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+      // add the application ID to session
+      session(['application_id'=>$applicationID]);
+
+      // +++++ might need to do some custom verification here with decision statements
+      AppDocReview::create([
+        'application_id' => $applicationID,
+        'marketer_id' => Auth::user()->staff_id,
+        'company_id' => request('company_id'),
+        'name_of_gas_plant' => request('gas_plant_name'),
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'plant_type' => request('lpg_category'),
+        'capacity_of_tank' => request('capacity_of_tank'),
+        'state' => request('state'),
+        'lga' => request('lga'),
+        'town' => request('town'),
+        'address' => request('address'),
+        'application_status' => 'Not Submitted'
+      ]);
+
+      // Note conversion from javascript date to php date was carried out below.
+
+      TakeoverReviews::create([
+        'application_id' => $applicationID,
+        'marketer_id' => Auth::user()->staff_id,
+        'company_id' => request('company_id'),
+        'new_name_of_gas_plant' => request('new_name_of_gas_plant'),
+        'company_alias' => request('company_alias'),
+        'lpg_category' => request('lpg_category'),
+        'last_lto_issue_date' => date('Y-m-d', strtotime(request('last_lto_issue_date'))),
+        'expiry_date_of_lto' => date('Y-m-d', strtotime(request('expiry_date_of_lto')))
+      ]);
+
+      return redirect('/takeover_requirement');
+    }
+
+
+
+
+
+  }
+
+  public function handleTakeover(Request $request){
+    // dd($request);
+    $aamoaDoc = $ciDoc = $wamvcDoc = $cptrcDoc = $appDoc = $cafDoc = $bsfpDoc = $mpDoc = $ctcDoc = $cfrcDoc = $olpDoc = $lorDoc = $prcDoc = $abpDoc = $eerDoc = $alDoc = 'null';
+    $marketerID = Auth::user()->staff_id;
+
+    // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+    if($request->hasFile('AAMOA_doc')){
+      $request->AAMOA_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->AAMOA_doc->getClientOriginalName());
+      $aamoaDoc = $request->AAMOA_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CI_doc')){
+      $request->CI_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CI_doc->getClientOriginalName());
+      $ciDoc = $request->CI_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('WAMVC_doc')){
+      $request->WAMVC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->WAMVC_doc->getClientOriginalName());
+      $wamvcDoc = $request->WAMVC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CPTRC_doc')){
+      $request->CPTRC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CPTRC_doc->getClientOriginalName());
+      $cptrcDoc = $request->CPTRC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('APP_doc')){
+      $request->APP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->APP_doc->getClientOriginalName());
+      $appDoc = $request->APP_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CAF_doc')){
+      $request->CAF_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CAF_doc->getClientOriginalName());
+      $cafDoc = $request->CAF_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('BSFP_doc')){
+      $request->BSFP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->BSFP_doc->getClientOriginalName());
+      $bsfpDoc = $request->BSFP_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('MP_doc')){
+      $request->MP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->MP_doc->getClientOriginalName());
+      $mpDoc = $request->MP_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CTC_doc')){
+      $request->CTC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CTC_doc->getClientOriginalName());
+      $ctcDoc = $request->CTC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CFRC_doc')){
+      $request->CFRC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CFRC_doc->getClientOriginalName());
+      $cfrcDoc = $request->CFRC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('OLP_doc')){
+      $request->OLP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->OLP_doc->getClientOriginalName());
+      $olpDoc = $request->OLP_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('LOR_doc')){
+      $request->LOR_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->LOR_doc->getClientOriginalName());
+      $lorDoc = $request->LOR_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('PRC_doc')){
+      $request->PRC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->PRC_doc->getClientOriginalName());
+      $prcDoc = $request->PRC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('ABP_doc')){
+      $request->ABP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->ABP_doc->getClientOriginalName());
+      $abpDoc = $request->ABP_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('EER_doc')){
+      $request->EER_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->EER_doc->getClientOriginalName());
+      $eerDoc = $request->EER_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('AL_doc')){
+      $request->AL_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->AL_doc->getClientOriginalName());
+      $alDoc = $request->AL_doc->getClientOriginalName();
+    }
+
+
+    TakeoverInspectionDocuments::create([
+      'application_id' => session('application_id'),
+      'marketer_id' => $marketerID,
+      'article_and_memorandum_of_association' => request('AAMOA'),
+      'certificate_of_incorporation' => request('CI'),
+      'weight_measures_verification_certificate' => request('WAMVC'),
+      'current_pressure_test_certificate' => request('CPTRC'),
+      'appropriate_plant_photography' => request('APP'),
+      'completed_application_form' => request('CAF'),
+      'bankdraft_of_statutory_fees' => request('BSFP'),
+      'modification_plant' => request('MP'),
+      'current_tax_clearance_certificate' => request('CTC'),
+      'current_fire_report_certificate' => request('CFRC'),
+      'original_license_of_plant' => request('OLP'),
+      'letter_of_release' => request('LOR'),
+      'police_report_certificate' => request('PRC'),
+      'approved_building_plan' => request('ABP'),
+      'environment_evaluation_report' => request('EER'),
+      'application_letter' => request('AL'),
+      'article_and_memorandum_of_association_location_url' => $aamoaDoc,
+      'certificate_of_incorporation_location_url' => $ciDoc,
+      'weight_measures_verification_certificate_location_url' => $wamvcDoc,
+      'current_pressure_test_certificate_location_url' => $cptrcDoc,
+      'appropriate_plant_photography_location_url' => $appDoc,
+      'completed_application_form_location_url' => $cafDoc,
+      'bankdraft_of_statutory_fees_location_url' => $bsfpDoc,
+      'modification_plant_location_url' => $mpDoc,
+      'current_tax_clearance_certificate_location_url' => $ctcDoc,
+      'current_fire_report_certificate_location_url' => $cfrcDoc,
+      'original_license_of_plant_location_url' => $olpDoc,
+      'letter_of_release_location_url' => $lorDoc,
+      'police_report_certificate_location_url' => $prcDoc,
+      'approved_building_plan_location_url' => $abpDoc,
+      'environment_evaluation_report_location_url' => $eerDoc,
+      'application_letter_location_url' => $alDoc,
+      'article_and_memorandum_of_association_reason' => request('AAMOA_reason'),
+      'certificate_of_incorporation_reason' => request('CI_reason'),
+      'weight_measures_verification_certificate_reason' => request('WAMVC_reason'),
+      'current_pressure_test_certificate_reason' => request('CPRTC_reason'),
+      'appropriate_plant_photography_reason' => request('APP_reason'),
+      'completed_application_form_reason' => request('CAF_reason'),
+      'bankdraft_of_statutory_fees_reason' => request('BSFP_reason'),
+      'modification_plant_reason' => request('MP_reason'),
+      'current_tax_clearance_certificate_reason' => request('CTC_reason'),
+      'current_fire_report_certificate_reason' => request('CFRC_reason'),
+      'original_license_of_plant_reason' => request('OLP_reason'),
+      'letter_of_release_reason' => request('LOR_reason'),
+      'police_report_certificate_reason' => request('PRC_reason'),
+      'approved_building_plan_reason' => request('ABP_reason'),
+      'environment_evaluation_report_reason' => request('EER_reason'),
+      'application_letter_reason' => request('AL_reason')
+    ]);
+
+    // clear the application ID from the session
+    $request->session()->forget('application_id');
+
+    return redirect('/marketer');
+
+  }
+
+
+  public function handlePressureTestPhase1(Request $request){
+    dd($request);
+    $this->validate(request(), [
+      'atc_application_id' => 'required',
+      'company_name' => 'required',
+      'name_of_equipment' => 'required',
+      'test_type' => 'required',
+      'capacity_of_tank' => 'required',
+      'state' => 'required',
+      'lga' => 'required',
+      'tag_number' => 'required',
+      'location' => 'required',
+      'manufacture_year' => 'required',
+      'commission_year' => 'required',
+      'design_pressure' => 'required',
+      'test_pressure' => 'required'
+    ]);
+  }
 
 
   public function applicationDocumentReviewPhaseUpdate(Request $request){
@@ -852,11 +1113,27 @@ class marketerController extends Controller
           request('doc_type').'_reason' => request('reason'),
           request('doc_type').'_location_url' => $updatedDoc
         ]);
+      }elseif (request('sub_category') == "LTO") {
+        // dd($request);
+        LtoInspectionDocument::where('application_id', request('application_id'))
+        ->update([
+          request('doc_type') => request('selectedOption'),
+          request('doc_type').'_reason' => request('reason'),
+          request('doc_type').'_location_url' => $updatedDoc
+        ]);
+      }elseif (request('sub_category') == "Take Over") {
+        // dd($request);
+        TakeoverInspectionDocuments::where('application_id', request('application_id'))
+        ->update([
+          request('doc_type') => request('selectedOption'),
+          request('doc_type').'_reason' => request('reason'),
+          request('doc_type').'_location_url' => $updatedDoc
+        ]);
       }
 
 
 
-      return redirect('/marketer');
+      return redirect('/marketer_app_doc_review');
     }
 
   }

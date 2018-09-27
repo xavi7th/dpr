@@ -73,6 +73,7 @@
                           || $item->application_status == 'ATC Not Issued'
                           || $item->application_status == 'LTO Not Issued'
                           || $item->application_status == 'Renewal Declined'
+                          || $item->application_status == 'Take Over Not Approved'
                           )
                             <a class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @else
@@ -89,12 +90,14 @@
                           || $item->application_status == 'ATC Not Issued'
                           || $item->application_status == 'LTO Not Issued'
                           || $item->application_status == 'Renewal Declined'
+                          || $item->application_status == 'Take Over Not Approved'
                           )
                             <i class="fa fa-close text-red"></i>
                           @elseif ($item->application_status == 'Site Suitable'
                           || $item->application_status == 'ATC Issued'
                           || $item->application_status == 'LTO Issued'
                           || $item->application_status == 'Renewal Approved'
+                          || $item->application_status == 'Take Over Approved'
                           )
                             <i class="fa fa-check-circle text-green"></i>
                           @elseif ($item->application_status == 'Application Pending')

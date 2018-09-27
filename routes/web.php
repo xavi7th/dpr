@@ -49,6 +49,7 @@ Route::get('/lpg_retailer_outlet', 'marketerController@LPGRetailerOutletView')->
 Route::get('/site_suitability_requirement', 'marketerController@getSiteSuitablityInspectionView')->middleware(['auth', 'marketer']);
 Route::get('/atc_requirement', 'marketerController@getATCRequirementView')->middleware(['auth', 'marketer']);
 Route::get('/lto_requirement', 'marketerController@getLTORequirementView')->middleware(['auth', 'marketer']);
+Route::get('/takeover_requirement', 'marketerController@getTakeoverRequirementView')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_review/{id}', 'marketerController@showDocumentsRequirement')->middleware(['auth', 'marketer']);
 Route::get('/mDocument_edit/{id}', 'marketerController@showDocumentsRequirementDocEdit')->middleware(['auth', 'marketer']);
 Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView')->middleware(['auth', 'marketer']);
@@ -60,6 +61,7 @@ Route::get('/apply_for_atc_get', 'marketerController@applyForATCGet')->middlewar
 Route::get('/apply_for_lto_get', 'marketerController@applyForLTOGet')->middleware(['auth', 'marketer']);
 Route::get('/apply_for_lto_renewal_get', 'marketerController@applyForLTORenewalGet')->middleware(['auth', 'marketer']);
 Route::get('/apply_for_takeover_get', 'marketerController@applyForTakeOverGet')->middleware(['auth', 'marketer']);
+Route::get('/apply_for_pressure_test_get', 'marketerController@applyForPressureTestGet')->middleware(['auth', 'marketer']);
 
 
 
@@ -78,8 +80,10 @@ Route::post('/lto_req_upload', 'marketerController@handleLTO')->middleware(['aut
 // Route::post('/apply_for_renewal', 'marketerController@handleLTORenewalPhase1')->middleware(['auth', 'marketer']);
 // Route::post('/renewal_req_upload', 'marketerController@handleLTORenewal')->middleware(['auth', 'marketer']);
 
-Route::post('/apply_for_renewal', 'marketerController@handleLTORenewalPhase1')->middleware(['auth', 'marketer']);
-Route::post('/renewal_req_upload', 'marketerController@handleLTORenewal')->middleware(['auth', 'marketer']);
+Route::post('/apply_for_takeover', 'marketerController@handleTakeoverPhase1')->middleware(['auth', 'marketer']);
+Route::post('/takeover_req_upload', 'marketerController@handleTakeover')->middleware(['auth', 'marketer']);
+
+Route::post('/apply_for_pressure_test', 'marketerController@handlePressureTestPhase1')->middleware(['auth', 'marketer']);
 
 
 

@@ -144,7 +144,7 @@
             <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Modify Uploads</h3>
-              @if ($applicationReview->sub_category == "ATC")
+              @if ($applicationReview->sub_category == "ATC" || $applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "Take Over")
                 <div class="tools pull-right" data-toggle="modal" data-target="#reason" style="cursor: pointer;">
                   <i class="fa fa-edit text-red"></i>
                 </div>
@@ -172,28 +172,71 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label>Select Document to modify</label>
-                  <select class="form-control select2" name="doc_type" style="width: 100%;">
-                    <option selected="selected" value="null">Select Document</option>
-                    <option value="applications_letter_for_suitability_inspection">Applications Letter for Suitability Inspection</option>
-                    <option value="article_and_memorandum_of_association">Article and Memorandum of Association</option>
-                    <option value="current_tax_clearance">Current Tax Clearance</option>
-                    <option value="certificate_of_incorporation">Certificate of Incorporation</option>
-                    <option value="fire_certificate">Fire Certificate</option>
-                    <option value="police_report">Police Report / Certificate</option>
-                    <option value="completed_application_form">Completed Application Form</option>
-                    <option value="approved_building_plan">Approved Building Plan</option>
-                    <option value="survey_plan">Survey Plan</option>
-                    <option value="deed_of_conveyance">Deed of Conveyance</option>
-                    <option value="piping_and_instrumentation_diagram">Piping and Instrumentation Diagram</option>
-                    <option value="environmental_impact_accessment">Environmental Impact Assessment</option>
-                    <option value="bankdraft_of_statutory_fees">Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account</option>
-                    <option value="letter_confirmation_ministry_of_lands_and_survey">Letter of Confirmation from Ministry of Lands and Survey</option>
-                    <option value="codes_and_standard_adopted_in_the_tank_design">Codes and Standard Adopted in the Tank Design</option>
-                    <option value="application_letter_addressed_to_the_controller">Application Letter Addressed to the Controller DPR</option>
-                  </select>
-                </div>
+                @if ($applicationReview->sub_category == "ATC" || $applicationReview->sub_category == "Site Suitability")
+                  <div class="form-group">
+                    <label>Select Document to modify</label>
+                    <select class="form-control select2" name="doc_type" style="width: 100%;">
+                      <option selected="selected" value="null">Select Document</option>
+                      <option value="applications_letter_for_suitability_inspection">Applications Letter for Suitability Inspection</option>
+                      <option value="article_and_memorandum_of_association">Article and Memorandum of Association</option>
+                      <option value="current_tax_clearance">Current Tax Clearance</option>
+                      <option value="certificate_of_incorporation">Certificate of Incorporation</option>
+                      <option value="fire_certificate">Fire Certificate</option>
+                      <option value="police_report">Police Report / Certificate</option>
+                      <option value="completed_application_form">Completed Application Form</option>
+                      <option value="approved_building_plan">Approved Building Plan</option>
+                      <option value="survey_plan">Survey Plan</option>
+                      <option value="deed_of_conveyance">Deed of Conveyance</option>
+                      <option value="piping_and_instrumentation_diagram">Piping and Instrumentation Diagram</option>
+                      <option value="environmental_impact_accessment">Environmental Impact Assessment</option>
+                      <option value="bankdraft_of_statutory_fees">Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account</option>
+                      <option value="letter_confirmation_ministry_of_lands_and_survey">Letter of Confirmation from Ministry of Lands and Survey</option>
+                      <option value="codes_and_standard_adopted_in_the_tank_design">Codes and Standard Adopted in the Tank Design</option>
+                      <option value="application_letter_addressed_to_the_controller">Application Letter Addressed to the Controller DPR</option>
+                    </select>
+                  </div>
+                @elseif ($applicationReview->sub_category == "LTO")
+                  <div class="form-group">
+                    <label>Select Document to modify</label>
+                    <select class="form-control select2" name="doc_type" style="width: 100%;">
+                      <option selected="selected" value="null">Select Document</option>
+                      <option value="completed_application_form">Completed Application Form</option>
+                      <option value="bankdraft_of_statutory_fees">Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account</option>
+                      <option value="photocopy_of_approval_to_construct_lpg">Photocopy of Approval to Constuct LPG (ATC)</option>
+                      <option value="current_weight_measures_cert_of_verification">Current Weight & Measures Certificate of Verification</option>
+                      <option value="application_letter_addressed_to_the_controller">Application Letter Addressed to the Controller DPR</option>
+                      <option value="fire_report_certificate">Fire Report / Certificate</option>
+                      <option value="current_pressure_test_report_certificate">Current Pressure Test Report / Certificate</option>
+                      <option value="current_three_years_income_tax_clearance">Current Three Years Income Tax Clearance</option>
+                      <option value="appropriate_plant_photography">Appropriate Plant Photography (8 x 10)</option>
+                      <option value="standard_operating_procedure">Standard Operating Procedure</option>
+                    </select>
+                  </div>
+                @elseif ($applicationReview->sub_category == "Take Over")
+                  <div class="form-group">
+                    <label>Select Document to modify</label>
+                    <select class="form-control select2" name="doc_type" style="width: 100%;">
+                      <option selected="selected" value="null">Select Document</option>
+                      <option value="article_and_memorandum_of_association">Article and Memorandum of Association</option>
+                      <option value="certificate_of_incorporation">Certificate of Incorporation</option>
+                      <option value="weight_measures_verification_certificate">Weight and Measures Verification Certificate</option>
+                      <option value="current_pressure_test_certificate">Current Pressure Test Report / Certificate</option>
+                      <option value="appropriate_plant_photography">Appropriate Plant Photography (8 x 10)</option>
+                      <option value="completed_application_form">Completed Application Form</option>
+                      <option value="bankdraft_of_statutory_fees">Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account</option>
+                      <option value="modification_plant">Modification Plant (If any)</option>
+                      <option value="current_tax_clearance_certificate">Current Tax Clearance</option>
+                      <option value="current_fire_report_certificate">Current Fire Report / Certificate</option>
+                      <option value="original_license_of_plant">Original License of Plant</option>
+                      <option value="letter_of_release">Letter of Release</option>
+                      <option value="police_report_certificate">Police Report / Certificate</option>
+                      <option value="approved_building_plan">Approved Building Plan</option>
+                      <option value="environment_evaluation_report">Environment Evaluation Report</option>
+                      <option value="application_letter">Application Letter</option>
+                    </select>
+                  </div>
+                @endif
+
 
                 <div class="form-group">
                   <div class="radio">

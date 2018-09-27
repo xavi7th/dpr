@@ -184,7 +184,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="#" class="small-box-footer">
+              <a href="/apply_for_pressure_test_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>

@@ -5,7 +5,7 @@
 
   <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->current_tax_clearance_location_url }}" title="Current Tax Clearance" nameval="{{$applicationID->current_tax_clearance}}" modality="CTC" reason="c" reasonspecified="{{$applicationID->current_tax_clearance_reason}}"></m-view-application-docs>
 
-  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->certificate_of_incorporation_location_url }}" title="Certificate of Incorporation" nameval="{{$applicationID->certificate_of_incorporation}}" modality="CI" reason="d" reasonspecified="{{$applicationID->certificate_of_incorporation_resaon}}"></m-view-application-docs>
+  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->certificate_of_incorporation_location_url }}" title="Certificate of Incorporation" nameval="{{$applicationID->certificate_of_incorporation}}" modality="CI" reason="d" reasonspecified="{{$applicationID->certificate_of_incorporation_reason}}"></m-view-application-docs>
 
   <m-view-application-docs applicationid="{{ $applicationID->application_id }}" marketerid="{{ $applicationID->marketer_id }}" imgurl="{{ $applicationID->fire_certificate_location_url }}" title="Fire Certificate" nameval="{{$applicationID->fire_certificate}}" modality="FC" reason="e" reasonspecified="{{$applicationID->fire_certificate_reason}}"></m-view-application-docs>
 

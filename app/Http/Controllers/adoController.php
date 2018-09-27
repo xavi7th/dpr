@@ -52,6 +52,11 @@ class adoController extends Controller
       ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
       // ->where()
       ->first();
+    }elseif($applicationReview->sub_category == "Take Over") {
+      $applicationID = DB::table('takeover_inspection_documents')
+      ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
+      // ->where()
+      ->first();
     }
 
     return view('backend.ado.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));
@@ -71,12 +76,6 @@ class adoController extends Controller
     // dd($request);
     $verdict = "";
 
-    // if(request('approve')){
-    //   $verdict = 'Site Suitable';
-    // }elseif (request('decline')) {
-    //   $verdict = 'Site Not Suitable';
-    // }
-
     if(request('sub_category') == 'Site Suitability Inspection'){
       if(request('approve')){
         $verdict = 'Site Suitable';
@@ -91,6 +90,21 @@ class adoController extends Controller
       }elseif (request('decline')) {
         $verdict = 'Site Not Suitable';
       }
+
+      // update app_doc_review
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'application_status' => $verdict
+      ]);
+
+      // update job_assignments
+      JobAssignment::where('application_id', request('application_id'))
+      ->update([
+        'job_application_status' => $verdict,
+        'approved_by' => Auth::user()->staff_id
+      ]);
+
+
 
 
     }elseif (request('sub_category') == 'ATC') {
@@ -109,6 +123,20 @@ class adoController extends Controller
       }elseif (request('decline')) {
         $verdict = 'ATC Not Issued';
       }
+
+      // update app_doc_review
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'application_status' => $verdict
+      ]);
+
+      // update job_assignments
+      JobAssignment::where('application_id', request('application_id'))
+      ->update([
+        'job_application_status' => $verdict,
+        'company_id' => request('company_id'),
+        'approved_by' => Auth::user()->staff_id
+      ]);
 
 
     }elseif (request('sub_category') == 'LTO') {
@@ -134,6 +162,20 @@ class adoController extends Controller
       }elseif (request('decline')) {
         $verdict = 'LTO Not Issued';
       }
+
+      // update app_doc_review
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'application_status' => $verdict
+      ]);
+
+      // update job_assignments
+      JobAssignment::where('application_id', request('application_id'))
+      ->update([
+        'job_application_status' => $verdict,
+        'company_id' => request('company_id'),
+        'approved_by' => Auth::user()->staff_id
+      ]);
 
     }elseif (request('sub_category') == 'Renewal') {
       $dateIssued = Carbon::now();
@@ -167,8 +209,9 @@ class adoController extends Controller
           'date_issued' => $dateIssued->toDateTimeString(),
           'expiry_date' => $dateEx->toDateTimeString()
         ]);
+      }elseif (request('decline')) {
+        $verdict = 'Renewal Not Approved';
       }
-
 
       // update app_doc_review
       AppDocReview::where('application_id', request('application_id'))
@@ -183,8 +226,56 @@ class adoController extends Controller
         'company_id' => request('company_id'),
         'approved_by' => Auth::user()->staff_id
       ]);
-    }elseif (request('decline')) {
-      $verdict = 'Renewal Not Approved';
+
+    }elseif (request('sub_category') == 'Take Over') {
+
+      if(request('approve')){
+        $verdict = 'Take Over Approved';
+      }elseif (request('decline')) {
+        $verdict = 'Take Over Not Issued';
+      }
+
+      $takeOverRev = TakeoverReviews::where('company_id', request('company_id'))->first();
+
+      // update app_doc_review verdict for this application
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'application_status' => $verdict
+      ]);
+
+      // update app_doc_review new identities of gas plant
+      AppDocReview::where('company_id', request('company_id'))
+      ->update([
+        'marketer_id' => $takeOverRev->marketer_id,
+        'name_of_gas_plant' => $takeOverRev->new_name_of_gas_plant
+      ]);
+
+      // update company new identities
+      Company::where('company_id', request('company_id'))
+      ->update([
+        'company_name' => $takeOverRev->new_name_of_gas_plant,
+        'company_alias' => $takeOverRev->company_alias
+      ]);
+
+      // update job_assignments
+      JobAssignment::where('application_id', request('application_id'))
+      ->update([
+        'job_application_status' => $verdict,
+        'company_id' => request('company_id'),
+        'approved_by' => Auth::user()->staff_id
+      ]);
+
+      // update take over inspection documents
+      TakeoverInspectionDocuments::where('application_id', request('application_id'))
+      ->update([
+        'company_id' => request('company_id')
+      ]);
+
+      // update take over reviews
+      TakeoverReviews::where('application_id', request('application_id'))
+      ->update([
+        'company_id' => request('company_id')
+      ]);
     }
 
 

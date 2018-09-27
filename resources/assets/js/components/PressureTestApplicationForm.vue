@@ -1,38 +1,31 @@
 <template lang="html">
   <div>
     <div class="form-group">
-      <label>Gas Plant Company ID</label>
+      <label>ATC Application ID</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
-        <input type="text" name="company_id" class="form-control" placeholder="Enter Company ID of Gas Plant">
+        <input type="text" name="atc_application_id" class="form-control" placeholder="Enter ATC Application ID">
       </div>
     </div>
     <div class="form-group">
-      <label>Name of Gas Plant</label>
+      <label>Name of Company</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
-        <input type="text" name="gas_plant_name" class="form-control" placeholder="Enter Name of Gas Plant">
+        <input type="text" name="company_name" class="form-control" placeholder="Enter Name of Company">
       </div>
     </div>
     <div class="form-group">
-      <label>New Name of Gas Plant</label>
+      <label>Name of Equipment</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
-        <input type="text" name="new_name_of_gas_plant" class="form-control" placeholder="Enter New Name of Gas Plant">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Company Alias</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
-        <input type="text" name="company_alias" class="form-control" placeholder="Enter Company Alias">
+        <input type="text" name="name_of_equipment" class="form-control" placeholder="Enter Name of Equipment">
       </div>
     </div>
     <input type="text" name="application_type" value="LPG Retailer Outlets" hidden>
-    <input type="text" name="sub_category" value="Take Over" hidden>
+    <input type="text" name="sub_category" value="Pressure Testing" hidden>
     <div class="form-group">
-      <label>LPG Category</label>
-      <select class="form-control select2" name="lpg_category" style="width: 100%;">
+      <label>Type of Test</label>
+      <select class="form-control select2" name="test_type" style="width: 100%;">
         <option selected="selected">Select Type</option>
         <option value="Refilling Plant">Refilling Plant</option>
         <option value="Industrial Plant">Industrial Plant</option>
@@ -40,10 +33,10 @@
       </select>
     </div>
     <div class="form-group" id="capacity_of_tank">
-      <label>Capacity of Tank (MT)</label>
+      <label>Tag Number</label>
       <div class="input-group">
           <span class="input-group-addon"><i class="ion-beaker"></i></span>
-          <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
+          <input type="text" name="tag_number" class="form-control" placeholder="Enter Tag Number">
       </div>
     </div>
 
@@ -67,18 +60,54 @@
         </div>
       </div>
     </div>
+
     <div class="form-group">
-      <label>Town</label>
+      <label>Location</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion ion-location"></i></span>
-        <input type="text" name="town" class="form-control" placeholder="Enter Town">
+        <input type="text" name="location" class="form-control" placeholder="Enter Location">
       </div>
     </div>
-    <div class="form-group">
-      <label>Address</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="ion ion-location"></i></span>
-        <input type="text" name="address" class="form-control" placeholder="Enter Address">
+
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>Year of Manufacture</label>
+          <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input type="text" name="manufacture_year" class="form-control" placeholder="Enter Year of Manufacture">
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>Year of Commission</label>
+          <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input type="text" name="commission_year" class="form-control" placeholder="Enter Year of Commission">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>Design Pressure (BAR)</label>
+          <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input type="text" name="design_pressure" class="form-control" placeholder="Enter Design Pressure">
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>Test Pressure (BAR)</label>
+          <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              <input type="text" name="test_pressure" class="form-control" placeholder="Enter Test Pressure">
+          </div>
+        </div>
       </div>
     </div>
   </div>

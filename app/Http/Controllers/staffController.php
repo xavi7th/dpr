@@ -82,6 +82,11 @@ class staffController extends Controller
         ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
         // ->where()
         ->first();
+      }elseif($applicationReview->sub_category == "Take Over") {
+        $applicationID = DB::table('takeover_inspection_documents')
+        ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
+        // ->where()
+        ->first();
       }
       return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments'));
     }else{

@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | Take Over
+  DPR Marketer | Pressure Test
 @endsection
 
 @section('pagestyles')
@@ -21,7 +21,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Take Over
+          Pressure Test
           <small>Marketer Control panel</small>
         </h1>
       </section>
@@ -36,45 +36,50 @@
               </div>
               <!-- /.box-header -->
               <!-- form start -->
-              <form role="form" method="POST" action="/apply_for_takeover">
+              <form role="form" method="POST" action="/apply_for_pressure_test" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="box-body">
-                  <apply-for-takeover-component></apply-for-takeover-component>
+                  <apply-for-pressure-test-component></apply-for-pressure-test-component>
                   <!-- /.box-body -->
                   <div class="row">
                     <div class="col-xs-6">
                       <div class="form-group">
-                        <label>Last LTO Issue Date</label>
+                        <label>Date Last Tested</label>
 
                         <div class="input-group date">
                           <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                           </div>
-                          <input type="text" name="last_lto_issue_date" class="form-control pull-right" id="datepicker1">
+                          <input type="text" name="date_last_tested" class="form-control pull-right" id="datepicker1">
                         </div>
                         <!-- /.input group -->
                       </div>
                       <!-- /.form group -->
                     </div>
                     <div class="col-xs-6">
-                    <div class="form-group">
-                      <label>Expiring Date of LTO</label>
+                      <div class="form-group">
+                        <label>Due Date (MOSR/RBI)</label>
 
-                      <div class="input-group date">
-                        <div class="input-group-addon">
-                          <i class="fa fa-calendar"></i>
+                        <div class="input-group date">
+                          <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                          </div>
+                          <input type="text" name="due_date" class="form-control pull-right">
                         </div>
-                        <input type="text" name="expiry_date_of_lto" class="form-control pull-right" id="datepicker2">
+                        <!-- /.input group -->
                       </div>
-                      <!-- /.input group -->
+                      <!-- /.form group -->
+
                     </div>
-                    <!-- /.form group -->
-                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputFile">Upload Test Certificate Report</label>
+                    <input type="file" name="test_certificate_report">
                   </div>
                   <div class="box-footer">
-                    <button type="submit" class="btn btn-primary" style="float: right;">Save & Continue</button>
+                    <button type="submit" class="btn btn-primary" style="float: right;">Submit</button>
                   </div>
-              </form>
+                </form>
               </div>
             </div>
           </div>
