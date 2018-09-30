@@ -67,13 +67,10 @@
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
 
-                  @if ($applicationReview->to_team_lead == 'true' && optional($applicationStatus)->job_application_status != 'Report Submitted')
+                  @if ($applicationReview->to_team_lead == 'true')
                     <li class="list-group-item">
                       <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to Team Lead</a>
                     </li>
-                  @endif
-
-                  @if ($applicationReview->to_team_lead != 'true')
                     <form role="form" method="post" action="/push_down_to_teamlead">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
@@ -84,32 +81,36 @@
                   @endif
 
                   @if ($applicationStatus != null)
-                    <li class="list-group-item">
-                      <b>Application Status</b>
-                      @if ($reportDocument != null)
-                        <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
-                          <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
-                        </div>
+                    @if ($applicationReview->to_head_gas == "received" || $applicationReview->to_head_gas == "forwared")
+                      <li class="list-group-item">
+                        <b>Application Status</b>
+                        @if ($reportDocument != null)
+                          <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
+                            <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
+                          </div>
+                        @endif
+                        <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
+                      </li>
+                      @if ($applicationStatus->job_application_status == "Report Submitted")
+                        <form role="form" method="post" action="/hgApproves">
+                          {{ csrf_field() }}
+                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                          <div class="box-footer">
+                            <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
+                            <input type="submit" name="approve" value="Approve" class="pull-left btn btn-success">
+                            <input type="submit" style="margin-left: 2px;" name="sendToADO" value="Send to ADO" class="pull-right btn btn-primary">
+                            <input type="submit" name="sendToADO" value="Send to Team Lead" class="pull-right btn btn-primary">
+                          </div>
+                        </form>
                       @endif
-                      <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
-                    </li>
-                    @if ($applicationStatus->job_application_status == "Report Submitted")
-                      <form role="form" method="post" action="/hgApproves">
-                        {{ csrf_field() }}
-                        <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                        <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                        <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                        <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                        <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                        <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                        <div class="box-footer">
-                          <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
-                          <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
-                        </div>
-                      </form>
                     @endif
                   @endif
                 </ul>

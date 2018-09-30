@@ -16,6 +16,7 @@ use App\IssuedAtcLicense;
 use App\IssuedLtoLicense;
 use App\LtoInspectionDocument;
 use App\LtoLicenseRenewal;
+use App\JobsTimeline;
 use Carbon\Carbon;
 
 use Auth;
@@ -29,31 +30,25 @@ class staffController extends Controller
   }
 
   public function index(){
-    // $appDocReviews = JobAssignment::where('staff_id', Auth::user()->staff_id)->get();    // Retrieve all application documents
-
+    // Retrieve all assigned application documents
     $appDocReviews = DB::table('job_assignments')
     ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
-    ->where('job_assignments.staff_id', Auth::user()->staff_id)
+    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
     ->get();
+    $pendingApplications = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
 
-    // dd($appDocReviews);
+    return view('backend.staff.staff_dashboard', compact('appDocReviews','pendingApplications'));
+  }
 
+  public function staffPending(){
     // Retrieve all assigned application documents
-    $assignedApplications = JobAssignment::where([
-      ['staff_id', Auth::user()->staff_id],
-      ['job_application_status', 'Assigned']])->get();
+    $appDocReviews = DB::table('job_assignments')
+    ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
+    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
+    ->get();
+    $pendingApplications = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
 
-    // Retrieve all pending application documents
-    $pendingApplications = JobAssignment::where([
-      ['staff_id', Auth::user()->staff_id],
-      ['job_application_status', 'Pending']])->get();
-
-    // Retrieve all approved application documents
-    $approvedApplications = JobAssignment::where([
-      ['staff_id', Auth::user()->staff_id],
-      ['job_application_status', 'Approved']])->get();
-
-    return view('backend.staff.staff_dashboard', compact('appDocReviews','pendingApplications','assignedApplications','approvedApplications'));
+    return view('backend.staff.staff_pending', compact('appDocReviews','pendingApplications'));
   }
 
   public function showCreateCompany(SiteSuitabilityInspectionDocuments $applicationID){
@@ -199,10 +194,9 @@ class staffController extends Controller
         'report_url' => $report_document
       ]);
 
-      // update job assignment for this current application as document uploaded
       JobAssignment::where('application_id', request('application_id'))
       ->update([
-        'job_application_status' => 'Report Submitted'
+        'job_application_status' => 'Started'
       ]);
 
       // return back
@@ -211,6 +205,31 @@ class staffController extends Controller
       // return back with errors
       return back();
     }
+  }
+
+  public function upToTeamlead(Request $request){
+    // update job assignment for this current application as document uploaded
+    JobAssignment::where('application_id', request('application_id'))
+    ->update([
+      'job_application_status' => 'Report Submitted'
+    ]);
+
+    AppDocReview::where('application_id', request('application_id'))
+    ->update([
+      'to_team_lead' => 'received',
+      'to_staff' => 'forwarded'
+    ]);
+
+    $teamlead = JobAssignment::where('application_id', request('application_id'))->first();
+
+    JobsTimeline::create([
+      'application_id' => request('application_id'),
+      'from' => Auth::user()->staff_id,
+      'to' => $teamlead->assigned_by
+    ]);
+
+    // return back
+    return redirect('/staff');
   }
 
   public function uploadContructionReportATC(Request $request){

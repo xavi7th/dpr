@@ -19,6 +19,8 @@ use App\IssuedLtoLicense;
 use App\LtoLicenseRenewal;
 use App\TakeoverInspectionDocuments;
 use App\TakeoverReviews;
+use App\PressureTestRecords;
+use App\JobsTimeline;
 use Carbon\Carbon;
 
 use Auth;
@@ -34,6 +36,7 @@ class zopsconController extends Controller
 
     public function index(){
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
+      // $pressureTestDocReviews = PressureTestRecords::with('job_assignment')->where('to_zopscon','true')->get();    // get all pressure test requests
       return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews'));
     }
 
@@ -62,6 +65,9 @@ class zopsconController extends Controller
         ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
         // ->where()
         ->first();
+      }elseif($applicationReview->sub_category == "Pressure Testing") {
+        $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
+        dd($applicationID);
       }
 
       // dd($applicationID);
@@ -73,10 +79,21 @@ class zopsconController extends Controller
     public function forwardApplicationToADO(Request $request){
       AppDocReview::where('application_id', request('application_id'))
       ->update([
+        'to_zopscon' => 'forwarded',
         'to_ADO' => 'true'
       ]);
 
+      $to = Staff::where('role', 'ADO')->first();
+
+      JobsTimeline::create([
+        'application_id' => request('application_id'),
+        'from' => Auth::user()->staff_id,
+        'to' => $to->staff_id
+      ]);
+
+
       return back();
+      // return redirect('/zopscon_job_timeline');
     }
 
     public function zopsconApproves(Request $request){

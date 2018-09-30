@@ -72,7 +72,8 @@
                     <th>Name of Gas Plant</th>
                     <th>Application Type</th>
                     <th>Sub-Category</th>
-                    <th>Plant Type</th>
+                    <th>State</th>
+                    <th>Location</th>
                     <th>Application Status</th>
                     <th>Application Date</th>
                   </tr>
@@ -84,7 +85,8 @@
                         <td>{{ $item->name_of_gas_plant }}</td>
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
-                        <td>{{ $item->plant_type }}</td>
+                        <td>{{ $item->state }}</td>
+                        <td>{{ $item->lga }}</td>
                         <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
                         <td>{{ $item->created_at }}</td>
                       </tr>

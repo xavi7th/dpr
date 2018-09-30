@@ -14,13 +14,13 @@
         <input type="text" name="company_name" class="form-control" placeholder="Enter Name of Company">
       </div>
     </div>
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label>Name of Equipment</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
         <input type="text" name="name_of_equipment" class="form-control" placeholder="Enter Name of Equipment">
       </div>
-    </div>
+    </div> -->
     <input type="text" name="application_type" value="LPG Retailer Outlets" hidden>
     <input type="text" name="sub_category" value="Pressure Testing" hidden>
     <div class="form-group">
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-xs-6">
         <div class="form-group">
           <label>State</label>
@@ -67,7 +67,7 @@
         <span class="input-group-addon"><i class="ion ion-location"></i></span>
         <input type="text" name="location" class="form-control" placeholder="Enter Location">
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="col-xs-6">

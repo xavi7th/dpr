@@ -29,10 +29,9 @@
       <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <!-- ./col -->
           <div class="col-lg-4 col-xs-4">
             <!-- small box -->
-            <div class="small-box bg-purple">
+            <div class="small-box bg-orange">
               <div class="inner">
                 <h3>{{ $appDocReviews->count() }}</h3>
                 <p style="text-transform: uppercase;">Total applications</p>
@@ -40,43 +39,21 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
+              <a href="/headgas" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-3">
+          <div class="col-lg-4 col-xs-4">
             <!-- small box -->
-            <div class="small-box bg-orange">
+            <div class="small-box bg-purple">
               <div class="inner">
-                <h3>{{ $pending->count() }}</h3>
-                <p style="text-transform: uppercase;">Pending Approval</p>
+                <h3>{{ $appDocReviewsPending->count() }}</h3>
+                <p style="text-transform: uppercase;">Pending</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
-            </div>
-          </div>
-          <div class="col-lg-2 col-xs-3">
-            <!-- small box -->
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3>{{ $declined->count() }}</h3>
-                <p style="text-transform: uppercase;">Declined Applications</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-2 col-xs-3">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3>{{ $approved->count() }}</h3>
-                <p style="text-transform: uppercase;">Approved Applications</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
+              <a href="/headgas_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>

@@ -73,8 +73,8 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputFile">Upload Test Certificate Report</label>
-                    <input type="file" name="test_certificate_report">
+                    <label for="exampleInputFile">Upload Test Report / Certificate</label>
+                    <input type="file" name="TCR_doc">
                   </div>
                   <div class="box-footer">
                     <button type="submit" class="btn btn-primary" style="float: right;">Submit</button>
@@ -110,3 +110,14 @@
 
     </script>
   @endsection
+
+
+  {{-- 64971064
+
+  64867702
+
+  64867690
+
+  64724645
+
+  64533150 --}}

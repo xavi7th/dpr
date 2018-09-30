@@ -75,6 +75,24 @@
                     @endif
                     <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                   </li>
+
+                    @if ($applicationStatus->job_application_status == "Started")
+                      <li class="list-group-item">
+                        <form role="form" method="post" action="/up_to_teamlead">
+                          {{ csrf_field() }}
+                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                          <div class="box-footer">
+                            <input type="submit" name="upToTeamlead" value="Send to Team Lead" class="pull-right btn btn-primary">
+                          </div>
+                        </form>
+                      </li>
+                    @endif
+
                   {{-- <h3 class="box-title">Job Assigned <i class="fa fa-check-circle text-green"></i> {{ $applicationReview->marketer_id }}</h3> --}}
                 </ul>
               </div>
@@ -107,31 +125,33 @@
                 </form>
               </div>
             @else
-              <div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Upload Report</h3>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form role="form" method="post" action="/stUpload_report" enctype="multipart/form-data">
-                  {{ csrf_field() }}
-                  <div class="box-body">
-                  <div class="form-group">
-                    <label for="exampleInputFile">Report Document</label>
-                    <input type="file" name="reportDocument">
-                    <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
-                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                    <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
+              @if ($applicationReview->to_staff == 'true' || $applicationReview->to_staff == 'received')
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Upload Report</h3>
                   </div>
-                </div>
-                <!-- /.box-body -->
+                  <!-- /.box-header -->
+                  <!-- form start -->
+                  <form role="form" method="post" action="/stUpload_report" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    <div class="box-body">
+                    <div class="form-group">
+                      <label for="exampleInputFile">Report Document</label>
+                      <input type="file" name="reportDocument">
+                      <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
 
-                <div class="box-footer">
-                  <button type="submit" class="pull-right btn btn-default">Upload
-                    <i class="fa fa-upload"></i></button>
-                  </div>
-                </form>
-              </div>
+                  <div class="box-footer">
+                    <button type="submit" class="pull-right btn btn-default">Upload
+                      <i class="fa fa-upload"></i></button>
+                    </div>
+                  </form>
+                </div>
+              @endif
             @endif
 
             <div class="modal fade" id="report" style="display: none;">

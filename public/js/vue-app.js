@@ -53299,371 +53299,207 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _vm._m(1),
-    _vm._v(" "),
-    _vm._m(2),
-    _vm._v(" "),
-    _c("input", {
-      attrs: {
-        type: "text",
-        name: "application_type",
-        value: "LPG Retailer Outlets",
-        hidden: ""
-      }
-    }),
-    _vm._v(" "),
-    _c("input", {
-      attrs: {
-        type: "text",
-        name: "sub_category",
-        value: "Pressure Testing",
-        hidden: ""
-      }
-    }),
-    _vm._v(" "),
-    _vm._m(3),
-    _vm._v(" "),
-    _vm._m(4),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("State")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.state,
-                  expression: "state"
-                }
-              ],
-              staticClass: "form-control",
-              staticStyle: { width: "100%" },
-              attrs: { id: "dropdown2", name: "state" },
-              on: {
-                change: [
-                  function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.state = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  },
-                  function($event) {
-                    _vm.onChangeTwo()
-                  }
-                ]
-              }
-            },
-            [
-              _c("option", { attrs: { selected: "selected" } }, [
-                _vm._v("Select State")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.states, function(item) {
-                return _c("option", { domProps: { value: item.state } }, [
-                  _vm._v(_vm._s(item.state))
-                ])
-              })
-            ],
-            2
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("L.G.A")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              staticClass: "form-control",
-              staticStyle: { width: "100%" },
-              attrs: { id: "dropdown3", name: "lga" }
-            },
-            [
-              _c("option", { attrs: { selected: "selected" } }, [
-                _vm._v("Select LGA")
-              ]),
-              _vm._v(" "),
-              _vm._l(_vm.lga, function(item) {
-                return _c("option", { domProps: { value: item } }, [
-                  _vm._v(_vm._s(item))
-                ])
-              })
-            ],
-            2
-          )
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _vm._m(5),
-    _vm._v(" "),
-    _vm._m(6),
-    _vm._v(" "),
-    _vm._m(7)
-  ])
+  return _vm._m(0)
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", [_vm._v("ATC Application ID")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "input-group" }, [
-        _c("span", { staticClass: "input-group-addon" }, [
-          _c("i", { staticClass: "ion-ios-list-outline" })
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "atc_application_id",
-            placeholder: "Enter ATC Application ID"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", [_vm._v("Name of Company")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "input-group" }, [
-        _c("span", { staticClass: "input-group-addon" }, [
-          _c("i", { staticClass: "ion-ios-list-outline" })
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "company_name",
-            placeholder: "Enter Name of Company"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", [_vm._v("Name of Equipment")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "input-group" }, [
-        _c("span", { staticClass: "input-group-addon" }, [
-          _c("i", { staticClass: "ion-ios-list-outline" })
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "name_of_equipment",
-            placeholder: "Enter Name of Equipment"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", [_vm._v("Type of Test")]),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          staticClass: "form-control select2",
-          staticStyle: { width: "100%" },
-          attrs: { name: "test_type" }
-        },
-        [
-          _c("option", { attrs: { selected: "selected" } }, [
-            _vm._v("Select Type")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "Refilling Plant" } }, [
-            _vm._v("Refilling Plant")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "Industrial Plant" } }, [
-            _vm._v("Industrial Plant")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "Auto Gas Plant" } }, [
-            _vm._v("Auto Gas Plant")
-          ])
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "form-group", attrs: { id: "capacity_of_tank" } },
-      [
-        _c("label", [_vm._v("Tag Number")]),
+    return _c("div", [
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", [_vm._v("ATC Application ID")]),
         _vm._v(" "),
         _c("div", { staticClass: "input-group" }, [
           _c("span", { staticClass: "input-group-addon" }, [
-            _c("i", { staticClass: "ion-beaker" })
+            _c("i", { staticClass: "ion-ios-list-outline" })
           ]),
           _vm._v(" "),
           _c("input", {
             staticClass: "form-control",
             attrs: {
               type: "text",
-              name: "tag_number",
-              placeholder: "Enter Tag Number"
+              name: "atc_application_id",
+              placeholder: "Enter ATC Application ID"
             }
           })
         ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", [_vm._v("Location")]),
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "input-group" }, [
-        _c("span", { staticClass: "input-group-addon" }, [
-          _c("i", { staticClass: "ion ion-location" })
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", [_vm._v("Name of Company")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group" }, [
+          _c("span", { staticClass: "input-group-addon" }, [
+            _c("i", { staticClass: "ion-ios-list-outline" })
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              name: "company_name",
+              placeholder: "Enter Name of Company"
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: {
+          type: "text",
+          name: "application_type",
+          value: "LPG Retailer Outlets",
+          hidden: ""
+        }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        attrs: {
+          type: "text",
+          name: "sub_category",
+          value: "Pressure Testing",
+          hidden: ""
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", [_vm._v("Type of Test")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            staticClass: "form-control select2",
+            staticStyle: { width: "100%" },
+            attrs: { name: "test_type" }
+          },
+          [
+            _c("option", { attrs: { selected: "selected" } }, [
+              _vm._v("Select Type")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Refilling Plant" } }, [
+              _vm._v("Refilling Plant")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Industrial Plant" } }, [
+              _vm._v("Industrial Plant")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "Auto Gas Plant" } }, [
+              _vm._v("Auto Gas Plant")
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-group", attrs: { id: "capacity_of_tank" } },
+        [
+          _c("label", [_vm._v("Tag Number")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group" }, [
+            _c("span", { staticClass: "input-group-addon" }, [
+              _c("i", { staticClass: "ion-beaker" })
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                type: "text",
+                name: "tag_number",
+                placeholder: "Enter Tag Number"
+              }
+            })
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-xs-6" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Year of Manufacture")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "input-group" }, [
+              _c("span", { staticClass: "input-group-addon" }, [
+                _c("i", { staticClass: "fa fa-calendar" })
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "manufacture_year",
+                  placeholder: "Enter Year of Manufacture"
+                }
+              })
+            ])
+          ])
         ]),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "location",
-            placeholder: "Enter Location"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Year of Manufacture")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-group" }, [
-            _c("span", { staticClass: "input-group-addon" }, [
-              _c("i", { staticClass: "fa fa-calendar" })
-            ]),
+        _c("div", { staticClass: "col-xs-6" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Year of Commission")]),
             _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                name: "manufacture_year",
-                placeholder: "Enter Year of Manufacture"
-              }
-            })
+            _c("div", { staticClass: "input-group" }, [
+              _c("span", { staticClass: "input-group-addon" }, [
+                _c("i", { staticClass: "fa fa-calendar" })
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "commission_year",
+                  placeholder: "Enter Year of Commission"
+                }
+              })
+            ])
           ])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Year of Commission")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-group" }, [
-            _c("span", { staticClass: "input-group-addon" }, [
-              _c("i", { staticClass: "fa fa-calendar" })
-            ]),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-xs-6" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Design Pressure (BAR)")]),
             _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                name: "commission_year",
-                placeholder: "Enter Year of Commission"
-              }
-            })
+            _c("div", { staticClass: "input-group" }, [
+              _c("span", { staticClass: "input-group-addon" }, [
+                _c("i", { staticClass: "fa fa-calendar" })
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "design_pressure",
+                  placeholder: "Enter Design Pressure"
+                }
+              })
+            ])
           ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Design Pressure (BAR)")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-group" }, [
-            _c("span", { staticClass: "input-group-addon" }, [
-              _c("i", { staticClass: "fa fa-calendar" })
-            ]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-xs-6" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Test Pressure (BAR)")]),
             _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                name: "design_pressure",
-                placeholder: "Enter Design Pressure"
-              }
-            })
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-xs-6" }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", [_vm._v("Test Pressure (BAR)")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "input-group" }, [
-            _c("span", { staticClass: "input-group-addon" }, [
-              _c("i", { staticClass: "fa fa-calendar" })
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                name: "test_pressure",
-                placeholder: "Enter Test Pressure"
-              }
-            })
+            _c("div", { staticClass: "input-group" }, [
+              _c("span", { staticClass: "input-group-addon" }, [
+                _c("i", { staticClass: "fa fa-calendar" })
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "test_pressure",
+                  placeholder: "Enter Test Pressure"
+                }
+              })
+            ])
           ])
         ])
       ])

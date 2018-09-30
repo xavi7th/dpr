@@ -165,6 +165,8 @@
                 @include('partials.m_view_application_docs_lto_renewal')
               @elseif($applicationReview->sub_category == 'Take Over')
                 @include('partials.m_view_application_docs_takeover')
+              @elseif($applicationReview->sub_category == 'Pressure Testing')
+                {{-- @include('partials.m_view_application_docs_takeover') --}}
               @endif
             </div>
             <!-- /.box-body -->

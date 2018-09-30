@@ -16,6 +16,7 @@ use App\IssuedAtcLicense;
 use App\IssuedLtoLicense;
 use App\LtoInspectionDocument;
 use App\LtoLicenseRenewal;
+use App\JobsTimeline;
 use Carbon\Carbon;
 
 use Auth;
@@ -28,14 +29,15 @@ class teamleadController extends Controller
   }
 
   public function index(){
-    // $appDocReviews = AppDocReview::with('job_assignment')->where('application_status', '!=', 'Not Submitted')->get();    // Retrieve all application documents
-    // $pendingApplications = AppDocReview::where('application_status', 'Application Pending')->get();   // Retrieve all pending application documents
-    // $assignedApplications = JobAssignment::where('job_application_status', 'Assigned')->get();   // Retrieve all assigned application documents
-    // $startedApplications = JobAssignment::where('job_application_status', 'Started')->get();   // Retrieve all started application documents
-    // $approvedApplications = JobAssignment::where('job_application_status', 'Approved')->get();   // Retrieve all approved application documents
-
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
-    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews'));
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
+    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending'));
+  }
+
+  public function teamleadPending(){
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
+    return view('backend.teamlead.teamlead_pending', compact('appDocReviews','appDocReviewsPending'));
   }
 
   public function teamleadDocumentReview($id){
@@ -70,13 +72,26 @@ class teamleadController extends Controller
 
   public function teamleadDocumentAssign(Request $request){
 
+    AppDocReview::where('application_id', request('application_id'))
+    ->update([
+      'to_team_Lead' => 'forwarded',
+      'to_staff' => 'true'
+    ]);
+
     JobAssignment::updateOrCreate([
       'application_id' => request('application_id')
     ],
     [
       'application_id' => request('application_id'),
+      'assigned_by' => Auth::user()->staff_id,
       'staff_id' => request('staff_id'),
       'job_application_status' => 'Assigned'
+    ]);
+
+    JobsTimeline::create([
+      'application_id' => request('application_id'),
+      'from' => Auth::user()->staff_id,
+      'to' => request('staff_id')
     ]);
 
     return redirect('/teamlead');
@@ -118,22 +133,50 @@ class teamleadController extends Controller
     return redirect('/teamlead');
   }
 
-  public function sendATCApplicationToHeadGas(Request $request){
+  public function upToHeadGas(Request $request){
 
-    // send this application request to the HOD
-    HodLpgDocument::create([
-      'application_id' => request('application_id'),
-      'teamlead_id' => Auth::user()->staff_id,
-      'staff_id' => request('staff_id'),
-      'company_id' => request('company_id'),
-      'marketer_id' => request('marketer_id'),
-      'report_url' => request('report_url')
-    ]);
+    if(request('sendToHeadGas')){
 
-    JobAssignment::where('application_id', request('application_id'))
-    ->update([
-      'job_application_status' => 'Pending Approval'
-    ]);
+      // send this application request back to head gas
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'to_head_gas' => 'received',
+        'to_team_lead' => 'forwarded'
+      ]);
+
+      $to = Staff::where('role', 'Head Gas M&G Lagos')->first();
+
+      JobsTimeline::create([
+        'application_id' => request('application_id'),
+        'from' => Auth::user()->staff_id,
+        'to' => $to->staff_id
+      ]);
+
+    }elseif(request('sendToStaff')) {
+
+      // send this application request back to staff
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'to_staff' => 'received',
+        'to_team_lead' => 'forwarded'
+      ]);
+
+      JobAssignment::updateOrCreate([
+        'application_id' => request('application_id')
+      ],
+      [
+        'job_application_status' => 'Assigned'
+      ]);
+
+      JobsTimeline::create([
+        'application_id' => request('application_id'),
+        'from' => Auth::user()->staff_id,
+        'to' => request('staff_id')
+      ]);
+
+    }
+
+
 
     return redirect('/teamlead');
 

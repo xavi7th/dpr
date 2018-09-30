@@ -94,17 +94,14 @@
                             <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
                           </div>
                         </form>
-                      @elseif ($applicationReview->sub_category == 'ATCs')
-                        <form role="form" method="post" action="/tl_atc_to_headgas">
+                      @elseif ($applicationStatus->to_head_gas != "true")
+                        <form role="form" method="post" action="/up_to_headgas">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
                           <div class="box-footer">
-                            <input type="submit" name="sendToHOD" value="Send to HOD" class="pull-right btn btn-success">
+                            <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                            <input type="submit" name="sendToHeadGas" value="Send to Head Gas" class="pull-left btn btn-success">
+                            <input type="submit" name="sendToStaff" value="Send to Staff" class="pull-right btn btn-danger">
                           </div>
                         </form>
                       @endif

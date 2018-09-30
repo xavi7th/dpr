@@ -14,9 +14,11 @@ use App\LtoInspectionDocument;
 use App\IssuedLtoLicense;
 use App\LtoLicenseRenewal;
 use App\TakeoverReviews;
+use App\PressureTestRecords;
 use App\Company;
 use App\TakeoverInspectionDocuments;
 use Storage;
+use Carbon\Carbon;
 
 class marketerController extends Controller
 {
@@ -1065,22 +1067,119 @@ class marketerController extends Controller
 
 
   public function handlePressureTestPhase1(Request $request){
-    dd($request);
+
+
+
+    // dd($request);
+
+
     $this->validate(request(), [
-      'atc_application_id' => 'required',
-      'company_name' => 'required',
-      'name_of_equipment' => 'required',
-      'test_type' => 'required',
-      'capacity_of_tank' => 'required',
-      'state' => 'required',
-      'lga' => 'required',
-      'tag_number' => 'required',
-      'location' => 'required',
-      'manufacture_year' => 'required',
-      'commission_year' => 'required',
-      'design_pressure' => 'required',
-      'test_pressure' => 'required'
+      'atc_application_id' => 'required'
     ]);
+
+    // retrieve the ATC application_id from AppDocReviews and check if ATC is approved
+    $retrievedATC = AppDocReview::where([
+      ['application_id', request('atc_application_id')],
+      ['application_status','ATC Issued']
+    ])->first();
+
+    // dd($retrievedATC);
+    if($retrievedATC == null){
+      dd('here1');
+      // return back with a custom error === This ATC is ethier invalid or has not been issued
+      // return back();
+    }else{
+      // dd('here2');
+      // check for due date
+      $currentYear = Carbon::now()->year;
+      $manufactureYear = request('manufacture_year');
+
+      $tankAge = $currentYear - $manufactureYear;
+      $dateLastTested = date('Y-m-d', strtotime(request('date_last_tested')));  // this is in javascript time.....converted to PHP datetime
+
+      if($tankAge < 20){
+        // if the year of manufacture is not up to 20 years, pressure test should be carried out every 5 years
+        $dueDate = Carbon::createFromFormat('Y-m-d', $dateLastTested)->addYears(5);  // set due date to 5 years upfront of date last tested
+        $dueDate = date('Y-m-d', strtotime($dueDate));
+      }elseif ($tankAge >= 20) {
+        // if the year of manufacture is up to 20 years and above, pressure test should be carried out every 30 months
+        $dueDate = Carbon::createFromFormat('Y-m-d', $dateLastTested)->addMonths(30);  // set due date to 30 months upfront of date last tested
+        $dueDate = date('Y-m-d', strtotime($dueDate));
+      }
+
+      $tcrDoc = 'null';
+      $marketerID = Auth::user()->staff_id;
+
+      // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+      if($request->hasFile('TCR_doc')){
+        $applicationCount = DB::table('app_doc_reviews')->get();
+
+        // adding 1 to that number
+        $indexIncremented = $applicationCount->count() + 1;
+
+        // padding the number to 4 leading zeros
+        $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+        //appending the new application index to DPRCOMP to create the applications's ID
+        $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+        // add the application ID to session
+        session(['application_id'=>$applicationID]);
+
+        // +++++ might need to do some custom verification here with decision statements
+        AppDocReview::create([
+          'application_id' => $applicationID,
+          'marketer_id' => $marketerID,
+          'company_id' => $retrievedATC->company_id,
+          'name_of_gas_plant' => $retrievedATC->name_of_gas_plant,
+          'application_type' => request('application_type'),
+          'sub_category' => request('sub_category'),
+          'plant_type' => $retrievedATC->plant_type,
+          'capacity_of_tank' => $retrievedATC->capacity_of_tank,
+          'state' => $retrievedATC->state,
+          'lga' => $retrievedATC->lga,
+          'town' => $retrievedATC->town,
+          'address' => $retrievedATC->address,
+          'application_status' => 'Application Pending',
+          'to_zopscon' => 'true'
+        ]);
+
+
+        // dd('here3');
+        $request->TCR_doc->storeAs('presure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
+        $tcrDoc = $request->TCR_doc->getClientOriginalName();
+
+        // insert records into the pressure_test_records database
+
+        PressureTestRecords::create([
+          'application_id' => $applicationID,
+          'atc_application_id' => request('atc_application_id'),
+          'marketer_id' => $marketerID,
+          'company_name' => request('company_name'),
+          'test_type' => request('test_type'),
+          'tag_number' => request('tag_number'),
+          'manufacture_year' => $manufactureYear,
+          'commission_year' => request('commission_year'),
+          'design_pressure' => request('design_pressure'),
+          'test_pressure' => request('test_pressure'),
+          'date_last_tested' => $dateLastTested,
+          'due_date' => $dueDate,
+          'test_certificate_report_location_url' => $tcrDoc
+        ]);
+
+
+
+        return redirect('/marketer');
+      }else{
+        dd('here4');
+        // return back with a custom error === Please upload test report
+        // return back();
+      }
+
+
+
+    }
+
   }
 
 

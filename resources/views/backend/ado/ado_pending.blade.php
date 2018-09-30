@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR ADO | Dashboard
+  DPR ADO | Pending
 @endsection
 
 @section('pagestyles')
@@ -20,7 +20,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Dashboard
+          Pending Applications
           <small>ADO Control panel</small>
         </h1>
       </section>
@@ -30,7 +30,7 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-4">
+          <div class="col-lg-4 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-orange">
               <div class="inner">
@@ -44,7 +44,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-3">
+          <div class="col-lg-2 col-xs-3">
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">

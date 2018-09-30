@@ -40,6 +40,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
+              <a href="/teamlead" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -47,16 +48,17 @@
             <!-- small box -->
             <div class="small-box bg-purple">
               <div class="inner">
-                <h3>0</h3>
-                <p style="text-transform: uppercase;">Assigned</p>
+                <h3>{{ $appDocReviewsPending->count() }}</h3>
+                <p style="text-transform: uppercase;">Pending</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
+              <a href="/teamlead_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-4 col-xs-4">
+          {{-- <div class="col-lg-4 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
@@ -67,7 +69,7 @@
                 <i class="fa fa-pie-chart"></i>
               </div>
             </div>
-          </div>
+          </div> --}}
           <!-- ./col -->
           {{-- <div class="col-lg-2 col-xs-3">
             <!-- small box -->
