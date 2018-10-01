@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Staff | Pending
+  DPR Staff | Inbox
 @endsection
 
 @section('pagestyles')
@@ -20,7 +20,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Pending
+          Inbox
           <small>Staff Control panel</small>
         </h1>
       </section>
@@ -35,7 +35,7 @@
             <div class="small-box bg-purple">
               <div class="inner">
                 <h3>{{ $appDocReviews->count() }}</h3>
-                <p style="text-transform: uppercase;">Total Applications</p>
+                <p style="text-transform: uppercase;">Current Assigned</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -46,18 +46,45 @@
           <!-- ./col -->
           <div class="col-lg-3 col-xs-6">
             <!-- small box -->
+            <div class="small-box bg-green">
+              <div class="inner">
+                <h3>{{ $appDocReviewsPending->count() }}</h3>
+                <p style="text-transform: uppercase;">Inbox</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="/staff_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
-                <h3>{{ $pendingApplications->count() }}</h3>
-                <p style="text-transform: uppercase;">Pending</p>
+                <h3>{{ $appDocReviewsOutbox->count() }}</h3>
+                <p style="text-transform: uppercase;">Outbox</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/staff" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/staff_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
-        </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-blue">
+              <div class="inner">
+                <h3>{{ $appDocReviewsCompleted->count() }}</h3>
+                <p style="text-transform: uppercase;">Completed</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="/staff_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
         <!-- /.row (main row) -->
 
         <div class="row">
@@ -81,7 +108,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($pendingApplications as $item)
+                    @foreach ($appDocReviewsPending as $item)
                       <tr>
                         <td class="sorting_1"><a href="/stDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
                         <td>{{ $item->name_of_gas_plant }}</td>

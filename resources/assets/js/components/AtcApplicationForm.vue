@@ -84,6 +84,7 @@
             // console.log('Component hmm.');
             axios.get('js/location.json').then(response => {
               this.states = response.data.nigeria;
+              console.log(response.data);
             });
             axios.get('js/applicationTypesAndSubCategory.json').then(response => {
               this.application_types = response.data.app_doc;

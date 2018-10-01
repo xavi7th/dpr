@@ -34,18 +34,36 @@ class headgasController extends Controller
 
 
   public function index(){
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application request
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->latest()->get();    // get all application request
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->get();    // get all pending application requestss
-    // $pending = JobAssignment::where('job_application_status', 'Report Submitted')->get();    // retrieve pending applications
-    // $approved = JobAssignment::whereIn('job_application_status', ['Site Suitable','ATC Issued','LTO Issued'])->get();    // retrieve approved applications
-    // $declined = JobAssignment::whereIn('job_application_status', ['Site Not Suitable','ATC Not Issued','LTO Not Issued'])->get();    // retrieve decliined applications
-    return view('backend.headgas.headgas_dashboard', compact('appDocReviews','appDocReviewsPending'));
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    return view('backend.headgas.headgas_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function headgasPending(){
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->latest()->get();    // get all pending application requests
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    return view('backend.headgas.headgas_pending', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+  }
+
+  public function headgasOutbox(){
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->get();    // get all pending application requests
-    return view('backend.headgas.headgas_pending', compact('appDocReviews','appDocReviewsPending'));
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+
+    return view('backend.headgas.headgas_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+  }
+
+  public function headgasCompleted(){
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->latest()->get();    // get all pending application requests
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->latest()->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    return view('backend.headgas.headgas_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function headGasDocumentReview($id){
@@ -72,6 +90,9 @@ class headgasController extends Controller
       ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
       // ->where()
       ->first();
+    }elseif($applicationReview->sub_category == "Pressure Testing") {
+      $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
+      // dd($applicationID);
     }
 
     return view('backend.headgas.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));
@@ -93,7 +114,7 @@ class headgasController extends Controller
       'to' => $to->staff_id
     ]);
 
-    return back();
+    return redirect('/headgas');
   }
 
   public function headGasApproves(Request $request){
@@ -101,9 +122,34 @@ class headgasController extends Controller
     $verdict = "";
 
     if(request('sendToADO')){
-      JobAssignment::where('application_id', request('application_id'))
+      // send this application request to ADO
+      AppDocReview::where('application_id', request('application_id'))
       ->update([
-        'to_ADO' => 'true'
+        'to_ADO' => 'received',
+        'to_head_gas' => 'forwarded'
+      ]);
+
+      $to = Staff::where('role', 'ADO')->first();
+
+      JobsTimeline::create([
+        'application_id' => request('application_id'),
+        'from' => Auth::user()->staff_id,
+        'to' => $to->staff_id
+      ]);
+    }elseif(request('sendToTeamLead')){
+      // send this application request back to team lead
+      AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'to_team_lead' => 'received',
+        'to_head_gas' => 'forwarded'
+      ]);
+
+      $to = Staff::where('role', 'Team Lead')->first();
+
+      JobsTimeline::create([
+        'application_id' => request('application_id'),
+        'from' => Auth::user()->staff_id,
+        'to' => $to->staff_id
       ]);
     }else{
       if(request('sub_category') == 'Site Suitability Inspection'){
@@ -124,7 +170,12 @@ class headgasController extends Controller
         // update app_doc_review
         AppDocReview::where('application_id', request('application_id'))
         ->update([
-          'application_status' => $verdict
+          'application_status' => $verdict,
+          'to_zopscon' => 'completed',
+          'to_ADO' => 'completed',
+          'to_head_gas' => 'completed',
+          'to_team_lead' => 'completed',
+          'to_staff' => 'completed'
         ]);
 
         // update job_assignments
@@ -157,7 +208,12 @@ class headgasController extends Controller
         // update app_doc_review
         AppDocReview::where('application_id', request('application_id'))
         ->update([
-          'application_status' => $verdict
+          'application_status' => $verdict,
+          'to_zopscon' => 'completed',
+          'to_ADO' => 'completed',
+          'to_head_gas' => 'completed',
+          'to_team_lead' => 'completed',
+          'to_staff' => 'completed'
         ]);
 
         // update job_assignments
@@ -182,6 +238,7 @@ class headgasController extends Controller
             'staff_id' => request('staff_id'),
             'date_issued' => $dateIssued->toDateTimeString(),
             'expiry_date' => $expiryDate->toDateTimeString(),
+            'report_url' => request('report_url')
           ]);
 
           // lto inspection document
@@ -196,7 +253,12 @@ class headgasController extends Controller
         // update app_doc_review
         AppDocReview::where('application_id', request('application_id'))
         ->update([
-          'application_status' => $verdict
+          'application_status' => $verdict,
+          'to_zopscon' => 'completed',
+          'to_ADO' => 'completed',
+          'to_head_gas' => 'completed',
+          'to_team_lead' => 'completed',
+          'to_staff' => 'completed'
         ]);
 
         // update job_assignments
@@ -246,7 +308,12 @@ class headgasController extends Controller
         // update app_doc_review
         AppDocReview::where('application_id', request('application_id'))
         ->update([
-          'application_status' => $verdict
+          'application_status' => $verdict,
+          'to_zopscon' => 'completed',
+          'to_ADO' => 'completed',
+          'to_head_gas' => 'completed',
+          'to_team_lead' => 'completed',
+          'to_staff' => 'completed'
         ]);
 
         // update job_assignments
@@ -270,7 +337,12 @@ class headgasController extends Controller
         // update app_doc_review verdict for this application
         AppDocReview::where('application_id', request('application_id'))
         ->update([
-          'application_status' => $verdict
+          'application_status' => $verdict,
+          'to_zopscon' => 'completed',
+          'to_ADO' => 'completed',
+          'to_head_gas' => 'completed',
+          'to_team_lead' => 'completed',
+          'to_staff' => 'completed'
         ]);
 
         // update app_doc_review new identities of gas plant
@@ -308,7 +380,7 @@ class headgasController extends Controller
         ]);
       }
     }
-    return back();
+    return redirect('/headgas');
   }
 
 

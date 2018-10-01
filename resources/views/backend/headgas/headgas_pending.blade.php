@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Head Gas | Pending
+  DPR Head Gas | Inbox
 @endsection
 
 @section('pagestyles')
@@ -20,7 +20,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Pending
+          Inbox
           <small>Head Gas Control panel</small>
         </h1>
       </section>
@@ -29,7 +29,8 @@
       <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-lg-4 col-xs-4">
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-orange">
               <div class="inner">
@@ -43,17 +44,44 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-4 col-xs-4">
+          <div class="col-lg-3 col-xs-3">
             <!-- small box -->
-            <div class="small-box bg-purple">
+            <div class="small-box bg-green">
               <div class="inner">
                 <h3>{{ $appDocReviewsPending->count() }}</h3>
-                <p style="text-transform: uppercase;">Pending</p>
+                <p style="text-transform: uppercase;">INBOX</p>
               </div>
               <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="ion ion-pie-graph"></i>
               </div>
               <a href="/headgas_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-3">
+            <!-- small box -->
+            <div class="small-box bg-red">
+              <div class="inner">
+                <h3>{{ $appDocReviewsOutbox->count() }}</h3>
+                <p style="text-transform: uppercase;">OUTBOX</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="/headgas_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-xs-3">
+            <!-- small box -->
+            <div class="small-box bg-blue">
+              <div class="inner">
+                <h3>{{ $appDocReviewsCompleted->count() }}</h3>
+                <p style="text-transform: uppercase;">Completed</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="/headgas_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>

@@ -5,7 +5,15 @@
 @endsection
 
 @section('pagestyles')
-
+  <style>
+    #pt_style b{
+      font-size: 20px;
+    }
+    #pt_style a{
+      font-size: 20px;
+      color: red;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -67,13 +75,15 @@
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
 
+
+
                   @if ($applicationReview->to_ADO == 'true' && optional($applicationStatus)->job_application_status != 'Report Submitted')
                     <li class="list-group-item">
                       <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to ADO</a>
                     </li>
                   @endif
 
-                  @if ($applicationReview->to_ADO != 'true')
+                  @if ($applicationReview->to_ADO == null)
                     <form role="form" method="post" action="/push_down_to_ADO">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
@@ -84,7 +94,7 @@
                   @endif
 
                   @if ($applicationStatus != null)
-                    @if ($applicationStatus->to_zopscon == "true")
+                    @if ($applicationReview->to_zopscon == "received")
                       <li class="list-group-item">
                         <b>Application Status</b>
                         @if ($reportDocument != null)
@@ -98,7 +108,7 @@
                         <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                       </li>
                       @if ($applicationStatus->job_application_status == "Report Submitted")
-                        <form role="form" method="post" action="/hgApproves">
+                        <form role="form" method="post" action="/zopscon_decides">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                           <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
@@ -107,9 +117,9 @@
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
                           <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
                           <div class="box-footer">
-                            <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
-                            <input type="submit" name="approve" value="Approve" class="pull btn btn-success">
-                            {{-- <input type="submit" name="sendToADO" value="Send to ADO" class="pull-right btn btn-primary"> --}}
+                            <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
+                            <input type="submit" name="approve" value="Approve" class="pull-left btn btn-success">
+                            <input type="submit" name="sendToADO" value="Send to ADO" class="pull-right btn btn-primary">
                           </div>
                         </form>
                       @endif
@@ -125,6 +135,7 @@
                     </div>
                   </div>
                 </div>
+
               </div>
 
               <!-- /.box-body -->
@@ -211,6 +222,9 @@
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
                   @include('partials.m_view_application_docs_takeover')
+                @elseif ($applicationReview->sub_category == 'Pressure Testing')
+                  @include('partials.m_view_application_docs_pressure_test')
+                    
                 @endif
               </div>
               <!-- /.box-body -->

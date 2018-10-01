@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Team Lead | Dashboard
+  DPR Staff | Completed
 @endsection
 
 @section('pagestyles')
@@ -13,15 +13,15 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_teamlead')
+    @include('partials.backend_aside_all')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Dashboard
-          <small>Team Lead Control panel</small>
+          Completed
+          <small>Staff Control panel</small>
         </h1>
       </section>
 
@@ -30,48 +30,49 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-4">
+          <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-orange">
+            <div class="small-box bg-purple">
               <div class="inner">
                 <h3>{{ $appDocReviews->count() }}</h3>
-                <p style="text-transform: uppercase;">Total applications</p>
+                <p style="text-transform: uppercase;">Current Assigned</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="/teamlead" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/staff" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-3">
+          <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
                 <h3>{{ $appDocReviewsPending->count() }}</h3>
-                <p style="text-transform: uppercase;">INBOX</p>
+                <p style="text-transform: uppercase;">Inbox</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="/teamlead_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/staff_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-xs-3">
+          <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
                 <h3>{{ $appDocReviewsOutbox->count() }}</h3>
-                <p style="text-transform: uppercase;">OUTBOX</p>
+                <p style="text-transform: uppercase;">Outbox</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/staff_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <div class="col-lg-3 col-xs-3">
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-blue">
               <div class="inner">
@@ -81,10 +82,9 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/staff_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
-        </div>
         <!-- /.row (main row) -->
 
         <div class="row">
@@ -108,9 +108,9 @@
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($appDocReviews as $item)
+                    @foreach ($appDocReviewsCompleted as $item)
                       <tr>
-                        <td class="sorting_1"><a href="/tlDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
+                        <td class="sorting_1"><a href="/stDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
                         <td>{{ $item->name_of_gas_plant }}</td>
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>

@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Team Lead | Dashboard
+  DPR Team Lead | Outbox
 @endsection
 
 @section('pagestyles')
@@ -20,7 +20,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Dashboard
+          Outbox
           <small>Team Lead Control panel</small>
         </h1>
       </section>
@@ -97,27 +97,29 @@
                 <table id="example1" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>Application ID</th>
+                    {{-- <th>Application ID</th> --}}
                     <th>Name of Gas Plant</th>
                     <th>Application Type</th>
                     <th>Sub-Category</th>
-                    <th>Plant Type</th>
-                    <th>Application Status</th>
-                    <th>Application Date</th>
-                    {{-- <th>Action</th> --}}
+                    <th>State</th>
+                    <th>Location</th>
+                    <th>Sent To</th>
+                    <th>Status</th>
+                    <th>Date Sent</th>
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($appDocReviews as $item)
+                    @foreach ($appDocReviewsOutbox as $item)
                       <tr>
-                        <td class="sorting_1"><a href="/tlDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
-                        <td>{{ $item->name_of_gas_plant }}</td>
-                        <td>{{ $item->application_type }}</td>
-                        <td>{{ $item->sub_category }}</td>
-                        <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
-                        <td>{{ $item->created_at }}</td>
-                        {{-- <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td> --}}
+                        {{-- <td class="sorting_1"><a href="/zopscon_document_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td> --}}
+                        <td>{{ $item->app_doc_rev['name_of_gas_plant'] }}</td>
+                        <td>{{ $item->app_doc_rev['application_type'] }}</td>
+                        <td>{{ $item->app_doc_rev['sub_category'] }}</td>
+                        <td>{{ $item->app_doc_rev['state'] }}</td>
+                        <td>{{ $item->app_doc_rev['lga'] }}</td>
+                        <td>{{ $item->to }}</td>
+                        <td>{{ $item->job_assignment['job_application_status'] }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                       </tr>
                     @endforeach
                   </tbody>

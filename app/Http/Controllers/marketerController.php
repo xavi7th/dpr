@@ -1146,7 +1146,7 @@ class marketerController extends Controller
 
 
         // dd('here3');
-        $request->TCR_doc->storeAs('presure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
+        $request->TCR_doc->storeAs('pressure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
         $tcrDoc = $request->TCR_doc->getClientOriginalName();
 
         // insert records into the pressure_test_records database

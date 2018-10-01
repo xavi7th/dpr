@@ -35,9 +35,38 @@ class zopsconController extends Controller
 
 
     public function index(){
+      $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->latest()->get();    // get all application requests
+      $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
+      $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
+      $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    }
+
+    public function zopsconPending(){
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
-      // $pressureTestDocReviews = PressureTestRecords::with('job_assignment')->where('to_zopscon','true')->get();    // get all pressure test requests
-      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews'));
+      $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
+      $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
+      $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+      return view('backend.zopscon.zopscon_pending', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    }
+
+    public function zopsconOutbox(){
+      $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
+      $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
+      $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
+      $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+
+      // dd($appDocReviewsOutbox);
+
+      return view('backend.zopscon.zopscon_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    }
+
+    public function zopsconCompleted(){
+      $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
+      $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
+      $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
+      $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+      return view('backend.zopscon.zopscon_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
     }
 
     public function zopsconDocumentReview($id){
@@ -67,7 +96,7 @@ class zopsconController extends Controller
         ->first();
       }elseif($applicationReview->sub_category == "Pressure Testing") {
         $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
-        dd($applicationID);
+        // dd($applicationID);
       }
 
       // dd($applicationID);
@@ -92,7 +121,7 @@ class zopsconController extends Controller
       ]);
 
 
-      return back();
+      return redirect('/zopscon');
       // return redirect('/zopscon_job_timeline');
     }
 
@@ -100,209 +129,250 @@ class zopsconController extends Controller
       // dd($request);
       $verdict = "";
 
-      if(request('sub_category') == 'Site Suitability Inspection'){
-        if(request('approve')){
-          $verdict = 'Site Suitable';
-          // record this application inside site suitability reports
-          SiteSuitabilityReports::create([
-            'application_id' => request('application_id'),
-            'staff_id' => request('staff_id'),
-            'company_id' => request('company_id'),
-            'marketer_id' => request('marketer_id'),
-            'report_location' => request('report_url')
-          ]);
-        }elseif (request('decline')) {
-          $verdict = 'Site Not Suitable';
-        }
-
-        // update app_doc_review
+      if(request('sendToADO')){
+        // send this application request to ADO
         AppDocReview::where('application_id', request('application_id'))
         ->update([
-          'application_status' => $verdict
+          'to_zopscon' => 'forwarded',
+          'to_ADO' => 'received'
         ]);
 
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'approved_by' => Auth::user()->staff_id
+        $to = Staff::where('role', 'ADO')->first();
+
+        JobsTimeline::create([
+          'application_id' => request('application_id'),
+          'from' => Auth::user()->staff_id,
+          'to' => $to->staff_id
         ]);
+      }else{
+        if(request('sub_category') == 'Site Suitability Inspection'){
+          if(request('approve')){
+            $verdict = 'Site Suitable';
+            // record this application inside site suitability reports
+            SiteSuitabilityReports::create([
+              'application_id' => request('application_id'),
+              'staff_id' => request('staff_id'),
+              'company_id' => request('company_id'),
+              'marketer_id' => request('marketer_id'),
+              'report_location' => request('report_url')
+            ]);
+          }elseif (request('decline')) {
+            $verdict = 'Site Not Suitable';
+          }
 
-
-
-
-      }elseif (request('sub_category') == 'ATC') {
-        $dateIssued = Carbon::now();
-        $expiryDate = Carbon::now()->addMonths(6);
-        if(request('approve')){
-          $verdict = 'ATC Issued';
-          // update or create a record for this application inside issued atc_licences table
-          IssuedAtcLicense::create([
-            'application_id' => request('application_id'),
-            'company_id' => request('company_id'),
-            'staff_id' => request('staff_id'),
-            'date_issued' => $dateIssued->toDateTimeString(),
-            'expiry_date' => $expiryDate->toDateTimeString(),
-          ]);
-        }elseif (request('decline')) {
-          $verdict = 'ATC Not Issued';
-        }
-
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-
-      }elseif (request('sub_category') == 'LTO') {
-        $dateIssued = Carbon::now();
-        $expiryDate = Carbon::now()->addYears(2);
-        if(request('approve')){
-          $verdict = 'LTO Issued';
-
-          // update or create a record for this application inside issued atc_licences table
-          IssuedLtoLicense::create([
-            'application_id' => request('application_id'),
-            'company_id' => request('company_id'),
-            'staff_id' => request('staff_id'),
-            'date_issued' => $dateIssued->toDateTimeString(),
-            'expiry_date' => $expiryDate->toDateTimeString(),
+          // update app_doc_review
+          AppDocReview::where('application_id', request('application_id'))
+          ->update([
+            'application_status' => $verdict,
+            'to_zopscon' => 'completed',
+            'to_ADO' => 'completed',
+            'to_head_gas' => 'completed',
+            'to_team_lead' => 'completed',
+            'to_staff' => 'completed'
           ]);
 
-          // lto inspection document
-          LtoInspectionDocument::where('application_id', request('application_id'))
+          // update job_assignments
+          JobAssignment::where('application_id', request('application_id'))
+          ->update([
+            'job_application_status' => $verdict,
+            'approved_by' => Auth::user()->staff_id
+          ]);
+
+
+
+
+        }elseif (request('sub_category') == 'ATC') {
+          $dateIssued = Carbon::now();
+          $expiryDate = Carbon::now()->addMonths(6);
+          if(request('approve')){
+            $verdict = 'ATC Issued';
+            // update or create a record for this application inside issued atc_licences table
+            IssuedAtcLicense::create([
+              'application_id' => request('application_id'),
+              'company_id' => request('company_id'),
+              'staff_id' => request('staff_id'),
+              'date_issued' => $dateIssued->toDateTimeString(),
+              'expiry_date' => $expiryDate->toDateTimeString(),
+            ]);
+          }elseif (request('decline')) {
+            $verdict = 'ATC Not Issued';
+          }
+
+          // update app_doc_review
+          AppDocReview::where('application_id', request('application_id'))
+          ->update([
+            'application_status' => $verdict,
+            'to_zopscon' => 'completed',
+            'to_ADO' => 'completed',
+            'to_head_gas' => 'completed',
+            'to_team_lead' => 'completed',
+            'to_staff' => 'completed'
+          ]);
+
+          // update job_assignments
+          JobAssignment::where('application_id', request('application_id'))
+          ->update([
+            'job_application_status' => $verdict,
+            'company_id' => request('company_id'),
+            'approved_by' => Auth::user()->staff_id
+          ]);
+
+
+        }elseif (request('sub_category') == 'LTO') {
+          $dateIssued = Carbon::now();
+          $expiryDate = Carbon::now()->addYears(2);
+          if(request('approve')){
+            $verdict = 'LTO Issued';
+
+            // update or create a record for this application inside issued atc_licences table
+            IssuedLtoLicense::create([
+              'application_id' => request('application_id'),
+              'company_id' => request('company_id'),
+              'staff_id' => request('staff_id'),
+              'date_issued' => $dateIssued->toDateTimeString(),
+              'expiry_date' => $expiryDate->toDateTimeString(),
+              'report_url' => request('report_url')
+            ]);
+
+            // lto inspection document
+            LtoInspectionDocument::where('application_id', request('application_id'))
+            ->update([
+              'company_id' => request('company_id')
+            ]);
+          }elseif (request('decline')) {
+            $verdict = 'LTO Not Issued';
+          }
+
+          // update app_doc_review
+          AppDocReview::where('application_id', request('application_id'))
+          ->update([
+            'application_status' => $verdict,
+            'to_zopscon' => 'completed',
+            'to_ADO' => 'completed',
+            'to_head_gas' => 'completed',
+            'to_team_lead' => 'completed',
+            'to_staff' => 'completed'
+          ]);
+
+          // update job_assignments
+          JobAssignment::where('application_id', request('application_id'))
+          ->update([
+            'job_application_status' => $verdict,
+            'company_id' => request('company_id'),
+            'approved_by' => Auth::user()->staff_id
+          ]);
+
+        }elseif (request('sub_category') == 'Renewal') {
+          $dateIssued = Carbon::now();
+          $dateEx = Carbon::now()->addYear();
+
+          if(request('approve')){
+            $verdict = 'Renewal Approved';
+            $ltolicenseRenDetails = DB::table('lto_license_renewals')
+            ->leftJoin('issued_lto_licenses', 'issued_lto_licenses.application_id', '=', 'lto_license_renewals.comp_license_id')
+            ->first();
+
+            // dd($ltolicenseRenDetails->comp_license_id);
+
+            $k = 12 - $dateEx->month; // where k = the number of months remaining for that particular year
+
+            $dateEx = $dateEx->addMonth($k);
+
+            RenewedLtoLicense::create([
+              'comp_license_id' => $ltolicenseRenDetails->comp_license_id,
+              'company_id' => $ltolicenseRenDetails->company_id,
+              'previous_date_issued' => $ltolicenseRenDetails->date_issued,
+              'previous_expiry_date' => $ltolicenseRenDetails->expiry_date,
+              'current_date_issued' => $dateIssued->toDateTimeString(),
+              'current_expiry_date' => $dateEx->toDateTimeString()
+            ]);
+
+
+            // Update The current dates inside issued lto license
+            IssuedLtoLicense::where('application_id', $ltolicenseRenDetails->comp_license_id)
+            ->update([
+              'date_issued' => $dateIssued->toDateTimeString(),
+              'expiry_date' => $dateEx->toDateTimeString()
+            ]);
+          }elseif (request('decline')) {
+            $verdict = 'Renewal Not Approved';
+          }
+
+          // update app_doc_review
+          AppDocReview::where('application_id', request('application_id'))
+          ->update([
+            'application_status' => $verdict,
+            'to_zopscon' => 'completed',
+            'to_ADO' => 'completed',
+            'to_head_gas' => 'completed',
+            'to_team_lead' => 'completed',
+            'to_staff' => 'completed'
+          ]);
+
+          // update job_assignments
+          JobAssignment::where('application_id', request('application_id'))
+          ->update([
+            'job_application_status' => $verdict,
+            'company_id' => request('company_id'),
+            'approved_by' => Auth::user()->staff_id
+          ]);
+
+        }elseif (request('sub_category') == 'Take Over') {
+
+          if(request('approve')){
+            $verdict = 'Take Over Approved';
+          }elseif (request('decline')) {
+            $verdict = 'Take Over Not Issued';
+          }
+
+          $takeOverRev = TakeoverReviews::where('company_id', request('company_id'))->first();
+
+          // update app_doc_review
+          AppDocReview::where('application_id', request('application_id'))
+          ->update([
+            'application_status' => $verdict,
+            'to_zopscon' => 'completed',
+            'to_ADO' => 'completed',
+            'to_head_gas' => 'completed',
+            'to_team_lead' => 'completed',
+            'to_staff' => 'completed'
+          ]);
+
+          // update app_doc_review new identities of gas plant
+          AppDocReview::where('company_id', request('company_id'))
+          ->update([
+            'marketer_id' => $takeOverRev->marketer_id,
+            'name_of_gas_plant' => $takeOverRev->new_name_of_gas_plant
+          ]);
+
+          // update company new identities
+          Company::where('company_id', request('company_id'))
+          ->update([
+            'company_name' => $takeOverRev->new_name_of_gas_plant,
+            'company_alias' => $takeOverRev->company_alias
+          ]);
+
+          // update job_assignments
+          JobAssignment::where('application_id', request('application_id'))
+          ->update([
+            'job_application_status' => $verdict,
+            'company_id' => request('company_id'),
+            'approved_by' => Auth::user()->staff_id
+          ]);
+
+          // update take over inspection documents
+          TakeoverInspectionDocuments::where('application_id', request('application_id'))
           ->update([
             'company_id' => request('company_id')
           ]);
-        }elseif (request('decline')) {
-          $verdict = 'LTO Not Issued';
-        }
 
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-      }elseif (request('sub_category') == 'Renewal') {
-        $dateIssued = Carbon::now();
-        $dateEx = Carbon::now()->addYear();
-
-        if(request('approve')){
-          $verdict = 'Renewal Approved';
-          $ltolicenseRenDetails = DB::table('lto_license_renewals')
-          ->leftJoin('issued_lto_licenses', 'issued_lto_licenses.application_id', '=', 'lto_license_renewals.comp_license_id')
-          ->first();
-
-          // dd($ltolicenseRenDetails->comp_license_id);
-
-          $k = 12 - $dateEx->month; // where k = the number of months remaining for that particular year
-
-          $dateEx = $dateEx->addMonth($k);
-
-          RenewedLtoLicense::create([
-            'comp_license_id' => $ltolicenseRenDetails->comp_license_id,
-            'company_id' => $ltolicenseRenDetails->company_id,
-            'previous_date_issued' => $ltolicenseRenDetails->date_issued,
-            'previous_expiry_date' => $ltolicenseRenDetails->expiry_date,
-            'current_date_issued' => $dateIssued->toDateTimeString(),
-            'current_expiry_date' => $dateEx->toDateTimeString()
-          ]);
-
-
-          // Update The current dates inside issued lto license
-          IssuedLtoLicense::where('application_id', $ltolicenseRenDetails->comp_license_id)
+          // update take over reviews
+          TakeoverReviews::where('application_id', request('application_id'))
           ->update([
-            'date_issued' => $dateIssued->toDateTimeString(),
-            'expiry_date' => $dateEx->toDateTimeString()
+            'company_id' => request('company_id')
           ]);
-        }elseif (request('decline')) {
-          $verdict = 'Renewal Not Approved';
         }
-
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-      }elseif (request('sub_category') == 'Take Over') {
-
-        if(request('approve')){
-          $verdict = 'Take Over Approved';
-        }elseif (request('decline')) {
-          $verdict = 'Take Over Not Issued';
-        }
-
-        $takeOverRev = TakeoverReviews::where('company_id', request('company_id'))->first();
-
-        // update app_doc_review verdict for this application
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict
-        ]);
-
-        // update app_doc_review new identities of gas plant
-        AppDocReview::where('company_id', request('company_id'))
-        ->update([
-          'marketer_id' => $takeOverRev->marketer_id,
-          'name_of_gas_plant' => $takeOverRev->new_name_of_gas_plant
-        ]);
-
-        // update company new identities
-        Company::where('company_id', request('company_id'))
-        ->update([
-          'company_name' => $takeOverRev->new_name_of_gas_plant,
-          'company_alias' => $takeOverRev->company_alias
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-        // update take over inspection documents
-        TakeoverInspectionDocuments::where('application_id', request('application_id'))
-        ->update([
-          'company_id' => request('company_id')
-        ]);
-
-        // update take over reviews
-        TakeoverReviews::where('application_id', request('application_id'))
-        ->update([
-          'company_id' => request('company_id')
-        ]);
       }
-
-
 
       return back();
     }

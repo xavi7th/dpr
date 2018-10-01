@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR ADO | Pending
+  DPR ADO | Inbox
 @endsection
 
 @section('pagestyles')
@@ -20,7 +20,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Pending Applications
+          Inbox
           <small>ADO Control panel</small>
         </h1>
       </section>
@@ -30,7 +30,7 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
-          <div class="col-lg-4 col-xs-4">
+          <div class="col-lg-3 col-xs-4">
             <!-- small box -->
             <div class="small-box bg-orange">
               <div class="inner">
@@ -44,17 +44,44 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-3">
+          <div class="col-lg-3 col-xs-3">
             <!-- small box -->
-            <div class="small-box bg-red">
+            <div class="small-box bg-green">
               <div class="inner">
-                <h3>0</h3>
-                <p style="text-transform: uppercase;">Pending</p>
+                <h3>{{ $appDocReviewsPending->count() }}</h3>
+                <p style="text-transform: uppercase;">INBOX</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
               <a href="/ado_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-xs-3">
+            <!-- small box -->
+            <div class="small-box bg-red">
+              <div class="inner">
+                <h3>{{ $appDocReviewsOutbox->count() }}</h3>
+                <p style="text-transform: uppercase;">OUTBOX</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="/ado_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-xs-3">
+            <!-- small box -->
+            <div class="small-box bg-blue">
+              <div class="inner">
+                <h3>{{ $appDocReviewsCompleted->count() }}</h3>
+                <p style="text-transform: uppercase;">Completed</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="/ado_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>
@@ -80,7 +107,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($appDocReviews as $item)
+                    @foreach ($appDocReviewsPending as $item)
                       <tr>
                         <td class="sorting_1"><a href="/ado_document_review/{{ $item->id }}" class="text-purple" style="font-size: 20px; font-weight: 600;">{{ $item->name_of_gas_plant }}</a></td>
                         {{-- <td>{{ $item->name_of_gas_plant }}</td> --}}

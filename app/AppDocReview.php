@@ -8,6 +8,8 @@ class AppDocReview extends Model
 {
     protected $guarded = [];
 
+    protected $dates = ['created_at'];
+
     public function staff(){
       return $this->belongsTo(Staff::class);
     }

@@ -17,6 +17,8 @@ use App\IssuedLtoLicense;
 use App\LtoInspectionDocument;
 use App\LtoLicenseRenewal;
 use App\JobsTimeline;
+use App\PressureTestRecords;
+use App\Company;
 use Carbon\Carbon;
 
 use Auth;
@@ -34,10 +36,13 @@ class staffController extends Controller
     $appDocReviews = DB::table('job_assignments')
     ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
     ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
+    ->orderBy('job_assignments.created_at')
     ->get();
-    $pendingApplications = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    return view('backend.staff.staff_dashboard', compact('appDocReviews','pendingApplications'));
+    return view('backend.staff.staff_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function staffPending(){
@@ -45,10 +50,43 @@ class staffController extends Controller
     $appDocReviews = DB::table('job_assignments')
     ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
     ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
+    ->orderBy('job_assignments.created_at')
     ->get();
-    $pendingApplications = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->latest()->get();
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    return view('backend.staff.staff_pending', compact('appDocReviews','pendingApplications'));
+    return view('backend.staff.staff_pending', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+  }
+
+  public function staffOutbox(){
+    // Retrieve all assigned application documents
+    $appDocReviews = DB::table('job_assignments')
+    ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
+    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
+    ->orderBy('job_assignments.created_at')
+    ->get();
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+
+    // dd($appDocReviewsOutbox);
+
+    return view('backend.staff.staff_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+  }
+
+  public function staffCompleted(){
+    // Retrieve all assigned application documents
+    $appDocReviews = DB::table('job_assignments')
+    ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
+    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
+    ->orderBy('job_assignments.created_at')
+    ->get();
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->latest()->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+
+    return view('backend.staff.staff_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function showCreateCompany(SiteSuitabilityInspectionDocuments $applicationID){
@@ -82,6 +120,9 @@ class staffController extends Controller
         ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
         // ->where()
         ->first();
+      }elseif($applicationReview->sub_category == "Pressure Testing") {
+        $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
+        // dd($applicationID);
       }
       return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments'));
     }else{

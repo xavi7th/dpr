@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Team Lead | Dashboard
+  DPR Team Lead | Completed
 @endsection
 
 @section('pagestyles')
@@ -20,7 +20,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Dashboard
+          Completed
           <small>Team Lead Control panel</small>
         </h1>
       </section>
@@ -108,7 +108,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($appDocReviews as $item)
+                    @foreach ($appDocReviewsCompleted as $item)
                       <tr>
                         <td class="sorting_1"><a href="/tlDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
                         <td>{{ $item->name_of_gas_plant }}</td>

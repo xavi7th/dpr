@@ -5,7 +5,15 @@
 @endsection
 
 @section('pagestyles')
-
+  <style>
+    #pt_style b{
+      font-size: 20px;
+    }
+    #pt_style a{
+      font-size: 20px;
+      color: red;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -30,7 +38,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <div class="box box-primary">
               <div class="box-body box-profile">
 
@@ -67,13 +75,13 @@
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
 
-                  @if ($applicationReview->to_head_gas == 'true' && optional($applicationStatus)->job_application_status != 'Report Submitted')
+                  @if ($applicationReview->to_head_gas == 'true')
                     <li class="list-group-item">
                       <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to Head Gas M&G Lagos</a>
                     </li>
                   @endif
 
-                  @if ($applicationReview->to_head_gas != 'true')
+                  @if ($applicationReview->to_head_gas == null)
                     <form role="form" method="post" action="/push_down_to_headgas">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
@@ -84,7 +92,7 @@
                   @endif
 
                   @if ($applicationStatus != null)
-                    @if ($applicationStatus->to_ADO == "true")
+                    @if ($applicationReview->to_ADO == "received")
                       <li class="list-group-item">
                         <b>Application Status</b>
                         @if ($reportDocument != null)
@@ -98,7 +106,7 @@
                         <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                       </li>
                       @if ($applicationStatus->job_application_status == "Report Submitted")
-                        <form role="form" method="post" action="/hgApproves">
+                        <form role="form" method="post" action="/ado_decides">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                           <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
@@ -107,9 +115,9 @@
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
                           <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
                           <div class="box-footer">
-                            <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
-                            <input type="submit" name="approve" value="Approve" class="pull btn btn-success">
-                            <input type="submit" name="sendToZOPSCON" value="Send to ZOPSCON" class="pull-right btn btn-primary">
+                            <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
+                            <input type="submit" name="approve" value="Approve" class="pull-left btn btn-success">
+                            <input type="submit" style="margin-left: 2px;" name="sendToZOPSCON" value="Send to ZOPSCON" class="pull-right btn btn-primary">
                             <input type="submit" name="sendToHeadGas" value="Send to Head Gas" class="pull-right btn btn-primary">
                           </div>
                         </form>
@@ -185,7 +193,7 @@
 
 
 
-          <div class="col-md-8">
+          <div class="col-md-7">
 
             {{-- @if (optional($applicationStatus)->job_application_status != "Started")
               @if (optional($applicationStatus)->job_application_status != "Report Submitted")
@@ -200,7 +208,7 @@
 
 
 
-          <div class="col-md-8">
+          <div class="col-md-7">
             <div class="box box-primary">
               <!-- /.box-header -->
               <div class="box-body">
@@ -212,6 +220,8 @@
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
                   @include('partials.m_view_application_docs_takeover')
+                @elseif ($applicationReview->sub_category == 'Pressure Testing')
+                  @include('partials.m_view_application_docs_pressure_test')
                 @endif
               </div>
               <!-- /.box-body -->

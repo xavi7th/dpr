@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Team Lead | Dashboard
+  DPR Head Gas | Completed
 @endsection
 
 @section('pagestyles')
@@ -13,15 +13,15 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_teamlead')
+    @include('partials.backend_aside_headgas')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Dashboard
-          <small>Team Lead Control panel</small>
+          Completed
+          <small>Head Gas Control panel</small>
         </h1>
       </section>
 
@@ -40,7 +40,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/headgas" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -54,7 +54,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/headgas_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -68,7 +68,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/headgas_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <div class="col-lg-3 col-xs-3">
@@ -81,12 +81,11 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/headgas_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>
         <!-- /.row (main row) -->
-
         <div class="row">
           <div class="col-md-12">
             <div class="box">
@@ -104,7 +103,46 @@
                     <th>Plant Type</th>
                     <th>Application Status</th>
                     <th>Application Date</th>
-                    {{-- <th>Action</th> --}}
+                  </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($appDocReviewsCompleted as $item)
+                      <tr>
+                        <td class="sorting_1"><a href="/headgas_document_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
+                        <td>{{ $item->name_of_gas_plant }}</td>
+                        <td>{{ $item->application_type }}</td>
+                        <td>{{ $item->sub_category }}</td>
+                        <td>{{ $item->plant_type }}</td>
+                        <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
+                        <td>{{ $item->created_at }}</td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+
+          </div>
+          <!-- ./col -->
+        </div>
+        {{-- <div class="row">
+          <div class="col-md-12">
+            <div class="box">
+              <div class="box-header">
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <table id="example1" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>Application ID</th>
+                    <th>Name of Gas Plant</th>
+                    <th>Application Type</th>
+                    <th>Sub-Category</th>
+                    <th>Plant Type</th>
+                    <th>Application Status</th>
+                    <th>Application Date</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -117,7 +155,6 @@
                         <td>{{ $item->plant_type }}</td>
                         <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
                         <td>{{ $item->created_at }}</td>
-                        {{-- <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td> --}}
                       </tr>
                     @endforeach
                   </tbody>
@@ -128,7 +165,7 @@
 
           </div>
           <!-- ./col -->
-        </div>
+        </div> --}}
 
       </section>
       <!-- /.content -->

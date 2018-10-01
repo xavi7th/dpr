@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Team Lead | Dashboard
+  DPR ADO | Completed
 @endsection
 
 @section('pagestyles')
@@ -13,15 +13,15 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_teamlead')
+    @include('partials.backend_aside_ado')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          Dashboard
-          <small>Team Lead Control panel</small>
+          Completed Applications
+          <small>ADO Control panel</small>
         </h1>
       </section>
 
@@ -40,7 +40,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/ado" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -54,7 +54,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/ado_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -68,7 +68,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/ado_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <div class="col-lg-3 col-xs-3">
@@ -81,7 +81,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="/teamlead_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/ado_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>
@@ -97,27 +97,25 @@
                 <table id="example1" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>Application ID</th>
+                    {{-- <th>Application ID</th> --}}
                     <th>Name of Gas Plant</th>
                     <th>Application Type</th>
                     <th>Sub-Category</th>
                     <th>Plant Type</th>
                     <th>Application Status</th>
                     <th>Application Date</th>
-                    {{-- <th>Action</th> --}}
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($appDocReviews as $item)
+                    @foreach ($appDocReviewsCompleted as $item)
                       <tr>
-                        <td class="sorting_1"><a href="/tlDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
-                        <td>{{ $item->name_of_gas_plant }}</td>
+                        <td class="sorting_1"><a href="/ado_document_review/{{ $item->id }}" class="text-purple" style="font-size: 20px; font-weight: 600;">{{ $item->name_of_gas_plant }}</a></td>
+                        {{-- <td>{{ $item->name_of_gas_plant }}</td> --}}
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         <td>{{ $item->plant_type }}</td>
                         <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
                         <td>{{ $item->created_at }}</td>
-                        {{-- <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td> --}}
                       </tr>
                     @endforeach
                   </tbody>

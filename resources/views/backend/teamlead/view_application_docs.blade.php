@@ -5,7 +5,15 @@
 @endsection
 
 @section('pagestyles')
-
+  <style>
+    #pt_style b{
+      font-size: 20px;
+    }
+    #pt_style a{
+      font-size: 20px;
+      color: red;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -244,6 +252,8 @@
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
                   @include('partials.m_view_application_docs_takeover')
+                @elseif ($applicationReview->sub_category == 'Pressure Testing')
+                  @include('partials.m_view_application_docs_pressure_test')
                 @endif
               </div>
               <!-- /.box-body -->

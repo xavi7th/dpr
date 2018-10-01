@@ -64361,6 +64361,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // console.log('Component hmm.');
     axios.get('js/location.json').then(function (response) {
       _this.states = response.data.nigeria;
+      console.log(response.data);
     });
     axios.get('js/applicationTypesAndSubCategory.json').then(function (response) {
       _this.application_types = response.data.app_doc;

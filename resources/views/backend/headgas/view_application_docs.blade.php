@@ -5,7 +5,15 @@
 @endsection
 
 @section('pagestyles')
-
+  <style>
+    #pt_style b{
+      font-size: 20px;
+    }
+    #pt_style a{
+      font-size: 20px;
+      color: red;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -71,6 +79,9 @@
                     <li class="list-group-item">
                       <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to Team Lead</a>
                     </li>
+                  @endif
+
+                  @if ($applicationReview->to_team_lead == null)
                     <form role="form" method="post" action="/push_down_to_teamlead">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
@@ -81,7 +92,7 @@
                   @endif
 
                   @if ($applicationStatus != null)
-                    @if ($applicationReview->to_head_gas == "received" || $applicationReview->to_head_gas == "forwared")
+                    @if ($applicationReview->to_head_gas == "received")
                       <li class="list-group-item">
                         <b>Application Status</b>
                         @if ($reportDocument != null)
@@ -107,7 +118,7 @@
                             <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
                             <input type="submit" name="approve" value="Approve" class="pull-left btn btn-success">
                             <input type="submit" style="margin-left: 2px;" name="sendToADO" value="Send to ADO" class="pull-right btn btn-primary">
-                            <input type="submit" name="sendToADO" value="Send to Team Lead" class="pull-right btn btn-primary">
+                            <input type="submit" name="sendToTeamLead" value="Send to Team Lead" class="pull-right btn btn-primary">
                           </div>
                         </form>
                       @endif
@@ -209,6 +220,8 @@
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
                   @include('partials.m_view_application_docs_takeover')
+                @elseif ($applicationReview->sub_category == 'Pressure Testing')
+                  @include('partials.m_view_application_docs_pressure_test')
                 @endif
               </div>
               <!-- /.box-body -->

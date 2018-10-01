@@ -16,6 +16,7 @@ use App\IssuedAtcLicense;
 use App\IssuedLtoLicense;
 use App\LtoInspectionDocument;
 use App\LtoLicenseRenewal;
+use App\PressureTestRecords;
 use App\JobsTimeline;
 use Carbon\Carbon;
 
@@ -29,15 +30,37 @@ class teamleadController extends Controller
   }
 
   public function index(){
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->latest()->get();    // get all application requests
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
-    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending'));
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+
+    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function teamleadPending(){
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
-    return view('backend.teamlead.teamlead_pending', compact('appDocReviews','appDocReviewsPending'));
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    return view('backend.teamlead.teamlead_pending', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+  }
+
+  public function teamleadOutbox(){
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    // dd($appDocReviewsOutbox);
+    return view('backend.teamlead.teamlead_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+  }
+
+  public function teamleadCompleted(){
+    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
+    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->latest()->get();    // get all pending application requests
+    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    return view('backend.teamlead.teamlead_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function teamleadDocumentReview($id){
@@ -64,6 +87,9 @@ class teamleadController extends Controller
       ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
       // ->where()
       ->first();
+    }elseif($applicationReview->sub_category == "Pressure Testing") {
+      $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
+      // dd($applicationID);
     }
 
     // dd($applicationStatus);

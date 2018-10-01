@@ -103,6 +103,8 @@ Route::post('/mSubmitApplication', 'marketerController@submitApplicationRequest'
 //STAFF-CONTROLLER
 Route::get('/staff', 'staffController@index')->middleware(['auth', 'staff']);
 Route::get('/staff_pending', 'staffController@staffPending')->middleware(['auth', 'staff']);
+Route::get('/staff_outbox', 'staffController@staffOutbox')->middleware(['auth', 'staff']);
+Route::get('/staff_completed', 'staffController@staffCompleted')->middleware(['auth', 'staff']);
 Route::get('/stDocument_review/{applicationID}', 'staffController@staffDocumentReview')->middleware(['auth', 'staff']);
 Route::get('/create_company/{applicationID}', 'staffController@showCreateCompany')->middleware(['auth', 'staff']);
 
@@ -116,6 +118,8 @@ Route::post('/up_to_teamlead', 'staffController@upToTeamlead')->middleware(['aut
 Route::get('/teamlead', 'teamleadController@index')->middleware(['auth', 'teamlead']);
 Route::get('/tlDocument_review/{applicationID}', 'teamleadController@teamleadDocumentReview')->middleware(['auth', 'teamlead']);
 Route::get('/teamlead_pending', 'teamleadController@teamleadPending')->middleware(['auth', 'teamlead']);
+Route::get('/teamlead_outbox', 'teamleadController@teamleadOutbox')->middleware(['auth', 'teamlead']);
+Route::get('/teamlead_completed', 'teamleadController@teamleadCompleted')->middleware(['auth', 'teamlead']);
 
 Route::post('/tlDocument_assign', 'teamleadController@teamleadDocumentAssign')->middleware(['auth', 'teamlead']);
 Route::post('/tlApproves', 'teamleadController@teamleadApproves')->middleware(['auth', 'teamlead']);
@@ -126,6 +130,8 @@ Route::post('/up_to_headgas', 'teamleadController@upToHeadGas')->middleware(['au
 Route::get('/headgas', 'headgasController@index')->middleware(['auth', 'headgas']);
 Route::get('/headgas_document_review/{applicationID}', 'headgasController@headGasDocumentReview')->middleware(['auth', 'headgas']);
 Route::get('/headgas_pending', 'headgasController@headgasPending')->middleware(['auth', 'headgas']);
+Route::get('/headgas_outbox', 'headgasController@headgasOutbox')->middleware(['auth', 'headgas']);
+Route::get('/headgas_completed', 'headgasController@headgasCompleted')->middleware(['auth', 'headgas']);
 
 Route::post('/push_down_to_teamlead', 'headgasController@forwardApplicationToTeamLead')->middleware(['auth', 'headgas']);
 Route::post('/hgApproves', 'headgasController@headGasApproves')->middleware(['auth', 'headgas']);
@@ -134,6 +140,8 @@ Route::post('/hgApproves', 'headgasController@headGasApproves')->middleware(['au
 //ADO
 Route::get('/ado', 'adoController@index')->middleware(['auth', 'ado']);
 Route::get('/ado_pending', 'adoController@adoPending')->middleware(['auth', 'ado']);
+Route::get('/ado_outbox', 'adoController@adoOutbox')->middleware(['auth', 'ado']);
+Route::get('/ado_completed', 'adoController@adoCompleted')->middleware(['auth', 'ado']);
 Route::get('/ado_document_review/{applicationID}', 'adoController@adoDocumentReview')->middleware(['auth', 'ado']);
 
 Route::post('/push_down_to_headgas', 'adoController@forwardApplicationToHeadGas')->middleware(['auth', 'ado']);
@@ -142,6 +150,9 @@ Route::post('/ado_decides', 'adoController@adoApproves')->middleware(['auth', 'a
 
 //ZOPSCON
 Route::get('/zopscon', 'zopsconController@index')->middleware(['auth', 'zopscon']);
+Route::get('/zopscon_pending', 'zopsconController@zopsconPending')->middleware(['auth', 'zopscon']);
+Route::get('/zopscon_outbox', 'zopsconController@zopsconOutbox')->middleware(['auth', 'zopscon']);
+Route::get('/zopscon_completed', 'zopsconController@zopsconCompleted')->middleware(['auth', 'zopscon']);
 Route::get('/zopscon_document_review/{applicationID}', 'zopsconController@zopsconDocumentReview')->middleware(['auth', 'zopscon']);
 
 
