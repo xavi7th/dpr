@@ -64,7 +64,7 @@
                     <b>Address</b> <a class="pull-right">{{ $applicationReview->address }}</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
+                    <b>Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($applicationReview->created_at)->toFormattedDateString() }}</a>
                   </li>
                   @if ($applicationReview->application_status)
                     <li class="list-group-item">
@@ -86,7 +86,9 @@
                   @if ($applicationReview->application_status == 'Not Submitted')
                     <form class="" action="/mSubmitApplication" method="post">
                       {{ csrf_field() }}
-                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->id }}">
+                      <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                      <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
                       <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
                     </form>
                   @else

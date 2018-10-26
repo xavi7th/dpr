@@ -144,7 +144,10 @@
             <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Modify Uploads</h3>
-              @if ($applicationReview->sub_category == "ATC" || $applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "Take Over")
+              @if ($applicationReview->sub_category == "ATC"
+              || $applicationReview->sub_category == "LTO"
+              || $applicationReview->sub_category == "Renewal"
+              || $applicationReview->sub_category == "Take Over")
                 <div class="tools pull-right" data-toggle="modal" data-target="#reason" style="cursor: pointer;">
                   <i class="fa fa-edit text-red"></i>
                 </div>
@@ -172,7 +175,7 @@
                     </div>
                   </div>
                 </div>
-                @if ($applicationReview->sub_category == "ATC" || $applicationReview->sub_category == "Site Suitability")
+                @if ($applicationReview->sub_category == "ATC" || $applicationReview->sub_category == "Site Suitability Inspection")
                   <div class="form-group">
                     <label>Select Document to modify</label>
                     <select class="form-control select2" name="doc_type" style="width: 100%;">

@@ -5,6 +5,7 @@
 @endsection
 
 @section('pagestyles')
+
 @endsection
 
 @section('content')
@@ -14,10 +15,7 @@
 
 
     @include('partials.backend_aside_zopscon')
-
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
           Dashboard
@@ -25,8 +23,7 @@
         </h1>
       </section>
 
-      <!-- Main content -->
-      <section class="content">
+      {{-- <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
@@ -130,10 +127,79 @@
           <!-- ./col -->
         </div>
 
-      </section>
-      <!-- /.content -->
+      </section> --}}
+      <section class="content">
+      <div class="row">
+        <div class="col-md-3">
+          {{-- <a href="compose.html" class="btn btn-primary btn-block margin-bottom">Compose</a> --}}
+
+          <div class="box box-solid" data-vivaldi-spatnav-clickable="1">
+            <div class="box-header with-border">
+              <h3 class="box-title">Folders</h3>
+
+              <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="box-body no-padding">
+              <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="#"><i class="fa fa-inbox"></i> Inbox
+                  <span class="label label-primary pull-right">{{ $inboxUnreadCount->count() }}</span></a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i> Outbox</a></li>
+                {{-- <li><a href="#"><i class="fa fa-file-text-o"></i> Drafts</a></li> --}}
+                <li><a href="#"><i class="fa fa-filter"></i> Junk <span class="label label-warning pull-right">65</span></a>
+                </li>
+                <li><a href="#"><i class="fa fa-trash-o"></i> Trash</a></li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+        <!-- /.col -->
+        {{-- rgba(60, 141, 188, 0.2) --}}
+        <div class="col-md-9">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Inbox</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>Application id</th>
+                  <th>Application Type</th>
+                  <th>Sub-Category</th>
+                  <th>Date Received</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @foreach ($inbox as $item)
+                    @if ($item->read == 'true')
+                      <tr>
+                    @else
+                      <tr style="background-color: rgba(63, 81, 181, 0.2);">
+                    @endif
+                      <td><a href="/zopscon_document_review/{{ $item->application_id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
+                      {{-- <td>{{ $item->application_id }}</td> --}}
+                      <td>{{ $item->application_type }}</td>
+                      <td>{{ $item->sub_category }}</td>
+                      <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
     </div>
-    <!-- /.content-wrapper -->
     @include('partials.base_footer')
   </div>
 @endsection
@@ -154,5 +220,50 @@
       'autoWidth'   : false
     })
   })
+</script>
+<script>
+$(function () {
+  //Enable iCheck plugin for checkboxes
+  //iCheck for checkbox and radio inputs
+  $('.mailbox-messages input[type="checkbox"]').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  //Enable check and uncheck all functionality
+  $(".checkbox-toggle").click(function () {
+    var clicks = $(this).data('clicks');
+    if (clicks) {
+      //Uncheck all checkboxes
+      $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+      $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+    } else {
+      //Check all checkboxes
+      $(".mailbox-messages input[type='checkbox']").iCheck("check");
+      $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+    }
+    $(this).data("clicks", !clicks);
+  });
+
+  //Handle starring for glyphicon and font awesome
+  $(".mailbox-star").click(function (e) {
+    e.preventDefault();
+    //detect type
+    var $this = $(this).find("a > i");
+    var glyph = $this.hasClass("glyphicon");
+    var fa = $this.hasClass("fa");
+
+    //Switch states
+    if (glyph) {
+      $this.toggleClass("glyphicon-star");
+      $this.toggleClass("glyphicon-star-empty");
+    }
+
+    if (fa) {
+      $this.toggleClass("fa-star");
+      $this.toggleClass("fa-star-o");
+    }
+  });
+});
 </script>
 @endsection

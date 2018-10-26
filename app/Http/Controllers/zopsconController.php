@@ -21,6 +21,7 @@ use App\TakeoverInspectionDocuments;
 use App\TakeoverReviews;
 use App\PressureTestRecords;
 use App\JobsTimeline;
+use App\zopsconInbox;
 use Carbon\Carbon;
 
 use Auth;
@@ -35,11 +36,15 @@ class zopsconController extends Controller
 
 
     public function index(){
+      $inbox = zopsconInbox::with('app_doc_review')->latest()->get();
+      $inboxUnreadCount = zopsconInbox::where('read', 'false')->get();
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->latest()->get();    // get all application requests
       $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
       $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
       $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+
+      // dd($inbox);
+      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount'));
     }
 
     public function zopsconPending(){

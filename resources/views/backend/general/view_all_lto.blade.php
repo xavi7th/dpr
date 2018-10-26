@@ -56,6 +56,7 @@
                     <th>Sub-Category</th>
                     <th>Plant Type</th>
                     <th>Application Status</th>
+                    <th>Date Issued</th>
                     <th>Expiry Date</th>
                   </tr>
                   </thead>
@@ -90,8 +91,12 @@
                         <td>{{ $item->plant_type }}</td>
                         <td>{{ $item->application_status}}</td>
                         <td>
-                          {{ $item->expiry_date }}
+                          {{ Carbon\Carbon::parse($item->date_issued)->toFormattedDateString() }}
                         </td>
+                        <td>
+                          {{ Carbon\Carbon::parse($item->expiry_date)->toFormattedDateString() }}
+                        </td>
+
                       </tr>
                     @endforeach
                   </tbody>

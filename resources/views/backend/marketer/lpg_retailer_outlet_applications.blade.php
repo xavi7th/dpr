@@ -5,7 +5,11 @@
 @endsection
 
 @section('pagestyles')
-
+  <style>
+    .inner h3{
+      font-size: 25px;
+    }
+  </style>
 @endsection
 
 @section('content')

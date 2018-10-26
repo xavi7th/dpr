@@ -17,6 +17,7 @@ use App\TakeoverReviews;
 use App\PressureTestRecords;
 use App\Company;
 use App\TakeoverInspectionDocuments;
+use App\zopsconInbox;
 use Storage;
 use Carbon\Carbon;
 
@@ -258,12 +259,6 @@ class marketerController extends Controller
 
 
   }
-
-
-
-
-
-
 
 
   public function handleSiteSuitablityInspectionPhase1(Request $request){
@@ -1146,7 +1141,7 @@ class marketerController extends Controller
 
 
         // dd('here3');
-        $request->TCR_doc->storeAs('pressure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
+        $request->TCR_doc->storeAs('press$appDocReviewsLTO$appDocReviewsLTOure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
         $tcrDoc = $request->TCR_doc->getClientOriginalName();
 
         // insert records into the pressure_test_records database
@@ -1267,11 +1262,20 @@ class marketerController extends Controller
 
 
   public function submitApplicationRequest(Request $request){
+    // dd($request);
 
-    AppDocReview::where('application_id', request('application_id'))
+    AppDocReview::where('id', request('application_id'))
     ->update([
       'application_status' => 'Application Pending',
       'to_zopscon' => 'true'
+    ]);
+
+    zopsconInbox::create([
+      'application_id' => request('application_id'),
+      'from' => Auth::user()->staff_id,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'read' => 'false'
     ]);
 
     return redirect('/marketer');
@@ -1573,7 +1577,7 @@ class marketerController extends Controller
   public function viewAllLTO(){
     $appDocReviewsLTO = DB::table('app_doc_reviews')
     ->rightJoin('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
-    ->select('app_doc_reviews.*','issued_lto_licenses.expiry_date')
+    ->select('app_doc_reviews.*','issued_lto_licenses.expiry_date','issued_lto_licenses.date_issued')
     ->where([['application_status','LTO Issued'],['marketer_id', Auth::user()->staff_id]])
     ->get();    // get all application requests
 

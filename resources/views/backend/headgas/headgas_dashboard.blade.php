@@ -113,7 +113,7 @@
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->job_application_status }}</td>
+                        <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
                         <td>{{ $item->created_at }}</td>
                       </tr>
                     @endforeach

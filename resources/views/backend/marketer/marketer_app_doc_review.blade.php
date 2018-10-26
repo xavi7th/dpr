@@ -55,10 +55,11 @@
                   <tr>
                     <th>Application ID</th>
                     <th>Name of Gas Plant</th>
-                    <th>Application Type</th>
+                    {{-- <th>Application Type</th> --}}
                     <th>Sub-Category</th>
-                    <th>Plant Type</th>
-                    <th>Document Status</th>
+                    {{-- <th>Plant Type</th> --}}
+                    <th>State</th>
+                    <th>lga</th>
                     <th>Status</th>
                     <th>Application Date</th>
                     {{-- <th>Mails</th> --}}
@@ -81,10 +82,11 @@
                           @endif
                         </td>
                         <td>{{ $item->name_of_gas_plant }}</td>
-                        <td>{{ $item->application_type }}</td>
+                        {{-- <td>{{ $item->application_type }}</td> --}}
                         <td>{{ $item->sub_category }}</td>
-                        <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->application_status }}</td>
+                        {{-- <td>{{ $item->plant_type }}</td> --}}
+                        <td>{{ $item->state }}</td>
+                        <td>{{ $item->lga }}</td>
                         <td>
                           @if ($item->application_status == 'Site Not Suitable'
                           || $item->application_status == 'ATC Not Issued'
@@ -106,7 +108,7 @@
                             <a href="/mDocument_edit/{{ $item->id }}" class="" style="font-size: 13px;"><i class="fa fa-gears text-black"></i></a>
                           @endif
                         </td>
-                        <td>{{ $item->created_at }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->created_at)->toFormattedDateString() }}</td>
                         {{-- <td><a href="/mDocument_messages/{{ $item->id }}" class="label label-primary" style="font-size: 13px;">View</a></td> --}}
                       </tr>
                     @endforeach

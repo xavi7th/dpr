@@ -117,8 +117,8 @@
                           <div class="box-footer">
                             <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
                             <input type="submit" name="approve" value="Approve" class="pull-left btn btn-success">
-                            <input type="submit" style="margin-left: 2px;" name="sendToADO" value="Send to ADO" class="pull-right btn btn-primary">
-                            <input type="submit" name="sendToTeamLead" value="Send to Team Lead" class="pull-right btn btn-primary">
+                            <input type="submit" style="margin-left: 2px;" name="sendToADO" value="To ADO" class="pull-right btn btn-primary">
+                            <input type="submit" name="sendToTeamLead" value="To Team Lead" class="pull-right btn btn-primary">
                           </div>
                         </form>
                       @endif
