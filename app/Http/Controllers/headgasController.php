@@ -21,6 +21,9 @@ use App\TakeoverInspectionDocuments;
 use App\TakeoverReviews;
 use App\PressureTestRecords;
 use App\JobsTimeline;
+use App\headgasInbox;
+use App\teamleadInbox;
+use App\headgasOutbox;
 use Carbon\Carbon;
 
 use Auth;
@@ -34,11 +37,15 @@ class headgasController extends Controller
 
 
   public function index(){
+    $inbox = headgasInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
+    // dd($inbox);
+    $inboxUnreadCount = headgasInbox::where('read', 'false')->get();
+    $outboxUnreadCount = headgasOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->latest()->get();    // get all application request
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->get();    // get all pending application requestss
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.headgas.headgas_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    return view('backend.headgas.headgas_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
   }
 
   public function headgasPending(){
@@ -50,12 +57,16 @@ class headgasController extends Controller
   }
 
   public function headgasOutbox(){
+    $outbox = headgasOutbox::with('app_doc_review')->latest()->get();
+    // dd($outbox);
+    $inboxUnreadCount = headgasInbox::where('read', 'false')->get();
+    $outboxUnreadCount = headgasOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->get();    // get all pending application requests
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    return view('backend.headgas.headgas_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    return view('backend.headgas.headgas_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
   }
 
   public function headgasCompleted(){
@@ -67,6 +78,9 @@ class headgasController extends Controller
   }
 
   public function headGasDocumentReview($id){
+    headgasInbox::where('application_id', $id)->update([
+      'read' => 'true'
+    ]);
     $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
@@ -112,6 +126,29 @@ class headgasController extends Controller
       'application_id' => request('application_id'),
       'from' => Auth::user()->staff_id,
       'to' => $to->staff_id
+    ]);
+
+    headgasInbox::where('application_id', request('id'))->update([
+      'to_outbox' => 'true'
+    ]);
+
+    // add this application document to the headgas outbox
+    headgasOutbox::create([
+      'application_id' => request('id'),
+      'to' => $to->staff_id,
+      'role' => $to->role,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category')
+    ]);
+
+    // add to teamlead inbox
+    teamleadInbox::create([
+      'application_id' => request('id'),
+      'from' => Auth::user()->staff_id,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'read' => 'false',
+      'to_outbox' => 'false'
     ]);
 
     return redirect('/headgas');

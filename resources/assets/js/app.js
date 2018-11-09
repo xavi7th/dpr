@@ -8,6 +8,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+// import Router from './routes.js'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -30,7 +31,10 @@ Vue.component('apply-for-takeover-component', require('./components/TakeoverAppl
 Vue.component('apply-for-pressure-test-component', require('./components/PressureTestApplicationForm.vue'));
 Vue.component('m-view-application-docs', require('./components/mViewApplicationDocs.vue'));
 Vue.component('m-view-application-docs-lto-renewal', require('./components/mViewApplicationDocsLtoRenewal.vue'));
+// Vue.component('zopscon-inbox', require('./components/zopsconInbox.vue'));
+// Vue.component('zopscon-outbox', require('./components/zopsconOutbox.vue'));
 
 const app = new Vue({
     el: '#app'
+    // router: Router
 });

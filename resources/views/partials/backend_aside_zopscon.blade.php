@@ -43,11 +43,11 @@
           <li><a href="/view_lto_records"><i class="fa fa-fax"></i>LTO</a></li>
         </ul>
       </li> --}}
-      <li>
+      {{-- <li>
         <a href="/mUpload_documents">
           <i class="fa fa-upload "></i> <span>Presure Test Records</span>
         </a>
-      </li>
+      </li> --}}
       <li>
         <a href="/preferences">
           <i class="ion ion-android-settings"></i> <span>Settings</span>

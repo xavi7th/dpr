@@ -150,6 +150,7 @@ Route::post('/ado_decides', 'adoController@adoApproves')->middleware(['auth', 'a
 
 //ZOPSCON
 Route::get('/zopscon', 'zopsconController@index')->middleware(['auth', 'zopscon']);
+Route::get('/zopscon_inbox_all', 'zopsconController@zopsconInboxAll')->middleware(['auth', 'zopscon']); // testing routes for vuejs
 Route::get('/zopscon_pending', 'zopsconController@zopsconPending')->middleware(['auth', 'zopscon']);
 Route::get('/zopscon_outbox', 'zopsconController@zopsconOutbox')->middleware(['auth', 'zopscon']);
 Route::get('/zopscon_completed', 'zopsconController@zopsconCompleted')->middleware(['auth', 'zopscon']);

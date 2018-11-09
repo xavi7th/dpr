@@ -26,7 +26,7 @@
       </section>
 
       <!-- Main content -->
-      <section class="content">
+      {{-- <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
@@ -126,35 +126,40 @@
           </div>
           <!-- ./col -->
         </div>
-        {{-- <div class="row">
-          <div class="col-md-12">
-            <div class="box">
-              <div class="box-header">
+
+      </section> --}}
+      <section class="content">
+
+        <div class="row">
+          @include('partials.headgas_folders')
+          <!-- ./col -->
+          <div class="col-md-9">
+            <div class="box box-success">
+              <div class="box-header with-border">
+                <h3 class="box-title">Inbox</h3>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
                 <table id="example1" class="table table-bordered table-hover">
                   <thead>
-                  <tr>
-                    <th>Application ID</th>
-                    <th>Name of Gas Plant</th>
-                    <th>Application Type</th>
-                    <th>Sub-Category</th>
-                    <th>Plant Type</th>
-                    <th>Application Status</th>
-                    <th>Application Date</th>
-                  </tr>
+                    <tr>
+                      <th>Name of Company</th>
+                      <th>Application Type</th>
+                      <th>Sub-Category</th>
+                      <th>Date Received</th>
+                    </tr>
                   </thead>
                   <tbody>
-                    @foreach ($appDocReviews as $item)
+                    @foreach ($inbox as $item)
                       <tr>
-                        <td class="sorting_1"><a href="/tlDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
-                        <td>{{ $item->name_of_gas_plant }}</td>
+                        @if ($item->read == 'true')
+                          <td><i class="fa fa-circle" style="padding-right: 15px; color: #4CAF50;"></i><a href="/headgas_document_review/{{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                        @else
+                          <td><i class="fa fa-circle" style="padding-right: 15px; color: #F44336;"></i><a href="/headgas_document_review/{{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                        @endif
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
-                        <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
-                        <td>{{ $item->created_at }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -162,10 +167,10 @@
               </div>
               <!-- /.box-body -->
             </div>
+            {{-- <router-view></router-view> --}}
 
           </div>
-          <!-- ./col -->
-        </div> --}}
+        </div>
 
       </section>
       <!-- /.content -->

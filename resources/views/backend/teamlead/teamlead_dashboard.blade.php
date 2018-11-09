@@ -26,7 +26,7 @@
       </section>
 
       <!-- Main content -->
-      <section class="content">
+      {{-- <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <!-- ./col -->
@@ -104,7 +104,7 @@
                     <th>Plant Type</th>
                     <th>Application Status</th>
                     <th>Application Date</th>
-                    {{-- <th>Action</th> --}}
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -117,7 +117,7 @@
                         <td>{{ $item->plant_type }}</td>
                         <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
                         <td>{{ $item->created_at }}</td>
-                        {{-- <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td> --}}
+                        <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -128,6 +128,51 @@
 
           </div>
           <!-- ./col -->
+        </div>
+
+      </section> --}}
+      <section class="content">
+
+        <div class="row">
+          @include('partials.teamlead_folders')
+          <!-- ./col -->
+          <div class="col-md-9">
+            <div class="box box-success">
+              <div class="box-header with-border">
+                <h3 class="box-title">Inbox</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <table id="example1" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Name of Company</th>
+                      <th>Application Type</th>
+                      <th>Sub-Category</th>
+                      <th>Date Received</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($inbox as $item)
+                      <tr>
+                        @if ($item->read == 'true')
+                          <td><i class="fa fa-circle" style="padding-right: 15px; color: #4CAF50;"></i><a href="/tlDocument_review/{{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                        @else
+                          <td><i class="fa fa-circle" style="padding-right: 15px; color: #F44336;"></i><a href="/tlDocument_review/{{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                        @endif
+                        <td>{{ $item->application_type }}</td>
+                        <td>{{ $item->sub_category }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            {{-- <router-view></router-view> --}}
+
+          </div>
         </div>
 
       </section>

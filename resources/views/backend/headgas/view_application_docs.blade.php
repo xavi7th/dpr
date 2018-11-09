@@ -85,6 +85,9 @@
                     <form role="form" method="post" action="/push_down_to_teamlead">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                      <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                      <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
                       <div class="box-footer">
                         <input type="submit" name="to_teamlead" value="Forward to Team Lead" class="pull btn btn-primary btn-block">
                       </div>

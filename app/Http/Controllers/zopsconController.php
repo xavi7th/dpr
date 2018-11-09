@@ -22,6 +22,8 @@ use App\TakeoverReviews;
 use App\PressureTestRecords;
 use App\JobsTimeline;
 use App\zopsconInbox;
+use App\adoInbox;
+use App\zopsconOutbox;
 use Carbon\Carbon;
 
 use Auth;
@@ -36,16 +38,23 @@ class zopsconController extends Controller
 
 
     public function index(){
-      $inbox = zopsconInbox::with('app_doc_review')->latest()->get();
+      $inbox = zopsconInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
       $inboxUnreadCount = zopsconInbox::where('read', 'false')->get();
+      $outboxUnreadCount = zopsconOutbox::all();
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->latest()->get();    // get all application requests
       $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
       $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
       $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
       // dd($inbox);
-      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount'));
+      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
     }
+
+    // public function zopsconInboxAll(){
+    //   // $inbox = zopsconInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
+    //   $inbox = zopsconInbox::with('app_doc_review')->latest()->get();
+    //   return response()->json(["inbox"=>$inbox], 200);
+    // }
 
     public function zopsconPending(){
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
@@ -56,6 +65,9 @@ class zopsconController extends Controller
     }
 
     public function zopsconOutbox(){
+      $outbox = zopsconOutbox::with('app_doc_review')->latest()->get();
+      $inboxUnreadCount = zopsconInbox::where('read', 'false')->get();
+      $outboxUnreadCount = zopsconOutbox::all();
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
       $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
       $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
@@ -63,7 +75,7 @@ class zopsconController extends Controller
 
       // dd($appDocReviewsOutbox);
 
-      return view('backend.zopscon.zopscon_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+      return view('backend.zopscon.zopscon_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
     }
 
     public function zopsconCompleted(){
@@ -75,6 +87,14 @@ class zopsconController extends Controller
     }
 
     public function zopsconDocumentReview($id){
+
+      // update this document to read in zopscon inbox
+
+      zopsconInbox::where('application_id', $id)->update([
+        'read' => 'true'
+      ]);
+
+
       $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
       // dd($applicationReview);
       $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
@@ -111,6 +131,7 @@ class zopsconController extends Controller
     }
 
     public function forwardApplicationToADO(Request $request){
+      // dd($request);
       AppDocReview::where('application_id', request('application_id'))
       ->update([
         'to_zopscon' => 'forwarded',
@@ -123,6 +144,31 @@ class zopsconController extends Controller
         'application_id' => request('application_id'),
         'from' => Auth::user()->staff_id,
         'to' => $to->staff_id
+      ]);
+
+      // update this document to_outbox => true inside zopscon inbox
+
+      zopsconInbox::where('application_id', request('id'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // add this application document to the zopscon outbox
+      zopsconOutbox::create([
+        'application_id' => request('id'),
+        'to' => $to->staff_id,
+        'role' => $to->role,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category')
+      ]);
+
+      // add to ado inbox
+      adoInbox::create([
+        'application_id' => request('application_id'),
+        'from' => Auth::user()->staff_id,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'read' => 'false',
+        'to_outbox' => 'false'
       ]);
 
 

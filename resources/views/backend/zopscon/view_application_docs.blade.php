@@ -87,6 +87,9 @@
                     <form role="form" method="post" action="/push_down_to_ADO">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                      <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                      <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
                       <div class="box-footer">
                         <input type="submit" name="to_ADO" value="Forward to ADO" class="pull btn btn-primary btn-block">
                       </div>
@@ -224,7 +227,7 @@
                   @include('partials.m_view_application_docs_takeover')
                 @elseif ($applicationReview->sub_category == 'Pressure Testing')
                   @include('partials.m_view_application_docs_pressure_test')
-                    
+
                 @endif
               </div>
               <!-- /.box-body -->

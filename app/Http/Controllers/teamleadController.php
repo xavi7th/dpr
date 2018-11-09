@@ -18,6 +18,9 @@ use App\LtoInspectionDocument;
 use App\LtoLicenseRenewal;
 use App\PressureTestRecords;
 use App\JobsTimeline;
+use App\teamleadInbox;
+use App\staffInbox;
+use App\teamleadOutbox;
 use Carbon\Carbon;
 
 use Auth;
@@ -30,12 +33,16 @@ class teamleadController extends Controller
   }
 
   public function index(){
+    $inbox = teamleadInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
+    // dd($inbox);
+    $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
+    $outboxUnreadCount = teamleadOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->latest()->get();    // get all application requests
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
   }
 
   public function teamleadPending(){
@@ -47,12 +54,16 @@ class teamleadController extends Controller
   }
 
   public function teamleadOutbox(){
+    $outbox = teamleadOutbox::with('app_doc_review')->latest()->get();
+    // dd($outbox);
+    $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
+    $outboxUnreadCount = teamleadOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
     // dd($appDocReviewsOutbox);
-    return view('backend.teamlead.teamlead_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    return view('backend.teamlead.teamlead_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
   }
 
   public function teamleadCompleted(){
@@ -64,6 +75,9 @@ class teamleadController extends Controller
   }
 
   public function teamleadDocumentReview($id){
+    teamleadInbox::where('application_id', $id)->update([
+      'read' => 'true'
+    ]);
     // $applicationReview = AppDocReview::with('job_assignment')->where('application_id', $applicationID->application_id)->first();    // retrieve application review
     $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
@@ -102,6 +116,37 @@ class teamleadController extends Controller
     ->update([
       'to_team_Lead' => 'forwarded',
       'to_staff' => 'true'
+    ]);
+
+    $to = Staff::where('role', 'Staff')->first();
+
+    JobsTimeline::create([
+      'application_id' => request('application_id'),
+      'from' => Auth::user()->staff_id,
+      'to' => $to->staff_id
+    ]);
+
+    teamleadInbox::where('application_id', request('id'))->update([
+      'to_outbox' => 'true'
+    ]);
+
+    // add this application document to the teamlead outbox
+    teamleadOutbox::create([
+      'application_id' => request('id'),
+      'to' => $to->staff_id,
+      'role' => $to->role,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category')
+    ]);
+
+    // add to staff inbox
+    staffInbox::create([
+      'application_id' => request('id'),
+      'from' => Auth::user()->staff_id,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'read' => 'false',
+      'to_outbox' => 'false'
     ]);
 
     JobAssignment::updateOrCreate([

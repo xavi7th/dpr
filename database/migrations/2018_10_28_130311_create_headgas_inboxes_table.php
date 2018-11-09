@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateZopsconInboxesTable extends Migration
+class CreateHeadgasInboxesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateZopsconInboxesTable extends Migration
      */
     public function up()
     {
-        Schema::create('zopscon_inboxes', function (Blueprint $table) {
+        Schema::create('headgas_inboxes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('application_id');
             $table->string('from'); // This is should be the role of the sender e.g Marketer, ZOPSCON, ADO etc...
@@ -32,6 +32,6 @@ class CreateZopsconInboxesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('zopscon_inboxes');
+        Schema::dropIfExists('headgas_inboxes');
     }
 }

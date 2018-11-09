@@ -21,6 +21,9 @@ use App\TakeoverInspectionDocuments;
 use App\TakeoverReviews;
 use App\PressureTestRecords;
 use App\JobsTimeline;
+use App\adoInbox;
+use App\headgasInbox;
+use App\adoOutbox;
 use Carbon\Carbon;
 
 use Auth;
@@ -34,11 +37,16 @@ class adoController extends Controller
 
 
   public function index(){
+    $inbox = adoInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
+    // dd($inbox);
+    $inboxUnreadCount = adoInbox::where('read', 'false')->get();
+    // $inboxUnreadCount = adoInbox::all(); // number of items in inbox
+    $outboxUnreadCount = adoOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->latest()->get();    // get all application request
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.ado.ado_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    return view('backend.ado.ado_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
   }
 
   public function adoPending(){
@@ -50,6 +58,9 @@ class adoController extends Controller
   }
 
   public function adoOutbox(){
+    $outbox = adoOutbox::with('app_doc_review')->latest()->get();
+    $inboxUnreadCount = adoInbox::where('read', 'false')->get();
+    $outboxUnreadCount = adoOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->get();    // get all application requests
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending application requests
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->get();    // get all pending application requests
@@ -57,7 +68,7 @@ class adoController extends Controller
 
     // dd($appDocReviewsOutbox);
 
-    return view('backend.ado.ado_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    return view('backend.ado.ado_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
   }
 
   public function adoCompleted(){
@@ -69,6 +80,9 @@ class adoController extends Controller
   }
 
   public function adoDocumentReview($id){
+    adoInbox::where('application_id', $id)->update([
+      'read' => 'true'
+    ]);
     $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
@@ -102,6 +116,7 @@ class adoController extends Controller
   }
 
   public function forwardApplicationToHeadGas(Request $request){
+    // dd($request);
     AppDocReview::where('application_id', request('application_id'))
     ->update([
       'to_ADO' => 'forwarded',
@@ -114,6 +129,29 @@ class adoController extends Controller
       'application_id' => request('application_id'),
       'from' => Auth::user()->staff_id,
       'to' => $to->staff_id
+    ]);
+
+    adoInbox::where('application_id', request('id'))->update([
+      'to_outbox' => 'true'
+    ]);
+
+    // add this application document to the ado outbox
+    adoOutbox::create([
+      'application_id' => request('id'),
+      'to' => $to->staff_id,
+      'role' => $to->role,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category')
+    ]);
+
+    // add to headgas inbox
+    headgasInbox::create([
+      'application_id' => request('id'),
+      'from' => Auth::user()->staff_id,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'read' => 'false',
+      'to_outbox' => 'false'
     ]);
 
     return redirect('/ado');
