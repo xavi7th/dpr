@@ -272,7 +272,7 @@ class staffController extends Controller
       'to_staff' => 'forwarded'
     ]);
 
-    $to = Staff::where('role', 'Staff')->first();
+    $to = Staff::where('role', 'Team Lead')->first(); // remember to find a way to get a specific user and not reneralize with the role
 
     staffInbox::where('application_id', request('id'))->update([
       'to_outbox' => 'true'

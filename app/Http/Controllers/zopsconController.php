@@ -163,7 +163,7 @@ class zopsconController extends Controller
 
       // add to ado inbox
       adoInbox::create([
-        'application_id' => request('application_id'),
+        'application_id' => request('id'),
         'from' => Auth::user()->staff_id,
         'application_type' => request('application_type'),
         'sub_category' => request('sub_category'),

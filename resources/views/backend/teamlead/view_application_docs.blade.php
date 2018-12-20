@@ -75,46 +75,51 @@
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
                   @if ($applicationStatus != null)
-                    <li class="list-group-item">
-                      <b>Application Status</b>
-                      @if ($reportDocument != null)
-                        <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
-                          <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
-                        </div>
-                      @endif
-                      <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
-                    </li>
-                    @if ($applicationStatus->job_application_status == "Report Submitted")
-                      @if ($applicationReview->sub_category == 'Site Suitability Inspection')
-                        <form role="form" method="post" action="/tlApproves">
-                          {{ csrf_field() }}
-                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                          <div class="box-footer">
-                            <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
-                            <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
+                    @if ($applicationReview->to_team_lead == "received")
+                      <li class="list-group-item">
+                        <b>Application Status</b>
+                        @if ($reportDocument != null)
+                          <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
+                            <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
                           </div>
-                        </form>
-                      @elseif ($applicationStatus->to_head_gas != "true")
-                        <form role="form" method="post" action="/up_to_headgas">
-                          {{ csrf_field() }}
-                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                          <div class="box-footer">
+                        @endif
+                        <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
+                      </li>
+                      @if ($applicationStatus->job_application_status == "Report Submitted")
+                        @if ($applicationReview->sub_category == 'Site Suitability Inspection')
+                          <form role="form" method="post" action="/tlApproves">
+                            {{ csrf_field() }}
+                            <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                            <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                            <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                            <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
                             <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                            <input type="submit" name="sendToHeadGas" value="Send to Head Gas" class="pull-left btn btn-success">
-                            <input type="submit" name="sendToStaff" value="Send to Staff" class="pull-right btn btn-danger">
-                          </div>
-                        </form>
+                            <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                            <div class="box-footer">
+                              <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
+                              <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
+                            </div>
+                          </form>
+                        @elseif ($applicationStatus->to_head_gas != "true")
+                          <form role="form" method="post" action="/up_to_headgas">
+                            {{ csrf_field() }}
+                            <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                            <div class="box-footer">
+                              <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                              <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                              <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                              <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                              <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                              <input type="submit" name="sendToHeadGas" value="Send to Head Gas" class="pull-left btn btn-success">
+                              <input type="submit" name="sendToStaff" value="Send to Staff" class="pull-right btn btn-danger">
+                            </div>
+                          </form>
+                        @endif
                       @endif
                     @endif
-
                   @endif
                 </ul>
                 <div class="modal fade" id="report" style="display: none;">

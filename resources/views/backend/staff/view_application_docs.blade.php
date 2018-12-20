@@ -84,7 +84,8 @@
                     <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                   </li>
 
-                    @if ($reportDocument != null)
+                    {{-- @if ($reportDocument != null) --}}
+                    @if ($applicationStatus->job_application_status != "Report Submitted" || $applicationStatus->job_application_status == null)
                       <li class="list-group-item">
                         <form role="form" method="post" action="/up_to_teamlead">
                           {{ csrf_field() }}

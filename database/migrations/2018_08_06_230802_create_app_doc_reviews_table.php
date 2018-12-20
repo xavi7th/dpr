@@ -32,6 +32,7 @@ class CreateAppDocReviewsTable extends Migration
             $table->string('to_ADO')->nullable();
             $table->string('to_head_gas')->nullable();
             $table->string('to_team_lead')->nullable();
+            $table->string('to_staff')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

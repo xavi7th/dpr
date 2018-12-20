@@ -15,10 +15,10 @@ class CreateJobAssignmentsTable extends Migration
     {
         Schema::create('job_assignments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('application_id');
-            $table->string('assigned_by');
-            $table->string('staff_id');
-            $table->string('teamlead_id');
+            $table->string('application_id')->nullable();
+            $table->string('assigned_by')->nullable();
+            $table->string('staff_id')->nullable();
+            $table->string('teamlead_id')->nullable();
             $table->string('company_id')->nullable();
             $table->string('job_application_status')->nullable();
             $table->string('to_zopscon')->nullable();

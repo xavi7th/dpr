@@ -21,6 +21,7 @@ use App\JobsTimeline;
 use App\teamleadInbox;
 use App\staffInbox;
 use App\teamleadOutbox;
+use App\headgasInbox;
 use Carbon\Carbon;
 
 use Auth;
@@ -113,60 +114,7 @@ class teamleadController extends Controller
   public function teamleadDocumentAssign(Request $request){
 
     // dd($request);
-
-    AppDocReview::where('application_id', request('application_id'))
-    ->update([
-      'to_team_Lead' => 'forwarded',
-      'to_staff' => 'true'
-    ]);
-
-    $to = Staff::where('role', 'Staff')->first();
-
-    JobsTimeline::create([
-      'application_id' => request('application_id'),
-      'from' => Auth::user()->staff_id,
-      'to' => $to->staff_id
-    ]);
-
-    teamleadInbox::where('application_id', request('id'))->update([
-      'to_outbox' => 'true'
-    ]);
-
-    // add this application document to the teamlead outbox
-    teamleadOutbox::create([
-      'application_id' => request('id'),
-      'to' => $to->staff_id,
-      'role' => $to->role,
-      'application_type' => request('application_type'),
-      'sub_category' => request('sub_category')
-    ]);
-
-    // add to staff inbox
-    staffInbox::create([
-      'application_id' => request('id'),
-      'from' => Auth::user()->staff_id,
-      'application_type' => request('application_type'),
-      'sub_category' => request('sub_category'),
-      'read' => 'false',
-      'to_outbox' => 'false'
-    ]);
-
-    JobAssignment::updateOrCreate([
-      'application_id' => request('application_id')
-    ],
-    [
-      'application_id' => request('application_id'),
-      'assigned_by' => Auth::user()->staff_id,
-      'staff_id' => request('staff_id'),
-      'job_application_status' => 'Assigned'
-    ]);
-
-    JobsTimeline::create([
-      'application_id' => request('application_id'),
-      'from' => Auth::user()->staff_id,
-      'to' => request('staff_id')
-    ]);
-
+    $this->teamleadAssignProcess($request);
     return redirect('/teamlead');
   }
 
@@ -208,6 +156,8 @@ class teamleadController extends Controller
 
   public function upToHeadGas(Request $request){
 
+    // dd($request);
+
     if(request('sendToHeadGas')){
 
       // send this application request back to head gas
@@ -225,27 +175,33 @@ class teamleadController extends Controller
         'to' => $to->staff_id
       ]);
 
+      teamleadInbox::where('application_id', request('id'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // add this application document to the teamlead outbox
+      teamleadOutbox::create([
+        'application_id' => request('id'),
+        'to' => $to->staff_id,
+        'role' => $to->role,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category')
+      ]);
+
+      // add to headgas inbox
+      headgasInbox::create([
+        'application_id' => request('id'),
+        'from' => Auth::user()->staff_id,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'read' => 'false',
+        'to_outbox' => 'false'
+      ]);
+
     }elseif(request('sendToStaff')) {
 
       // send this application request back to staff
-      AppDocReview::where('application_id', request('application_id'))
-      ->update([
-        'to_staff' => 'received',
-        'to_team_lead' => 'forwarded'
-      ]);
-
-      JobAssignment::updateOrCreate([
-        'application_id' => request('application_id')
-      ],
-      [
-        'job_application_status' => 'Assigned'
-      ]);
-
-      JobsTimeline::create([
-        'application_id' => request('application_id'),
-        'from' => Auth::user()->staff_id,
-        'to' => request('staff_id')
-      ]);
+      $this->teamleadAssignProcess($request);
 
     }
 
@@ -255,4 +211,163 @@ class teamleadController extends Controller
 
   }
 
+
+
+
+
+
+
+
+
+
+
+#######################################################################################################
+#######################################################################################################
+#######################################################################################################
+#######################################################################################################
+#######################################################################################################
+#######################################################################################################
+
+
+
+  private function teamleadAssignProcess(Request $request){
+    AppDocReview::where('application_id', request('application_id'))
+    ->update([
+      'to_team_Lead' => 'forwarded',
+      'to_staff' => 'true'
+    ]);
+
+    $to = Staff::where('staff_id', request('staff_id'))->first();
+
+    JobsTimeline::create([
+      'application_id' => request('application_id'),
+      'from' => Auth::user()->staff_id,
+      'to' => $to->staff_id
+    ]);
+
+    teamleadInbox::where('application_id', request('id'))->update([
+      'to_outbox' => 'true'
+    ]);
+
+    // add this application document to the teamlead outbox
+    teamleadOutbox::create([
+      'application_id' => request('id'),
+      'to' => $to->staff_id,
+      'role' => $to->role,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category')
+    ]);
+
+    // add to staff inbox
+    staffInbox::create([
+      'application_id' => request('id'),
+      'from' => Auth::user()->staff_id,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'read' => 'false',
+      'to_outbox' => 'false'
+    ]);
+
+    JobAssignment::updateOrCreate([
+      'application_id' => request('application_id')
+    ],
+    [
+      'application_id' => request('application_id'),
+      'assigned_by' => Auth::user()->staff_id,
+      'staff_id' => request('staff_id'),
+      'job_application_status' => 'Assigned'
+    ]);
+  }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// public function teamleadDocumentAssign(Request $request){
+//
+//   dd($request);
+//
+//   AppDocReview::where('application_id', request('application_id'))
+//   ->update([
+//     'to_team_Lead' => 'forwarded',
+//     'to_staff' => 'true'
+//   ]);
+//
+//   $to = Staff::where('role', 'Staff')->first();
+//
+//   JobsTimeline::create([
+//     'application_id' => request('application_id'),
+//     'from' => Auth::user()->staff_id,
+//     'to' => $to->staff_id
+//   ]);
+//
+//   teamleadInbox::where('application_id', request('id'))->update([
+//     'to_outbox' => 'true'
+//   ]);
+//
+//   // add this application document to the teamlead outbox
+//   teamleadOutbox::create([
+//     'application_id' => request('id'),
+//     'to' => $to->staff_id,
+//     'role' => $to->role,
+//     'application_type' => request('application_type'),
+//     'sub_category' => request('sub_category')
+//   ]);
+//
+//   // add to staff inbox
+//   staffInbox::create([
+//     'application_id' => request('id'),
+//     'from' => Auth::user()->staff_id,
+//     'application_type' => request('application_type'),
+//     'sub_category' => request('sub_category'),
+//     'read' => 'false',
+//     'to_outbox' => 'false'
+//   ]);
+//
+//   JobAssignment::updateOrCreate([
+//     'application_id' => request('application_id')
+//   ],
+//   [
+//     'application_id' => request('application_id'),
+//     'assigned_by' => Auth::user()->staff_id,
+//     'staff_id' => request('staff_id'),
+//     'job_application_status' => 'Assigned'
+//   ]);
+//
+//   JobsTimeline::create([
+//     'application_id' => request('application_id'),
+//     'from' => Auth::user()->staff_id,
+//     'to' => request('staff_id')
+//   ]);
+//
+//   return redirect('/teamlead');
+// }

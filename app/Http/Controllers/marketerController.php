@@ -1292,7 +1292,7 @@ class marketerController extends Controller
 
 
     // retrieve site suitability fields for this company from app_doc_reviews using the application_id from request
-    $companyATODetails = AppDocReview::where('application_id', request('application_id'))->first();
+    $companySSIDetails = AppDocReview::where('application_id', request('application_id'))->first();
 
     // create a new application for ATC for this company inside app_doc_reviews (Set status to Not Submitted)
     // getting the current number of created applications
@@ -1309,6 +1309,7 @@ class marketerController extends Controller
 
     // add the application ID to session
     // session(['application_id'=>$applicationID]);
+    // dd($companySSIDetails);
 
     // +++++ might need to do some custom verification here with decision statements
     AppDocReview::create([
