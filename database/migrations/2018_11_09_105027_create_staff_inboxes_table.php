@@ -15,6 +15,12 @@ class CreateStaffInboxesTable extends Migration
     {
         Schema::create('staff_inboxes', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('application_id');
+            $table->string('from'); // This is should be the role of the sender e.g Marketer, ZOPSCON, ADO etc...
+            $table->string('application_type');
+            $table->string('sub_category');
+            $table->string('read')->default('false');
+            $table->string('to_outbox')->default('false');
             $table->timestamps();
         });
     }

@@ -15,6 +15,11 @@ class CreateStaffOutboxesTable extends Migration
     {
         Schema::create('staff_outboxes', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('application_id');
+            $table->string('to');
+            $table->string('role');
+            $table->string('application_type');
+            $table->string('sub_category');
             $table->timestamps();
         });
     }

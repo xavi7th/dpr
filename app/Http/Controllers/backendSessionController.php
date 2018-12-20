@@ -37,6 +37,7 @@ class backendSessionController extends Controller
 
       // check if the staff's hashed password matches the plain text password provided
       if(Hash::check(request('password'), $staff->password)){
+        // dd(request('password'));
 
         //sign the user in
         auth()->login($staff);

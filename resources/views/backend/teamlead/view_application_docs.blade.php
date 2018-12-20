@@ -217,6 +217,9 @@
                                   <form action="/tlDocument_assign" method="post">
                                     {{ csrf_field() }}
                                     <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                                    <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                                    <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                                    <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
                                     <input type="text" hidden name="staff_id" value="{{ $staff->staff_id }}">
                                     @if (optional($applicationStatus)->job_application_status == "Assigned")
                                       <input type="submit" class="btn btn-danger" value="Re-Assign" style="padding: 2px 25px;">

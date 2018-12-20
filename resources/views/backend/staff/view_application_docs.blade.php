@@ -91,6 +91,8 @@
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                           <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
                           <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                          <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                          <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
                           <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
                           <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">

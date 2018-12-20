@@ -112,6 +112,8 @@ class teamleadController extends Controller
 
   public function teamleadDocumentAssign(Request $request){
 
+    // dd($request);
+
     AppDocReview::where('application_id', request('application_id'))
     ->update([
       'to_team_Lead' => 'forwarded',
