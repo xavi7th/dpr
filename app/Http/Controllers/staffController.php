@@ -105,6 +105,10 @@ class staffController extends Controller
   }
 
   public function staffDocumentReview($id){
+    staffInbox::where('application_id', $id)->update([
+      'read' => 'true'
+    ]);
+
     $applicationReview = AppDocReview::where('id', $id)->first();    // retrieve application review
 
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status

@@ -76,7 +76,7 @@
                   </li>
                   <li class="list-group-item">
                     <b>Application Status</b>
-                    @if ($reportDocument != null)
+                    @if ($reportDocument)
                       <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
                         <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
                       </div>
@@ -84,24 +84,31 @@
                     <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                   </li>
 
-                    {{-- @if ($reportDocument != null) --}}
-                    @if ($applicationStatus->job_application_status != "Report Submitted" || $applicationStatus->job_application_status == null)
-                      <li class="list-group-item">
-                        <form role="form" method="post" action="/up_to_teamlead">
-                          {{ csrf_field() }}
-                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                          <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
-                          <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
-                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                          <div class="box-footer">
-                            <input type="submit" name="upToTeamlead" value="Send to Team Lead" class="pull-right btn btn-primary">
-                          </div>
-                        </form>
-                      </li>
+                    @if ($reportDocument)
+                    {{--  @if ($applicationStatus->job_application_status != "Report Submitted" || $applicationStatus->job_application_status == null)  --}}
+                    {{--  check if this application has been completed  --}}
+                      @if ($applicationReview->to_staff != "completed")
+                          <li class="list-group-item">
+                            <form role="form" method="post" action="/up_to_teamlead">
+                              {{ csrf_field() }}
+                              <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                              <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                              <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                              <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                              <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                              <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                              <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                              <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                              @if ($applicationStatus->job_application_status == "Report Submitted")
+                                {{--  // empty zone  --}}
+                              @else
+                                <div class="box-footer">
+                                  <input type="submit" name="upToTeamlead" value="Send to Team Lead" class="pull-right btn btn-primary">
+                                </div>
+                              @endif
+                            </form>
+                          </li>
+                      @endif
                     @endif
 
                   {{-- <h3 class="box-title">Job Assigned <i class="fa fa-check-circle text-green"></i> {{ $applicationReview->marketer_id }}</h3> --}}
@@ -304,3 +311,7 @@
   })
   </script>
 @endsection
+
+
+
+

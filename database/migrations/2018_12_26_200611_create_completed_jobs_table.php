@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateZopsconInboxesTable extends Migration
+class CreateCompletedJobsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateZopsconInboxesTable extends Migration
      */
     public function up()
     {
-        Schema::create('zopscon_inboxes', function (Blueprint $table) {
+        Schema::create('completed_jobs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('application_id');
-            $table->string('from'); // This is the role of the sender e.g Marketer, ZOPSCON, ADO etc...
-            $table->string('application_type');
-            $table->string('sub_category');
-            $table->string('read')->default('false');
-            $table->string('to_outbox')->default('false');
+            $table->string('teamlead_id');
+            $table->string('staff_id');
+            $table->string('company_id');
+            $table->string('marketer_id');
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class CreateZopsconInboxesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('zopscon_inboxes');
+        Schema::dropIfExists('completed_jobs');
     }
 }

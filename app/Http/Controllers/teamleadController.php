@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\AppDocReview;
 use App\JobAssignment;
 use App\Staff;
+use App\CompletedJobs;
 use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
@@ -26,6 +27,7 @@ use Carbon\Carbon;
 
 use Auth;
 use DB;
+use App\CustomHelpers;
 
 class teamleadController extends Controller
 {
@@ -68,11 +70,15 @@ class teamleadController extends Controller
   }
 
   public function teamleadCompleted(){
+    $completed = AppDocReview::with('job_assignment')->where('to_team_lead', 'completed')->latest()->get();
+    dd($completed);
+    $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
+    $outboxUnreadCount = teamleadOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->latest()->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.teamlead.teamlead_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    // $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
+    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->latest()->get();    // get all pending application requests
+    // $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    return view('backend.teamlead.teamlead_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox', 'completed', 'inboxUnreadCount', 'outboxUnreadCount'));
   }
 
   public function teamleadDocumentReview($id){
@@ -141,6 +147,22 @@ class teamleadController extends Controller
       'approved_by' => Auth::user()->staff_id
     ]);
 
+    // update app_doc_review
+    AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'application_status' => $verdict,
+        'to_zopscon' => 'completed',
+        'to_ADO' => 'completed',
+        'to_head_gas' => 'completed',
+        'to_team_lead' => 'completed',
+        'to_staff' => 'completed'
+      ]);
+
+      // update teamlead inbox for this application as sent to outbox....reason is we don't want to leave the application at the teamlead inbox
+    teamleadInbox::where('application_id', request('id'))->update([
+      'to_outbox' => 'true'
+    ]);
+
     // record this application inside site suitability reports
     SiteSuitabilityReports::create([
       'application_id' => request('application_id'),
@@ -150,6 +172,7 @@ class teamleadController extends Controller
       'report_location' => request('report_url')
     ]);
 
+    CustomHelpers::toCompletedJobsTable($request);
 
     return redirect('/teamlead');
   }

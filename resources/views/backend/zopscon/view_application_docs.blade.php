@@ -74,6 +74,14 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
+                  @if ($applicationStatus->job_application_status == "Started")
+                      <li class="list-group-item">
+                        <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Application Status</b><a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
+                      </li>
+                  @endif
 
 
 
@@ -97,10 +105,10 @@
                   @endif
 
                   @if ($applicationStatus != null)
-                    @if ($applicationReview->to_zopscon == "received")
+                    @if ($applicationReview->to_zopscon == "received" || $applicationReview->to_zopscon == "completed")
                       <li class="list-group-item">
                         <b>Application Status</b>
-                        @if ($reportDocument != null)
+                        @if ($reportDocument)
                           <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
                             <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
                           </div>
@@ -119,6 +127,8 @@
                           <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
                           <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                          <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                          <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
                           <div class="box-footer">
                             <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
                             <input type="submit" name="approve" value="Approve" class="pull-left btn btn-success">

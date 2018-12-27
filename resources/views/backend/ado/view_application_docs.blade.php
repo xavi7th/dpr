@@ -38,7 +38,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="row">
-          <div class="col-md-5">
+          <div class="col-md-4">
             <div class="box box-primary">
               <div class="box-body box-profile">
 
@@ -74,6 +74,14 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
+                  @if ($applicationStatus->job_application_status == "Started")
+                      <li class="list-group-item">
+                        <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Application Status</b><a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
+                      </li>
+                  @endif
 
                   @if ($applicationReview->to_head_gas == 'true')
                     <li class="list-group-item">
@@ -95,10 +103,10 @@
                   @endif
 
                   @if ($applicationStatus != null)
-                    @if ($applicationReview->to_ADO == "received")
+                    @if ($applicationReview->to_ADO == "received" || $applicationReview->to_ADO == "completed")
                       <li class="list-group-item">
                         <b>Application Status</b>
-                        @if ($reportDocument != null)
+                        @if ($reportDocument)
                           <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
                             <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
                           </div>
@@ -117,6 +125,8 @@
                           <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
                           <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                          <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                          <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
                           <div class="box-footer">
                             <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
                             <input type="submit" name="approve" value="Approve" class="pull-left btn btn-success">
@@ -196,9 +206,9 @@
 
 
 
-          <div class="col-md-7">
+          {{--  <div class="col-md-8">
 
-            {{-- @if (optional($applicationStatus)->job_application_status != "Started")
+            @if (optional($applicationStatus)->job_application_status != "Started")
               @if (optional($applicationStatus)->job_application_status != "Report Submitted")
                 @if (optional($applicationStatus)->job_application_status != "Site Suitable")
                   @if (optional($applicationStatus)->job_application_status != "Pending Approval")
@@ -206,12 +216,12 @@
                   @endif
                 @endif
               @endif
-            @endif --}}
-          </div>
+            @endif
+          </div>  --}}
 
 
 
-          <div class="col-md-7">
+          <div class="col-md-8">
             <div class="box box-primary">
               <!-- /.box-header -->
               <div class="box-body">

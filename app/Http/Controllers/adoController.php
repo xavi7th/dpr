@@ -23,6 +23,7 @@ use App\PressureTestRecords;
 use App\JobsTimeline;
 use App\adoInbox;
 use App\headgasInbox;
+use App\zopsconInbox;
 use App\adoOutbox;
 use Carbon\Carbon;
 
@@ -183,6 +184,29 @@ class adoController extends Controller
         'from' => Auth::user()->staff_id,
         'to' => $to->staff_id
       ]);
+
+      adoInbox::where('application_id', request('id'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // add this application document to the ado outbox
+      adoOutbox::create([
+        'application_id' => request('id'),
+        'to' => $to->staff_id,
+        'role' => $to->role,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category')
+      ]);
+
+    // add to zopscon inbox
+      zopsconInbox::create([
+        'application_id' => request('id'),
+        'from' => Auth::user()->staff_id,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'read' => 'false',
+        'to_outbox' => 'false'
+      ]);
     }elseif(request('sendToHeadGas')){
       // send this application request back to team lead
       AppDocReview::where('application_id', request('application_id'))
@@ -197,6 +221,29 @@ class adoController extends Controller
         'application_id' => request('application_id'),
         'from' => Auth::user()->staff_id,
         'to' => $to->staff_id
+      ]);
+
+      adoInbox::where('application_id', request('id'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // add this application document to the ado outbox
+      adoOutbox::create([
+        'application_id' => request('id'),
+        'to' => $to->staff_id,
+        'role' => $to->role,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category')
+      ]);
+
+      // add to teamlead inbox
+      headgasInbox::create([
+        'application_id' => request('id'),
+        'from' => Auth::user()->staff_id,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'read' => 'false',
+        'to_outbox' => 'false'
       ]);
     }else{
       if(request('sub_category') == 'Site Suitability Inspection'){
@@ -230,6 +277,10 @@ class adoController extends Controller
         ->update([
           'job_application_status' => $verdict,
           'approved_by' => Auth::user()->staff_id
+        ]);
+
+        adoInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
         ]);
       }elseif (request('sub_category') == 'ATC') {
         $dateIssued = Carbon::now();
@@ -265,6 +316,10 @@ class adoController extends Controller
           'job_application_status' => $verdict,
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
+        ]);
+
+        adoInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
         ]);
 
 
@@ -310,6 +365,10 @@ class adoController extends Controller
           'job_application_status' => $verdict,
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
+        ]);
+
+        adoInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
         ]);
 
       }elseif (request('sub_category') == 'Renewal') {
@@ -367,6 +426,10 @@ class adoController extends Controller
           'approved_by' => Auth::user()->staff_id
         ]);
 
+        adoInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
+
       }elseif (request('sub_category') == 'Take Over') {
 
         if(request('approve')){
@@ -420,6 +483,10 @@ class adoController extends Controller
         TakeoverReviews::where('application_id', request('application_id'))
         ->update([
           'company_id' => request('company_id')
+        ]);
+
+        adoInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
         ]);
       }
     }

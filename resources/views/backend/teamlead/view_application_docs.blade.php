@@ -74,11 +74,20 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
+                  @if ($applicationStatus->job_application_status == "Started")
+                      <li class="list-group-item">
+                        <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Application Status</b><a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
+                      </li>
+                  @endif
+                  
                   @if ($applicationStatus != null)
-                    @if ($applicationReview->to_team_lead == "received")
+                    @if ($applicationReview->to_team_lead == "received" || $applicationReview->to_team_lead == "completed")
                       <li class="list-group-item">
                         <b>Application Status</b>
-                        @if ($reportDocument != null)
+                        @if ($reportDocument)
                           <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
                             <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
                           </div>
@@ -189,62 +198,63 @@
 
           </div>
           <div class="col-md-8">
-            @if (optional($applicationStatus)->job_application_status != "Started")
+            {{--  @if (optional($applicationStatus)->job_application_status != "Started")
               @if (optional($applicationStatus)->job_application_status != "Report Submitted")
                 @if (optional($applicationStatus)->job_application_status != "Site Suitable")
-                  @if (optional($applicationStatus)->job_application_status != "Pending Approval")
-                    <div class="box">
-                      <div class="box-header with-border">
-                        <h3 class="box-title">Select Staff To Assign</h3>
-                      </div>
-                      <!-- /.box-header -->
-                      <div class="box-body">
-                        <table id="example1" class="table table-bordered table-hover">
-                          <thead>
-                            <tr>
-                              <th>Staff ID</th>
-                              <th>Firstname</th>
-                              <th>Lastname</th>
-                              <th>Email Address</th>
-                              <th>Mobile Number</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @foreach ($staffs as $staff)
-                              <tr>
-                                <td class="sorting_1"><a class="label label-success" style="font-size: 14px;">{{ $staff->staff_id }}</a></td>
-                                <td>{{ $staff->first_name }}</td>
-                                <td>{{ $staff->last_name }}</td>
-                                <td>{{ $staff->email_address }}</td>
-                                <td>{{ $staff->mobile_number }}</td>
-                                <td>
-                                  <form action="/tlDocument_assign" method="post">
-                                    {{ csrf_field() }}
-                                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                                    <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
-                                    <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                                    <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
-                                    <input type="text" hidden name="staff_id" value="{{ $staff->staff_id }}">
-                                    @if (optional($applicationStatus)->job_application_status == "Assigned")
-                                      <input type="submit" class="btn btn-danger" value="Re-Assign" style="padding: 2px 25px;">
-                                    @else
-                                      <input type="submit" class="btn btn-primary" value="Assign" style="padding: 2px 25px;">
-                                    @endif
-
-                                  </form>
-                                  {{-- <a href="/tlDocument_assign/{{ $applicationReview->id }}" class="label label-danger" style="font-size: 13px;">Assign</a> --}}
-                                </td>
-                              </tr>
-                            @endforeach
-                          </tbody>
-                        </table>
-                      </div>
-                      <!-- /.box-body -->
-                    </div>
-                  @endif
+                  
                 @endif
               @endif
+            @endif  --}}
+            @if ($applicationReview->application_status == "Application Pending")
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Select Staff To Assign</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <table id="example1" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Staff ID</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email Address</th>
+                        <th>Mobile Number</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($staffs as $staff)
+                        <tr>
+                          <td class="sorting_1"><a class="label label-success" style="font-size: 14px;">{{ $staff->staff_id }}</a></td>
+                          <td>{{ $staff->first_name }}</td>
+                          <td>{{ $staff->last_name }}</td>
+                          <td>{{ $staff->email_address }}</td>
+                          <td>{{ $staff->mobile_number }}</td>
+                          <td>
+                            <form action="/tlDocument_assign" method="post">
+                              {{ csrf_field() }}
+                              <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                              <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                              <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                              <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                              <input type="text" hidden name="staff_id" value="{{ $staff->staff_id }}">
+                              @if (optional($applicationStatus)->job_application_status == "Assigned")
+                                <input type="submit" class="btn btn-danger" value="Re-Assign" style="padding: 2px 25px;">
+                              @else
+                                <input type="submit" class="btn btn-primary" value="Assign" style="padding: 2px 25px;">
+                              @endif
+
+                            </form>
+                            {{-- <a href="/tlDocument_assign/{{ $applicationReview->id }}" class="label label-danger" style="font-size: 13px;">Assign</a> --}}
+                          </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.box-body -->
+              </div>
             @endif
 
           </div>

@@ -195,6 +195,30 @@ class zopsconController extends Controller
           'from' => Auth::user()->staff_id,
           'to' => $to->staff_id
         ]);
+
+      zopsconInbox::where('application_id', request('id'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // add this application document to the zopscon outbox
+      zopsconOutbox::create([
+        'application_id' => request('id'),
+        'to' => $to->staff_id,
+        'role' => $to->role,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category')
+      ]);
+
+    // add to ado inbox
+      adoInbox::create([
+        'application_id' => request('id'),
+        'from' => Auth::user()->staff_id,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'read' => 'false',
+        'to_outbox' => 'false'
+      ]);
+
       }else{
         if(request('sub_category') == 'Site Suitability Inspection'){
           if(request('approve')){
@@ -228,6 +252,10 @@ class zopsconController extends Controller
             'job_application_status' => $verdict,
             'approved_by' => Auth::user()->staff_id
           ]);
+
+        zopsconInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
 
 
 
@@ -267,6 +295,10 @@ class zopsconController extends Controller
             'company_id' => request('company_id'),
             'approved_by' => Auth::user()->staff_id
           ]);
+
+        zopsconInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
 
 
         }elseif (request('sub_category') == 'LTO') {
@@ -312,6 +344,10 @@ class zopsconController extends Controller
             'company_id' => request('company_id'),
             'approved_by' => Auth::user()->staff_id
           ]);
+
+        zopsconInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
 
         }elseif (request('sub_category') == 'Renewal') {
           $dateIssued = Carbon::now();
@@ -368,6 +404,10 @@ class zopsconController extends Controller
             'approved_by' => Auth::user()->staff_id
           ]);
 
+        zopsconInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
+
         }elseif (request('sub_category') == 'Take Over') {
 
           if(request('approve')){
@@ -422,6 +462,10 @@ class zopsconController extends Controller
           ->update([
             'company_id' => request('company_id')
           ]);
+
+        zopsconInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
         }
       }
 

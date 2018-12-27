@@ -174,6 +174,30 @@ class headgasController extends Controller
         'from' => Auth::user()->staff_id,
         'to' => $to->staff_id
       ]);
+
+      headgasInbox::where('application_id', request('id'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // add this application document to the headgas outbox
+    headgasOutbox::create([
+      'application_id' => request('id'),
+      'to' => $to->staff_id,
+      'role' => $to->role,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category')
+    ]);
+
+    // add to ado inbox
+    adoInbox::create([
+      'application_id' => request('id'),
+      'from' => Auth::user()->staff_id,
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'read' => 'false',
+      'to_outbox' => 'false'
+    ]);
+
     }elseif(request('sendToTeamLead')){
       // send this application request back to team lead
       AppDocReview::where('application_id', request('application_id'))
@@ -182,12 +206,37 @@ class headgasController extends Controller
         'to_head_gas' => 'forwarded'
       ]);
 
-      $to = Staff::where('role', 'Team Lead')->first();
+      //get the teamlead's id from this job
+      $currentJob = JobAssignment::where('application_id', request('application_id'))->first();
+      $to = Staff::where('staff_id', $currentJob->assigned_by)->first();
 
       JobsTimeline::create([
         'application_id' => request('application_id'),
         'from' => Auth::user()->staff_id,
         'to' => $to->staff_id
+      ]);
+
+      headgasInbox::where('application_id', request('id'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+    // add this application document to the headgas outbox
+      headgasOutbox::create([
+        'application_id' => request('id'),
+        'to' => $to->staff_id,
+        'role' => $to->role,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category')
+      ]);
+
+    // add to teamlead inbox
+      teamleadInbox::create([
+        'application_id' => request('id'),
+        'from' => Auth::user()->staff_id,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'read' => 'false',
+        'to_outbox' => 'false'
       ]);
     }else{
       if(request('sub_category') == 'Site Suitability Inspection'){
@@ -221,6 +270,10 @@ class headgasController extends Controller
         ->update([
           'job_application_status' => $verdict,
           'approved_by' => Auth::user()->staff_id
+        ]);
+
+        headgasInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
         ]);
 
 
@@ -260,6 +313,10 @@ class headgasController extends Controller
           'job_application_status' => $verdict,
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
+        ]);
+
+        headgasInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
         ]);
 
 
@@ -305,6 +362,10 @@ class headgasController extends Controller
           'job_application_status' => $verdict,
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
+        ]);
+
+        headgasInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
         ]);
 
       }elseif (request('sub_category') == 'Renewal') {
@@ -362,6 +423,10 @@ class headgasController extends Controller
           'approved_by' => Auth::user()->staff_id
         ]);
 
+        headgasInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
+
       }elseif (request('sub_category') == 'Take Over') {
 
         if(request('approve')){
@@ -416,69 +481,14 @@ class headgasController extends Controller
         ->update([
           'company_id' => request('company_id')
         ]);
+
+        headgasInbox::where('application_id', request('id'))->update([
+          'to_outbox' => 'true'
+        ]);
       }
     }
     return redirect('/headgas');
   }
-
-  public function upToAdo(Request $request){
-
-    // dd($request);
-
-    if(request('sendToHeadGas')){
-
-      // send this application request back to head gas
-      AppDocReview::where('application_id', request('application_id'))
-      ->update([
-        'to_head_gas' => 'received',
-        'to_team_lead' => 'forwarded'
-      ]);
-
-      $to = Staff::where('staff_id', request('staff_id'))->first();
-
-      JobsTimeline::create([
-        'application_id' => request('application_id'),
-        'from' => Auth::user()->staff_id,
-        'to' => $to->staff_id
-      ]);
-
-      teamleadInbox::where('application_id', request('id'))->update([
-        'to_outbox' => 'true'
-      ]);
-
-      // add this application document to the teamlead outbox
-      teamleadOutbox::create([
-        'application_id' => request('id'),
-        'to' => $to->staff_id,
-        'role' => $to->role,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category')
-      ]);
-
-      // add to headgas inbox
-      headgasInbox::create([
-        'application_id' => request('id'),
-        'from' => Auth::user()->staff_id,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category'),
-        'read' => 'false',
-        'to_outbox' => 'false'
-      ]);
-
-    }elseif(request('sendToStaff')) {
-
-      // send this application request back to staff
-      $this->teamleadAssignProcess($request);
-
-    }
-
-
-
-    return redirect('/teamlead');
-
-  }
-
-
 
 
 }
