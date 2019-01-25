@@ -1,6 +1,13 @@
 <template lang="html">
   <div>
     <div class="form-group">
+      <label>Company ID</label>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
+        <input type="text" name="company_id" class="form-control" placeholder="Enter Company ID">
+      </div>
+    </div>
+    <div class="form-group">
       <label>Name of Gas Plant</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>

@@ -170,20 +170,10 @@ class marketerController extends Controller
 
 
 
-
-
-
-
   public function getDocs(Request $request){
     $docs = SiteSuitabilityInspectionDocuments::where('application_id', $request->applicationID)->get();
     return response()->json($docs);
   }
-
-
-
-
-
-
 
 
   public function showMarketerRecords(){
@@ -192,7 +182,94 @@ class marketerController extends Controller
   }
 
 
+  public function showCreateCompany()
+  {
+    return view('backend.marketer.create_company');
+  }
 
+  public function createCompany(Request $request)
+  {
+
+    // dd($request);
+
+    // validate this form
+    $this->validate(request(), [
+      'comp_name' => 'required',
+      'contract_type' => 'required',
+      'state' => 'required',
+      'lga' => 'required',
+      'town' => 'required',
+      'address' => 'required',
+      'mobile_number' => 'required',
+      'email' => 'required'
+    ]);
+
+    // getting the current number of created companies
+    $companyCount = DB::table('companies')->get();
+
+    // adding 1 to that number
+    $indexIncremented = $companyCount->count() + 1;
+
+    // padding the number to 4 leading zeros
+    $newCompanyIndex = sprintf('%05d', $indexIncremented);
+
+    //appending the new company index to DPRCOMP to create the company's ID
+    $companyID = "DPRCOMP" . $newCompanyIndex;
+
+    // Verification process to make sure contract_type, state, town all have values
+    if ((request('contract_type') == 'Select Contract Type')
+      || (request('state') == 'Select State')
+      || (request('town') == 'Select LGA')) {
+      return back();
+    } else {
+      // create and save the company
+      Company::create([
+        'company_id' => $companyID,
+        'marketer_id' => Auth::user()->staff_id,
+        'company_name' => request('comp_name'),
+        'company_alias' => request('comp_alias'),
+        'contract_type' => request('contract_type'),
+        'state' => request('state'),
+        'lga' => request('lga'),
+        'town' => request('town'),
+        'address' => request('address'),
+        'mobile_number' => request('mobile_number'),
+        'email_address' => request('email')
+      ]);
+
+      // update the application to contain the company idea
+      // AppDocReview::where('application_id', request('application_id'))
+      //   ->update([
+      //     'company_id' => $companyID
+      //   ]);
+
+      // update application status in Job Assignments Table to STARTED
+      // JobAssignment::where('application_id', request('application_id'))
+      //   ->update([
+      //     'job_application_status' => 'Started',
+      //     'company_id' => $companyID
+      //   ]);
+
+      // $currentApplication = AppDocReview::where('application_id', request('application_id'))->first();
+
+      // if ($currentApplication->sub_category == 'Site Suitability Inspection') {
+      //   SiteSuitabilityInspectionDocuments::where('application_id', request('application_id'))
+      //     ->update([
+      //       'company_id' => $companyID
+      //     ]);
+      // } elseif ($currentApplication->sub_category == 'ATC') {
+      //   AtcInspectionDocuments::where('application_id', request('application_id'))
+      //     ->update([
+      //       'company_id' => $companyID
+      //     ]);
+      // } elseif ($currentApplication->sub_category == 'LTO') {
+      //   // code...
+      // }
+
+      // redirect to staff view document
+      return redirect('/marketer');
+    }
+  }
 
 
 
@@ -287,6 +364,7 @@ class marketerController extends Controller
     AppDocReview::create([
       'application_id' => $applicationID,
       'marketer_id' => Auth::user()->staff_id,
+      'company_id' => request('company_id'), // do not to forget to do a validation for this field....this marketer should be the registrar of the company
       'name_of_gas_plant' => request('gas_plant_name'),
       'application_type' => request('application_type'),
       'sub_category' => request('sub_category'),

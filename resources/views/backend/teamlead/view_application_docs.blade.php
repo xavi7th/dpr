@@ -74,7 +74,7 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
-                  @if ($applicationStatus->job_application_status == "Started")
+                  @if (optional($applicationStatus)->job_application_status == "Started")
                       <li class="list-group-item">
                         <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                       </li>
@@ -206,6 +206,8 @@
               @endif
             @endif  --}}
             @if ($applicationReview->application_status == "Application Pending")
+              @if ($applicationStatus->job_application_status == "Started")
+              @else
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Select Staff To Assign</h3>
@@ -255,6 +257,8 @@
                 </div>
                 <!-- /.box-body -->
               </div>
+              @endif
+              
             @endif
 
           </div>

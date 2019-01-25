@@ -54,6 +54,11 @@
         </a>
       </li> --}}
       <li>
+        <a href="/create_company">
+          <i class="fa fa-dashboard"></i> <span>Create Company</span>
+        </a>
+      </li>
+      <li>
         <a href="/preferences">
           <i class="ion ion-android-settings"></i> <span>Settings</span>
         </a>

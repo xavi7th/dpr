@@ -74,7 +74,7 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
-                  @if ($applicationStatus->job_application_status == "Started")
+                  @if (optional($applicationStatus)->job_application_status == "Started")
                       <li class="list-group-item">
                         <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                       </li>

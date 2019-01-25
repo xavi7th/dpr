@@ -55,6 +55,9 @@ Route::get('/mDocument_edit/{id}', 'marketerController@showDocumentsRequirementD
 Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView')->middleware(['auth', 'marketer']);
 Route::get('/m_view_lto_records', 'marketerController@viewAllLTO')->middleware(['auth', 'marketer']);
 Route::get('/m_view_lto_records', 'marketerController@viewAllLTO')->middleware(['auth', 'marketer']);
+Route::get('/create_company', 'marketerController@showCreateCompany')->middleware(['auth', 'marketer']);
+
+
 
 Route::get('/apply_for_ssi_get', 'marketerController@applyForSSIGet')->middleware(['auth', 'marketer']);
 Route::get('/apply_for_atc_get', 'marketerController@applyForATCGet')->middleware(['auth', 'marketer']);
@@ -67,7 +70,7 @@ Route::get('/apply_for_pressure_test_get', 'marketerController@applyForPressureT
 
 
 
-
+Route::post('/marketer_create_company', 'marketerController@createCompany')->middleware(['auth', 'marketer']);
 Route::post('/apply_for_site_suitability_inspection', 'marketerController@handleSiteSuitablityInspectionPhase1')->middleware(['auth', 'marketer']);
 Route::post('/site_suit_req_upload', 'marketerController@handleSiteSuitablityInspection')->middleware(['auth', 'marketer']);
 
@@ -106,9 +109,9 @@ Route::get('/staff_pending', 'staffController@staffPending')->middleware(['auth'
 Route::get('/staff_outbox', 'staffController@staffOutbox')->middleware(['auth', 'staff']);
 Route::get('/staff_completed', 'staffController@staffCompleted')->middleware(['auth', 'staff']);
 Route::get('/stDocument_review/{applicationID}', 'staffController@staffDocumentReview')->middleware(['auth', 'staff']);
-Route::get('/create_company/{applicationID}', 'staffController@showCreateCompany')->middleware(['auth', 'staff']);
+Route::get('/create_company/{applicationID}', 'staffController@showCreateCompany')->middleware(['auth', 'staff']); // might be obsolete soon or by now
 
-Route::post('/staff_create_company', 'staffController@createCompany')->middleware(['auth', 'staff']);
+Route::post('/staff_create_company', 'staffController@createCompany')->middleware(['auth', 'staff']); // might be obsolete soon or by now
 Route::post('/stUpload_report', 'staffController@uploadReport')->middleware(['auth', 'staff']);
 Route::post('/stUpload_construction_report', 'staffController@uploadContructionReportATC')->middleware(['auth', 'staff']);
 Route::post('/up_to_teamlead', 'staffController@upToTeamlead')->middleware(['auth', 'staff']);
@@ -159,3 +162,8 @@ Route::get('/zopscon_document_review/{applicationID}', 'zopsconController@zopsco
 
 Route::post('/push_down_to_ADO', 'zopsconController@forwardApplicationToADO')->middleware(['auth', 'zopscon']);
 Route::post('/zopscon_decides', 'zopsconController@zopsconApproves')->middleware(['auth', 'zopscon']);
+
+
+
+
+
