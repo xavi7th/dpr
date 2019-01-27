@@ -19,6 +19,7 @@ use App\LtoLicenseRenewal;
 use App\JobsTimeline;
 use App\PressureTestRecords;
 use App\Company;
+use App\CompletedJobs;
 use App\teamleadInbox;
 use App\staffInbox;
 use App\staffOutbox;
@@ -36,7 +37,7 @@ class staffController extends Controller
 
   public function index(){
     $inbox = staffInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
-    // dd($inbox);
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = staffInbox::where('read', 'false')->get();
     $outboxUnreadCount = staffOutbox::all();
     // Retrieve all assigned application documents
@@ -49,7 +50,7 @@ class staffController extends Controller
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    return view('backend.staff.staff_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.staff.staff_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
   }
 
   public function staffPending(){
@@ -68,7 +69,7 @@ class staffController extends Controller
 
   public function staffOutbox(){
     $outbox = staffOutbox::with('app_doc_review')->latest()->get();
-    // dd($outbox);
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = staffInbox::where('read', 'false')->get();
     $outboxUnreadCount = staffOutbox::all();
     // Retrieve all assigned application documents
@@ -83,21 +84,18 @@ class staffController extends Controller
 
     // dd($appDocReviewsOutbox);
 
-    return view('backend.staff.staff_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.staff.staff_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
   }
 
   public function staffCompleted(){
     // Retrieve all assigned application documents
-    $appDocReviews = DB::table('job_assignments')
-    ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
-    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
-    ->orderBy('job_assignments.created_at')
-    ->get();
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->latest()->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    $completedCount = CompletedJobs::all();
+    $inboxUnreadCount = staffInbox::where('read', 'false')->get();
+    $outboxUnreadCount = staffOutbox::all();
 
-    return view('backend.staff.staff_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    $completed = CompletedJobs::with('app_doc_review')->latest()->get();
+    
+    return view('backend.staff.staff_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount','completed'));
   }
 
   public function showCreateCompany(SiteSuitabilityInspectionDocuments $applicationID){

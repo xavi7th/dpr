@@ -18,8 +18,8 @@
             </a>
           </li>
           {{-- <li><a href="#"><i class="fa fa-file-text-o"></i> Drafts</a></li> --}}
-          <li><a href="/teamlead_completed" class="text-red"><i class="fa fa-filter"></i> Completed <span class="label label-danger pull-right">65</span></a></li>
-          <li><a href="/teamlead_junk" class="text-orange"><i class="fa fa-filter"></i> Junk <span class="label label-warning pull-right">65</span></a></li>
+          <li><a href="/teamlead_completed" class="text-orange"><i class="fa fa-check"></i> Completed <span class="label label-warning pull-right">{{ $completedCount->count() }}</span></a>
+          {{--  <li><a href="/teamlead_junk" class="text-orange"><i class="fa fa-filter"></i> Junk <span class="label label-warning pull-right">65</span></a></li>  --}}
           <li><a href="/teamlead_trash" class="text-red"><i class="fa fa-trash-o"></i> Trash <span class="label label-danger pull-right">65</span></a></li>
         </ul>
       </div>

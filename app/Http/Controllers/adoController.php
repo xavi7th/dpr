@@ -26,6 +26,9 @@ use App\headgasInbox;
 use App\zopsconInbox;
 use App\adoOutbox;
 use Carbon\Carbon;
+use App\CustomHelpers;
+use App\CompletedJobs;
+
 
 use Auth;
 use DB;
@@ -40,6 +43,7 @@ class adoController extends Controller
   public function index(){
     $inbox = adoInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
     // dd($inbox);
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = adoInbox::where('read', 'false')->get();
     // $inboxUnreadCount = adoInbox::all(); // number of items in inbox
     $outboxUnreadCount = adoOutbox::all();
@@ -47,7 +51,7 @@ class adoController extends Controller
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.ado.ado_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.ado.ado_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
   }
 
   public function adoPending(){
@@ -60,6 +64,7 @@ class adoController extends Controller
 
   public function adoOutbox(){
     $outbox = adoOutbox::with('app_doc_review')->latest()->get();
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = adoInbox::where('read', 'false')->get();
     $outboxUnreadCount = adoOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->get();    // get all application requests
@@ -69,15 +74,23 @@ class adoController extends Controller
 
     // dd($appDocReviewsOutbox);
 
-    return view('backend.ado.ado_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.ado.ado_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
   }
 
   public function adoCompleted(){
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->latest()->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.ado.ado_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+
+    $completedCount = CompletedJobs::all();
+    $inboxUnreadCount = adoInbox::where('read', 'false')->get();
+    $outboxUnreadCount = adoOutbox::all();
+
+    $completed = CompletedJobs::with('app_doc_review')->latest()->get();
+
+    return view('backend.ado.ado_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount', 'completed'));
+    // $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->get();    // get all application requests
+    // $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending application requests
+    // $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->latest()->get();    // get all pending application requests
+    // $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    // return view('backend.ado.ado_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function adoDocumentReview($id){
@@ -279,9 +292,13 @@ class adoController extends Controller
           'approved_by' => Auth::user()->staff_id
         ]);
 
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
+
         adoInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
         ]);
+
       }elseif (request('sub_category') == 'ATC') {
         $dateIssued = Carbon::now();
         $expiryDate = Carbon::now()->addMonths(6);
@@ -317,6 +334,9 @@ class adoController extends Controller
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
         ]);
+
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         adoInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
@@ -366,6 +386,9 @@ class adoController extends Controller
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
         ]);
+
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         adoInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
@@ -426,6 +449,9 @@ class adoController extends Controller
           'approved_by' => Auth::user()->staff_id
         ]);
 
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
+
         adoInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
         ]);
@@ -485,6 +511,9 @@ class adoController extends Controller
           'company_id' => request('company_id')
         ]);
 
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
+
         adoInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
         ]);
@@ -499,3 +528,33 @@ class adoController extends Controller
   }
 
 }
+
+
+
+
+
+
+
+// else if (isset($_POST['btnLogin'])){
+//   $email = $_POST['email'];
+//   $password = md5($_POST['password']);
+
+//   /** Validations ****/
+//   if (empty($email) || empty($password) ){
+//     echo "all field are required";
+//   }else{
+//     $sql = "SELECT * FROM users where password = '$password' AND email = '$email'";
+
+//     $results = $con->query($sql);
+
+//     if ($results->num_rows > 0) {
+//       while ($row = $result->fetch_assoc()) {
+//         // coming from the users table in the database
+//         $email = $row['email']; 
+//         $password = $row['password'];
+//       }
+//     }else{
+//     echo "incorrect username or password";
+//     }
+//   }
+// }

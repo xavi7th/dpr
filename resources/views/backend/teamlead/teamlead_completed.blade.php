@@ -42,6 +42,7 @@
                     <thead>
                       <tr>
                         <th>Name of Company</th>
+                        <th>Company ID</th>
                         <th>Application Type</th>
                         <th>Sub-Category</th>
                         <th>Date Completed</th>
@@ -50,9 +51,10 @@
                     <tbody>
                       @foreach ($completed as $item)
                         <tr>
-                          <td><a href="/tlDocument_review/{{ $item->id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->name_of_gas_plant }}</a></td>
-                          <td>{{ $item->application_type }}</td>
-                          <td>{{ $item->sub_category }}</td>
+                          <td><a href="/tlDocument_review/{{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          <td>{{ $item->company_id }}</td>
+                          <td>{{ $item->app_doc_review['application_type'] }}</td>
+                          <td>{{ $item->app_doc_review['sub_category'] }}</td>
                           <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                         </tr>
                       @endforeach

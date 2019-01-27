@@ -38,6 +38,7 @@ class teamleadController extends Controller
   public function index(){
     $inbox = teamleadInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
     // dd($inbox);
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
     $outboxUnreadCount = teamleadOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->latest()->get();    // get all application requests
@@ -45,7 +46,7 @@ class teamleadController extends Controller
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount','completedCount'));
   }
 
   public function teamleadPending(){
@@ -59,6 +60,7 @@ class teamleadController extends Controller
   public function teamleadOutbox(){
     $outbox = teamleadOutbox::with('app_doc_review')->latest()->get();
     // dd($outbox);
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
     $outboxUnreadCount = teamleadOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
@@ -66,19 +68,18 @@ class teamleadController extends Controller
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
     // dd($appDocReviewsOutbox);
-    return view('backend.teamlead.teamlead_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.teamlead.teamlead_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount','completedCount'));
   }
 
   public function teamleadCompleted(){
-    $completed = AppDocReview::with('job_assignment')->where('to_team_lead', 'completed')->latest()->get();
-    dd($completed);
+
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
     $outboxUnreadCount = teamleadOutbox::all();
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
-    // $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->latest()->get();    // get all pending application requests
-    // $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.teamlead.teamlead_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox', 'completed', 'inboxUnreadCount', 'outboxUnreadCount'));
+
+    $completed = CompletedJobs::with('app_doc_review')->latest()->get();
+
+    return view('backend.teamlead.teamlead_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount', 'completed'));
   }
 
   public function teamleadDocumentReview($id){
@@ -172,6 +173,7 @@ class teamleadController extends Controller
       'report_location' => request('report_url')
     ]);
 
+    // send to completed jobs table
     CustomHelpers::toCompletedJobsTable($request);
 
     return redirect('/teamlead');

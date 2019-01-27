@@ -26,6 +26,8 @@ use App\teamleadInbox;
 use App\headgasOutbox;
 use App\adoInbox;
 use Carbon\Carbon;
+use App\CustomHelpers;
+use App\CompletedJobs;
 
 use Auth;
 use DB;
@@ -40,13 +42,14 @@ class headgasController extends Controller
   public function index(){
     $inbox = headgasInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
     // dd($inbox);
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = headgasInbox::where('read', 'false')->get();
     $outboxUnreadCount = headgasOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->latest()->get();    // get all application request
     $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->get();    // get all pending application requestss
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.headgas.headgas_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.headgas.headgas_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
   }
 
   public function headgasPending(){
@@ -60,6 +63,7 @@ class headgasController extends Controller
   public function headgasOutbox(){
     $outbox = headgasOutbox::with('app_doc_review')->latest()->get();
     // dd($outbox);
+    $completedCount = CompletedJobs::all();
     $inboxUnreadCount = headgasInbox::where('read', 'false')->get();
     $outboxUnreadCount = headgasOutbox::all();
     $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
@@ -67,15 +71,22 @@ class headgasController extends Controller
     $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->get();    // get all pending application requests
     $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    return view('backend.headgas.headgas_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
+    return view('backend.headgas.headgas_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
   }
 
   public function headgasCompleted(){
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->latest()->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->latest()->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.headgas.headgas_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    $completedCount = CompletedJobs::all();
+    $inboxUnreadCount = headgasInbox::where('read', 'false')->get();
+    $outboxUnreadCount = headgasOutbox::all();
+
+    $completed = CompletedJobs::with('app_doc_review')->latest()->get();
+
+    return view('backend.headgas.headgas_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount', 'completed'));
+    // $appDocReviews = AppDocReview::with('job_assignment')->where('to_head_gas','true')->get();    // get all application requests
+    // $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_head_gas','received')->latest()->get();    // get all pending application requests
+    // $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_head_gas','completed')->latest()->get();    // get all pending application requests
+    // $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+    // return view('backend.headgas.headgas_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
   }
 
   public function headGasDocumentReview($id){
@@ -272,6 +283,9 @@ class headgasController extends Controller
           'approved_by' => Auth::user()->staff_id
         ]);
 
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
+
         headgasInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
         ]);
@@ -314,6 +328,9 @@ class headgasController extends Controller
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
         ]);
+
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         headgasInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
@@ -363,6 +380,9 @@ class headgasController extends Controller
           'company_id' => request('company_id'),
           'approved_by' => Auth::user()->staff_id
         ]);
+
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         headgasInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
@@ -423,6 +443,9 @@ class headgasController extends Controller
           'approved_by' => Auth::user()->staff_id
         ]);
 
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
+
         headgasInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
         ]);
@@ -481,6 +504,9 @@ class headgasController extends Controller
         ->update([
           'company_id' => request('company_id')
         ]);
+
+        // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         headgasInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'

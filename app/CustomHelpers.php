@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Http\Request;
+
 use App\AppDocReview;
 use App\JobAssignment;
 use App\Staff;
@@ -86,7 +88,7 @@ class CustomHelpers
         $jobAssigned = JobAssignment::where('application_id', request('application_id'))->first();
 
         CompletedJobs::create([
-            'application_id' => $currentJob->application_id,
+            'application_id' => $currentJob->id,
             'teamlead_id' => $jobAssigned->assigned_by,
             'staff_id' => $jobAssigned->staff_id,
             'company_id' => $currentJob->company_id,

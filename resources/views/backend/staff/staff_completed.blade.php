@@ -27,110 +27,48 @@
 
       <!-- Main content -->
       <section class="content">
-        <!-- Small boxes (Stat box) -->
         <div class="row">
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-purple">
-              <div class="inner">
-                <h3>{{ $appDocReviews->count() }}</h3>
-                <p style="text-transform: uppercase;">Current Assigned</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="/staff" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3>{{ $appDocReviewsPending->count() }}</h3>
-                <p style="text-transform: uppercase;">Inbox</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="/staff_pending" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3>{{ $appDocReviewsOutbox->count() }}</h3>
-                <p style="text-transform: uppercase;">Outbox</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="/staff_outbox" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-blue">
-              <div class="inner">
-                <h3>{{ $appDocReviewsCompleted->count() }}</h3>
-                <p style="text-transform: uppercase;">Completed</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="/staff_completed" style="padding: 6px; color: #fff;" class="small-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-        <!-- /.row (main row) -->
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="box">
-              <div class="box-header">
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                <table id="example1" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <th>Application ID</th>
-                    <th>Name of Gas Plant</th>
-                    <th>Application Type</th>
-                    <th>Sub-Category</th>
-                    <th>Plant Type</th>
-                    <th>Application Status</th>
-                    <th>Application Date</th>
-                    {{-- <th>Action</th> --}}
-                  </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($appDocReviewsCompleted as $item)
+          @include('partials.staff_folders')
+            <!-- /.col -->
+            {{-- rgba(60, 141, 188, 0.2) --}}
+            <div class="col-md-9">
+              <div class="box box-primary">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Completed</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <table id="example1" class="table table-bordered table-hover">
+                    <thead>
                       <tr>
-                        <td class="sorting_1"><a href="/stDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a></td>
-                        <td>{{ $item->name_of_gas_plant }}</td>
-                        <td>{{ $item->application_type }}</td>
-                        <td>{{ $item->sub_category }}</td>
-                        <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->job_assignment['job_application_status'] ?? 'Not Assigned' }}</td>
-                        <td>{{ $item->created_at }}</td>
-                        {{-- <td><a href="/tlDocument_assign/{{ $item->id }}" class="label label-danger" style="font-size: 13px;">Assign</a></td> --}}
+                        <th>Name of Company</th>
+                        <th>Company ID</th>
+                        <th>Application Type</th>
+                        <th>Sub-Category</th>
+                        <th>Date Completed</th>
                       </tr>
-                    @endforeach
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      @foreach ($completed as $item)
+                        <tr>
+                          <td><a href="/stDocument_review/{{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          <td>{{ $item->company_id }}</td>
+                          <td>{{ $item->app_doc_review['application_type'] }}</td>
+                          <td>{{ $item->app_doc_review['sub_category'] }}</td>
+                          <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.box-body -->
               </div>
-              <!-- /.box-body -->
+              {{-- <router-view></router-view> --}}
             </div>
-
+            <!-- /.col -->
           </div>
-          <!-- ./col -->
-        </div>
-
-      </section>
+          <!-- /.row -->
+        </section>
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->

@@ -24,6 +24,8 @@ use App\JobsTimeline;
 use App\zopsconInbox;
 use App\adoInbox;
 use App\zopsconOutbox;
+use App\CustomHelpers;
+use App\CompletedJobs;
 use Carbon\Carbon;
 
 use Auth;
@@ -39,6 +41,7 @@ class zopsconController extends Controller
 
     public function index(){
       $inbox = zopsconInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
+      $completedCount = CompletedJobs::all();
       $inboxUnreadCount = zopsconInbox::where('read', 'false')->get();
       $outboxUnreadCount = zopsconOutbox::all();
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->latest()->get();    // get all application requests
@@ -47,7 +50,7 @@ class zopsconController extends Controller
       $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
       // dd($inbox);
-      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount'));
+      return view('backend.zopscon.zopscon_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
     }
 
     // public function zopsconInboxAll(){
@@ -66,6 +69,7 @@ class zopsconController extends Controller
 
     public function zopsconOutbox(){
       $outbox = zopsconOutbox::with('app_doc_review')->latest()->get();
+      $completedCount = CompletedJobs::all();
       $inboxUnreadCount = zopsconInbox::where('read', 'false')->get();
       $outboxUnreadCount = zopsconOutbox::all();
       $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
@@ -75,15 +79,23 @@ class zopsconController extends Controller
 
       // dd($appDocReviewsOutbox);
 
-      return view('backend.zopscon.zopscon_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount'));
+      return view('backend.zopscon.zopscon_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
     }
 
     public function zopsconCompleted(){
-      $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
-      $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
-      $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
-      $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-      return view('backend.zopscon.zopscon_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+
+      $completedCount = CompletedJobs::all();
+      $inboxUnreadCount = zopsconInbox::where('read', 'false')->get();
+      $outboxUnreadCount = zopsconOutbox::all();
+
+      $completed = CompletedJobs::with('app_doc_review')->latest()->get();
+
+      return view('backend.zopscon.zopscon_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount', 'completed'));
+      // $appDocReviews = AppDocReview::with('job_assignment')->where('to_zopscon','true')->get();    // get all application requests
+      // $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_zopscon','received')->get();    // get all pending application requests
+      // $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_zopscon','completed')->get();    // get all pending application requests
+      // $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+      // return view('backend.zopscon.zopscon_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
     }
 
     public function zopsconDocumentReview($id){
@@ -253,12 +265,13 @@ class zopsconController extends Controller
             'approved_by' => Auth::user()->staff_id
           ]);
 
+          // update completed job table
+          CustomHelpers::toCompletedJobsTable($request);
+          
+
         zopsconInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
         ]);
-
-
-
 
         }elseif (request('sub_category') == 'ATC') {
           $dateIssued = Carbon::now();
@@ -295,6 +308,9 @@ class zopsconController extends Controller
             'company_id' => request('company_id'),
             'approved_by' => Auth::user()->staff_id
           ]);
+
+          // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         zopsconInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
@@ -344,6 +360,9 @@ class zopsconController extends Controller
             'company_id' => request('company_id'),
             'approved_by' => Auth::user()->staff_id
           ]);
+
+          // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         zopsconInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
@@ -404,6 +423,9 @@ class zopsconController extends Controller
             'approved_by' => Auth::user()->staff_id
           ]);
 
+          // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
+
         zopsconInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'
         ]);
@@ -462,6 +484,9 @@ class zopsconController extends Controller
           ->update([
             'company_id' => request('company_id')
           ]);
+
+          // update completed job table
+        CustomHelpers::toCompletedJobsTable($request);
 
         zopsconInbox::where('application_id', request('id'))->update([
           'to_outbox' => 'true'

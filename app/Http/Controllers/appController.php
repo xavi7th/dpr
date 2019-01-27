@@ -9,6 +9,7 @@ use App\ApplicationComments;
 use App\AppDocReview;
 use App\LtoInspectionDocument;
 use App\AtcInspectionDocuments;
+use App\CompletedJobs;
 use Auth;
 use DB;
 
@@ -111,15 +112,17 @@ class appController extends Controller
         ->where('app_doc_reviews.application_id', $application_id)
         ->first();    // get all application requests
       }
-
-
-      // dd($appDocReviewed);
-
-
-
-      // dd($applicationID);
       return view('backend.general.view_application_docs', compact('appDocReviewed','applicationReview','applicationID'));
     }
+
+    // public function completedJobs(){
+    //   $completedCount = CompletedJobs::all();
+
+    //   $completed = CompletedJobs::with('app_doc_review')->latest()->get();
+
+    //   return view('backend.staff.staff_outbox', compact('appDocReviews', 'appDocReviewsPending', 'appDocReviewsCompleted', 'appDocReviewsOutbox', 'outbox', 'inboxUnreadCount', 'outboxUnreadCount'));
+
+    // }
 
 }
 
