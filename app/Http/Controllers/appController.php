@@ -115,17 +115,76 @@ class appController extends Controller
       return view('backend.general.view_application_docs', compact('appDocReviewed','applicationReview','applicationID'));
     }
 
-    // public function completedJobs(){
-    //   $completedCount = CompletedJobs::all();
+    public function lpgCngDashboard(){return view('backend.general.lpg_cng_dashboard');}
 
-    //   $completed = CompletedJobs::with('app_doc_review')->latest()->get();
 
-    //   return view('backend.staff.staff_outbox', compact('appDocReviews', 'appDocReviewsPending', 'appDocReviewsCompleted', 'appDocReviewsOutbox', 'outbox', 'inboxUnreadCount', 'outboxUnreadCount'));
 
-    // }
+
+    public function gasProcessingFacilitiesDashboard(){return view('backend.general.gas_processing_facilities_dashboard');}
+
+    public function gasPipelinesDashboard(){return view('backend.general.gas_pipelines_dashboard');}
+    
+
+
+
+
+    public function projectMonitoringDashboard(){return view('backend.general.project_monitoring_dashboard');}
+
+    public function projectMonitoringFeedCreateForm(){return view('backend.general.project_monitoring_feed_create');}
+
+    public function projectMonitoringFeedEditForm(){return view('backend.general.project_monitoring_feed_edit');}
+
+    public function projectMonitoringFeedSearch(){
+      $users = factory(\App\User::class, 350)->make();
+      return view('backend.general.project_monitoring_feed_search', compact('users'));
+    }
+
+
+
+
+    public function projectMonitoringMilestoneCreateForm(){return view('backend.general.project_monitoring_milestone_create');}
+
+    public function projectMonitoringMilestoneEditForm(){return view('backend.general.project_monitoring_milestone_edit');}
+
+    public function projectMonitoringMilestoneSearch(){return view('backend.general.project_monitoring_milestone_search');}
+
+
+
+
+    public function projectMonitoringContinousCreateForm(){return view('backend.general.project_monitoring_continous_create');}
+
+    public function projectMonitoringContinousEditForm(){return view('backend.general.project_monitoring_continous_edit');}
+
+    public function projectMonitoringContinousSearch(){return view('backend.general.project_monitoring_continous_search');}
+
+
+
+
+    public function projectMonitoringPermitAndConsentCreateForm(){return view('backend.general.project_monitoring_permit_and_consent_create');}
+
+    public function projectMonitoringPermitAndConsentEditForm(){return view('backend.general.project_monitoring_permit_and_consent_edit');}
+
+    public function projectMonitoringPermitAndConsentSearch(){return view('backend.general.project_monitoring_permit_and_consent_search');}
+
+
+
+
+
+    public function gasProductionUtilizationDashboard(){return view('backend.general.gas_production_utilization_dashboard');}
+
+    public function gasProductionExportOperationsDashboard(){return view('backend.general.gas_production_export_operations_dashboard');}
+
+    public function gasSubsurfaceDashboard(){return view('backend.general.gas_subsurface_dashboard');}
+
+    public function gasDiaryDashboard(){return view('backend.general.gas_diary_dashboard');}
+
+    public function inspectionDashboard(){return view('backend.general.inspection_dashboard');}
+
+
+
+    public function projectMonitoringFeedCreate(Request $request){
+      dd($request);
+    }
+
 
 }
-
-
-// support@bitcoinexpert45.net
-// support@bitcoinexpert@45

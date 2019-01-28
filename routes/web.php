@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/', function () {
+    return redirect('/backend');
+});
+
 // BACKEND-SESSION-CONTROLLER
 Route::get('/logout', 'backendSessionController@destroy');
 Route::get('/backend', 'backendSessionController@index')->middleware('guest')->name('login');
@@ -23,9 +27,91 @@ Route::get('/view_atc_records', 'appController@viewAllATC')->middleware('auth');
 Route::get('/view_lto_records', 'appController@viewAllLTO')->middleware('auth');
 Route::get('/document_review/{id}', 'appController@viewDocument')->middleware(['auth']);
 
+//LPG-CNG-ROUTES
+Route::get('/lpg_cng_dashboard', 'appController@lpgCngDashboard')->middleware(['auth']);
+
+//GAS-PROCESSING-FACILITIES-ROUTES
+Route::get('/gas_processing_facilities_dashboard', 'appController@gasProcessingFacilitiesDashboard')->middleware(['auth']);
+
+//GAS-PIPELINES-ROUTES
+Route::get('/gas_pipelines_dashboard', 'appController@gasPipelinesDashboard')->middleware(['auth']);
+
+//PROJECT-MONITORING-ROUTES
+Route::get('/project_monitoring_dashboard', 'appController@projectMonitoringDashboard')->middleware(['auth']);
+Route::get('/pm_feed_create', 'appController@projectMonitoringFeedCreateForm')->middleware(['auth']);
+Route::get('/pm_feed_search', 'appController@projectMonitoringFeedSearch')->middleware(['auth']);
+Route::get('/pm_feed_edit', 'appController@projectMonitoringFeedEditForm')->middleware(['auth']);
+Route::get('/pm_feed_report', 'appController@projectMonitoringFeedReportForm')->middleware(['auth']);
+Route::get('/pm_feed_document', 'appController@projectMonitoringFeedDocumentForm')->middleware(['auth']);
+
+Route::get('/pm_milestone_create', 'appController@projectMonitoringMilestoneCreateForm')->middleware(['auth']);
+Route::get('/pm_milestone_edit', 'appController@projectMonitoringMilestoneEditForm')->middleware(['auth']);
+Route::get('/pm_milestone_search', 'appController@projectMonitoringMilestoneSearch')->middleware(['auth']);
+
+Route::get('/pm_continous_create', 'appController@projectMonitoringContinousCreateForm')->middleware(['auth']);
+Route::get('/pm_continous_edit', 'appController@projectMonitoringContinousEditForm')->middleware(['auth']);
+Route::get('/pm_continous_search', 'appController@projectMonitoringContinousSearch')->middleware(['auth']);
+
+Route::get('/pm_permit_and_consent_create', 'appController@projectMonitoringPermitAndConsentCreateForm')->middleware(['auth']);
+Route::get('/pm_permit_and_consent_edit', 'appController@projectMonitoringPermitAndConsentEditForm')->middleware(['auth']);
+Route::get('/pm_permit_and_consent_search', 'appController@projectMonitoringPermitAndConsentSearch')->middleware(['auth']);
+
+//faker route
+Route::get('/faker', function(){
+    $users = factory(App\User::class, 10)->make();
+    dd($users);
+})->middleware(['auth']);
+
+
+
+
+//GAS-PRODUCTION-UTILIZATION-ROUTES
+Route::get('/gas_production_utilization_dashboard', 'appController@gasProductionUtilizationDashboard')->middleware(['auth']);
+
+//GAS-PRODUCTION-EXPORT-OPERATIONS-ROUTES
+Route::get('/gas_production_export_operations_dashboard', 'appController@gasProductionExportOperationsDashboard')->middleware(['auth']);
+
+//GAS-SUBSURFACE-ROUTES
+Route::get('/gas_subsurface_dashboard', 'appController@gasSubsurfaceDashboard')->middleware(['auth']);
+
+
+//GAS-DIARY-ROUTES
+Route::get('/gas_diary_dashboard', 'appController@gasDiaryDashboard')->middleware(['auth']);
+
+//INSPECTION-ROUTES
+Route::get('/inspection_dashboard', 'appController@inspectionDashboard')->middleware(['auth']);
+
+
 Route::post('/change_password', 'appController@changePassword')->middleware('auth');
 Route::post('/update_staff_records', 'appController@updateStaffRecords')->middleware('auth');
 Route::post('/make_report_comment', 'appController@makeReportComment')->middleware('auth');
+Route::post('/project_monitoring_feed_create', 'appController@projectMonitoringFeedCreate')->middleware(['auth']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ADMINISTRATOR-CONTROLLER
 Route::get('/admin', 'administratorController@index')->middleware(['auth', 'admin']);
@@ -165,5 +251,23 @@ Route::post('/zopscon_decides', 'zopsconController@zopsconApproves')->middleware
 
 
 
+
+
+
+
+Route::get('migrate', function (Request $request) {
+    $ret = Artisan::call('migrate', array('--force' => true, '--seed' => true));
+    return ['message' => 'Migration successfull', 'result' => $ret];
+});
+
+Route::get('migrate-rollback', function (Request $request) {
+    $ret = Artisan::call('migrate:rollback', array());
+    return ['message' => 'Migration successfull', 'result' => $ret];
+});
+
+Route::get('storage-link', function (Request $request) {
+    $ret = Artisan::call('storage:link', array());
+    return ['message' => 'Migration successfull', 'result' => $ret];
+});
 
 
