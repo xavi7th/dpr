@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Administrator | Companies
+  DPR {{Auth::user()->role}} | Companies
 @endsection
 
 @section('pagestyles')
@@ -13,14 +13,14 @@
 
     @include('partials.backend_top_nav_all')
 
-    @include('partials.backend_aside_admin')
+    @include('partials.router_aside')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
           All Registered Companies
-          <small>Administrator Control Panel</small>
+          <small>{{Auth::user()->role}} Control Panel</small>
         </h1>
       </section>
 

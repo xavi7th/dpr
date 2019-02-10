@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | Requirement For Approval to Construct
+  DPR {{Auth::user()->role}} | Requirement For Approval to Construct
 @endsection
 
 @section('pagestyles')
@@ -47,7 +47,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_marketer')
+    @include('partials.router_aside')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -55,7 +55,7 @@
       <section class="content-header">
         <h1>
           Approval to Construct (ATC)
-          <small>Marketer Control panel</small>
+          <small>{{Auth::user()->role}} Control panel</small>
         </h1>
       </section>
 

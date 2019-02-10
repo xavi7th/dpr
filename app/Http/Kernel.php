@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'headgas' => \App\Http\Middleware\HeadGas::class,
         'ado' => \App\Http\Middleware\ADO::class,
         'zopscon' => \App\Http\Middleware\zopscon::class,
+        'managergas' => \App\Http\Middleware\managergas::class,
     ];
 }

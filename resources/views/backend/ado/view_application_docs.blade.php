@@ -74,7 +74,7 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
-                  @if (optional($applicationStatus)->job_application_status == "Started")
+                  @if (optional($applicationStatus)->job_application_status)
                       <li class="list-group-item">
                         <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                       </li>
@@ -82,22 +82,20 @@
                         <b>Application Status</b><a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                       </li>
                   @endif
-
-                  @if ($applicationReview->to_head_gas == 'true')
+                  @if ($reportDocument)
                     <li class="list-group-item">
-                      <b>Status <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right">Forwarded to Head Gas M&G Lagos</a>
+                      <b>Uploaded Report</b>
+                      <a href="/displayDocument?pic=/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
                     </li>
                   @endif
-
-                  @if ($applicationReview->to_head_gas == null)
-                    <form role="form" method="post" action="/push_down_to_headgas">
+                  @if (optional($inboxItem)->to_outbox == 'false')
+                    <form role="form" method="post" action="/open_assign_tree">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                      <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
-                      <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
                       <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                      <input type="text" hidden name="inbox_id" value="{{ $inboxID }}">
                       <div class="box-footer">
-                        <input type="submit" name="to_headgas" value="Forward to Head Gas" class="pull btn btn-primary btn-block">
+                        <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">
                       </div>
                     </form>
                   @endif
@@ -223,6 +221,14 @@
 
           <div class="col-md-8">
             <div class="box box-primary">
+              <div class="box-header">
+                <h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </div>
+                <!-- /. tools -->
+              </div>
               <!-- /.box-header -->
               <div class="box-body">
                 @if($applicationReview->sub_category == 'Site Suitability Inspection' || $applicationReview->sub_category == 'ATC')

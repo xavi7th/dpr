@@ -46,10 +46,17 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="">Last Name</label>
+                    <label for="">Middle Name</label>
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                      <input type="text" name="lastname" class="form-control" placeholder="Enter Lastname">
+                      <input type="text" name="middlename" class="form-control" placeholder="Enter Middlename">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="">Surname</label>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                      <input type="text" name="surname" class="form-control" placeholder="Enter Surname">
                     </div>
                   </div>
                   <div class="form-group">
@@ -81,12 +88,22 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label>Select Staff Role</label>
+                    <label>Select Office</label>
+                    <select class="form-control select2" name="office" style="width: 100%;">
+                      <option selected="selected">Select Role</option>
+                      <option value="Warri">Warri</option>
+                      <option value="HQ">HQ</option>
+                      <option value="Marketer">Marketer</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Select Role</label>
                     <select class="form-control select2" name="role" style="width: 100%;">
                       <option selected="selected">Select Role</option>
                       <option value="ZOPSCON">ZOPSCON</option>
                       <option value="ADO">ADO</option>
                       <option value="Head Gas M&G Lagos">Head Gas M&G Lagos</option>
+                      <option value="Manager Gas">Manager Gas</option>
                       <option value="Team Lead">Team Lead</option>
                       <option value="Staff">Staff</option>
                       <option value="Admin">Admin</option>

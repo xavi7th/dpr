@@ -19,6 +19,9 @@ class CreateReportDocumentsTable extends Migration
             $table->string('staff_id');
             $table->string('company_id');
             $table->string('report_url');
+            $table->string('report_type');
+            $table->string('office');
+            $table->datetime('date_of_inspection')->nullable();
             $table->timestamps();
         });
     }

@@ -52,10 +52,12 @@
                   <tr>
                     <th>Application ID</th>
                     <th>Name of Gas Plant</th>
-                    <th>Application Type</th>
-                    <th>Sub-Category</th>
+                    <th>State</th>
                     <th>Plant Type</th>
                     <th>Application Status</th>
+                    <th>License Validity Status</th>
+                    <th>Application Date</th>
+                    <th>Date Sent to HQ</th>
                     <th>Date Issued</th>
                     <th>Expiry Date</th>
                   </tr>
@@ -64,13 +66,13 @@
                     @foreach ($appDocReviewsLTO as $item)
                       <tr>
                         <td class="sorting_1">
-                          @if (Auth::user()->role == 'Marketer')
+                          {{--  @if (Auth::user()->role == 'Marketer')
                             @if (now()->gte($item->expiry_date))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
                             @elseif (now()->addMonths(3)->gte($item->expiry_date))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
                             @else
-                              {{-- if (now()->lte($item->expiry_date)) --}}
+                              if (now()->lte($item->expiry_date)) this was commented
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
                             @endif
                           @else
@@ -79,23 +81,32 @@
                             @elseif (now()->addMonths(3)->gte($item->expiry_date))
                               <a href="/document_review/{{ $item->application_id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
                             @else
-                              {{-- if (now()->lte($item->expiry_date)) --}}
+                              if (now()->lte($item->expiry_date)) this was commented
                               <a href="/document_review/{{ $item->application_id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
                             @endif
-                          @endif
-
+                          @endif  --}}
+                          <a href="/document_review/{{ $item->application_id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
                         </td>
                         <td>{{ $item->name_of_gas_plant }}</td>
-                        <td>{{ $item->application_type }}</td>
-                        <td>{{ $item->sub_category }}</td>
+                        <td>{{ $item->state }}</td>
                         <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->application_status}}</td>
-                        <td>
-                          {{ Carbon\Carbon::parse($item->date_issued)->toFormattedDateString() }}
-                        </td>
-                        <td>
-                          {{ Carbon\Carbon::parse($item->expiry_date)->toFormattedDateString() }}
-                        </td>
+                        <td>{{ $item->job_application_status }}</td>
+                        <td>null</td>
+                        {{--  <td>
+                          @if (now()->lte($item->expiry_date))
+                            Active
+                          @else
+                            Expired
+                          @endif
+                        </td>  --}}
+                        <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->updated_at)->toDayDateTimeString() }}</td>
+                        <td>null</td>
+                        <td>null</td>
+
+                        {{--  <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->date_issued)->toDayDateTimeString() }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->expiry_date)->toDayDateTimeString() }}</td>  --}}
 
                       </tr>
                     @endforeach

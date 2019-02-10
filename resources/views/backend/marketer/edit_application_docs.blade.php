@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | Edit Application Documents
+  DPR {{Auth::user()->role}} | Edit Application Documents
 @endsection
 
 @section('pagestyles')
@@ -14,7 +14,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_marketer')
+    @include('partials.router_aside')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -22,7 +22,7 @@
       <section class="content-header">
         <h1>
           Edit Application Documents
-          <small>Marketer Control panel</small>
+          <small>{{Auth::user()->role}} Control panel</small>
         </h1>
       </section>
 

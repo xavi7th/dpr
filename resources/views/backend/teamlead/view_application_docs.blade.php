@@ -74,7 +74,7 @@
                   <li class="list-group-item">
                     <b>Application Date</b> <a class="pull-right">{{ $applicationReview->created_at->diffForHumans() }}</a>
                   </li>
-                  @if (optional($applicationStatus)->job_application_status == "Started")
+                  @if (optional($applicationStatus)->job_application_status)
                       <li class="list-group-item">
                         <b>Staff Assigned <i class="fa fa-check-circle text-green"></i></b> <a class="pull-right text-green">{{ $applicationStatus->staff_id }}</a>
                       </li>
@@ -82,6 +82,44 @@
                         <b>Application Status</b><a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                       </li>
                   @endif
+                  @if ($reportDocument)
+                    <li class="list-group-item">
+                      <b>Uploaded Report</b>
+                      <a href="/displayDocument?pic=/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
+                    </li>
+                  @endif
+                  @if (optional($inboxItem)->to_outbox == 'false')
+                    <form role="form" method="post" action="/open_assign_tree">
+                      {{ csrf_field() }}
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                      <input type="text" hidden name="inbox_id" value="{{ $inboxID }}">
+                      <div class="box-footer">
+                        <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">
+                      </div>
+                    </form>
+                    @if ($applicationReview->sub_category == 'Site Suitability Inspection')
+                      @if ($reportDocument)
+                        <form role="form" method="post" action="/tlApproves">
+                          {{ csrf_field() }}
+                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                          <input type="text" hidden name="inboxID" value="{{ $inboxItem->id }}">
+                          <div class="box-footer">
+                            <input type="submit" name="decline" value="Decline" class="pull btn btn-danger">
+                            <input type="submit" name="approve" value="Approve" class="pull-right btn btn-success">
+                          </div>
+                        </form>
+                      @endif
+                    @endif
+                  @endif
+                  
+
+                  
                   
                   @if ($applicationStatus != null)
                     @if ($applicationReview->to_team_lead == "received" || $applicationReview->to_team_lead == "completed")
@@ -197,14 +235,7 @@
             </div>
 
           </div>
-          <div class="col-md-8">
-            {{--  @if (optional($applicationStatus)->job_application_status != "Started")
-              @if (optional($applicationStatus)->job_application_status != "Report Submitted")
-                @if (optional($applicationStatus)->job_application_status != "Site Suitable")
-                  
-                @endif
-              @endif
-            @endif  --}}
+          {{--  <div class="col-md-8">
             @if ($applicationReview->application_status == "Application Pending")
               @if ($applicationStatus->job_application_status == "Started")
               @else
@@ -248,7 +279,6 @@
                               @endif
 
                             </form>
-                            {{-- <a href="/tlDocument_assign/{{ $applicationReview->id }}" class="label label-danger" style="font-size: 13px;">Assign</a> --}}
                           </td>
                         </tr>
                       @endforeach
@@ -261,7 +291,7 @@
               
             @endif
 
-          </div>
+          </div>  --}}
           <div class="col-md-8">
             <div class="box box-primary">
               <!-- /.box-header -->

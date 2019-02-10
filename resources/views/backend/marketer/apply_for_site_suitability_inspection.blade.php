@@ -39,6 +39,15 @@
               <form role="form" method="POST" action="/apply_for_site_suitability_inspection">
                 {{ csrf_field() }}
                 <div class="box-body">
+                  <div class="form-group">
+                    <label>Company Name</label>
+                    <select class="form-control select2" name="company_id" style="width: 100%;">
+                      <option selected="selected">Select Company</option>
+                      @foreach ($companies as $item)
+                        <option value="{{$item->company_id}}">{{$item->company_name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
                   <apply-for-site-suitability-inspection-component></apply-for-site-suitability-inspection-component>
                   <!-- /.box-body -->
                   <div class="box-footer">

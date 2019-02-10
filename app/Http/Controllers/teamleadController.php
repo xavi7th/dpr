@@ -20,8 +20,8 @@ use App\LtoLicenseRenewal;
 use App\PressureTestRecords;
 use App\JobsTimeline;
 use App\teamleadInbox;
-use App\staffInbox;
-use App\teamleadOutbox;
+use App\Inbox;
+use App\Outbox;
 use App\headgasInbox;
 use Carbon\Carbon;
 
@@ -31,63 +31,96 @@ use App\CustomHelpers;
 
 class teamleadController extends Controller
 {
+
+  private $completedCount = '';
+  private $inboxUnreadCount = '';
+  private $outboxCount = '';
+
   public function __construct(){
     $this->middleware('auth');
   }
 
-  public function index(){
-    $inbox = teamleadInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
-    // dd($inbox);
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
-    $outboxUnreadCount = teamleadOutbox::all();
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->latest()->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+  private function getMailDetails()
+  {
 
-    return view('backend.teamlead.teamlead_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount','completedCount'));
+    $this->completedCount = CompletedJobs::all()->count();
+
+    $this->inboxUnreadCount = Inbox::where([
+      ['read', 'false'],
+      ['receiver_role', Auth::user()->role],
+      ['office', Auth::user()->office]
+    ])->get()->count();
+
+    $this->outboxCount = Inbox::where([
+      ['to_outbox', 'true'],
+      ['receiver_role', Auth::user()->role],
+      ['office', Auth::user()->office]
+    ])->get()->count();
+
   }
 
-  public function teamleadPending(){
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.teamlead.teamlead_pending', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+  public function index(){
+
+    $inbox = Inbox::with('app_doc_review')
+      ->where([
+        ['to_outbox', 'false'],
+        ['receiver_role', Auth::user()->role],
+        ['office', Auth::user()->office]
+      ])->latest()->get();
+
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.teamlead.teamlead_dashboard', compact('inbox', 'inboxUnreadCount', 'outboxCount', 'completedCount'));
   }
 
   public function teamleadOutbox(){
-    $outbox = teamleadOutbox::with('app_doc_review')->latest()->get();
-    // dd($outbox);
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
-    $outboxUnreadCount = teamleadOutbox::all();
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_team_lead','true')->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_team_lead','received')->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_team_lead','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    // dd($appDocReviewsOutbox);
-    return view('backend.teamlead.teamlead_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount','completedCount'));
+
+    $outbox = Outbox::with('app_doc_review')
+      ->where([
+        ['role', Auth::user()->role],
+        ['office', Auth::user()->office]
+      ])->latest()->get();
+
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.teamlead.teamlead_outbox', compact('outbox', 'inboxUnreadCount', 'outboxCount', 'completedCount'));
   }
 
-  public function teamleadCompleted(){
-
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = teamleadInbox::where('read', 'false')->get();
-    $outboxUnreadCount = teamleadOutbox::all();
+  public function teamleadCompleted(Request $request){
 
     $completed = CompletedJobs::with('app_doc_review')->latest()->get();
 
-    return view('backend.teamlead.teamlead_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount', 'completed'));
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.teamlead.teamlead_completed', compact('outboxCount', 'inboxUnreadCount', 'completedCount', 'completed'));
   }
 
-  public function teamleadDocumentReview($id){
-    teamleadInbox::where('application_id', $id)->update([
-      'read' => 'true'
-    ]);
-    // $applicationReview = AppDocReview::with('job_assignment')->where('application_id', $applicationID->application_id)->first();    // retrieve application review
-    $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
+  public function teamleadDocumentReview(Request $request){
+    $id = request('inboxIndex');
+
+    $inboxItem = Inbox::where('id', $id)->first();
+
+    if ($inboxItem) {
+      $inboxID = $inboxItem->id; // this is the id of this application from inbox
+      Inbox::where('id', $id)->update([
+        'read' => 'true'
+      ]);
+    }
+
+    $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
+    $applicationReview = AppDocReview::with('job_assignment')->where('id', $applicationID)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
     $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
@@ -113,19 +146,14 @@ class teamleadController extends Controller
       $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
       // dd($applicationID);
     }
-
-    // dd($applicationStatus);
-    return view('backend.teamlead.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));
-  }
-
-  public function teamleadDocumentAssign(Request $request){
-
-    // dd($request);
-    $this->teamleadAssignProcess($request);
-    return redirect('/teamlead');
+    $role = Auth::user()->role;
+    return view('backend.teamlead.view_application_docs', compact('role', 'inboxID', 'applicationID', 'applicationReview', 'staffs', 'applicationStatus', 'reportDocument', 'applicationComments', 'inboxItem'));
   }
 
   public function teamleadApproves(Request $request){
+    
+    // dd($request);
+
     $verdict = "";
 
     if(request('approve')){
@@ -133,7 +161,6 @@ class teamleadController extends Controller
     }elseif (request('decline')) {
       $verdict = 'Site Not Suitable';
     }
-
 
     // update app_doc_review
     AppDocReview::where('application_id', request('application_id'))
@@ -146,21 +173,10 @@ class teamleadController extends Controller
     ->update([
       'job_application_status' => $verdict,
       'approved_by' => Auth::user()->staff_id
+      // 'job_application_status' => $verdict
     ]);
 
-    // update app_doc_review
-    AppDocReview::where('application_id', request('application_id'))
-      ->update([
-        'application_status' => $verdict,
-        'to_zopscon' => 'completed',
-        'to_ADO' => 'completed',
-        'to_head_gas' => 'completed',
-        'to_team_lead' => 'completed',
-        'to_staff' => 'completed'
-      ]);
-
-      // update teamlead inbox for this application as sent to outbox....reason is we don't want to leave the application at the teamlead inbox
-    teamleadInbox::where('application_id', request('id'))->update([
+    Inbox::where('id', request('inboxID'))->update([
       'to_outbox' => 'true'
     ]);
 
@@ -179,62 +195,62 @@ class teamleadController extends Controller
     return redirect('/teamlead');
   }
 
-  public function upToHeadGas(Request $request){
+  // public function upToHeadGas(Request $request){
 
-    // dd($request);
+  //   // dd($request);
 
-    if(request('sendToHeadGas')){
+  //   if(request('sendToHeadGas')){
 
-      // send this application request back to head gas
-      AppDocReview::where('application_id', request('application_id'))
-      ->update([
-        'to_head_gas' => 'received',
-        'to_team_lead' => 'forwarded'
-      ]);
+  //     // send this application request back to head gas
+  //     AppDocReview::where('application_id', request('application_id'))
+  //     ->update([
+  //       'to_head_gas' => 'received',
+  //       'to_team_lead' => 'forwarded'
+  //     ]);
 
-      $to = Staff::where('role', 'Head Gas M&G Lagos')->first();
+  //     $to = Staff::where('role', 'Head Gas M&G Lagos')->first();
 
-      JobsTimeline::create([
-        'application_id' => request('application_id'),
-        'from' => Auth::user()->staff_id,
-        'to' => $to->staff_id
-      ]);
+  //     JobsTimeline::create([
+  //       'application_id' => request('application_id'),
+  //       'from' => Auth::user()->staff_id,
+  //       'to' => $to->staff_id
+  //     ]);
 
-      teamleadInbox::where('application_id', request('id'))->update([
-        'to_outbox' => 'true'
-      ]);
+  //     teamleadInbox::where('application_id', request('id'))->update([
+  //       'to_outbox' => 'true'
+  //     ]);
 
-      // add this application document to the teamlead outbox
-      teamleadOutbox::create([
-        'application_id' => request('id'),
-        'to' => $to->staff_id,
-        'role' => $to->role,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category')
-      ]);
+  //     // add this application document to the teamlead outbox
+  //     teamleadOutbox::create([
+  //       'application_id' => request('id'),
+  //       'to' => $to->staff_id,
+  //       'role' => $to->role,
+  //       'application_type' => request('application_type'),
+  //       'sub_category' => request('sub_category')
+  //     ]);
 
-      // add to headgas inbox
-      headgasInbox::create([
-        'application_id' => request('id'),
-        'from' => Auth::user()->staff_id,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category'),
-        'read' => 'false',
-        'to_outbox' => 'false'
-      ]);
+  //     // add to headgas inbox
+  //     headgasInbox::create([
+  //       'application_id' => request('id'),
+  //       'from' => Auth::user()->staff_id,
+  //       'application_type' => request('application_type'),
+  //       'sub_category' => request('sub_category'),
+  //       'read' => 'false',
+  //       'to_outbox' => 'false'
+  //     ]);
 
-    }elseif(request('sendToStaff')) {
+  //   }elseif(request('sendToStaff')) {
 
-      // send this application request back to staff
-      $this->teamleadAssignProcess($request);
+  //     // send this application request back to staff
+  //     $this->teamleadAssignProcess($request);
 
-    }
+  //   }
 
 
 
-    return redirect('/teamlead');
+  //   return redirect('/teamlead');
 
-  }
+  // }
 
 
 

@@ -18,6 +18,7 @@ class CreateApplicationCommentsTable extends Migration
             $table->string('application_id');
             $table->string('staff_id');
             $table->string('comment');
+            $table->string('office');
             $table->timestamps();
         });
     }

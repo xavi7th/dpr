@@ -38,22 +38,28 @@
                   <thead>
                   <tr>
                     <th>Staff ID</th>
+                    <th>Username</th>
                     <th>Firstname</th>
-                    <th>Lastname</th>
+                    <th>Middlename</th>
+                    <th>Surname</th>
                     <th>Email Address</th>
                     <th>Mobile Number</th>
                     <th>Role</th>
+                    <th>Office</th>
                   </tr>
                   </thead>
                   <tbody>
                     @foreach ($staffs as $staff)
                       <tr>
                         <td class="sorting_1"><a href="/edit_staff/{{ $staff->id }}" class="label label-success" style="font-size: 14px;">{{ $staff->staff_id }}</a></td>
+                        <td>{{ $staff->username }}</td>
                         <td>{{ $staff->first_name }}</td>
-                        <td>{{ $staff->last_name }}</td>
+                        <td>{{ $staff->middle_name }}</td>
+                        <td>{{ $staff->surname }}</td>
                         <td>{{ $staff->email_address }}</td>
                         <td>{{ $staff->mobile_number }}</td>
                         <td>{{ $staff->role }}</td>
+                        <td>{{ $staff->office }}</td>
                       </tr>
                     @endforeach
                   </tbody>

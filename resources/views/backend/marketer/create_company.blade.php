@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | Create Company
+  DPR {{Auth::user()->role}} | Create Company
 @endsection
 
 @section('pagestyles')
@@ -13,14 +13,15 @@
 
     @include('partials.backend_top_nav_all')
 
-    @include('partials.backend_aside_marketer')
+    @include('partials.router_aside')
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
           Create Company
-          <small>Marketer Control Panel</small>
+          <small>{{Auth::user()->role}} Control Panel</small>
         </h1>
       </section>
 

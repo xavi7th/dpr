@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | View Application Documents
+  DPR {{Auth::user()->role}} | View Application Documents
 @endsection
 
 @section('pagestyles')
@@ -14,7 +14,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_marketer')
+    @include('partials.router_aside')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -22,7 +22,7 @@
       <section class="content-header">
         <h1>
           Application Documents
-          <small>Marketer Control panel</small>
+          <small>{{Auth::user()->role}} Control panel</small>
         </h1>
       </section>
 
@@ -102,6 +102,13 @@
                     @if ($applicationReview->sub_category == 'ATC' && $applicationReview->application_status != 'LTO Issued')
                       <form class="" action="/apply_for_lto" method="post">
                         {{ csrf_field() }}
+                        <div class="form-group" id="capacity_of_tank">
+                          <label>Capacity of Tank (MT)</label>
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="ion-beaker"></i></span>
+                              <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
+                          </div>
+                        </div>
                         <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                         <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
                       </form>
@@ -188,3 +195,10 @@
 
 
 @endsection
+
+
+{{--  <form action="/openDocument" method="POST">
+  {{ csrf_field() }}
+  <input type="text" hidden value="" name="">
+  <button type="submit" class="btn btn-primary pull-right">View</button>
+</form>  --}}

@@ -26,19 +26,20 @@ class backendSessionController extends Controller
 
       // validate the form requests
       $this->validate(request(), [
-        'staff_id' => 'required',
+        'username' => 'required',
         'password' => 'required'
       ]);
 
       //retrieve the staff's details and make the appropriate checks
 
-      $staff = Staff::where('staff_id', request('staff_id'))
+      $staff = Staff::where('username', request('username'))
       ->first();
+
+      // dd($staff);
 
       // check if the staff's hashed password matches the plain text password provided
       if(Hash::check(request('password'), $staff->password)){
         // dd(request('password'));
-
         //sign the user in
         auth()->login($staff);
         // dd($staff->role);
@@ -64,6 +65,9 @@ class backendSessionController extends Controller
         }elseif($staff->role == 'ZOPSCON'){
           //redirect to zopscon dashboard
           return redirect('/zopscon');
+        }elseif($staff->role == 'Manager Gas'){
+          //redirect to zopscon dashboard
+          return redirect('/managergas');
         }
 
       }else{

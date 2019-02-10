@@ -16,12 +16,15 @@ class CreateStaffTable extends Migration
         Schema::create('staff', function (Blueprint $table) {
           $table->increments('id');
           $table->string('staff_id')->unique();
+          $table->string('username')->nullable();;
           $table->string('first_name');
-          $table->string('last_name');
+          $table->string('middle_name');
+          $table->string('surname');
           $table->string('mobile_number');
           $table->string('email_address')->unique();
           $table->string('password');
           $table->string('role');
+          $table->string('office');
           $table->rememberToken();
           $table->timestamps();
         });

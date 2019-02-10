@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | Application Document Records
+  DPR {{Auth::user()->role}} | Application Document Records
 @endsection
 
 @section('pagestyles')
@@ -14,7 +14,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_marketer')
+    @include('partials.router_aside')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -22,7 +22,7 @@
       <section class="content-header">
         <h1>
           Application Document Records
-          <small>Marketer Control panel</small>
+          <small>{{Auth::user()->role}} Control panel</small>
         </h1>
       </section>
 
@@ -55,7 +55,7 @@
                   <tr>
                     <th>Application ID</th>
                     <th>Name of Gas Plant</th>
-                    {{-- <th>Application Type</th> --}}
+                    <th>Application Type</th>
                     <th>Sub-Category</th>
                     {{-- <th>Plant Type</th> --}}
                     <th>State</th>
@@ -82,7 +82,7 @@
                           @endif
                         </td>
                         <td>{{ $item->name_of_gas_plant }}</td>
-                        {{-- <td>{{ $item->application_type }}</td> --}}
+                        <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         {{-- <td>{{ $item->plant_type }}</td> --}}
                         <td>{{ $item->state }}</td>

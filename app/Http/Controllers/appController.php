@@ -10,6 +10,10 @@ use App\AppDocReview;
 use App\LtoInspectionDocument;
 use App\AtcInspectionDocuments;
 use App\CompletedJobs;
+use App\JobAssignment;
+use App\SiteSuitabilityInspectionDocuments;
+use App\Inbox;
+use App\Outbox;
 use Auth;
 use DB;
 
@@ -65,32 +69,118 @@ class appController extends Controller
       return back();
     }
 
+    public function documentValid(Request $request){
+      // dd($request);
+
+      $applicationID = request('applicationid');
+      $subCategory = request('subcategory');
+      $valid = request('valid');
+      $documentCheckName = request('documentcheck');
+
+      if($subCategory == 'Site Suitability Inspection'){
+        SiteSuitabilityInspectionDocuments::where('application_id', $applicationID)
+        ->update([
+          $documentCheckName => $valid
+        ]);
+      }elseif($subCategory == 'ATC'){
+        AtcInspectionDocuments::where('application_id', $applicationID)
+        ->update([
+          $documentCheckName => $valid
+        ]);
+      }elseif($subCategory == 'LTO'){
+        LtoInspectionDocument::where('application_id', $applicationID)
+        ->update([
+          $documentCheckName => $valid
+        ]);
+      }
+
+      
+
+      return back();
+    }
+
     public function viewAllSSI(){
       $appDocReviewsSSI = AppDocReview::where('application_status','Site Suitable')->get();    // get all application requests
       return view('backend.general.view_all_ssi', compact('appDocReviewsSSI'));
     }
 
-    public function viewAllATC(){
-      $appDocReviewsATC = DB::table('issued_atc_licenses')
-      ->join('app_doc_reviews', 'app_doc_reviews.company_id', '=', 'issued_atc_licenses.company_id')
-      ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
-      ->where('application_status','ATC Issued')
-      ->get();    // get all application requests
+    public function viewAllATC(Request $request){
+      // dd($request);
 
-      // dd($appDocReviewsATC);
+      $type = request('val');
+
+      if($type == 'lpg_atc'){
+        $appDocReviewsATC = DB::table('issued_atc_licenses')
+        ->join('app_doc_reviews', 'app_doc_reviews.application_id', '=', 'issued_atc_licenses.application_id')
+        ->join('companies', 'companies.company_id', '=', 'issued_atc_licenses.company_id')
+        ->select('issued_atc_licenses.*', 'app_doc_reviews.*', 'companies.*')
+        ->where('application_type', 'LPG Retailer Outlets')
+        ->where('application_status', 'ATC Issued')
+        ->get();    // get all application requests
+
+        // dd($appDocReviewsATC);
+      }elseif($type == 'cng_atc'){
+        $appDocReviewsATC = DB::table('issued_atc_licenses')
+        ->join('app_doc_reviews', 'app_doc_reviews.application_id', '=', 'issued_atc_licenses.application_id')
+        ->join('companies', 'companies.company_id', '=', 'issued_atc_licenses.company_id')
+        ->select('issued_atc_licenses.*', 'app_doc_reviews.*', 'companies.*')
+        ->where('application_type', 'CNG Retailer Outlets')
+        ->where('application_status', 'ATC Issued')
+        ->get();    // get all application requests
+
+        // dd($appDocReviewsATC);
+      }
 
       return view('backend.general.view_all_atc', compact('appDocReviewsATC'));
     }
 
-    public function viewAllLTO(){
-      $appDocReviewsLTO = DB::table('issued_lto_licenses')
-      ->join('app_doc_reviews', 'app_doc_reviews.company_id', '=', 'issued_lto_licenses.company_id')
-      ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
-      ->where('application_status','LTO Issued')
-      ->get();    // get all application requests
+    public function viewAllLTO(Request $request){
+      // dd($request);
+
+      $type = request('val');
+
+      if($type == 'lpg_lto'){
+        $appDocReviewsLTO = DB::table('app_doc_reviews')
+        ->join('job_assignments', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
+          // ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id') // maybe this would be uncommented when we receive the license tatus From HQ
+        ->where('application_type', 'LPG Retailer Outlets')
+        ->where('sub_category', 'LTO')
+        ->get();    // get all application requests
+
+        // dd($appDocReviewsLTO);
+      } elseif ($type == 'cng_lto'){
+        $appDocReviewsLTO = DB::table('app_doc_reviews')
+        ->join('job_assignments', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
+          // ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id') // maybe this would be uncommented when we receive the license tatus From HQ
+        ->where('application_type', 'CNG Retailer Outlets')
+        ->where('sub_category', 'LTO')
+        ->get();    // get all application requests
+
+        // dd($appDocReviewsLTO);
+      }
+    // this code below might still be important when license status are back from HQ
+    
+      // $appDocReviewsLTO = DB::table('issued_lto_licenses')
+      // ->join('app_doc_reviews', 'app_doc_reviews.company_id', '=', 'issued_lto_licenses.company_id')
+      // ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+      // ->where('application_status','LTO Issued')
+      // ->get();    // get all application requests
 
       // dd($appDocReviewsLTO);
       return view('backend.general.view_all_lto', compact('appDocReviewsLTO'));
+    }
+
+    public function viewAllPressureTestRecords(){
+      $pressureTestRecords = DB::table('app_doc_reviews')
+      ->join('pressure_test_records', 'pressure_test_records.application_id', '=', 'app_doc_reviews.application_id')
+      ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+      ->where('sub_category', 'Pressure Testing')
+      ->select('app_doc_reviews.*', 'pressure_test_records.*', 'companies.*')
+      ->get();
+
+      // dd($pressureTestRecords);
+
+      return view('backend.general.view_pressure_test_records', compact('pressureTestRecords'));
     }
 
     public function viewDocument($application_id){
@@ -99,21 +189,198 @@ class appController extends Controller
 
       if($applicationReview->sub_category == 'ATC'){
         $applicationID = AtcInspectionDocuments::where('application_id', $application_id)->first();
-        $appDocReviewed = DB::table('app_doc_reviews')
-        ->join('issued_atc_licenses', 'issued_atc_licenses.company_id', '=', 'app_doc_reviews.company_id')
-        ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
-        ->where('app_doc_reviews.application_id', $application_id)
-        ->first();    // get all application requests
+        // $appDocReviewed = DB::table('app_doc_reviews')
+        // ->join('issued_atc_licenses', 'issued_atc_licenses.company_id', '=', 'app_doc_reviews.company_id')
+        // ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+        // ->where('app_doc_reviews.application_id', $application_id)
+        // ->first();    // get all application requests
       }elseif ($applicationReview->sub_category == 'LTO') {
         $applicationID = LtoInspectionDocument::where('application_id', $application_id)->first();
-        $appDocReviewed = DB::table('app_doc_reviews')
-        ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
-        ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
-        ->where('app_doc_reviews.application_id', $application_id)
-        ->first();    // get all application requests
+        // $appDocReviewed = DB::table('app_doc_reviews')
+        // ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id')
+        // ->join('companies', 'companies.company_id', '=', 'app_doc_reviews.company_id')
+        // ->where('app_doc_reviews.application_id', $application_id)
+        // ->first();    // get all application requests
       }
+      
       return view('backend.general.view_application_docs', compact('appDocReviewed','applicationReview','applicationID'));
     }
+
+    public function viewDocumentPOST(Request $request){
+      $this->documentURL = request('img');
+      $this->reason = request('reason');
+
+      dd('r');
+    }
+
+    public function assignTree(Request $request){
+      // dd($request);
+      $staffs = Staff::where('office', Auth::user()->office)->get();
+      $applicationID = request('application_id');
+      $appID = request('id'); // application index from app_doc_review
+      $inboxID = request('inbox_id'); // application index from inbox
+      
+      return view('backend.general.assign_tree', compact('staffs','applicationID', 'appID', 'inboxID'));
+    }
+
+    public function viewDocumentGET(Request $request){
+      // dd($request);
+
+      $documentURL = request('pic');
+
+      return view('backend.general.display_document', compact('documentURL'));
+    }
+
+    public function sendJob(Request $request){
+
+      // dd($request);
+
+      Inbox::where('application_id', request('appID'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // create updated job application access for the next user
+      Inbox::create([
+        'application_id' => request('appID'),
+        'to' => request('staff_id'),
+        'from' => Auth::user()->staff_id,
+        'receiver_role' => request('role'),
+        'sender_role' => Auth::user()->role,
+        'office' => Auth::user()->office,
+        'read' => 'false',
+        'to_outbox' => 'false'
+      ]);
+
+      Outbox::create([
+        'application_id' => request('appID'),
+        'to' => request('staff_id')." (". request('role').")",
+        'role' => Auth::user()->role,
+        'office' => Auth::user()->office
+      ]);
+
+      if(Auth::user()->role == 'ZOPSCON'){
+        return redirect('/zopscon');
+      }elseif(Auth::user()->role == 'ADO'){
+        return redirect('/ado');
+      }elseif(Auth::user()->role == 'Head Gas M&G Lagos'){
+        return redirect('/headgas');
+      }elseif(Auth::user()->role == 'Team Lead'){
+
+        $thisJob = JobAssignment::where('application_id', request('application_id'))->first();
+
+        if(optional($thisJob)->job_application_status == 'Started'){
+          return redirect('/teamlead');
+        }else{
+          JobAssignment::updateOrCreate(
+            ['application_id' => request('application_id')],
+            [
+              'application_id' => request('application_id'),
+              'assigned_by' => Auth::user()->staff_id,
+              'staff_id' => request('staff_id'),
+              'job_application_status' => 'Assigned'
+            ]
+          );
+        }
+
+        return redirect('/teamlead');
+
+      }elseif(Auth::user()->role == 'Staff'){
+        return redirect('/staff');
+      }elseif (Auth::user()->role == 'Manager Gas') {
+        return redirect('/managergas');
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public function sendJobToHQ(Request $request){
+      // dd($request);
+      // update job_assignments
+      JobAssignment::where('application_id', request('application_id'))
+      ->update([
+        'job_application_status' => 'Application Sent to HQ',
+        'company_id' => request('company_id')
+      ]);
+
+      // update lto_inspection_document
+      LtoInspectionDocument::where('application_id', request('application_id'))
+      ->update([
+        'company_id' => request('company_id')
+      ]);
+
+      // update inbox
+      Inbox::where('id', request('inboxID'))->update([
+        'to_outbox' => 'true'
+      ]);
+
+      // create updated job application access for the next user .......
+      // we would need to grab the details of the headgas from HQ and office location in order for this application
+      // to be forwared but for now we use a dummy
+
+      
+
+      $HeadGas = Staff::where([
+        ['office', 'HQ'],
+        ['role', 'Head Gas M&G Lagos']
+      ])->first();
+
+
+      Inbox::create([
+        'application_id' => request('id'),
+        'to' => request('staff_id'),
+        'from' => Auth::user()->staff_id,
+        'receiver_role' => $HeadGas->role,
+        'sender_role' => Auth::user()->role,
+        'office' => $HeadGas->office,
+        'read' => 'false',
+        'to_outbox' => 'false'
+      ]);
+
+      $headgasHQ = $HeadGas->staff_id;
+      $headgasHQRole = $HeadGas->role;
+
+      Outbox::create([
+        'application_id' => request('id'),
+        'to' => $headgasHQ . " (" . $headgasHQRole . ")",
+        'role' => Auth::user()->role,
+        'office' => Auth::user()->office
+      ]);
+
+      if (Auth::user()->role == 'ZOPSCON') {
+        return redirect('/zopscon');
+      } elseif (Auth::user()->role == 'ADO') {
+        return redirect('/ado');
+      } elseif (Auth::user()->role == 'Head Gas M&G Lagos') {
+        return redirect('/headgas');
+      } elseif (Auth::user()->role == 'Manager Gas') {
+        return redirect('/managergas');
+      }
+      
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function lpgCngDashboard(){return view('backend.general.lpg_cng_dashboard');}
 
@@ -170,13 +437,86 @@ class appController extends Controller
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     public function gasProductionUtilizationDashboard(){return view('backend.general.gas_production_utilization_dashboard');}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function gasProductionExportOperationsDashboard(){return view('backend.general.gas_production_export_operations_dashboard');}
 
-    public function gasSubsurfaceDashboard(){return view('backend.general.gas_subsurface_dashboard');}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function gasSubsurfaceDashboard(){return view('backend.general.gas_sub_surface_dashboard');}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function gasDiaryDashboard(){return view('backend.general.gas_diary_dashboard');}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function inspectionDashboard(){return view('backend.general.inspection_dashboard');}
 

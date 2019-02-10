@@ -22,6 +22,8 @@ use App\TakeoverReviews;
 use App\PressureTestRecords;
 use App\JobsTimeline;
 use App\adoInbox;
+use App\Inbox;
+use App\Outbox;
 use App\headgasInbox;
 use App\zopsconInbox;
 use App\adoOutbox;
@@ -35,69 +37,98 @@ use DB;
 
 class adoController extends Controller
 {
+
+    private $completedCount = '';
+    private $inboxUnreadCount = '';
+    private $outboxCount = '';
+
   public function __construct(){
     $this->middleware('auth');
   }
 
+  private function getMailDetails(){
 
-  public function index(){
-    $inbox = adoInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
-    // dd($inbox);
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = adoInbox::where('read', 'false')->get();
-    // $inboxUnreadCount = adoInbox::all(); // number of items in inbox
-    $outboxUnreadCount = adoOutbox::all();
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->latest()->get();    // get all application request
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.ado.ado_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
+    $this->completedCount = CompletedJobs::all()->count();
+
+    $this->inboxUnreadCount = Inbox::where([
+      ['read', 'false'],
+      ['receiver_role', Auth::user()->role],
+      ['office', Auth::user()->office]
+    ])->get()->count();
+
+    $this->outboxCount = Inbox::where([
+      ['to_outbox', 'true'],
+      ['receiver_role', Auth::user()->role],
+      ['office', Auth::user()->office]
+    ])->get()->count();
+
   }
 
-  public function adoPending(){
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->latest()->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    return view('backend.ado.ado_pending', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+
+  public function index(){
+
+    $inbox = Inbox::with('app_doc_review')
+      ->where([
+        ['to_outbox', 'false'],
+        ['receiver_role', Auth::user()->role],
+        ['office', Auth::user()->office]
+      ])->latest()->get();
+
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+
+    return view('backend.ado.ado_dashboard', compact('inbox', 'inboxUnreadCount', 'outboxCount', 'completedCount'));
   }
 
   public function adoOutbox(){
-    $outbox = adoOutbox::with('app_doc_review')->latest()->get();
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = adoInbox::where('read', 'false')->get();
-    $outboxUnreadCount = adoOutbox::all();
-    $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->get();    // get all application requests
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending application requests
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    // dd($appDocReviewsOutbox);
+    $outbox = Outbox::with('app_doc_review')
+      ->where([
+        ['role', Auth::user()->role],
+        ['office', Auth::user()->office]
+      ])->latest()->get();
 
-    return view('backend.ado.ado_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.ado.ado_outbox', compact('outbox', 'inboxUnreadCount', 'outboxCount', 'completedCount'));
   }
 
   public function adoCompleted(){
 
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = adoInbox::where('read', 'false')->get();
-    $outboxUnreadCount = adoOutbox::all();
-
     $completed = CompletedJobs::with('app_doc_review')->latest()->get();
 
-    return view('backend.ado.ado_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount', 'completed'));
-    // $appDocReviews = AppDocReview::with('job_assignment')->where('to_ado','true')->get();    // get all application requests
-    // $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_ado','received')->get();    // get all pending application requests
-    // $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_ado','completed')->latest()->get();    // get all pending application requests
-    // $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
-    // return view('backend.ado.ado_completed', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.ado.ado_completed', compact('outboxCount', 'inboxUnreadCount', 'completedCount', 'completed'));
   }
 
-  public function adoDocumentReview($id){
-    adoInbox::where('application_id', $id)->update([
-      'read' => 'true'
-    ]);
-    $applicationReview = AppDocReview::with('job_assignment')->where('id', $id)->first();    // retrieve application review
+  public function adoDocumentReview(Request $request){
+
+    $id = request('inboxIndex');
+
+    $inboxItem = Inbox::where('id', $id)->first();
+
+    if ($inboxItem) {
+      $inboxID = $inboxItem->id; // this is the id of this application from inbox
+      Inbox::where('id', $id)->update([
+        'read' => 'true'
+      ]);
+    }
+
+    $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
+    $applicationReview = AppDocReview::with('job_assignment')->where('id', $applicationID)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
     // dd($applicationStatus);
@@ -124,437 +155,53 @@ class adoController extends Controller
       $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
       // dd($applicationID);
     }
+    $role = Auth::user()->role;
+    return view('backend.ado.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments','inboxItem'));
 
-    return view('backend.ado.view_application_docs', compact('applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments'));
-
-  }
-
-  public function forwardApplicationToHeadGas(Request $request){
-    // dd($request);
-    AppDocReview::where('application_id', request('application_id'))
-    ->update([
-      'to_ADO' => 'forwarded',
-      'to_head_gas' => 'true'
-    ]);
-
-    $to = Staff::where('role', 'Head Gas M&G Lagos')->first();
-
-    JobsTimeline::create([
-      'application_id' => request('application_id'),
-      'from' => Auth::user()->staff_id,
-      'to' => $to->staff_id
-    ]);
-
-    adoInbox::where('application_id', request('id'))->update([
-      'to_outbox' => 'true'
-    ]);
-
-    // add this application document to the ado outbox
-    adoOutbox::create([
-      'application_id' => request('id'),
-      'to' => $to->staff_id,
-      'role' => $to->role,
-      'application_type' => request('application_type'),
-      'sub_category' => request('sub_category')
-    ]);
-
-    // add to headgas inbox
-    headgasInbox::create([
-      'application_id' => request('id'),
-      'from' => Auth::user()->staff_id,
-      'application_type' => request('application_type'),
-      'sub_category' => request('sub_category'),
-      'read' => 'false',
-      'to_outbox' => 'false'
-    ]);
-
-    return redirect('/ado');
   }
 
   public function adoApproves(Request $request){
-    // dd($request);
+
+      // dd($request);
     $verdict = "";
 
-    // if(request('sendToZOPSCON')){
-    //   JobAssignment::where('application_id', request('application_id'))
-    //   ->update([
-    //     'to_zopscon' => 'true'
-    //   ]);
-    // }
-
-    if(request('sendToZOPSCON')){
-      // send this application request to ADO
-      AppDocReview::where('application_id', request('application_id'))
-      ->update([
-        'to_zopscon' => 'received',
-        'to_ADO' => 'forwarded'
-      ]);
-
-      $to = Staff::where('role', 'ZOPSCON')->first();
-
-      JobsTimeline::create([
-        'application_id' => request('application_id'),
-        'from' => Auth::user()->staff_id,
-        'to' => $to->staff_id
-      ]);
-
-      adoInbox::where('application_id', request('id'))->update([
-        'to_outbox' => 'true'
-      ]);
-
-      // add this application document to the ado outbox
-      adoOutbox::create([
-        'application_id' => request('id'),
-        'to' => $to->staff_id,
-        'role' => $to->role,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category')
-      ]);
-
-    // add to zopscon inbox
-      zopsconInbox::create([
-        'application_id' => request('id'),
-        'from' => Auth::user()->staff_id,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category'),
-        'read' => 'false',
-        'to_outbox' => 'false'
-      ]);
-    }elseif(request('sendToHeadGas')){
-      // send this application request back to team lead
-      AppDocReview::where('application_id', request('application_id'))
-      ->update([
-        'to_head_gas' => 'received',
-        'to_ADO' => 'forwarded'
-      ]);
-
-      $to = Staff::where('role', 'Head Gas M&G Lagos')->first();
-
-      JobsTimeline::create([
-        'application_id' => request('application_id'),
-        'from' => Auth::user()->staff_id,
-        'to' => $to->staff_id
-      ]);
-
-      adoInbox::where('application_id', request('id'))->update([
-        'to_outbox' => 'true'
-      ]);
-
-      // add this application document to the ado outbox
-      adoOutbox::create([
-        'application_id' => request('id'),
-        'to' => $to->staff_id,
-        'role' => $to->role,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category')
-      ]);
-
-      // add to teamlead inbox
-      headgasInbox::create([
-        'application_id' => request('id'),
-        'from' => Auth::user()->staff_id,
-        'application_type' => request('application_type'),
-        'sub_category' => request('sub_category'),
-        'read' => 'false',
-        'to_outbox' => 'false'
-      ]);
-    }else{
-      if(request('sub_category') == 'Site Suitability Inspection'){
-        if(request('approve')){
-          $verdict = 'Site Suitable';
-          // record this application inside site suitability reports
-          SiteSuitabilityReports::create([
-            'application_id' => request('application_id'),
-            'staff_id' => request('staff_id'),
-            'company_id' => request('company_id'),
-            'marketer_id' => request('marketer_id'),
-            'report_location' => request('report_url')
-          ]);
-        }elseif (request('decline')) {
-          $verdict = 'Site Not Suitable';
-        }
-
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict,
-          'to_zopscon' => 'completed',
-          'to_ADO' => 'completed',
-          'to_head_gas' => 'completed',
-          'to_team_lead' => 'completed',
-          'to_staff' => 'completed'
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-        // update completed job table
-        CustomHelpers::toCompletedJobsTable($request);
-
-        adoInbox::where('application_id', request('id'))->update([
-          'to_outbox' => 'true'
-        ]);
-
-      }elseif (request('sub_category') == 'ATC') {
-        $dateIssued = Carbon::now();
-        $expiryDate = Carbon::now()->addMonths(6);
-        if(request('approve')){
-          $verdict = 'ATC Issued';
-          // update or create a record for this application inside issued atc_licences table
-          IssuedAtcLicense::create([
-            'application_id' => request('application_id'),
-            'company_id' => request('company_id'),
-            'staff_id' => request('staff_id'),
-            'date_issued' => $dateIssued->toDateTimeString(),
-            'expiry_date' => $expiryDate->toDateTimeString(),
-          ]);
-        }elseif (request('decline')) {
-          $verdict = 'ATC Not Issued';
-        }
-
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict,
-          'to_zopscon' => 'completed',
-          'to_ADO' => 'completed',
-          'to_head_gas' => 'completed',
-          'to_team_lead' => 'completed',
-          'to_staff' => 'completed'
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
+    if (request('sub_category') == 'ATC') {
+      $dateIssued = Carbon::now();
+      $expiryDate = Carbon::now()->addMonths(6);
+      if (request('approve')) {
+        $verdict = 'ATC Issued';
+        // update or create a record for this application inside issued atc_licences table
+        IssuedAtcLicense::create([
+          'application_id' => request('application_id'),
           'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
+          'staff_id' => request('staff_id'),
+          'date_issued' => $dateIssued->toDateTimeString(),
+          'expiry_date' => $expiryDate->toDateTimeString(),
         ]);
-
-        // update completed job table
-        CustomHelpers::toCompletedJobsTable($request);
-
-        adoInbox::where('application_id', request('id'))->update([
-          'to_outbox' => 'true'
-        ]);
-
-
-      }elseif (request('sub_category') == 'LTO') {
-        $dateIssued = Carbon::now();
-        $expiryDate = Carbon::now()->addYears(2);
-        if(request('approve')){
-          $verdict = 'LTO Issued';
-
-          // update or create a record for this application inside issued atc_licences table
-          IssuedLtoLicense::create([
-            'application_id' => request('application_id'),
-            'company_id' => request('company_id'),
-            'staff_id' => request('staff_id'),
-            'date_issued' => $dateIssued->toDateTimeString(),
-            'expiry_date' => $expiryDate->toDateTimeString(),
-            'report_url' => request('report_url')
-          ]);
-
-          // lto inspection document
-          LtoInspectionDocument::where('application_id', request('application_id'))
-          ->update([
-            'company_id' => request('company_id')
-          ]);
-        }elseif (request('decline')) {
-          $verdict = 'LTO Not Issued';
-        }
-
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict,
-          'to_zopscon' => 'completed',
-          'to_ADO' => 'completed',
-          'to_head_gas' => 'completed',
-          'to_team_lead' => 'completed',
-          'to_staff' => 'completed'
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-        // update completed job table
-        CustomHelpers::toCompletedJobsTable($request);
-
-        adoInbox::where('application_id', request('id'))->update([
-          'to_outbox' => 'true'
-        ]);
-
-      }elseif (request('sub_category') == 'Renewal') {
-        $dateIssued = Carbon::now();
-        $dateEx = Carbon::now()->addYear();
-
-        if(request('approve')){
-          $verdict = 'Renewal Approved';
-          $ltolicenseRenDetails = DB::table('lto_license_renewals')
-          ->leftJoin('issued_lto_licenses', 'issued_lto_licenses.application_id', '=', 'lto_license_renewals.comp_license_id')
-          ->first();
-
-          // dd($ltolicenseRenDetails->comp_license_id);
-
-          $k = 12 - $dateEx->month; // where k = the number of months remaining for that particular year
-
-          $dateEx = $dateEx->addMonth($k);
-
-          RenewedLtoLicense::create([
-            'comp_license_id' => $ltolicenseRenDetails->comp_license_id,
-            'company_id' => $ltolicenseRenDetails->company_id,
-            'previous_date_issued' => $ltolicenseRenDetails->date_issued,
-            'previous_expiry_date' => $ltolicenseRenDetails->expiry_date,
-            'current_date_issued' => $dateIssued->toDateTimeString(),
-            'current_expiry_date' => $dateEx->toDateTimeString()
-          ]);
-
-
-          // Update The current dates inside issued lto license
-          IssuedLtoLicense::where('application_id', $ltolicenseRenDetails->comp_license_id)
-          ->update([
-            'date_issued' => $dateIssued->toDateTimeString(),
-            'expiry_date' => $dateEx->toDateTimeString()
-          ]);
-        }elseif (request('decline')) {
-          $verdict = 'Renewal Not Approved';
-        }
-
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict,
-          'to_zopscon' => 'completed',
-          'to_ADO' => 'completed',
-          'to_head_gas' => 'completed',
-          'to_team_lead' => 'completed',
-          'to_staff' => 'completed'
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-        // update completed job table
-        CustomHelpers::toCompletedJobsTable($request);
-
-        adoInbox::where('application_id', request('id'))->update([
-          'to_outbox' => 'true'
-        ]);
-
-      }elseif (request('sub_category') == 'Take Over') {
-
-        if(request('approve')){
-          $verdict = 'Take Over Approved';
-        }elseif (request('decline')) {
-          $verdict = 'Take Over Not Issued';
-        }
-
-        $takeOverRev = TakeoverReviews::where('company_id', request('company_id'))->first();
-
-        // update app_doc_review
-        AppDocReview::where('application_id', request('application_id'))
-        ->update([
-          'application_status' => $verdict,
-          'to_zopscon' => 'completed',
-          'to_ADO' => 'completed',
-          'to_head_gas' => 'completed',
-          'to_team_lead' => 'completed',
-          'to_staff' => 'completed'
-        ]);
-
-        // update app_doc_review new identities of gas plant
-        AppDocReview::where('company_id', request('company_id'))
-        ->update([
-          'marketer_id' => $takeOverRev->marketer_id,
-          'name_of_gas_plant' => $takeOverRev->new_name_of_gas_plant
-        ]);
-
-        // update company new identities
-        Company::where('company_id', request('company_id'))
-        ->update([
-          'company_name' => $takeOverRev->new_name_of_gas_plant,
-          'company_alias' => $takeOverRev->company_alias
-        ]);
-
-        // update job_assignments
-        JobAssignment::where('application_id', request('application_id'))
-        ->update([
-          'job_application_status' => $verdict,
-          'company_id' => request('company_id'),
-          'approved_by' => Auth::user()->staff_id
-        ]);
-
-        // update take over inspection documents
-        TakeoverInspectionDocuments::where('application_id', request('application_id'))
-        ->update([
-          'company_id' => request('company_id')
-        ]);
-
-        // update take over reviews
-        TakeoverReviews::where('application_id', request('application_id'))
-        ->update([
-          'company_id' => request('company_id')
-        ]);
-
-        // update completed job table
-        CustomHelpers::toCompletedJobsTable($request);
-
-        adoInbox::where('application_id', request('id'))->update([
-          'to_outbox' => 'true'
-        ]);
+      } elseif (request('decline')) {
+        $verdict = 'ATC Not Issued';
       }
+      // update app_doc_review
+      AppDocReview::where('application_id', request('application_id'))
+        ->update([
+          'application_status' => $verdict
+        ]);
+      // update job_assignments
+      JobAssignment::where('application_id', request('application_id'))
+        ->update([
+          'job_application_status' => $verdict,
+          'company_id' => request('company_id'),
+          'approved_by' => Auth::user()->staff_id
+        ]);
+      // update completed job table
+      CustomHelpers::toCompletedJobsTable($request);
+      // update inbox table
+      Inbox::where('id', request('inboxID'))->update([
+        'to_outbox' => 'true'
+      ]);
     }
-
-
-
-
 
     return back();
   }
 
 }
-
-
-
-
-
-
-
-// else if (isset($_POST['btnLogin'])){
-//   $email = $_POST['email'];
-//   $password = md5($_POST['password']);
-
-//   /** Validations ****/
-//   if (empty($email) || empty($password) ){
-//     echo "all field are required";
-//   }else{
-//     $sql = "SELECT * FROM users where password = '$password' AND email = '$email'";
-
-//     $results = $con->query($sql);
-
-//     if ($results->num_rows > 0) {
-//       while ($row = $result->fetch_assoc()) {
-//         // coming from the users table in the database
-//         $email = $row['email']; 
-//         $password = $row['password'];
-//       }
-//     }else{
-//     echo "incorrect username or password";
-//     }
-//   }
-// }

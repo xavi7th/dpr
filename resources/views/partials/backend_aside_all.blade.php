@@ -20,6 +20,11 @@
         </a>
       </li>
       <li>
+        <a href="/marketer_app_doc_review">
+          <i class="fa fa-dashboard"></i> <span>App. Document Review</span>
+        </a>
+      </li>
+      <li>
         <a href="/lpg_cng_dashboard">
           <i class="fa fa-dashboard"></i> <span>LPG/CNG Retailer Outlets</span>
         </a>
@@ -30,7 +35,7 @@
         </a>
       </li>
       <li>
-        <a href="/gas_pipelines_dashboard_">
+        <a href="/gas_pipelines_dashboard">
           <i class="fa fa-dashboard"></i> <span>Gas Pipelines</span>
         </a>
       </li>
@@ -40,29 +45,41 @@
         </a>
       </li>
       <li>
-        <a href="/gas_production_utilization_dashboard_">
+        <a href="/gas_production_utilization_dashboard">
           <i class="fa fa-dashboard"></i> <span>Gas Prod./Utilization</span>
         </a>
       </li>
       <li>
-        <a href="/gas_production_export_operations_dashboard_">
+        <a href="/gas_production_export_operations_dashboard">
           <i class="fa fa-dashboard"></i> <span>Gas Prod./Export Operations</span>
         </a>
       </li>
       <li>
-        <a href="/gas_subsurface_dashboard_">
+        <a href="/gas_subsurface_dashboard">
           <i class="fa fa-dashboard"></i> <span>Gas Sub-surface</span>
         </a>
       </li>
       <li>
-        <a href="/gas_diary_dashboard_">
+        <a href="/gas_diary_dashboard">
           <i class="fa fa-dashboard"></i> <span>Gas Diary</span>
         </a>
       </li>
       <li>
-        <a href="/inspection_dashboard_">
+        <a href="/inspection_dashboard">
           <i class="fa fa-dashboard"></i> <span>Inspection</span>
         </a>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="ion ion-eye"></i> <span>Companies</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+          <li><a href="/create_company"><i class="fa fa-fax"></i>Create Company</a></li>
+          <li><a href="/companies_list"><i class="fa fa-fax"></i>Registered Companies</a></li>
+        </ul>
       </li>
       {{--  <li class="treeview">
         <a href="#">
@@ -76,6 +93,11 @@
           <li><a href="/view_atc_records"><i class="fa fa-fax"></i>ATC</a></li>
           <li><a href="/view_lto_records"><i class="fa fa-fax"></i>LTO</a></li>
         </ul>
+      </li>  --}}
+      {{--  <li>
+        <a href="/companies_list">
+          <i class="fa fa-list"></i> <span>Companies</span>
+        </a>
       </li>  --}}
       <li>
         <a href="/preferences">

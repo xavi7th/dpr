@@ -105,6 +105,8 @@
 
                   <takeover-inspection-upload-component title="Application Letter" reason="AL_reason" name="AL" inputid="AL_doc"></takeover-inspection-upload-component>
 
+                  {{--  <takeover-inspection-upload-component title="Standard Operating Procedure (SOP)" reason="SOP_reason" name="SOP" inputid="SOP_doc"></takeover-inspection-upload-component>  --}}
+
                 </div>
 
                 <div class="box-footer">

@@ -47,37 +47,37 @@
             <div class="box box-primary">
             <div class="box-body box-profile">
 
-              <h3 class="profile-username text-center">{{ $appDocReviewed->name_of_gas_plant }}</h3>
+              <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
 
-              <p class="text-muted text-center">{{ $appDocReviewed->application_id }}</p>
+              <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
 
               <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
-                  <b>Application type</b> <a class="pull-right">{{ $appDocReviewed->application_type }}</a>
+                  <b>Application type</b> <a class="pull-right">{{ $applicationReview->application_type }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Sub-category</b> <a class="pull-right">{{ $appDocReviewed->sub_category }}</a>
+                  <b>Sub-category</b> <a class="pull-right">{{ $applicationReview->sub_category }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Plant type</b> <a class="pull-right">{{ $appDocReviewed->plant_type }}</a>
+                  <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Capacity of tank</b> <a class="pull-right">{{ $appDocReviewed->capacity_of_tank }}</a>
+                  <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>State</b> <a class="pull-right">{{ $appDocReviewed->state }}</a>
+                  <b>State</b> <a class="pull-right">{{ $applicationReview->state }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>L.G.A</b> <a class="pull-right">{{ $appDocReviewed->lga }}</a>
+                  <b>L.G.A</b> <a class="pull-right">{{ $applicationReview->lga }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Town</b> <a class="pull-right">{{ $appDocReviewed->town }}</a>
+                  <b>Town</b> <a class="pull-right">{{ $applicationReview->town }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Address</b> <a class="pull-right">{{ $appDocReviewed->address }}</a>
+                  <b>Address</b> <a class="pull-right">{{ $applicationReview->address }}</a>
                 </li>
                 <li class="list-group-item">
-                  <b>Date</b> <a class="pull-right">{{ $appDocReviewed->created_at }}</a>
+                  <b>Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($applicationReview->created_at)->toDayDateTimeString() }}</a>
                 </li>
                 {{-- now()->addMonths(3)->gte($item->expiry_date) --}}
                 <br>
@@ -114,11 +114,11 @@
               </div>
               <!-- /.box-header -->
               <div class="box-body">
-                @if($appDocReviewed->sub_category == 'Site Suitability Inspection' || $appDocReviewed->sub_category == 'ATC')
+                @if($applicationReview->sub_category == 'Site Suitability Inspection')
                   @include('partials.m_view_application_docs')
-                @elseif($appDocReviewed->sub_category == 'ATC')
+                @elseif($applicationReview->sub_category == 'ATC')
                   @include('partials.m_view_application_docs_atc')
-                @elseif($appDocReviewed->sub_category == 'LTO')
+                @elseif($applicationReview->sub_category == 'LTO')
                   @include('partials.m_view_application_docs_lto')
                 @endif
               </div>

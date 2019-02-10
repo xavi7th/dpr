@@ -104,19 +104,19 @@
               <div class="lpg inner">
                 {{-- <p>Records</p> --}}
               </div>
-              <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">LPG Retailer Outlet</h3>
+              <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">LPG/CNG Retailer Outlet</h3>
               <a href="/lpg_retailer_outlet" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <div class="col-md-6">
+          {{--  <div class="col-md-6">
             <div class="small-box" id="retailer">
               <div class="cng inner">
-                {{-- <p>Records</p> --}}
+                <p>Records</p>
               </div>
               <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">CNG Retailer Outlet</h3>
               <a href="/lpg_retailer_outlet" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
             </div>
-          </div>
+          </div>  --}}
         </div>
 
 
@@ -127,7 +127,7 @@
                 {{-- <p>Records</p> --}}
               </div>
               <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">Gas Processing Facilities</h3>
-              <a href="/lpg_retailer_outlet" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/gas_processing_facilities_dashboard" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <div class="col-md-6">
@@ -136,7 +136,7 @@
                 {{-- <p>Records</p> --}}
               </div>
               <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">Gas Pipelines</h3>
-              <a href="/lpg_retailer_outlet" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/gas_pipelines_dashboard_" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>
@@ -149,7 +149,7 @@
                 {{-- <p>Records</p> --}}
               </div>
               <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">Project Monitoring</h3>
-              <a href="/lpg_retailer_outlet" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/project_monitoring_dashboard" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <div class="col-md-6">

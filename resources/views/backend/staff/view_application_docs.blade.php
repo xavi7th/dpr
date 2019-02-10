@@ -13,6 +13,11 @@
       font-size: 20px;
       color: red;
     }
+
+    
+  .hider{
+    visibility: hidden;
+  }
   </style>
 @endsection
 
@@ -76,17 +81,29 @@
                   </li>
                   <li class="list-group-item">
                     <b>Application Status</b>
-                    @if ($reportDocument)
-                      <div class="box-tools pull-right tools" data-toggle="modal" data-target="#report" style="position: relative; bottom: 5px;">
-                        <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
-                      </div>
-                    @endif
                     <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                   </li>
-
-                    @if ($reportDocument)
-                    {{--  @if ($applicationStatus->job_application_status != "Report Submitted" || $applicationStatus->job_application_status == null)  --}}
-                    {{--  check if this application has been completed  --}}
+                
+                  @if ($reportDocument)
+                  <li class="list-group-item">
+                    <b>Uploaded Report</b>
+                    <a href="/displayDocument?pic=/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
+                  </li>
+                  @endif
+                  @if (optional($inboxItem)->to_outbox == 'false')
+                    <form role="form" method="post" action="/open_assign_tree">
+                      {{ csrf_field() }}
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                      <input type="text" hidden name="inbox_id" value="{{ $inboxID }}">
+                      <div class="box-footer">
+                        <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">
+                      </div>
+                    </form>
+                  @endif
+                    {{--  @if ($reportDocument)
+                    @if ($applicationStatus->job_application_status != "Report Submitted" || $applicationStatus->job_application_status == null)
+                    check if this application has been completed
                       @if ($applicationReview->to_staff != "completed")
                           <li class="list-group-item">
                             <form role="form" method="post" action="/up_to_teamlead">
@@ -100,7 +117,7 @@
                               <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
                               <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
                               @if ($applicationStatus->job_application_status == "Report Submitted")
-                                {{--  // empty zone  --}}
+                                // empty zone
                               @else
                                 <div class="box-footer">
                                   <input type="submit" name="upToTeamlead" value="Send to Team Lead" class="pull-right btn btn-primary">
@@ -109,7 +126,7 @@
                             </form>
                           </li>
                       @endif
-                    @endif
+                    @endif  --}}
 
                   {{-- <h3 class="box-title">Job Assigned <i class="fa fa-check-circle text-green"></i> {{ $applicationReview->marketer_id }}</h3> --}}
                 </ul>
@@ -142,37 +159,9 @@
                   </div>
                 </form>
               </div>
-            @else
-              @if ($applicationReview->to_staff == 'true' || $applicationReview->to_staff == 'received')
-                <div class="box box-primary">
-                  <div class="box-header with-border">
-                    <h3 class="box-title">Upload Report</h3>
-                  </div>
-                  <!-- /.box-header -->
-                  <!-- form start -->
-                  <form role="form" method="post" action="/stUpload_report" enctype="multipart/form-data">
-                    {{ csrf_field() }}
-                    <div class="box-body">
-                    <div class="form-group">
-                      <label for="exampleInputFile">Report Document</label>
-                      <input type="file" name="reportDocument">
-                      <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
-                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                      <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
-                    </div>
-                  </div>
-                  <!-- /.box-body -->
-
-                  <div class="box-footer">
-                    <button type="submit" class="pull-right btn btn-default">Upload
-                      <i class="fa fa-upload"></i></button>
-                    </div>
-                  </form>
-                </div>
-              @endif
             @endif
 
-            <div class="modal fade" id="report" style="display: none;">
+            {{--  <div class="modal fade" id="report" style="display: none;">
               <div class="modal-dialog" style="width: 1400px;">
                 <div class="modal-content" style="background: transparent;">
                   @if ($reportDocument != null)
@@ -180,7 +169,7 @@
                   @endif
                 </div>
               </div>
-            </div>
+            </div>  --}}
 
             <div class="box box-primary direct-chat direct-chat-warning">
               <div class="box-header with-border">
@@ -237,6 +226,14 @@
         </div>
         <div class="col-md-8">
           <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
+              <!-- tools box -->
+              <div class="pull-right box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+              </div>
+              <!-- /. tools -->
+            </div>
             <!-- /.box-header -->
             <div class="box-body">
               @if($applicationReview->sub_category == 'Site Suitability Inspection' || $applicationReview->sub_category == 'ATC')
@@ -253,8 +250,52 @@
             </div>
             <!-- /.box-body -->
           </div>
+          @if (optional($inboxItem)->to_outbox == 'false')
+              <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title"><b>REPORTS</b></h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" method="post" action="/stUpload_report" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label>Type of Report</label>
+                      <select class="form-control select2" name="report_type" style="width: 100%;">
+                        <option selected="selected">Select</option>
+                        <option value="Site Suitability Inspection Report">Site Suitability Inspection Report</option>
+                        <option value="Pre-ATC Report">Pre-ATC Report</option>
+                        <option value="Final Report">Final Report</option>
+                      </select>
+                    </div>
+                    <div class="form-group" id="capacity_of_tank">
+                      <label>Date report was carried out</label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                          <input type="text" name="date_of_inspection" class="form-control pull-right" id="datepicker1">
+                      </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                      {{--  <label for="exampleInputFile">Report Document</label>  --}}
+                      <input type="file" name="reportDocument">
+                      <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
+                    </div>
+                  </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="submit" class="pull-right btn btn-success">Upload Report
+                    <i class="fa fa-upload"></i></button>
+                  </div>
+                </form>
+              </div>
+          @endif
+          
           <!-- quick email widget -->
-          <div class="box box-info">
+          {{--  <div class="box box-info">
             <div class="box-header">
               <i class="fa fa-envelope"></i>
 
@@ -284,7 +325,7 @@
                 <i class="fa fa-arrow-circle-right"></i></button>
               </div>
             </div>
-          </div>
+          </div>  --}}
         </div>
 
       </section>
@@ -309,6 +350,11 @@
       'autoWidth'   : false
     })
   })
+
+  //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
   </script>
 @endsection
 

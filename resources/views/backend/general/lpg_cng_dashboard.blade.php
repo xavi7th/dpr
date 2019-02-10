@@ -97,9 +97,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="/apply_for_atc_get">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="/view_atc_records?val=lpg_atc">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -118,9 +118,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="/apply_for_lto_get">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="/view_lto_records?val=lpg_lto">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -139,9 +139,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -160,9 +160,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -187,9 +187,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="/view_atc_records?val=cng_atc">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -208,9 +208,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="/view_lto_records?val=cng_lto">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -229,9 +229,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -250,9 +250,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -276,9 +276,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -297,9 +297,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -323,9 +323,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -344,9 +344,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>
+                  {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
+                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
@@ -459,7 +459,7 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_pressure_test_records">Track<i class="pull-right fa fa-search"></i></a></li>
                   <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>
                 </ul>
               </div>

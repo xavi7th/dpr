@@ -28352,7 +28352,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(15);
-module.exports = __webpack_require__(102);
+module.exports = __webpack_require__(107);
 
 
 /***/ }),
@@ -28392,7 +28392,7 @@ Vue.component('apply-for-takeover-component', __webpack_require__(86));
 Vue.component('apply-for-pressure-test-component', __webpack_require__(89));
 Vue.component('m-view-application-docs', __webpack_require__(92));
 Vue.component('m-view-application-docs-lto-renewal', __webpack_require__(97));
-Vue.component("project-monitoring-feed-req-doc", __webpack_require__(109));
+Vue.component("project-monitoring-feed-req-doc", __webpack_require__(102));
 // Vue.component('zopscon-inbox', require('./components/zopsconInbox.vue'));
 // Vue.component('zopscon-outbox', require('./components/zopsconOutbox.vue'));
 
@@ -64333,6 +64333,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -64414,15 +64422,6 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _vm._m(1),
-    _vm._v(" "),
-    _c("input", {
-      attrs: {
-        type: "text",
-        name: "application_type",
-        value: "LPG Retailer Outlets",
-        hidden: ""
-      }
-    }),
     _vm._v(" "),
     _c("input", {
       attrs: {
@@ -64530,29 +64529,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
-      _c("label", [_vm._v("Company ID")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "input-group" }, [
-        _c("span", { staticClass: "input-group-addon" }, [
-          _c("i", { staticClass: "ion-ios-list-outline" })
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "company_id",
-            placeholder: "Enter Company ID"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
       _c("label", [_vm._v("Name of Gas Plant")]),
       _vm._v(" "),
       _c("div", { staticClass: "input-group" }, [
@@ -64569,6 +64545,36 @@ var staticRenderFns = [
           }
         })
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", [_vm._v("Application Type")]),
+      _vm._v(" "),
+      _c(
+        "select",
+        {
+          staticClass: "form-control select2",
+          staticStyle: { width: "100%" },
+          attrs: { name: "application_type" }
+        },
+        [
+          _c("option", { attrs: { selected: "selected" } }, [
+            _vm._v("Select Type")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "LPG Retailer Outlets" } }, [
+            _vm._v("LPG Retailer Outlets")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "CNG Retailer Outlets" } }, [
+            _vm._v("CNG Retailer Outlets")
+          ])
+        ]
+      )
     ])
   },
   function() {
@@ -64786,6 +64792,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -64867,20 +64888,13 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
-    _c("input", {
-      attrs: {
-        type: "text",
-        name: "application_type",
-        value: "LPG Retailer Outlets",
-        hidden: ""
-      }
-    }),
+    _vm._m(1),
     _vm._v(" "),
     _c("input", {
       attrs: { type: "text", name: "sub_category", value: "ATC", hidden: "" }
     }),
     _vm._v(" "),
-    _vm._m(1),
+    _vm._m(2),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-xs-6" }, [
@@ -64966,9 +64980,9 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(2),
+    _vm._m(3),
     _vm._v(" "),
-    _vm._m(3)
+    _vm._m(4)
   ])
 }
 var staticRenderFns = [
@@ -64993,6 +65007,36 @@ var staticRenderFns = [
           }
         })
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", [_vm._v("Application Type")]),
+      _vm._v(" "),
+      _c(
+        "select",
+        {
+          staticClass: "form-control select2",
+          staticStyle: { width: "100%" },
+          attrs: { name: "application_type" }
+        },
+        [
+          _c("option", { attrs: { selected: "selected" } }, [
+            _vm._v("Select Type")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "LPG Retailer Outlets" } }, [
+            _vm._v("LPG Retailer Outlets")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "CNG Retailer Outlets" } }, [
+            _vm._v("CNG Retailer Outlets")
+          ])
+        ]
+      )
     ])
   },
   function() {
@@ -65210,6 +65254,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -65290,22 +65349,15 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
-    _c("input", {
-      attrs: {
-        type: "text",
-        name: "application_type",
-        value: "LPG Retailer Outlets",
-        hidden: ""
-      }
-    }),
+    _vm._m(1),
     _vm._v(" "),
     _c("input", {
       attrs: { type: "text", name: "sub_category", value: "LTO", hidden: "" }
     }),
     _vm._v(" "),
-    _vm._m(1),
-    _vm._v(" "),
     _vm._m(2),
+    _vm._v(" "),
+    _vm._m(3),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-xs-6" }, [
@@ -65391,9 +65443,9 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(3),
+    _vm._m(4),
     _vm._v(" "),
-    _vm._m(4)
+    _vm._m(5)
   ])
 }
 var staticRenderFns = [
@@ -65418,6 +65470,36 @@ var staticRenderFns = [
           }
         })
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", [_vm._v("Application Type")]),
+      _vm._v(" "),
+      _c(
+        "select",
+        {
+          staticClass: "form-control select2",
+          staticStyle: { width: "100%" },
+          attrs: { name: "application_type" }
+        },
+        [
+          _c("option", { attrs: { selected: "selected" } }, [
+            _vm._v("Select Type")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "LPG Retailer Outlets" } }, [
+            _vm._v("LPG Retailer Outlets")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "CNG Retailer Outlets" } }, [
+            _vm._v("CNG Retailer Outlets")
+          ])
+        ]
+      )
     ])
   },
   function() {
@@ -66676,7 +66758,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -66782,7 +66863,7 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
-        _c("label", [_vm._v("Name of Company")]),
+        _c("label", [_vm._v("Name of Equipment")]),
         _vm._v(" "),
         _c("div", { staticClass: "input-group" }, [
           _c("span", { staticClass: "input-group-addon" }, [
@@ -66793,8 +66874,8 @@ var staticRenderFns = [
             staticClass: "form-control",
             attrs: {
               type: "text",
-              name: "company_name",
-              placeholder: "Enter Name of Company"
+              name: "equipment_name",
+              placeholder: "Enter Name of Equipment"
             }
           })
         ])
@@ -66833,17 +66914,11 @@ var staticRenderFns = [
               _vm._v("Select Type")
             ]),
             _vm._v(" "),
-            _c("option", { attrs: { value: "Refilling Plant" } }, [
-              _vm._v("Refilling Plant")
+            _c("option", { attrs: { value: "Hydro Testing" } }, [
+              _vm._v("Hydro Testing")
             ]),
             _vm._v(" "),
-            _c("option", { attrs: { value: "Industrial Plant" } }, [
-              _vm._v("Industrial Plant")
-            ]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "Auto Gas Plant" } }, [
-              _vm._v("Auto Gas Plant")
-            ])
+            _c("option", { attrs: { value: "UTM" } }, [_vm._v("UTM")])
           ]
         )
       ]),
@@ -67056,7 +67131,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n#label-shift{\n  margin-bottom: 10px;\n}\n#label-shift span{\n  font-size: 16px;\n  text-transform: uppercase;\n}\n#label-shift small{\n  margin-left: 30px;\n  font-size: 12px;\n}\n", ""]);
+exports.push([module.i, "\n#label-shift{\n  margin-bottom: 10px;\n}\n#label-shift span{\n  font-size: 16px;\n  text-transform: uppercase;\n}\n#label-shift small{\n  margin-left: 30px;\n  font-size: 12px;\n}\n#checkform{\n  float: right;\n  margin-right: 20px;\n}\n", ""]);
 
 // exports
 
@@ -67067,6 +67142,24 @@ exports.push([module.i, "\n#label-shift{\n  margin-bottom: 10px;\n}\n#label-shif
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -67132,25 +67225,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     if (this.nameval == 'no' || this.nameval == 'null') {
       this.reasonBtn = true;
     }
+
+    if (this.documentcheck == "true") {
+      this.documentcheck = true;
+    } else if (this.documentcheck == "false") {
+      this.documentcheck = false;
+    }
   },
 
-  props: ['applicationid', 'marketerid', 'imgurl', 'title', 'nameval', 'modality', 'reason', 'reasonspecified'],
+  props: ['applicationid', 'marketerid', 'imgurl', 'title', 'nameval', 'modality', 'reason', 'reasonspecified', 'documentcheck', 'subcategory', 'documentcheckname', 'role'],
   data: function data() {
     return {
       docsData: [],
       namevalModified: this.nameval,
-      picURL: '',
+      picURL: this.imgurl,
+      docReason: this.reasonspecified,
       reasonBtn: false,
-      specifiedReason: ''
+      specifiedReason: '',
+      documentcheck: this.documentCheck,
+      role: this.role
     };
   },
 
   methods: {
     getReason: function getReason() {
-      // axios.get('/getReson',{params: {data:''}}).then(response => {
+      // axios.get('/getReson',{params: {data:''}}).then(response => { {img:this.picURL, reason:this.docReason}
       //   this.states = response.data.nigeria;
       // });
       this.specifiedReason = this.title;
+    },
+    viewDocument: function viewDocument() {
+      axios.post('/viewDocument', { img: this.picURL, reason: this.docReason }).then(function (response) {
+        window.location.href = '/displayDocument';
+        console.log("successful");
+
+        // this.states = response.data.nigeria;
+      });
+    },
+    markValid: function markValid() {
+      console.log(this.documentcheck);
+      axios.post('/document_valid', { applicationid: this.applicationid, subcategory: this.subcategory, valid: this.documentcheck + "", documentcheck: this.documentcheckname }).then(function (response) {
+        console.log("successful");
+      });
     }
   }
 });
@@ -67164,185 +67280,72 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("li", { attrs: { id: "label-shift" } }, [
+    _c("i", {
+      class: [
+        { "fa fa-check text-green": _vm.nameval == "yes" },
+        { "fa fa-times text-red": _vm.nameval == "no" },
+        { "ion-checkmark-circled text-yellow": _vm.nameval == "null" }
+      ]
+    }),
+    _vm._v(" "),
     _c("span", { staticClass: "text" }, [_vm._v(_vm._s(_vm.title))]),
     _vm._v(" "),
     _c(
-      "small",
+      "a",
       {
-        class: [
-          "label",
-          { "label-success": _vm.nameval == "yes" },
-          { "label-danger": _vm.nameval == "no" },
-          { "label-warning": _vm.nameval == "null" }
-        ]
+        staticClass: "btn btn-primary btn-xs pull-right",
+        attrs: { href: "/displayDocument?pic=" + _vm.picURL }
       },
-      [_vm._v(_vm._s(_vm.namevalModified))]
+      [_vm._v("View")]
     ),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: !_vm.reasonBtn,
-            expression: "!reasonBtn"
-          }
-        ],
-        staticClass: "tools",
-        attrs: { "data-toggle": "modal", "data-target": "#" + _vm.modality }
-      },
-      [_c("i", { staticClass: "fa fa-eye" })]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.reasonBtn,
-            expression: "reasonBtn"
-          }
-        ],
-        staticClass: "tools",
-        attrs: { "data-toggle": "modal", "data-target": "#" + _vm.reason },
-        on: {
-          click: function($event) {
-            _vm.getReason()
-          }
-        }
-      },
-      [_c("i", { staticClass: "fa fa-edit text-edit" })]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: !_vm.reasonBtn,
-            expression: "!reasonBtn"
-          }
-        ],
-        staticClass: "modal fade",
-        staticStyle: { display: "none" },
-        attrs: { id: "" + _vm.modality }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", staticStyle: { width: "1400px" } },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "modal-content",
-                staticStyle: { background: "transparent" }
+    _vm.role != "Marketer"
+      ? _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.documentcheck,
+              expression: "documentcheck"
+            }
+          ],
+          attrs: { id: "checkform", type: "checkbox", name: "documentCheck" },
+          domProps: {
+            checked: Array.isArray(_vm.documentcheck)
+              ? _vm._i(_vm.documentcheck, null) > -1
+              : _vm.documentcheck
+          },
+          on: {
+            change: [
+              function($event) {
+                var $$a = _vm.documentcheck,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = null,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.documentcheck = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.documentcheck = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.documentcheck = $$c
+                }
               },
-              [_c("img", { attrs: { src: _vm.picURL, alt: "" } })]
-            )
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.reasonBtn,
-            expression: "reasonBtn"
+              function($event) {
+                _vm.markValid()
+              }
+            ]
           }
-        ],
-        staticClass: "modal modal-danger fade",
-        attrs: { id: "" + _vm.reason }
-      },
-      [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("div", { staticClass: "modal-header" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c("h4", { staticClass: "modal-title" }, [
-                _vm._v(_vm._s(_vm.specifiedReason))
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "modal-body", staticStyle: { padding: "5px" } },
-              [
-                _c(
-                  "textarea",
-                  {
-                    staticStyle: {
-                      width: "100%",
-                      resize: "none",
-                      height: "200px",
-                      color: "#000",
-                      padding: "5px"
-                    },
-                    attrs: {
-                      name: "reason",
-                      rows: "8",
-                      cols: "80",
-                      placeholder: "Give reason..."
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.reasonspecified))]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _vm._m(1)
-          ])
-        ])
-      ]
-    )
+        })
+      : _vm._e()
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Submit")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -67600,30 +67603,18 @@ if (false) {
 
 /***/ }),
 /* 102 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(110)
+  __webpack_require__(103)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(112)
+var __vue_script__ = __webpack_require__(105)
 /* template */
-var __vue_template__ = __webpack_require__(113)
+var __vue_template__ = __webpack_require__(106)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -67662,13 +67653,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 110 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(111);
+var content = __webpack_require__(104);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -67688,7 +67679,7 @@ if(false) {
 }
 
 /***/ }),
-/* 111 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -67702,7 +67693,7 @@ exports.push([module.i, "\n#doc_icon{\n  color: #ccc;\n}\n", ""]);
 
 
 /***/ }),
-/* 112 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -67778,7 +67769,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 113 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -67891,6 +67882,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-9192d0a8", module.exports)
   }
 }
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

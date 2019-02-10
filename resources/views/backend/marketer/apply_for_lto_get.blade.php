@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Marketer | Apply For LTO
+  DPR {{Auth::user()->role}} | Apply For LTO
 @endsection
 
 @section('pagestyles')
@@ -14,7 +14,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_marketer')
+    @include('partials.router_aside')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -22,7 +22,7 @@
       <section class="content-header">
         <h1>
           License to Operate
-          <small>Marketer Control panel</small>
+          <small>{{Auth::user()->role}} Control panel</small>
         </h1>
       </section>
 
@@ -39,6 +39,15 @@
               <form role="form" method="POST" action="/apply_for_license_to_operate">
                 {{ csrf_field() }}
                 <div class="box-body">
+                  <div class="form-group">
+                    <label>Company Name</label>
+                    <select class="form-control select2" name="company_id" style="width: 100%;">
+                      <option selected="selected">Select Company</option>
+                      @foreach ($companies as $item)
+                        <option value="{{$item->company_id}}">{{$item->company_name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
                   <apply-for-lto-component></apply-for-lto-component>
                   <!-- /.box-body -->
                   <div class="box-footer">

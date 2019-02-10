@@ -7,29 +7,28 @@
         <input type="text" name="atc_application_id" class="form-control" placeholder="Enter ATC Application ID">
       </div>
     </div>
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label>Name of Company</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
         <input type="text" name="company_name" class="form-control" placeholder="Enter Name of Company">
       </div>
-    </div>
-    <!-- <div class="form-group">
+    </div> -->
+    <div class="form-group">
       <label>Name of Equipment</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
-        <input type="text" name="name_of_equipment" class="form-control" placeholder="Enter Name of Equipment">
+        <input type="text" name="equipment_name" class="form-control" placeholder="Enter Name of Equipment">
       </div>
-    </div> -->
+    </div>
     <input type="text" name="application_type" value="LPG Retailer Outlets" hidden>
     <input type="text" name="sub_category" value="Pressure Testing" hidden>
     <div class="form-group">
       <label>Type of Test</label>
       <select class="form-control select2" name="test_type" style="width: 100%;">
         <option selected="selected">Select Type</option>
-        <option value="Refilling Plant">Refilling Plant</option>
-        <option value="Industrial Plant">Industrial Plant</option>
-        <option value="Auto Gas Plant">Auto Gas Plant</option>
+        <option value="Hydro Testing">Hydro Testing</option>
+        <option value="UTM">UTM</option>
       </select>
     </div>
     <div class="form-group" id="capacity_of_tank">

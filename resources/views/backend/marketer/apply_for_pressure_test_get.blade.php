@@ -39,6 +39,15 @@
               <form role="form" method="POST" action="/apply_for_pressure_test" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="box-body">
+                  <div class="form-group">
+                    <label>Company Name</label>
+                    <select class="form-control select2" name="company_name" style="width: 100%;">
+                      <option selected="selected">Select Company</option>
+                      @foreach ($companies as $item)
+                        <option value="{{$item->company_id}}">{{$item->company_name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
                   <apply-for-pressure-test-component></apply-for-pressure-test-component>
                   <!-- /.box-body -->
                   <div class="row">
@@ -56,7 +65,7 @@
                       </div>
                       <!-- /.form group -->
                     </div>
-                    <div class="col-xs-6">
+                    {{--  <div class="col-xs-6">
                       <div class="form-group">
                         <label>Due Date (MOSR/RBI)</label>
 
@@ -64,13 +73,13 @@
                           <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                           </div>
-                          <input type="text" name="due_date" class="form-control pull-right">
+                          <input type="text" name="due_date" class="form-control pull-right" id="datepicker2">
                         </div>
                         <!-- /.input group -->
                       </div>
                       <!-- /.form group -->
 
-                    </div>
+                    </div>  --}}
                   </div>
                   <div class="form-group">
                     <label for="exampleInputFile">Upload Test Report / Certificate</label>

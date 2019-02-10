@@ -19,6 +19,8 @@ class CreatePressureTestRecordsTable extends Migration
             $table->string('atc_application_id');
             $table->string('marketer_id');
             $table->string('company_name');
+            $table->string('equipment_name');
+            $table->string('facility_name');
             $table->string('test_type');
             $table->string('tag_number')->nullable();
             $table->string('manufacture_year');

@@ -44,11 +44,13 @@ class administratorController extends Controller
     // validate this form
     $this->validate(request(), [
       'firstname' => 'required',
-      'lastname' => 'required',
+      'middlename' => 'required',
+      'surname' => 'required',
       'email' => 'required',
       'mobile_number' => 'required',
       'password' => 'required|confirmed',
-      'role' => 'required'
+      'role' => 'required',
+      'office' => 'required'
     ]);
 
     // getting the current number of created staffs
@@ -71,6 +73,10 @@ class administratorController extends Controller
     //appending the new staff index to DPRST to create the staff's ID
     $staffID = $userTag.$newStaffIndex;
 
+    $username = request('surname').".".substr(request('firstname'),0,1).".".substr(request('middlename'),0, 1).".dpr.gov.ng"; // this is not yet complete              nunez.j.s.dpr.gov.ng
+
+    // dd($username);
+
     if(request('role') == 'Select Role'){
       // return custom error message
 
@@ -78,12 +84,15 @@ class administratorController extends Controller
       // create and save the staff
       Staff::create([
         'staff_id' => $staffID,
+        'username' => $username,
         'first_name' => request('firstname'),
-        'last_name' => request('lastname'),
+        'middle_name' => request('middlename'),
+        'surname' => request('surname'),
         'mobile_number' => request('mobile_number'),
         'email_address' => request('email'),
         'password' => bcrypt(request('password')),
-        'role' => request('role')
+        'role' => request('role'),
+        'office' => request('office')
       ]);
 
       return redirect('/admin');

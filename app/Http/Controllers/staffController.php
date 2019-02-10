@@ -21,6 +21,8 @@ use App\PressureTestRecords;
 use App\Company;
 use App\CompletedJobs;
 use App\teamleadInbox;
+use App\Inbox;
+use App\Outbox;
 use App\staffInbox;
 use App\staffOutbox;
 use Carbon\Carbon;
@@ -31,84 +33,107 @@ use DB;
 class staffController extends Controller
 {
 
+  private $completedCount = '';
+  private $inboxUnreadCount = '';
+  private $outboxCount = '';
+
   public function __construct(){
     $this->middleware('auth');
   }
 
-  public function index(){
-    $inbox = staffInbox::with('app_doc_review')->where('to_outbox', 'false')->latest()->get();
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = staffInbox::where('read', 'false')->get();
-    $outboxUnreadCount = staffOutbox::all();
-    // Retrieve all assigned application documents
-    $appDocReviews = DB::table('job_assignments')
-    ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
-    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
-    ->orderBy('job_assignments.created_at')
-    ->get();
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+  private function getMailDetails()
+  {
 
-    return view('backend.staff.staff_dashboard', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','inbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
+    $this->completedCount = CompletedJobs::all()->count();
+
+    $this->inboxUnreadCount = Inbox::where([
+      ['read', 'false'],
+      ['receiver_role', Auth::user()->role],
+      ['office', Auth::user()->office]
+    ])->get()->count();
+
+    $this->outboxCount = Inbox::where([
+      ['to_outbox', 'true'],
+      ['receiver_role', Auth::user()->role],
+      ['office', Auth::user()->office]
+    ])->get()->count();
+
   }
 
-  public function staffPending(){
-    // Retrieve all assigned application documents
-    $appDocReviews = DB::table('job_assignments')
-    ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
-    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
-    ->orderBy('job_assignments.created_at')
-    ->get();
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->latest()->get();
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
+  public function index(){
 
-    return view('backend.staff.staff_pending', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox'));
+    $inbox = Inbox::with('app_doc_review')
+      ->where([
+        ['to_outbox', 'false'],
+        ['receiver_role', Auth::user()->role],
+        ['office', Auth::user()->office]
+      ])->latest()->get();
+
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.staff.staff_dashboard', compact('inbox', 'inboxUnreadCount', 'outboxCount', 'completedCount'));
   }
 
   public function staffOutbox(){
-    $outbox = staffOutbox::with('app_doc_review')->latest()->get();
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = staffInbox::where('read', 'false')->get();
-    $outboxUnreadCount = staffOutbox::all();
-    // Retrieve all assigned application documents
-    $appDocReviews = DB::table('job_assignments')
-    ->join('app_doc_reviews', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
-    ->where([['job_assignments.staff_id', Auth::user()->staff_id],['app_doc_reviews.to_staff','true']])
-    ->orderBy('job_assignments.created_at')
-    ->get();
-    $appDocReviewsPending = AppDocReview::with('job_assignment')->where('to_staff','received')->get();
-    $appDocReviewsCompleted = AppDocReview::with('job_assignment')->where('to_staff','completed')->get();    // get all pending application requests
-    $appDocReviewsOutbox = JobsTimeline::with(['app_doc_rev','job_assignment'])->where('from', Auth::user()->staff_id)->latest()->get();
 
-    // dd($appDocReviewsOutbox);
+    $outbox = Outbox::with('app_doc_review')
+      ->where([
+        ['role', Auth::user()->role],
+        ['office', Auth::user()->office]
+      ])->latest()->get();
 
-    return view('backend.staff.staff_outbox', compact('appDocReviews','appDocReviewsPending','appDocReviewsCompleted','appDocReviewsOutbox','outbox','inboxUnreadCount','outboxUnreadCount', 'completedCount'));
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.staff.staff_outbox', compact('outbox', 'inboxUnreadCount', 'outboxCount', 'completedCount'));
   }
 
   public function staffCompleted(){
-    // Retrieve all assigned application documents
-    $completedCount = CompletedJobs::all();
-    $inboxUnreadCount = staffInbox::where('read', 'false')->get();
-    $outboxUnreadCount = staffOutbox::all();
-
     $completed = CompletedJobs::with('app_doc_review')->latest()->get();
-    
-    return view('backend.staff.staff_completed', compact('outboxUnreadCount', 'inboxUnreadCount', 'completedCount','completed'));
+
+    $this->getMailDetails();
+
+    $completedCount = $this->completedCount;
+    $inboxUnreadCount = $this->inboxUnreadCount;
+    $outboxCount = $this->outboxCount;
+
+    return view('backend.staff.staff_completed', compact('outboxCount', 'inboxUnreadCount', 'completedCount', 'completed'));
   }
 
   public function showCreateCompany(SiteSuitabilityInspectionDocuments $applicationID){
     return view('backend.staff.create_company', compact('applicationID'));
   }
 
-  public function staffDocumentReview($id){
-    staffInbox::where('application_id', $id)->update([
-      'read' => 'true'
-    ]);
+  public function staffDocumentReview(Request $request){
 
-    $applicationReview = AppDocReview::where('id', $id)->first();    // retrieve application review
+    $id = request('inboxIndex');
 
+    $inboxItem = Inbox::where('id', $id)->first();
+
+    if ($inboxItem) {
+      $inboxID = $inboxItem->id; // this is the id of this application from inbox
+      Inbox::where('id', $id)->update([
+        'read' => 'true'
+      ]);
+    }
+
+    $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
+    $applicationReview = AppDocReview::where('id', $applicationID)->first();    // retrieve application review
+    
+    $thisJob = JobAssignment::where('application_id', $applicationReview->application_id)->first();
+    
+    if($thisJob->job_assignment_status == 'Assigned'){
+      JobAssignment::where('application_id', $applicationReview->application_id)->update([
+        'job_application_status' => 'Started'
+      ]);
+    }
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
     $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
     $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
@@ -119,6 +144,8 @@ class staffController extends Controller
       // check the pplication that is being assigned to this staff
       if($applicationReview->sub_category == "Site Suitability Inspection"){
         $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+
+        // dd($applicationID);
       }elseif($applicationReview->sub_category == "ATC") {
         $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "LTO") {
@@ -137,7 +164,8 @@ class staffController extends Controller
         $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
         // dd($applicationID);
       }
-      return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments'));
+      $role = Auth::user()->role;
+      return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments','inboxItem','inboxID','role'));
     }else{
       // redirect the staff to register this company
       return view('backend.staff.create_company', compact('applicationReview','applicationStatus'));
@@ -228,6 +256,7 @@ class staffController extends Controller
   }
 
   public function uploadReport(Request $request){
+    // dd($request);
     $report_document = "";
     // check if request has the document
     if($request->hasFile('reportDocument')){
@@ -235,6 +264,8 @@ class staffController extends Controller
       $request->reportDocument->storeAs('comp_reports/'.request('company_id').'/'.request('staff_id').'/'.request('application_id'), $request->reportDocument->getClientOriginalName());
 
       $report_document = $request->reportDocument->getClientOriginalName();
+
+      $inspectionDate = date('Y-m-d', strtotime(request('date_of_inspection')));
 
       // if this record exist, update the record else create a new record.
       ReportDocument::updateOrCreate([
@@ -244,7 +275,10 @@ class staffController extends Controller
         'application_id' => request('application_id'),
         'staff_id' => request('staff_id'),
         'company_id' => request('company_id'),
-        'report_url' => $report_document
+        'report_url' => $report_document,
+        'report_type' => request('report_type'),
+        'office' => Auth::user()->office,
+        'date_of_inspection' => $inspectionDate
       ]);
 
       JobAssignment::where('application_id', request('application_id'))

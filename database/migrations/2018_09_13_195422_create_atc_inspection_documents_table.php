@@ -34,6 +34,7 @@ class CreateAtcInspectionDocumentsTable extends Migration
             $table->string('letter_confirmation_ministry_of_lands_and_survey');
             $table->string('codes_and_standard_adopted_in_the_tank_design');
             $table->string('application_letter_addressed_to_the_controller');
+
             $table->string('applications_letter_for_suitability_inspection_location_url')->nullable();
             $table->string('article_and_memorandum_of_association_location_url')->nullable();
             $table->string('current_tax_clearance_location_url')->nullable();
@@ -50,6 +51,7 @@ class CreateAtcInspectionDocumentsTable extends Migration
             $table->string('letter_confirmation_ministry_of_lands_and_survey_location_url')->nullable();
             $table->string('codes_and_standard_adopted_in_the_tank_design_location_url')->nullable();
             $table->string('application_letter_addressed_to_the_controller_location_url')->nullable();
+
             $table->string('applications_letter_for_suitability_inspection_reason')->nullable();
             $table->string('article_and_memorandum_of_association_reason')->nullable();
             $table->string('current_tax_clearance_reason')->nullable();
@@ -66,6 +68,23 @@ class CreateAtcInspectionDocumentsTable extends Migration
             $table->string('letter_confirmation_ministry_of_lands_and_survey_reason')->nullable();
             $table->string('codes_and_standard_adopted_in_the_tank_design_reason')->nullable();
             $table->string('application_letter_addressed_to_the_controller_reason')->nullable();
+            
+            $table->string('applications_letter_for_suitability_inspection_location_check')->nullable();
+            $table->string('article_and_memorandum_of_association_location_check')->nullable();
+            $table->string('current_tax_clearance_location_check')->nullable();
+            $table->string('certificate_of_incorporation_location_check')->nullable();
+            $table->string('fire_certificate_location_check')->nullable();
+            $table->string('police_report_location_check')->nullable();
+            $table->string('completed_application_form_location_check')->nullable();
+            $table->string('approved_building_plan_location_check')->nullable();
+            $table->string('survey_plan_location_check')->nullable();
+            $table->string('deed_of_conveyance_location_check')->nullable();
+            $table->string('piping_and_instrumentation_diagram_location_check')->nullable();
+            $table->string('environmental_impact_accessment_location_check')->nullable();
+            $table->string('bankdraft_of_statutory_fees_location_check')->nullable();
+            $table->string('letter_confirmation_ministry_of_lands_and_survey_location_check')->nullable();
+            $table->string('codes_and_standard_adopted_in_the_tank_design_location_check')->nullable();
+            $table->string('application_letter_addressed_to_the_controller_location_check')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

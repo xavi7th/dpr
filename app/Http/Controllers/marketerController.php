@@ -18,6 +18,7 @@ use App\PressureTestRecords;
 use App\Company;
 use App\TakeoverInspectionDocuments;
 use App\zopsconInbox;
+use App\Inbox;
 use Storage;
 use Carbon\Carbon;
 
@@ -65,33 +66,40 @@ class marketerController extends Controller
 
 
   public function applyForSSIGet(){
-    return view('backend.marketer.apply_for_site_suitability_inspection');
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+
+    return view('backend.marketer.apply_for_site_suitability_inspection', compact('companies'));
   }
 
 
   public function applyForATCGet(){
-    return view('backend.marketer.apply_for_atc_get');
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_atc_get', compact('companies'));
   }
 
 
   public function applyForLTOGet(){
-    return view('backend.marketer.apply_for_lto_get');
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_lto_get', compact('companies'));
   }
 
 
   public function applyForLTORenewalGet(){
-    return view('backend.marketer.apply_for_lto_renewal_get');
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_lto_renewal_get', compact('companies'));
   }
 
 
   public function applyForTakeOverGet(){
-    return view('backend.marketer.apply_for_takeover_get');
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_takeover_get', compact('companies'));
   }
 
 
 
   public function applyForPressureTestGet(){
-    return view('backend.marketer.apply_for_pressure_test_get');
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_pressure_test_get', compact('companies'));
   }
 
 
@@ -152,7 +160,9 @@ class marketerController extends Controller
 
     // dd($applicationReview);
 
-    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail'));
+    $role = Auth::user()->role;
+
+    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail', 'role'));
   }
 
 
@@ -543,7 +553,6 @@ class marketerController extends Controller
 
   public function handleATCPhase1(Request $request){
     // dd($request);
-
     $this->validate(request(), [
       'gas_plant_name' => 'required'
     ]);
@@ -567,6 +576,7 @@ class marketerController extends Controller
     AppDocReview::create([
       'application_id' => $applicationID,
       'marketer_id' => Auth::user()->staff_id,
+      'company_id' => request('company_id'), // do not to forget to do a validation for this field....this marketer should be the registrar of the company
       'name_of_gas_plant' => request('gas_plant_name'),
       'application_type' => request('application_type'),
       'sub_category' => request('sub_category'),
@@ -747,7 +757,13 @@ class marketerController extends Controller
     // clear the application ID from the session
     $request->session()->forget('application_id');
 
-    return redirect('/marketer');
+     // redirect to the current AUTH USER
+
+    if (Auth::user()->role == 'Marketer') {
+      return redirect('/marketer');
+    }elseif(Auth::user()->role == 'Staff'){
+      return redirect('/staff');
+    }
 
   }
 
@@ -910,7 +926,11 @@ class marketerController extends Controller
     // clear the application ID from the session
     $request->session()->forget('application_id');
 
-    return redirect('/marketer');
+    if (Auth::user()->role == 'Marketer') {
+      return redirect('/marketer');
+    } elseif (Auth::user()->role == 'Staff') {
+      return redirect('/staff');
+    }
 
   }
 
@@ -1219,7 +1239,8 @@ class marketerController extends Controller
 
 
         // dd('here3');
-        $request->TCR_doc->storeAs('press$appDocReviewsLTO$appDocReviewsLTOure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
+        // $request->TCR_doc->storeAs('press$appDocReviewsLTO$appDocReviewsLTOure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
+        $request->TCR_doc->storeAs('pressure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
         $tcrDoc = $request->TCR_doc->getClientOriginalName();
 
         // insert records into the pressure_test_records database
@@ -1229,6 +1250,8 @@ class marketerController extends Controller
           'atc_application_id' => request('atc_application_id'),
           'marketer_id' => $marketerID,
           'company_name' => request('company_name'),
+          'equipment_name' => request('equipment_name'),
+          'facility_name' => $retrievedATC->name_of_gas_plant,
           'test_type' => request('test_type'),
           'tag_number' => request('tag_number'),
           'manufacture_year' => $manufactureYear,
@@ -1342,21 +1365,30 @@ class marketerController extends Controller
   public function submitApplicationRequest(Request $request){
     // dd($request);
 
+    // we would provide option for the marketer to be able to select the office/location this application is being made to
+
     AppDocReview::where('id', request('application_id'))
     ->update([
       'application_status' => 'Application Pending',
       'to_zopscon' => 'true'
     ]);
 
-    zopsconInbox::create([
+    Inbox::create([
       'application_id' => request('application_id'),
+      'to' => 'NA',
       'from' => Auth::user()->staff_id,
-      'application_type' => request('application_type'),
-      'sub_category' => request('sub_category'),
-      'read' => 'false'
+      'receiver_role' => 'ZOPSCON',
+      'sender_role' => Auth::user()->role,
+      'office' => 'Warri',
+      'read' => 'false',
+      'to_outbox' => 'false'
     ]);
 
-    return redirect('/marketer');
+    if (Auth::user()->role == 'Marketer') {
+      return redirect('/marketer');
+    } elseif (Auth::user()->role == 'Staff') {
+      return redirect('/staff');
+    }
 
   }
 
@@ -1523,6 +1555,8 @@ class marketerController extends Controller
 
   public function applyForLTO(Request $request){
 
+    // dd($request);
+
     // retrieve site suitability fields for this company from app_doc_reviews using the application_id from request
     $companyATODetails = AppDocReview::where('application_id', request('application_id'))->first();
 
@@ -1550,6 +1584,7 @@ class marketerController extends Controller
       'name_of_gas_plant' => $companyATODetails->name_of_gas_plant,
       'application_type' => $companyATODetails->application_type,
       'sub_category' => 'LTO',
+      'capacity_of_tank' => request('capacity_of_tank'),
       'plant_type' => $companyATODetails->plant_type,
       'state' => $companyATODetails->state,
       'lga' => $companyATODetails->lga,

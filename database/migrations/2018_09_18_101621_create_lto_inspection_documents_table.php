@@ -50,6 +50,17 @@ class CreateLtoInspectionDocumentsTable extends Migration
             $table->string('current_three_years_income_tax_clearance_reason')->nullable();
             $table->string('appropriate_plant_photography_reason')->nullable();
             $table->string('standard_operating_procedure_reason')->nullable();
+
+            $table->string('completed_application_form_location_check')->nullable();
+            $table->string('bankdraft_of_statutory_fees_location_check')->nullable();
+            $table->string('photocopy_of_approval_to_construct_lpg_location_check')->nullable();
+            $table->string('current_weight_measures_cert_of_verification_location_check')->nullable();
+            $table->string('application_letter_addressed_to_the_controller_location_check')->nullable();
+            $table->string('fire_report_certificate_location_check')->nullable();
+            $table->string('current_pressure_test_report_certificate_location_check')->nullable();
+            $table->string('current_three_years_income_tax_clearance_location_check')->nullable();
+            $table->string('appropriate_plant_photography_location_check')->nullable();
+            $table->string('standard_operating_procedure_location_check')->nullable();
             $table->timestamps();
         });
     }

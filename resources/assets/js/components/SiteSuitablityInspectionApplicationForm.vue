@@ -1,12 +1,12 @@
 <template lang="html">
   <div>
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label>Company ID</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
         <input type="text" name="company_id" class="form-control" placeholder="Enter Company ID">
       </div>
-    </div>
+    </div> -->
     <div class="form-group">
       <label>Name of Gas Plant</label>
       <div class="input-group">
@@ -14,7 +14,15 @@
         <input type="text" name="gas_plant_name" class="form-control" placeholder="Enter Name of Gas Plant">
       </div>
     </div>
-    <input type="text" name="application_type" value="LPG Retailer Outlets" hidden>
+    <!-- <input type="text" name="application_type" value="LPG Retailer Outlets" hidden> -->
+    <div class="form-group">
+      <label>Application Type</label>
+      <select class="form-control select2" name="application_type" style="width: 100%;">
+        <option selected="selected">Select Type</option>
+        <option value="LPG Retailer Outlets">LPG Retailer Outlets</option>
+        <option value="CNG Retailer Outlets">CNG Retailer Outlets</option>
+      </select>
+    </div>
     <input type="text" name="sub_category" value="Site Suitability Inspection" hidden>
     <!-- <div class="form-group">
       <label>Sub-Category</label>

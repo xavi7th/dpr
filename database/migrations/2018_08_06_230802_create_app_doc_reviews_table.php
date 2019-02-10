@@ -16,6 +16,7 @@ class CreateAppDocReviewsTable extends Migration
         Schema::create('app_doc_reviews', function (Blueprint $table) {
             $table->increments('id');
             $table->string('application_id')->unique();
+            $table->string('office');
             $table->string('marketer_id');
             $table->string('company_id')->nullable();
             $table->string('name_of_gas_plant');

@@ -51,10 +51,10 @@
                     <tbody>
                       @foreach ($outbox as $item)
                         <tr>
-                          <td><a href="/tlDocument_review/{{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
-                          <td>{{ $item->application_type }}</td>
-                          <td>{{ $item->sub_category }}</td>
-                          <td>{{ $item->role }} ({{ $item->to }})</td>
+                          <td><a href="/tlDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          <td>{{ $item->app_doc_review['application_type'] }}</td>
+                          <td>{{ $item->app_doc_review['sub_category'] }}</td>
+                          <td>{{ $item->to }}</td>
                           <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                         </tr>
                       @endforeach
