@@ -72,6 +72,7 @@
                           @if ($item->application_status == 'Application Pending'
                           || $item->application_status == 'Site Not Suitable'
                           || $item->application_status == 'ATC Not Issued'
+                          || $item->application_status == 'ATI Not Issued'
                           || $item->application_status == 'LTO Not Issued'
                           || $item->application_status == 'Renewal Declined'
                           || $item->application_status == 'Take Over Not Approved'
@@ -81,7 +82,13 @@
                             <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @endif
                         </td>
-                        <td>{{ $item->name_of_gas_plant }}</td>
+                        <td>
+                          @if ($item->sub_category == "CAT-D LTO")
+                            {{ $item->company['company_name'] }}
+                          @else
+                            {{ $item->name_of_gas_plant }}
+                          @endif
+                        </td>
                         <td>{{ $item->application_type }}</td>
                         <td>{{ $item->sub_category }}</td>
                         {{-- <td>{{ $item->plant_type }}</td> --}}
@@ -90,6 +97,7 @@
                         <td>
                           @if ($item->application_status == 'Site Not Suitable'
                           || $item->application_status == 'ATC Not Issued'
+                          || $item->application_status == 'ATI Not Issued'
                           || $item->application_status == 'LTO Not Issued'
                           || $item->application_status == 'Renewal Declined'
                           || $item->application_status == 'Take Over Not Approved'
@@ -97,6 +105,7 @@
                             <i class="fa fa-close text-red"></i>
                           @elseif ($item->application_status == 'Site Suitable'
                           || $item->application_status == 'ATC Issued'
+                          || $item->application_status == 'ATI Issued'
                           || $item->application_status == 'LTO Issued'
                           || $item->application_status == 'Renewal Approved'
                           || $item->application_status == 'Take Over Approved'
@@ -134,15 +143,9 @@
 @section('pagescript')
   <script>
     $(function () {
-      $('#example1').DataTable()
-      $('#example2').DataTable({
-        'paging'      : true,
-        'lengthChange': false,
-        'searching'   : false,
-        'ordering'    : true,
-        'info'        : true,
-        'autoWidth'   : false
-      })
-    })
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
+  })
   </script>
 @endsection

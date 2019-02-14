@@ -16,18 +16,18 @@ class CreateAppDocReviewsTable extends Migration
         Schema::create('app_doc_reviews', function (Blueprint $table) {
             $table->increments('id');
             $table->string('application_id')->unique();
-            $table->string('office');
-            $table->string('marketer_id');
+            $table->string('office')->nullable();;
+            $table->string('marketer_id')->nullable();;
             $table->string('company_id')->nullable();
-            $table->string('name_of_gas_plant');
-            $table->string('application_type');
-            $table->string('sub_category');
-            $table->string('plant_type');
+            $table->string('name_of_gas_plant')->nullable();
+            $table->string('application_type')->nullable();;
+            $table->string('sub_category')->nullable();;
+            $table->string('plant_type')->nullable();;
             $table->string('capacity_of_tank')->nullable();
-            $table->string('state');
-            $table->string('lga');
-            $table->string('town');
-            $table->string('address');
+            $table->string('state')->nullable();;
+            $table->string('lga')->nullable();;
+            $table->string('town')->nullable();;
+            $table->string('address')->nullable();;
             $table->string('application_status')->nullable();
             $table->string('to_zopscon')->nullable();
             $table->string('to_ADO')->nullable();

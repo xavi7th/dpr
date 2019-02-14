@@ -136,7 +136,7 @@
                 {{-- <p>Records</p> --}}
               </div>
               <h3 style="margin: 0; padding: 6px; color: #fff; background-color: #282e54;">Gas Pipelines</h3>
-              <a href="/gas_pipelines_dashboard_" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="/gas_pipelines_dashboard" style="padding: 6px; text-align: left; color: #fff;" class="small-box-footer">Proceed to application request <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>

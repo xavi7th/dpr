@@ -11,7 +11,10 @@ use App\Company;
 use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
+use App\AddonAtiInspectionDocument;
+use App\AddonLtoInspectionDocument;
 use App\AtcInspectionDocuments;
+use App\CatdLtoInspectionDocument;
 use App\SiteSuitabilityReports;
 use App\LtoInspectionDocument;
 use App\IssuedAtcLicense;
@@ -67,7 +70,7 @@ class adoController extends Controller
 
   public function index(){
 
-    $inbox = Inbox::with('app_doc_review')
+    $inbox = Inbox::with('app_doc_review.company')
       ->where([
         ['to_outbox', 'false'],
         ['receiver_role', Auth::user()->role],
@@ -128,10 +131,10 @@ class adoController extends Controller
     }
 
     $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
-    $applicationReview = AppDocReview::with('job_assignment')->where('id', $applicationID)->first();    // retrieve application review
+    $applicationReview = AppDocReview::with(['job_assignment','company'])->where('id', $applicationID)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
-    // dd($applicationStatus);
+    // dd($applicationReview);
     $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
     $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 
@@ -154,6 +157,12 @@ class adoController extends Controller
     }elseif($applicationReview->sub_category == "Pressure Testing") {
       $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
       // dd($applicationID);
+    } elseif ($applicationReview->sub_category == "ADD-ON ATI") {
+      $applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    }elseif($applicationReview->sub_category == "ADD-ON LTO") {
+      $applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    } elseif ($applicationReview->sub_category == "CAT-D LTO") {
+      $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
     }
     $role = Auth::user()->role;
     return view('backend.ado.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments','inboxItem'));

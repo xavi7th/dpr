@@ -51,7 +51,11 @@
                     <tbody>
                       @foreach ($completed as $item)
                         <tr>
-                          <td><a href="/headgas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          @if ($item->app_doc_review['sub_category'] == "CAT-D LTO")
+                            <td></i><a href="/headgas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
+                          @else
+                            <td></i><a href="/headgas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          @endif
                           <td>{{ $item->company_id }}</td>
                           <td>{{ $item->app_doc_review['application_type'] }}</td>
                           <td>{{ $item->app_doc_review['sub_category'] }}</td>
@@ -81,16 +85,10 @@
   $.widget.bridge('uibutton', $.ui.button);
 </script>
 <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+ $(function () {
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
   })
 </script>
 @endsection

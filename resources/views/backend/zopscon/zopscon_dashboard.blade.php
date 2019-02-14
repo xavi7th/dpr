@@ -49,14 +49,21 @@
                     @foreach ($inbox as $item)
                       <tr>
                         @if ($item->read == 'false')
-                          <td></i><a href="/zopscon_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: bold; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
-                          {{--  <td></i><a href="/zopscon_document_review/{{ $item->id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: bold; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>  --}}
+                          @if ($item->app_doc_review['sub_category'] == "CAT-D LTO")
+                            <td></i><a href="/zopscon_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: bold; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
+                          @else
+                            <td></i><a href="/zopscon_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: bold; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          @endif
                           <td style="font-weight: bold; color: #333;">{{ $item->app_doc_review['application_type'] }}</td>
                           <td style="font-weight: bold; color: #333;">{{ $item->app_doc_review['sub_category'] }}</td>
                           <td style="font-weight: bold; color: #333;">{{ $item->sender_role }}</td>
                           <td style="font-weight: bold; color: #333;">{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                         @else
-                          <td></i><a href="/zopscon_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          @if ($item->app_doc_review['sub_category'] == "CAT-D LTO")
+                            <td></i><a href="/zopscon_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
+                          @else
+                            <td></i><a href="/zopscon_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          @endif
                           <td style="color: #333;">{{ $item->app_doc_review['application_type'] }}</td>
                           <td style="color: #333;">{{ $item->app_doc_review['sub_category'] }}</td>
                           <td style="color: #333;">{{ $item->sender_role }}</td>
@@ -86,16 +93,10 @@
     $.widget.bridge('uibutton', $.ui.button);
   </script>
   <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+ $(function () {
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
   })
 </script>
 <script>

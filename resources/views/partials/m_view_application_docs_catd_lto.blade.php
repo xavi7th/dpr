@@ -1,0 +1,73 @@
+<ul class="todo-list ui-sortable">
+  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" 
+  marketerid="{{ $applicationID->marketer_id }}"
+  subcategory="{{ $applicationReview->sub_category }}"
+  applicationid="{{ $applicationID->application_id }}"
+  role="{{ $role }}"
+  documentcheckname="letter_form_sponsoring_company_location_check"
+  documentCheck="{{ $applicationID->letter_form_sponsoring_company_location_check }}" 
+  imgurl="{{ $applicationID->letter_form_sponsoring_company_location_url }}" 
+  title="Letter from Sponsoring Company" 
+  nameval="{{$applicationID->letter_form_sponsoring_company}}" 
+  modality="LFSC" 
+  reason="a" 
+  reasonspecified="{{$applicationID->letter_form_sponsoring_company_reason}}"></m-view-application-docs>
+
+  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" 
+  marketerid="{{ $applicationID->marketer_id }}"
+  subcategory="{{ $applicationReview->sub_category }}"
+  applicationid="{{ $applicationID->application_id }}"
+  role="{{ $role }}"
+  documentcheckname="bankdraft_of_statutory_fees_location_check"
+  documentCheck="{{ $applicationID->bankdraft_of_statutory_fees_location_check }}" 
+  imgurl="{{ $applicationID->bankdraft_of_statutory_fees_location_url }}" 
+  title="Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account" 
+  nameval="{{$applicationID->bankdraft_of_statutory_fees}}" 
+  modality="BSFP" 
+  reason="b" 
+  reasonspecified="{{$applicationID->bankdraft_of_statutory_fees_reason}}"></m-view-application-docs>
+
+  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" 
+  marketerid="{{ $applicationID->marketer_id }}"
+  subcategory="{{ $applicationReview->sub_category }}"
+  applicationid="{{ $applicationID->application_id }}"
+  role="{{ $role }}"
+  documentcheckname="verification_inspection_location_check"
+  documentCheck="{{ $applicationID->verification_inspection_location_check }}" 
+  imgurl="{{ $applicationID->verification_inspection_location_url }}" 
+  title="Photocopy of Approval to Install LPG (ATC)" 
+  nameval="{{$applicationID->verification_inspection}}" 
+  modality="VI"
+  reason="c" 
+  reasonspecified="{{$applicationID->verification_inspection_reason}}"></m-view-application-docs>
+
+  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" 
+  marketerid="{{ $applicationID->marketer_id }}"
+  subcategory="{{ $applicationReview->sub_category }}"
+  applicationid="{{ $applicationID->application_id }}"
+  role="{{ $role }}"
+  documentcheckname="application_letter_location_check"
+  documentCheck="{{ $applicationID->application_letter_location_check }}" 
+  imgurl="{{ $applicationID->application_letter_location_url }}" 
+  title="Application Letter" 
+  nameval="{{$applicationID->application_letter}}" 
+  modality="AL" 
+  reason="d" 
+  reasonspecified="{{$applicationID->application_letter_reason}}"></m-view-application-docs>
+
+  <m-view-application-docs applicationid="{{ $applicationID->application_id }}" 
+  marketerid="{{ $applicationID->marketer_id }}"
+  subcategory="{{ $applicationReview->sub_category }}"
+  applicationid="{{ $applicationID->application_id }}"
+  role="{{ $role }}"
+  documentcheckname="certificate_of_incorporation_location_check"
+  documentCheck="{{ $applicationID->certificate_of_incorporation_location_check }}" 
+  imgurl="{{ $applicationID->certificate_of_incorporation_location_url }}" 
+  title="Certificate of Incorporation"
+  nameval="{{$applicationID->certificate_of_incorporation}}" 
+  modality="CI" 
+  reason="e" 
+  reasonspecified="{{$applicationID->certificate_of_incorporation_reason}}"></m-view-application-docs>
+
+  
+</ul>

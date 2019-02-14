@@ -18,17 +18,25 @@ window.Vue = require('vue');
 
 Vue.component('app-doc-rev-upload-component', require('./components/SiteSuitablityInspectionReqDoc.vue'));
 Vue.component('atc-inspection-upload-component', require('./components/ATCInspectionDoc.vue'));
+Vue.component('ati-inspection-upload-component', require('./components/ATIInspectionDoc.vue'));
 Vue.component('lto-inspection-upload-component', require('./components/LTOInspectionDoc.vue'));
+Vue.component('addon-lto-inspection-upload-component', require('./components/AddonLTOInspectionDoc.vue'));
+Vue.component('catd-lto-inspection-upload-component', require('./components/CatDLTOInspectionDoc.vue'));
 Vue.component('takeover-inspection-upload-component', require('./components/TakeoverInspectionDoc.vue'));
 Vue.component('document-upload-component', require('./components/documentUploads.vue'));
 Vue.component('state-component', require('./components/StateComponent.vue'));
 Vue.component('app-doc-rev-component', require('./components/ApplicationDocumentReview.vue'));
 Vue.component('apply-for-site-suitability-inspection-component', require('./components/SiteSuitablityInspectionApplicationForm.vue'));
 Vue.component('apply-for-atc-component', require('./components/AtcApplicationForm.vue'));
+Vue.component('apply-for-ati-component', require('./components/AtiApplicationForm.vue'));
 Vue.component('apply-for-lto-component', require('./components/LtoApplicationForm.vue'));
+Vue.component('apply-for-addon-lto-component', require('./components/AddonLtoApplicationForm.vue'));
+Vue.component('apply-for-catd-lto-component', require('./components/CatDLtoApplicationForm.vue'));
 Vue.component('apply-for-lto-renewal-component', require('./components/LtoRenewalApplicationForm.vue'));
 Vue.component('apply-for-takeover-component', require('./components/TakeoverApplicationForm.vue'));
 Vue.component('apply-for-pressure-test-component', require('./components/PressureTestApplicationForm.vue'));
+Vue.component('apply-for-hydro-test-component', require('./components/HydroTestApplicationForm.vue'));
+Vue.component('apply-for-pigging-component', require('./components/PiggingApplicationForm.vue'));
 Vue.component('m-view-application-docs', require('./components/mViewApplicationDocs.vue'));
 Vue.component('m-view-application-docs-lto-renewal', require('./components/mViewApplicationDocsLtoRenewal.vue'));
 Vue.component(

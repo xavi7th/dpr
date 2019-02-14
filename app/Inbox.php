@@ -12,4 +12,6 @@ class Inbox extends Model
     {
         return $this->belongsTo(AppDocReview::class, 'application_id', 'id');
     }
+
+    
 }

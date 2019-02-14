@@ -11,11 +11,15 @@ use App\Company;
 use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
+use App\AddonAtiInspectionDocument;
+use App\AddonLtoInspectionDocument;
+use App\CatdLtoInspectionDocument;
 use App\AtcInspectionDocuments;
 use App\SiteSuitabilityReports;
 use App\LtoInspectionDocument;
 use App\IssuedAtcLicense;
 use App\IssuedLtoLicense;
+use App\IssuedAddonAtiLicense;
 use App\LtoLicenseRenewal;
 use App\TakeoverInspectionDocuments;
 use App\TakeoverReviews;
@@ -69,7 +73,7 @@ class managergasController extends Controller
     public function index()
     {
 
-        $inbox = Inbox::with('app_doc_review')
+        $inbox = Inbox::with('app_doc_review.company')
             ->where([
                 ['to_outbox', 'false'],
                 ['receiver_role', Auth::user()->role],
@@ -133,7 +137,7 @@ class managergasController extends Controller
         }
 
         $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
-        $applicationReview = AppDocReview::with('job_assignment')->where('id', $applicationID)->first();    // retrieve application review
+        $applicationReview = AppDocReview::with(['job_assignment', 'company'])->where('id', $applicationID)->first();    // retrieve application review
         $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
         $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
     // dd($applicationStatus);
@@ -154,11 +158,17 @@ class managergasController extends Controller
         } elseif ($applicationReview->sub_category == "Take Over") {
             $applicationID = DB::table('takeover_inspection_documents')
                 ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
-      // ->where()
+            // ->where()
                 ->first();
         } elseif ($applicationReview->sub_category == "Pressure Testing") {
             $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
-      // dd($applicationID);
+            // dd($applicationID);
+        } elseif ($applicationReview->sub_category == "ADD-ON ATI") {
+            $applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+        } elseif ($applicationReview->sub_category == "ADD-ON LTO") {
+            $applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+        } elseif ($applicationReview->sub_category == "CAT-D LTO") {
+            $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
         }
         $role = Auth::user()->role;
         return view('backend.managergas.view_application_docs', compact('role', 'inboxID', 'applicationID', 'applicationReview', 'staffs', 'applicationStatus', 'reportDocument', 'applicationComments', 'inboxItem'));
@@ -168,7 +178,7 @@ class managergasController extends Controller
     public function managergasApproves(Request $request)
     {
 
-      // dd($request);
+        // dd($request);
         $verdict = "";
 
         if (request('sub_category') == 'ATC') {
@@ -187,21 +197,57 @@ class managergasController extends Controller
             } elseif (request('decline')) {
                 $verdict = 'ATC Not Issued';
             }
-      // update app_doc_review
+            // update app_doc_review
             AppDocReview::where('application_id', request('application_id'))
                 ->update([
                     'application_status' => $verdict
                 ]);
-      // update job_assignments
+            // update job_assignments
             JobAssignment::where('application_id', request('application_id'))
                 ->update([
                     'job_application_status' => $verdict,
                     'company_id' => request('company_id'),
                     'approved_by' => Auth::user()->staff_id
                 ]);
-      // update completed job table
+            // update completed job table
             CustomHelpers::toCompletedJobsTable($request);
-      // update inbox table
+            // update inbox table
+            Inbox::where('id', request('inboxID'))->update([
+                'to_outbox' => 'true'
+            ]);
+        }
+
+        if (request('sub_category') == 'ADD-ON ATI') {
+            $dateIssued = Carbon::now();
+            $expiryDate = Carbon::now()->addMonths(6);
+            if (request('approve')) {
+                $verdict = 'ATI Issued';
+                // update or create a record for this application inside issued atc_licences table
+                IssuedAddonAtiLicense::create([
+                    'application_id' => request('application_id'),
+                    'company_id' => request('company_id'),
+                    'staff_id' => request('staff_id'),
+                    'date_issued' => $dateIssued->toDateTimeString(),
+                    'expiry_date' => $expiryDate->toDateTimeString(),
+                ]);
+            } elseif (request('decline')) {
+                $verdict = 'ATI Not Issued';
+            }
+            // update app_doc_review
+            AppDocReview::where('application_id', request('application_id'))
+                ->update([
+                    'application_status' => $verdict
+                ]);
+            // update job_assignments
+            JobAssignment::where('application_id', request('application_id'))
+                ->update([
+                    'job_application_status' => $verdict,
+                    'company_id' => request('company_id'),
+                    'approved_by' => Auth::user()->staff_id
+                ]);
+            // update completed job table
+            CustomHelpers::toCompletedJobsTable($request);
+            // update inbox table
             Inbox::where('id', request('inboxID'))->update([
                 'to_outbox' => 'true'
             ]);

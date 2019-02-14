@@ -1,7 +1,7 @@
 @extends('layout.master')
 
 @section('title')
-  DPR Head Gas | Application Review / Assignment
+  DPR {{ Auth::user()->office }} | Application Review / Assignment
 @endsection
 
 @section('pagestyles')
@@ -29,7 +29,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          <small>Forward Application</small>
+          DPR {{ Auth::user()->office }} Staff List
         </h1>
       </section>
 
@@ -98,16 +98,10 @@
 @section('pagescript')
   <!-- page script -->
   <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+ $(function () {
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
   })
   </script>
 @endsection

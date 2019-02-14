@@ -11,6 +11,9 @@ use App\Company;
 use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
+use App\AddonAtiInspectionDocument;
+use App\AddonLtoInspectionDocument;
+use App\CatdLtoInspectionDocument;
 use App\AtcInspectionDocuments;
 use App\SiteSuitabilityReports;
 use App\LtoInspectionDocument;
@@ -67,7 +70,7 @@ class headgasController extends Controller
 
   public function index(){
 
-    $inbox = Inbox::with('app_doc_review')
+    $inbox = Inbox::with('app_doc_review.company')
       ->where([
         ['to_outbox', 'false'],
         ['receiver_role', Auth::user()->role],
@@ -127,7 +130,7 @@ class headgasController extends Controller
     }
 
     $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
-    $applicationReview = AppDocReview::with('job_assignment')->where('id', $applicationID)->first();    // retrieve application review
+    $applicationReview = AppDocReview::with(['job_assignment', 'company'])->where('id', $applicationID)->first();    // retrieve application review
     $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
     $applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
 
@@ -153,10 +156,59 @@ class headgasController extends Controller
     }elseif($applicationReview->sub_category == "Pressure Testing") {
       $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
       // dd($applicationID);
+    } elseif ($applicationReview->sub_category == "ADD-ON ATI") {
+      $applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    } elseif ($applicationReview->sub_category == "ADD-ON LTO") {
+      $applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    } elseif ($applicationReview->sub_category == "CAT-D LTO") {
+      $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
     }
     $role = Auth::user()->role;
     return view('backend.headgas.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments', 'inboxItem'));
 
+  }
+
+
+  public function sendBackToZopscon(Request $request){
+    // dd($request);
+
+    $staff = Staff::where([
+      ['office', request('office')],
+      ['role', 'ZOPSCON']
+      ])->first();
+
+    // dd($staff);
+    
+
+    Inbox::where('id', request('inboxID'))->update([
+      'to_outbox' => 'true'
+    ]);
+
+      // create updated job application access for the next user
+    Inbox::create([
+      'application_id' => request('id'),
+      'to' => $staff->staff_id,
+      'from' => Auth::user()->staff_id,
+      'receiver_role' => $staff->role,
+      'sender_role' => Auth::user()->role,
+      'office' => $staff->office,
+      'read' => 'false',
+      'to_outbox' => 'false'
+    ]);
+
+    Outbox::create([
+      'application_id' => request('id'),
+      'to' => $staff->staff_id . " (" . $staff->role . ")",
+      'role' => Auth::user()->role,
+      'office' => Auth::user()->office
+    ]);
+
+    JobAssignment::where('application_id', request('application_id'))
+    ->update([
+      'job_application_status' => "HQ Sent to ZOPSCON"
+    ]);
+
+    return redirect('/headgas');
   }
 
 
@@ -174,6 +226,9 @@ class headgasController extends Controller
 
   public function headGasApproves(Request $request){
     // dd($request);
+    // if(request('to_zopscon')){
+    //   dd($request);
+    // }
     $verdict = "";
 
     if(request('sub_category') == 'ATC'){
@@ -247,7 +302,9 @@ class headgasController extends Controller
       ->update([
         'company_id' => request('company_id')
       ]);
-      } elseif (request('decline')) {
+      } 
+      
+      if (request('decline')) {
         $verdict = 'LTO Not Issued';
       }
 

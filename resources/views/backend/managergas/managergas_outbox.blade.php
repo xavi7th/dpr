@@ -51,8 +51,11 @@
                     <tbody>
                       @foreach ($outbox as $item)
                         <tr>
-                          <td><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
-                          <td>{{ $item->app_doc_review['application_type'] }}</td>
+                          @if ($item->app_doc_review['sub_category'] == "CAT-D LTO")
+                            <td></i><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: bold; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
+                          @else
+                            <td></i><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: bold; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                          @endif<td>{{ $item->app_doc_review['application_type'] }}</td>
                           <td>{{ $item->app_doc_review['sub_category'] }}</td>
                           <td>{{ $item->to }}</td>
                           <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
@@ -81,16 +84,10 @@
   $.widget.bridge('uibutton', $.ui.button);
 </script>
 <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+ $(function () {
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
   })
 </script>
 @endsection

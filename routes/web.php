@@ -23,9 +23,23 @@ Route::post('/do_login', 'backendSessionController@do_login');
 // APP-CONTROLLER
 Route::get('/preferences', 'appController@index')->middleware('auth');
 Route::get('/view_ssi_records', 'appController@viewAllSSI')->middleware('auth');
+
 Route::get('/view_atc_records', 'appController@viewAllATC')->middleware('auth');
+Route::get('/view_ati_records', 'appController@viewAllAddOnATI')->middleware('auth');
+
 Route::get('/view_lto_records', 'appController@viewAllLTO')->middleware('auth');
+Route::get('/view_addon_lto_records', 'appController@viewAllAddonLTO')->middleware('auth');
+Route::get('/view_catd_lto_records', 'appController@viewAllCatDLTO')->middleware('auth');
+
+
+Route::get('/view_renewal_records', 'appController@viewAllLpgCngRenewal')->middleware('auth');
+Route::get('/view_catd_renewal_records', 'appController@viewAllCatdRenewal')->middleware('auth');
+Route::get('/view_takeover_records', 'appController@viewAllLpgCngTakeover')->middleware('auth');
+
+
 Route::get('/view_pressure_test_records', 'appController@viewAllPressureTestRecords')->middleware('auth');
+
+
 Route::get('/document_review/{id}', 'appController@viewDocument')->middleware(['auth']);
 
 
@@ -41,9 +55,17 @@ Route::get('/lpg_cng_dashboard', 'appController@lpgCngDashboard')->middleware(['
 
 //GAS-PROCESSING-FACILITIES-ROUTES
 Route::get('/gas_processing_facilities_dashboard', 'appController@gasProcessingFacilitiesDashboard')->middleware(['auth']);
+Route::get('/custody_transfer_meters_search', 'appController@custodyTransferMetersSearch')->middleware(['auth']);
+Route::get('/flare_meters_search', 'appController@flareMetersSearch')->middleware(['auth']);
+Route::get('/fuel_meters_search', 'appController@fuelMetersSearch')->middleware(['auth']);
+Route::get('/production_allocation_transfer_meters_search', 'appController@productionAllocationTransferMetersSearch')->middleware(['auth']);
 
 //GAS-PIPELINES-ROUTES
 Route::get('/gas_pipelines_dashboard', 'appController@gasPipelinesDashboard')->middleware(['auth']);
+Route::get('/gas_pipelines_pts_search', 'appController@gasPipelinesPTSSearch')->middleware(['auth']);
+Route::get('/gas_pipelines_opll_search', 'appController@gasPipelinesOPLLSearch')->middleware(['auth']);
+Route::get('/gas_pipelines_hydrotesting_search', 'appController@gasPipelinesHydroTestingSearch')->middleware(['auth']);
+Route::get('/gas_pipelines_pigging_search', 'appController@gasPipelinesPiggingSearch')->middleware(['auth']);
 
 //PROJECT-MONITORING-ROUTES
 Route::get('/project_monitoring_dashboard', 'appController@projectMonitoringDashboard')->middleware(['auth']);
@@ -109,19 +131,6 @@ Route::post('/project_monitoring_feed_create', 'appController@projectMonitoringF
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ADMINISTRATOR-CONTROLLER
 Route::get('/admin', 'administratorController@index')->middleware(['auth', 'admin']);
 Route::get('/staffs_list', 'administratorController@showAllStaffs')->middleware(['auth', 'admin']);
@@ -143,7 +152,10 @@ Route::get('/app_doc_rev', 'marketerController@applicationDocumentReview')->midd
 Route::get('/lpg_retailer_outlet', 'marketerController@LPGRetailerOutletView')->middleware(['auth']);
 Route::get('/site_suitability_requirement', 'marketerController@getSiteSuitablityInspectionView')->middleware(['auth']);
 Route::get('/atc_requirement', 'marketerController@getATCRequirementView')->middleware(['auth']);
+Route::get('/ati_requirement', 'marketerController@getATIRequirementView')->middleware(['auth']);
 Route::get('/lto_requirement', 'marketerController@getLTORequirementView')->middleware(['auth']);
+Route::get('/addon_lto_requirement', 'marketerController@getAddonLTORequirementView')->middleware(['auth']);
+Route::get('/catd_lto_requirement', 'marketerController@getCatDLTORequirementView')->middleware(['auth']);
 Route::get('/takeover_requirement', 'marketerController@getTakeoverRequirementView')->middleware(['auth']);
 Route::get('/mDocument_review/{id}', 'marketerController@showDocumentsRequirement')->middleware(['auth']);
 Route::get('/mDocument_edit/{id}', 'marketerController@showDocumentsRequirementDocEdit')->middleware(['auth']);
@@ -156,10 +168,24 @@ Route::get('/create_company', 'marketerController@showCreateCompany')->middlewar
 
 Route::get('/apply_for_ssi_get', 'marketerController@applyForSSIGet')->middleware(['auth']);
 Route::get('/apply_for_atc_get', 'marketerController@applyForATCGet')->middleware(['auth']);
+Route::get('/apply_for_ati_get', 'marketerController@applyForATIGet')->middleware(['auth']);
 Route::get('/apply_for_lto_get', 'marketerController@applyForLTOGet')->middleware(['auth']);
+Route::get('/apply_for_addon_lto_get', 'marketerController@applyForAddonLTOGet')->middleware(['auth']);
+Route::get('/apply_for_catd_lto_get', 'marketerController@applyForCatDLTOGet')->middleware(['auth']);
 Route::get('/apply_for_lto_renewal_get', 'marketerController@applyForLTORenewalGet')->middleware(['auth']);
 Route::get('/apply_for_takeover_get', 'marketerController@applyForTakeOverGet')->middleware(['auth']);
 Route::get('/apply_for_pressure_test_get', 'marketerController@applyForPressureTestGet')->middleware(['auth']);
+
+Route::get('/apply_for_pts', 'marketerController@applyForPTS')->middleware(['auth']);
+Route::get('/apply_for_opll', 'marketerController@applyForOPLL')->middleware(['auth']);
+
+Route::get('/apply_for_hydrotesting', 'marketerController@applyForHydroTesting')->middleware(['auth']);
+Route::get('/apply_for_pigging', 'marketerController@applyForPigging')->middleware(['auth']);
+
+Route::get('/custody_transfer_meters', 'marketerController@custodyTransferMeters')->middleware(['auth']);
+Route::get('/flare_meters', 'marketerController@flareMeters')->middleware(['auth']);
+Route::get('/fuel_meters', 'marketerController@fuelMeters')->middleware(['auth']);
+Route::get('/production_allocation_transfer_meters', 'marketerController@productionAllocationTransferMeters')->middleware(['auth']);
 
 
 
@@ -170,10 +196,16 @@ Route::post('/apply_for_site_suitability_inspection', 'marketerController@handle
 Route::post('/site_suit_req_upload', 'marketerController@handleSiteSuitablityInspection')->middleware(['auth']);
 
 Route::post('/apply_for_approval_to_construct', 'marketerController@handleATCPhase1')->middleware(['auth']);
+Route::post('/apply_for_addon_ati', 'marketerController@handleAddonATIPhase1')->middleware(['auth']);
 Route::post('/atc_req_upload', 'marketerController@handleATC')->middleware(['auth']);
+Route::post('/ati_req_upload', 'marketerController@handleAddonATI')->middleware(['auth']);
 
 Route::post('/apply_for_license_to_operate', 'marketerController@handleLTOPhase1')->middleware(['auth']);
+Route::post('/apply_for_addon_license_to_operate', 'marketerController@handleAddonLTOPhase1')->middleware(['auth']);
+Route::post('/apply_for_catd_license_to_operate', 'marketerController@handleCAtDLTOPhase1')->middleware(['auth']);
 Route::post('/lto_req_upload', 'marketerController@handleLTO')->middleware(['auth']);
+Route::post('/addon_lto_req_upload', 'marketerController@handleAddonLTO')->middleware(['auth']);
+Route::post('/catd_lto_req_upload', 'marketerController@handleCatDLTO')->middleware(['auth']);
 
 // Route::post('/apply_for_renewal', 'marketerController@handleLTORenewalPhase1')->middleware(['auth', 'marketer']);
 // Route::post('/renewal_req_upload', 'marketerController@handleLTORenewal')->middleware(['auth', 'marketer']);
@@ -234,6 +266,7 @@ Route::get('/headgas_completed', 'headgasController@headgasCompleted')->middlewa
 // Route::post('/send_job', 'headgasController@sendJob')->middleware(['auth', 'headgas']);
 Route::post('/push_down_to_teamlead', 'headgasController@forwardApplicationToTeamLead')->middleware(['auth', 'headgas']);
 Route::post('/hgApproves', 'headgasController@headGasApproves')->middleware(['auth', 'headgas']);
+Route::post('/back_to_zopscon', 'headgasController@sendBackToZopscon')->middleware(['auth', 'headgas']);
 
 
 //ADO

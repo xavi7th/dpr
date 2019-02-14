@@ -42,8 +42,13 @@
             <div class="box box-primary">
               <div class="box-body box-profile">
 
-                <h3 class="profile-username text-center" style="text-transform: capitalize;">{{ $applicationReview->name_of_gas_plant }}</h3>
-
+                @if ($applicationReview->sub_category == "CAT-D LTO")
+                  
+                  <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
+                @else
+                  
+                  <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
+                @endif
                 <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
 
                 <ul class="list-group list-group-unbordered">
@@ -53,12 +58,30 @@
                   <li class="list-group-item">
                     <b>Sub-category</b> <a class="pull-right">{{ $applicationReview->sub_category }}</a>
                   </li>
+                  @if ($applicationReview->sub_category == "CAT-D LTO")
+                    <li class="list-group-item">
+                      <b>No. of Bottles</b> <a class="pull-right">{{ $applicationID->catdLtoApplicationExtention['no_of_bottles'] }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Name of Sponsoring Company</b> <a class="pull-right">{{ $applicationID->catdLtoApplicationExtention['sponsoring_company'] }}</a>
+                    </li>
+                  @else
                   <li class="list-group-item">
+                    <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
+                  </li>
+                  @endif
+                  
+                  @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
+                    <li class="list-group-item">
+                      <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
+                    </li>
+                  @endif
+                  {{--  <li class="list-group-item">
                     <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                   </li>
                   <li class="list-group-item">
                     <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
-                  </li>
+                  </li>  --}}
                   <li class="list-group-item">
                     <b>State</b> <a class="pull-right">{{ $applicationReview->state }}</a>
                   </li>
@@ -98,7 +121,7 @@
                         <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">
                       </div>
                     </form>
-                    @if ($applicationReview->sub_category == 'ATC')
+                    @if ($applicationReview->sub_category == 'ATC' || $applicationReview->sub_category == 'ADD-ON ATI')
                       @if ($reportDocument)
                         <form role="form" method="post" action="/managergas_decides">
                           {{ csrf_field() }}
@@ -118,7 +141,7 @@
                         </form>
                       @endif
                     @endif
-                    @if ($applicationReview->sub_category == 'LTO')
+                    @if ($applicationReview->sub_category == 'LTO' || $applicationReview->sub_category == 'ADD-ON LTO' || $applicationReview->sub_category == 'CAT-D LTO' && Auth::user()->office != 'HQ')
                       @if ($reportDocument)
                         <form role="form" method="post" action="/send_job_to_hq">
                           {{ csrf_field() }}
@@ -274,6 +297,12 @@
                   @include('partials.m_view_application_docs')
                 @elseif($applicationReview->sub_category == 'LTO')
                   @include('partials.m_view_application_docs_lto')
+                @elseif($applicationReview->sub_category == 'ADD-ON ATI')
+                  @include('partials.m_view_application_docs_addon_ati')
+                @elseif($applicationReview->sub_category == 'ADD-ON LTO')
+                  @include('partials.m_view_application_docs_addon_lto')
+                @elseif($applicationReview->sub_category == 'CAT-D LTO')
+                  @include('partials.m_view_application_docs_catd_lto')
                 @elseif($applicationReview->sub_category == 'Renewal')
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
@@ -300,16 +329,10 @@
 @section('pagescript')
   <!-- page script -->
   <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+ $(function () {
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
   })
   </script>
 @endsection

@@ -11,12 +11,16 @@ use Auth;
 use App\SiteSuitabilityInspectionDocuments;
 use App\AtcInspectionDocuments;
 use App\LtoInspectionDocument;
+use App\CatdLtoApplicationExtention;
 use App\IssuedLtoLicense;
 use App\LtoLicenseRenewal;
 use App\TakeoverReviews;
 use App\PressureTestRecords;
 use App\Company;
 use App\TakeoverInspectionDocuments;
+use App\AddonAtiInspectionDocument;
+use App\AddonLtoInspectionDocument;
+use App\CatdLtoInspectionDocument;
 use App\zopsconInbox;
 use App\Inbox;
 use Storage;
@@ -40,12 +44,15 @@ class marketerController extends Controller
 
 
   public function marketerAppDocReview(){
-    $appDocReviews = AppDocReview::where('marketer_id', Auth::user()->staff_id)
+    $appDocReviews = AppDocReview::with('company')->where('marketer_id', Auth::user()->staff_id)
     // ->where('application_status', 'Application Pending')
     // ->orWhere('application_status', 'Not Submitted')
     // ->orWhere('application_status', 'ATC Not Issued')
     // ->orWhere('application_status', 'LTO Not Issued')
-    ->get();
+    // $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
+    ->latest()->get();
+
+    // dd($appDocReviews);
     return view('backend.marketer.marketer_app_doc_review', compact('appDocReviews'));
   }
 
@@ -77,6 +84,21 @@ class marketerController extends Controller
     return view('backend.marketer.apply_for_atc_get', compact('companies'));
   }
 
+  public function applyForATIGet(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_ati_get', compact('companies'));
+  }
+
+  public function applyForAddonLTOGet(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_addon_lto_get', compact('companies'));
+  }
+
+  public function applyForCatDLTOGet(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_catd_lto_get', compact('companies'));
+  }
+
 
   public function applyForLTOGet(){
     $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
@@ -103,6 +125,55 @@ class marketerController extends Controller
   }
 
 
+  public function applyForPTS(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.gas_pipelines_pts_create', compact('companies'));
+  }
+
+  
+  public function applyForOPLL(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.gas_pipelines_opll_create', compact('companies'));
+  }
+
+
+  public function applyForHydroTesting(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_hydrotesting', compact('companies'));
+  }
+
+
+
+  public function applyForPigging(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.apply_for_pigging', compact('companies'));
+  }
+
+
+  public function custodyTransferMeters(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.custody_transfer_meters_create', compact('companies'));
+  }
+
+
+  public function flareMeters(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.flare_meters_create', compact('companies'));
+  }
+
+
+  public function fuelMeters(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.fuel_meters_create', compact('companies'));
+  }
+
+
+  public function productionAllocationTransferMeters(){
+    $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
+    return view('backend.marketer.production_allocation_transfer_meters_create', compact('companies'));
+  }
+
+
 
 
 
@@ -118,8 +189,25 @@ class marketerController extends Controller
 
 
 
+  public function getATIRequirementView(){
+    return view('backend.marketer.requirement_ati');
+  }
+
+
+
   public function getLTORequirementView(){
     return view('backend.marketer.requirement_lto');
+  }
+
+
+
+  public function getAddonLTORequirementView(){
+    return view('backend.marketer.requirement_addon_lto');
+  }
+
+
+  public function getCatDLTORequirementView(){
+    return view('backend.marketer.requirement_catd_lto');
   }
 
 
@@ -132,7 +220,9 @@ class marketerController extends Controller
 
 
   public function showDocumentsRequirement($id){
-    $applicationReview = AppDocReview::where('id', $id)->first();
+    $applicationReview = AppDocReview::with('company')->where('id', $id)->first();
+
+    $theCompany = Company::where('company_id', $applicationReview->company_id)->first();
 
     $licenseDetail = IssuedLtoLicense::where('application_id', $applicationReview->application_id)->first();
     $licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id],['sub_category','Renewal'],['application_status','Application Pending']])
@@ -142,27 +232,40 @@ class marketerController extends Controller
 
     if($applicationReview->sub_category == "Site Suitability Inspection"){
       $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
-    }elseif($applicationReview->sub_category == "ATC") {
+    }
+    elseif($applicationReview->sub_category == "ATC") {
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
-    }elseif($applicationReview->sub_category == "LTO") {
+    }
+    elseif($applicationReview->sub_category == "ADD-ON ATI") {
+      $applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    }
+    elseif($applicationReview->sub_category == "ADD-ON LTO") {
+      $applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+    }
+    elseif($applicationReview->sub_category == "LTO") {
       $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
-    }elseif($applicationReview->sub_category == "Renewal") {
+    }
+    elseif($applicationReview->sub_category == "CAT-D LTO") {
+      $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
+    }
+    elseif($applicationReview->sub_category == "Renewal") {
       $applicationID = DB::table('lto_inspection_documents')
       ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
       // ->where()
       ->first();
-    }elseif($applicationReview->sub_category == "Take Over") {
+    }
+    elseif($applicationReview->sub_category == "Take Over") {
       $applicationID = DB::table('takeover_inspection_documents')
       ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
       // ->where()
       ->first();
     }
 
-    // dd($applicationReview);
+    // dd($applicationID);
 
     $role = Auth::user()->role;
 
-    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail', 'role'));
+    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail', 'role', 'theCompany'));
   }
 
 
@@ -612,6 +715,57 @@ class marketerController extends Controller
 
   }
 
+
+
+
+  public function handleAddonATIPhase1(Request $request){
+    // dd($request);
+    $this->validate(request(), [
+      'gas_plant_name' => 'required'
+    ]);
+
+    // getting the current number of created applications
+    $applicationCount = DB::table('app_doc_reviews')->get();
+
+    // adding 1 to that number
+    $indexIncremented = $applicationCount->count() + 1;
+
+    // padding the number to 4 leading zeros
+    $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+    //appending the new application index to DPRCOMP to create the applications's ID
+    $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+    // add the application ID to session
+    session(['application_id'=>$applicationID]);
+
+    // +++++ might need to do some custom verification here with decision statements
+    AppDocReview::create([
+      'application_id' => $applicationID,
+      'office' => 'Warri', // This is very key and needs to be updated.....it cannot be left hardcoded like this
+      'marketer_id' => Auth::user()->staff_id,
+      'company_id' => request('company_id'), // do not to forget to do a validation for this field....this marketer should be the registrar of the company
+      'name_of_gas_plant' => request('gas_plant_name'),
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'plant_type' => request('plant_type'),
+      'state' => request('state'),
+      'lga' => request('lga'),
+      'town' => request('town'),
+      'address' => request('address'),
+      'application_status' => 'Not Submitted'
+    ]);
+
+
+    return redirect('/ati_requirement');
+
+  }
+
+
+
+
+
+
   public function handleATC(Request $request){
     // dd($request);
     $alfsiDoc = $amaDoc = $ctcDoc = $ciDoc = $fcDoc = $prcDoc = $cafDoc = $abpDoc = $spDoc = $dcDoc = $pidDoc = $eiaDoc = $bsfpDoc = $lcmlsDoc = $csatdDoc = $alacdDoc = 'null';
@@ -769,6 +923,200 @@ class marketerController extends Controller
 
 
 
+  public function handleAddonATI(Request $request){
+    // dd($request);
+    $sipsDoc = $ccsslDoc = $robldDoc = $pldlpgaDoc = $fsrilpgaDoc = $eerDoc = $rtpaDoc = $alacdDoc = 'null';
+    $marketerID = Auth::user()->staff_id;
+
+    // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+    if($request->hasFile('SIPS_doc')){
+      $request->SIPS_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->SIPS_doc->getClientOriginalName());
+      $sipsDoc = $request->SIPS_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CCSSL_doc')){
+      $request->CCSSL_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CCSSL_doc->getClientOriginalName());
+      $ccsslDoc = $request->CCSSL_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('ROBLD_doc')){
+      $request->ROBLD_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->ROBLD_doc->getClientOriginalName());
+      $robldDoc = $request->ROBLD_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('PLDLPGA_doc')){
+      $request->PLDLPGA_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->PLDLPGA_doc->getClientOriginalName());
+      $pldlpgaDoc = $request->PLDLPGA_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('FSRILPGA_doc')){
+      $request->FSRILPGA_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->FSRILPGA_doc->getClientOriginalName());
+      $fsrilpgaDoc = $request->FSRILPGA_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('EER_doc')){
+      $request->EER_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->EER_doc->getClientOriginalName());
+      $eerDoc = $request->EER_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('RTPA_doc')){
+      $request->RTPA_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->RTPA_doc->getClientOriginalName());
+      $rtpaDoc = $request->RTPA_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('ALACD_doc')){
+      $request->ALACD_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->ALACD_doc->getClientOriginalName());
+      $alacdDoc = $request->ALACD_doc->getClientOriginalName();
+    }
+
+
+    // $sipsDoc = $ccsslDoc = $robldDoc = $pldlpgaDoc = $fsrilpgaDoc = $eerDoc = $rtpaDoc = $alacdDoc = 'null';
+
+    AddonAtiInspectionDocument::create([
+      'application_id' => session('application_id'),
+      'marketer_id' => $marketerID,
+
+      'suitability_inspection_of_proposed_site' => request('SIPS'),
+      'copy_of_current_storage_and_sales_license' => request('CCSSL'),
+      'retail_outlet_as_built_layout_drawing' => request('ROBLD'),
+      'proposed_layout_drawing_for_the_lpg_addon' => request('PLDLPGA'),
+      'fire_services_report_indicating_the_lpg_addon' => request('FSRILPGA'),
+      'environmental_evaluation_report' => request('EER'),
+      'relevant_town_planning_approval' => request('RTPA'),
+      'application_letter_addressed_to_the_controller' => request('ALACD'),
+
+      'suitability_inspection_of_proposed_site_location_url' => $sipsDoc,
+      'copy_of_current_storage_and_sales_license_location_url' => $ccsslDoc,
+      'retail_outlet_as_built_layout_drawing_location_url' => $robldDoc,
+      'proposed_layout_drawing_for_the_lpg_addon_location_url' => $pldlpgaDoc,
+      'fire_services_report_indicating_the_lpg_addon_location_url' => $fsrilpgaDoc,
+      'environmental_evaluation_report_location_url' => $eerDoc,
+      'relevant_town_planning_approval_location_url' => $rtpaDoc,
+      'application_letter_addressed_to_the_controller_location_url' => $alacdDoc,
+
+      'suitability_inspection_of_proposed_site_reason' => request('SIPS_reason'),
+      'copy_of_current_storage_and_sales_license_reason' => request('CCSSL_reason'),
+      'retail_outlet_as_built_layout_drawing_reason' => request('ROBLD_reason'),
+      'proposed_layout_drawing_for_the_lpg_addon_reason' => request('PLDLPGA_reason'),
+      'fire_services_report_indicating_the_lpg_addon_reason' => request('FSRILPGA_reason'),
+      'environmental_evaluation_report_reason' => request('EER_reason'),
+      'relevant_town_planning_approval_reason' => request('RTPA_reason'),
+      'application_letter_addressed_to_the_controller_reason' => request('ALACD_reason')
+    ]);
+
+    // clear the application ID from the session
+    $request->session()->forget('application_id');
+
+     // redirect to the current AUTH USER
+
+    if (Auth::user()->role == 'Marketer') {
+      return redirect('/marketer');
+    }elseif(Auth::user()->role == 'Staff'){
+      return redirect('/staff');
+    }
+
+  }
+
+
+
+  public function handleAddonLTOPhase1(Request $request){
+    // dd($request);
+
+    $this->validate(request(), [
+      'gas_plant_name' => 'required'
+    ]);
+
+    // getting the current number of created applications
+    $applicationCount = DB::table('app_doc_reviews')->get();
+
+    // adding 1 to that number
+    $indexIncremented = $applicationCount->count() + 1;
+
+    // padding the number to 4 leading zeros
+    $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+    //appending the new application index to DPRCOMP to create the applications's ID
+    $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+    // add the application ID to session
+    session(['application_id'=>$applicationID]);
+
+    AppDocReview::create([
+      'application_id' => $applicationID,
+      'office' => 'Warri', // This is very key and needs to be updated.....it cannot be left hardcoded like this
+      'marketer_id' => Auth::user()->staff_id,
+      'company_id' => request('company_id'), // do not to forget to do a validation for this field....this marketer should be the registrar of the company
+      'name_of_gas_plant' => request('gas_plant_name'),
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'plant_type' => request('plant_type'),
+      'state' => request('state'),
+      'lga' => request('lga'),
+      'town' => request('town'),
+      'address' => request('address'),
+      'application_status' => 'Not Submitted'
+    ]);
+
+
+    return redirect('/addon_lto_requirement');
+
+  }
+
+
+  public function handleCAtDLTOPhase1(Request $request){
+    // dd($request);
+
+    // $this->validate(request(), [
+    //   'gas_plant_name' => 'required'
+    // ]);
+
+    // getting the current number of created applications
+    $applicationCount = DB::table('app_doc_reviews')->get();
+
+    // adding 1 to that number
+    $indexIncremented = $applicationCount->count() + 1;
+
+    // padding the number to 4 leading zeros
+    $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+    //appending the new application index to DPRCOMP to create the applications's ID
+    $applicationID = "DPRAPPLICATION".$newApplicationIndex;
+
+    // add the application ID to session
+    session(['application_id'=>$applicationID]);
+
+    // get the company
+
+    $company = Company::where('company_id', request('company_id'))->first();
+
+    AppDocReview::create([
+      'application_id' => $applicationID,
+      'office' => 'Warri', // This is very key and needs to be updated.....it cannot be left hardcoded like this
+      'marketer_id' => Auth::user()->staff_id,
+      'company_id' => request('company_id'), // do not to forget to do a validation for this field....this marketer should be the registrar of the company
+      'application_type' => request('application_type'),
+      'sub_category' => request('sub_category'),
+      'capacity_of_tank' => request('capacity_of_tank'),
+      'state' => $company->state,
+      'lga' => $company->lga,
+      'town' => $company->town,
+      'address' => $company->address,
+      'application_status' => 'Not Submitted'
+    ]);
+
+    CatdLtoApplicationExtention::create([
+      'application_id' => $applicationID,
+      'company_id' => request('company_id'), // do not to forget to do a validation for this field....this marketer should be the registrar of the company
+      'sponsoring_company' => request('name_of_sponsoring_company'),
+      'no_of_bottles' => request('no_of_bottles')
+    ]);
+
+
+    return redirect('/catd_lto_requirement');
+
+  }
+
+
   public function handleLTOPhase1(Request $request){
     // dd($request);
 
@@ -828,6 +1176,168 @@ class marketerController extends Controller
     //   return redirect('/lto_requirement');
     // }
 
+
+  }
+
+  public function handleAddonLTO(Request $request){
+    // dd($request);
+    $cafDoc = $bsfpDoc = $fsrilpgaDoc = $pailpgaDoc = $cwmcvDoc = $alacdDoc = $cptrcDoc = $ctyitcDoc = $appDoc = 'null';
+    $marketerID = Auth::user()->staff_id;
+
+    // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+    if($request->hasFile('CAF_doc')){
+      $request->CAF_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CAF_doc->getClientOriginalName());
+      $cafDoc = $request->CAF_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('BSFP_doc')){
+      $request->BSFP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->BSFP_doc->getClientOriginalName());
+      $bsfpDoc = $request->BSFP_doc->getClientOriginalName();
+    }
+
+    if ($request->hasFile('FSRILPGA_doc')) {
+      $request->FSRILPGA_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->FSRILPGA_doc->getClientOriginalName());
+      $fsrilpgaDoc = $request->FSRILPGA_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('PAILPGA_doc')){
+      $request->PAILPGA_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->PAILPGA_doc->getClientOriginalName());
+      $pailpgaDoc = $request->PAILPGA_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CWMCV_doc')){
+      $request->CWMCV_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CWMCV_doc->getClientOriginalName());
+      $cwmcvDoc = $request->CWMCV_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('ALACD_doc')){
+      $request->ALACD_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->ALACD_doc->getClientOriginalName());
+      $alacdDoc = $request->ALACD_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CPTRC_doc')){
+      $request->CPTRC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CPTRC_doc->getClientOriginalName());
+      $cptrcDoc = $request->CPTRC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CTYITC_doc')){
+      $request->CTYITC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CTYITC_doc->getClientOriginalName());
+      $ctyitcDoc = $request->CTYITC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('APP_doc')){
+      $request->APP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->APP_doc->getClientOriginalName());
+      $appDoc = $request->APP_doc->getClientOriginalName();
+    }
+
+
+    AddonLtoInspectionDocument::create([
+      'application_id' => session('application_id'),
+      'marketer_id' => $marketerID,
+      'completed_application_form' => request('CAF'),
+      'bankdraft_of_statutory_fees' => request('BSFP'),
+      'fire_services_report_indicating_the_lpg_addon' => request('FSRILPGA'),
+      'photocopy_of_approval_to_install_lpg' => request('PAILPGA'),
+      'current_weight_measures_cert_of_verification' => request('CWMCV'),
+      'application_letter_addressed_to_the_controller' => request('ALACD'),
+      'current_pressure_test_report_certificate' => request('CPTRC'),
+      'current_three_years_income_tax_clearance' => request('CTYITC'),
+      'appropriate_plant_photography' => request('APP'),
+
+      'completed_application_form_location_url' => $cafDoc,
+      'bankdraft_of_statutory_fees_location_url' => $bsfpDoc,
+      'fire_services_report_indicating_the_lpg_addon_location_url' => $fsrilpgaDoc,
+      'photocopy_of_approval_to_install_lpg_location_url' => $pailpgaDoc,
+      'current_weight_measures_cert_of_verification_location_url' => $cwmcvDoc,
+      'application_letter_addressed_to_the_controller_location_url' => $alacdDoc,
+      'current_pressure_test_report_certificate_location_url' => $cptrcDoc,
+      'current_three_years_income_tax_clearance_location_url' => $ctyitcDoc,
+      'appropriate_plant_photography_location_url' => $appDoc,
+
+      'completed_application_form_reason' => request('CAF_reason'),
+      'bankdraft_of_statutory_fees_reason' => request('BSFP_reason'),
+      'fire_services_report_indicating_the_lpg_addon_reason' => request('FSRILPGA_reason'),
+      'photocopy_of_approval_to_install_lpg_reason' => request('PACLPG_reason'),
+      'current_weight_measures_cert_of_verification_reason' => request('CWMCV_reason'),
+      'application_letter_addressed_to_the_controller_reason' => request('ALACD_reason'),
+      'current_pressure_test_report_certificate_reason' => request('CPTRC_reason'),
+      'current_three_years_income_tax_clearance_reason' => request('CTYITC_reason'),
+      'appropriate_plant_photography_reason' => request('APP_reason')
+    ]);
+
+    // clear the application ID from the session
+    $request->session()->forget('application_id');
+
+    if (Auth::user()->role == 'Marketer') {
+      return redirect('/marketer');
+    } elseif (Auth::user()->role == 'Staff') {
+      return redirect('/staff');
+    }
+
+  }
+
+  public function handleCatDLTO(Request $request){
+    // dd($request);
+    $lfscDoc = $bsfpDoc = $viDoc = $alDoc = $ciDoc = 'null';
+    $marketerID = Auth::user()->staff_id;
+
+    // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+    if($request->hasFile('LFSC_doc')){
+      $request->LFSC_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->LFSC_doc->getClientOriginalName());
+      $lfscDoc = $request->LFSC_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('BSFP_doc')){
+      $request->BSFP_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->BSFP_doc->getClientOriginalName());
+      $bsfpDoc = $request->BSFP_doc->getClientOriginalName();
+    }
+
+    if ($request->hasFile('VI_doc')) {
+      $request->VI_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->VI_doc->getClientOriginalName());
+      $viDoc = $request->VI_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('AL_doc')){
+      $request->AL_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->AL_doc->getClientOriginalName());
+      $alDoc = $request->AL_doc->getClientOriginalName();
+    }
+
+    if($request->hasFile('CI_doc')){
+      $request->CI_doc->storeAs('comp_docs/'.$marketerID.'/'.session('application_id'), $request->CI_doc->getClientOriginalName());
+      $ciDoc = $request->CI_doc->getClientOriginalName();
+    }
+
+
+    CatdLtoInspectionDocument::create([
+      'application_id' => session('application_id'),
+      'marketer_id' => $marketerID,
+      'letter_form_sponsoring_company' => request('LFSC'),
+      'bankdraft_of_statutory_fees' => request('BSFP'),
+      'verification_inspection' => request('VI'),
+      'application_letter' => request('AL'),
+      'certificate_of_incorporation' => request('CI'),
+
+      'letter_form_sponsoring_company_location_url' => $lfscDoc,
+      'bankdraft_of_statutory_fees_location_url' => $bsfpDoc,
+      'verification_inspection_location_url' => $viDoc,
+      'application_letter_location_url' => $alDoc,
+      'certificate_of_incorporation_location_url' => $ciDoc,
+
+      'letter_form_sponsoring_company_reason' => request('LFSC_reason'),
+      'bankdraft_of_statutory_fees_reason' => request('BSFP_reason'),
+      'verification_inspection_reason' => request('VI_reason'),
+      'application_letter_reason' => request('AI_reason'),
+      'certificate_of_incorporation_reason' => request('CI_reason')
+    ]);
+
+    // clear the application ID from the session
+    $request->session()->forget('application_id');
+
+    if (Auth::user()->role == 'Marketer') {
+      return redirect('/marketer');
+    } elseif (Auth::user()->role == 'Staff') {
+      return redirect('/staff');
+    }
 
   }
 

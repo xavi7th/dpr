@@ -10,7 +10,10 @@ use App\Staff;
 use App\ReportDocument;
 use App\ApplicationComments;
 use App\SiteSuitabilityInspectionDocuments;
+use App\AddonAtiInspectionDocument;
+use App\AddonLtoInspectionDocument;
 use App\AtcInspectionDocuments;
+use App\CatdLtoInspectionDocument;
 use App\SiteSuitabilityReports;
 use App\IssuedAtcLicense;
 use App\IssuedLtoLicense;
@@ -62,7 +65,7 @@ class staffController extends Controller
 
   public function index(){
 
-    $inbox = Inbox::with('app_doc_review')
+    $inbox = Inbox::with('app_doc_review.company')
       ->where([
         ['to_outbox', 'false'],
         ['receiver_role', Auth::user()->role],
@@ -85,6 +88,8 @@ class staffController extends Controller
         ['role', Auth::user()->role],
         ['office', Auth::user()->office]
       ])->latest()->get();
+
+      // dd($outbox);
 
     $this->getMailDetails();
 
@@ -125,7 +130,7 @@ class staffController extends Controller
     }
 
     $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
-    $applicationReview = AppDocReview::where('id', $applicationID)->first();    // retrieve application review
+    $applicationReview = AppDocReview::with(['job_assignment', 'company'])->where('id', $applicationID)->first();    // retrieve application review
     
     $thisJob = JobAssignment::where('application_id', $applicationReview->application_id)->first();
     
@@ -163,6 +168,12 @@ class staffController extends Controller
       }elseif($applicationReview->sub_category == "Pressure Testing") {
         $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
         // dd($applicationID);
+      } elseif ($applicationReview->sub_category == "ADD-ON ATI") {
+        $applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+      } elseif ($applicationReview->sub_category == "ADD-ON LTO") {
+        $applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+      } elseif ($applicationReview->sub_category == "CAT-D LTO") {
+        $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
       }
       $role = Auth::user()->role;
       return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments','inboxItem','inboxID','role'));

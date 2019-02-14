@@ -124,7 +124,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="#" class="small-box-footer">
+              <a href="/apply_for_ati_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
@@ -140,7 +140,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="#" class="small-box-footer">
+              <a href="/apply_for_addon_lto_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
@@ -156,7 +156,7 @@
               <div class="icon">
                 <i class="fa fa-external-link-square"></i>
               </div>
-              <a href="#" class="small-box-footer">
+              <a href="/apply_for_catd_lto_get" class="small-box-footer">
                 Proceed <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>

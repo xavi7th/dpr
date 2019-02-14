@@ -18,6 +18,7 @@ class CreateLtoInspectionDocumentsTable extends Migration
             $table->string('application_id');
             $table->string('marketer_id');
             $table->string('company_id')->nullable();
+            
             $table->string('completed_application_form');
             $table->string('bankdraft_of_statutory_fees');
             $table->string('photocopy_of_approval_to_construct_lpg');

@@ -200,9 +200,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Create<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>
+                  <li><a href="/custody_transfer_meters">Create<i class="pull-right fa fa-plus"></i></a></li>
+                  <li><a href="/custody_transfer_meters_search">Search<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
             </div>
@@ -221,9 +221,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Create<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>
+                  <li><a href="/flare_meters">Create<i class="pull-right fa fa-plus"></i></a></li>
+                  <li><a href="/flare_meters_search">Search<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
             </div>
@@ -242,9 +242,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Create<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>
+                  <li><a href="/fuel_meters">Create<i class="pull-right fa fa-plus"></i></a></li>
+                  <li><a href="/fuel_meters_search">Search<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
             </div>
@@ -263,9 +263,9 @@
               </div>
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
-                  <li><a href="#">Create<i class="pull-right fa fa-plus"></i></a></li>
-                  <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>
+                  <li><a href="/production_allocation_transfer_meters">Create<i class="pull-right fa fa-plus"></i></a></li>
+                  <li><a href="/production_allocation_transfer_meters_search">Search<i class="pull-right fa fa-search"></i></a></li>
+                  {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
             </div>

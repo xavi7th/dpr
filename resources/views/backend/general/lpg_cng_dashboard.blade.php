@@ -140,7 +140,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_renewal_records?val=lpg_renewal">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -161,7 +161,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_takeover_records?val=lpg_takeover">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -230,7 +230,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_renewal_records?val=cng_renewal">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -251,7 +251,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_takeover_records?val=cng_takeover">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -277,7 +277,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_ati_records">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -298,7 +298,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_addon_lto_records">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -324,7 +324,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_catd_lto_records">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -345,7 +345,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   {{--  <li><a href="#">Apply<i class="pull-right fa fa-plus"></i></a></li>  --}}
-                  <li><a href="#">Track<i class="pull-right fa fa-search"></i></a></li>
+                  <li><a href="/view_catd_renewal_records">Track<i class="pull-right fa fa-search"></i></a></li>
                   {{--  <li><a href="#">Report<i class="pull-right fa fa-newspaper-o"></i></a></li>  --}}
                   {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
@@ -438,7 +438,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   <li><a href="#">Search<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>
+                  {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
             </div>
@@ -460,7 +460,7 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   <li><a href="/view_pressure_test_records">Track<i class="pull-right fa fa-search"></i></a></li>
-                  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>
+                  {{--  <li><a href="#">Document<i class="pull-right fa fa-file-pdf-o"></i></a></li>  --}}
                 </ul>
               </div>
             </div>

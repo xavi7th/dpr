@@ -9,11 +9,15 @@ use App\ApplicationComments;
 use App\AppDocReview;
 use App\LtoInspectionDocument;
 use App\AtcInspectionDocuments;
+use App\AddonAtiInspectionDocument;
+use App\AddonLtoInspectionDocument;
 use App\CompletedJobs;
 use App\JobAssignment;
 use App\SiteSuitabilityInspectionDocuments;
+use App\CatdLtoInspectionDocument;
 use App\Inbox;
 use App\Outbox;
+use App\Company;
 use Auth;
 use DB;
 
@@ -92,8 +96,22 @@ class appController extends Controller
         ->update([
           $documentCheckName => $valid
         ]);
+      } elseif ($subCategory == 'ADD-ON ATI') {
+        AddonAtiInspectionDocument::where('application_id', $applicationID)
+        ->update([
+          $documentCheckName => $valid
+        ]);
+      } elseif ($subCategory == 'ADD-ON LTO') {
+        AddonLtoInspectionDocument::where('application_id', $applicationID)
+          ->update([
+            $documentCheckName => $valid
+          ]);
+      } elseif ($subCategory == 'CAT-D LTO') {
+        CatdLtoInspectionDocument::where('application_id', $applicationID)
+          ->update([
+            $documentCheckName => $valid
+          ]);
       }
-
       
 
       return back();
@@ -117,7 +135,6 @@ class appController extends Controller
         ->where('application_type', 'LPG Retailer Outlets')
         ->where('application_status', 'ATC Issued')
         ->get();    // get all application requests
-
         // dd($appDocReviewsATC);
       }elseif($type == 'cng_atc'){
         $appDocReviewsATC = DB::table('issued_atc_licenses')
@@ -168,6 +185,33 @@ class appController extends Controller
 
       // dd($appDocReviewsLTO);
       return view('backend.general.view_all_lto', compact('appDocReviewsLTO'));
+    }
+
+
+    public function viewAllAddonLTO(Request $request){
+      return view('backend.general.view_all_addonlto');
+    }
+
+
+    public function viewAllCatDLTO(Request $request){
+      return view('backend.general.view_all_catdlto');
+    }
+
+
+    public function viewAllAddOnATI(Request $request){
+      return view('backend.general.view_all_addonati');
+    }
+
+    public function viewAllLpgCngRenewal(Request $request){
+      return view('backend.general.view_all_lpgcng_renewal');
+    }
+
+    public function viewAllCatdRenewal(Request $request){
+      return view('backend.general.view_all_catd_renewal');
+    }
+
+    public function viewAllLpgCngTakeover(Request $request){
+      return view('backend.general.view_all_lpgcng_takeover');
     }
 
     public function viewAllPressureTestRecords(){
@@ -381,20 +425,36 @@ class appController extends Controller
 
 
 
-
+//LPG-CNG-ROUTES
     public function lpgCngDashboard(){return view('backend.general.lpg_cng_dashboard');}
 
 
 
-
+//GAS-PROCESSING-FACILITIES-ROUTES
     public function gasProcessingFacilitiesDashboard(){return view('backend.general.gas_processing_facilities_dashboard');}
+    public function custodyTransferMetersSearch(){return view('backend.general.custody_transfer_meters_search');}
+    public function flareMetersSearch(){return view('backend.general.flare_meters_search');}
+    public function fuelMetersSearch(){return view('backend.general.fuel_meters_search');}
+    public function productionAllocationTransferMetersSearch(){return view('backend.general.production_allocation_transfer_meters_search');}
 
+
+
+
+//GAS-PIPELINES-ROUTES
     public function gasPipelinesDashboard(){return view('backend.general.gas_pipelines_dashboard');}
+    public function gasPipelinesPTSSearch(){return view('backend.general.gas_pipelines_pts_search');}
+    public function gasPipelinesOPLLSearch(){return view('backend.general.gas_pipelines_opll_search');}
+    public function gasPipelinesHydroTestingSearch(){return view('backend.general.gas_pipelines_hydrotesting_search');}
+    public function gasPipelinesPiggingSearch(){return view('backend.general.gas_pipelines_pigging_search');}
+
     
 
 
 
 
+
+
+//PROJECT-MONITORING-ROUTES
     public function projectMonitoringDashboard(){return view('backend.general.project_monitoring_dashboard');}
 
     public function projectMonitoringFeedCreateForm(){return view('backend.general.project_monitoring_feed_create');}

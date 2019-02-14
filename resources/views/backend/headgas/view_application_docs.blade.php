@@ -42,8 +42,13 @@
             <div class="box box-primary">
               <div class="box-body box-profile">
 
-                <h3 class="profile-username text-center" style="text-transform: capitalize;">{{ $applicationReview->name_of_gas_plant }}</h3>
-
+                @if ($applicationReview->sub_category == "CAT-D LTO")
+                  
+                  <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
+                @else
+                  
+                  <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
+                @endif
                 <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
 
                 <ul class="list-group list-group-unbordered">
@@ -53,12 +58,30 @@
                   <li class="list-group-item">
                     <b>Sub-category</b> <a class="pull-right">{{ $applicationReview->sub_category }}</a>
                   </li>
+                  @if ($applicationReview->sub_category == "CAT-D LTO")
+                    <li class="list-group-item">
+                      <b>No. of Bottles</b> <a class="pull-right">{{ $applicationID->catdLtoApplicationExtention['no_of_bottles'] }}</a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Name of Sponsoring Company</b> <a class="pull-right">{{ $applicationID->catdLtoApplicationExtention['sponsoring_company'] }}</a>
+                    </li>
+                  @else
                   <li class="list-group-item">
+                    <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
+                  </li>
+                  @endif
+                  
+                  @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
+                    <li class="list-group-item">
+                      <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
+                    </li>
+                  @endif
+                  {{--  <li class="list-group-item">
                     <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                   </li>
                   <li class="list-group-item">
                     <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
-                  </li>
+                  </li>  --}}
                   <li class="list-group-item">
                     <b>State</b> <a class="pull-right">{{ $applicationReview->state }}</a>
                   </li>
@@ -95,10 +118,11 @@
                       <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
                       <input type="text" hidden name="inbox_id" value="{{ $inboxID }}">
                       <div class="box-footer">
-                        <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">
+                        {{--  <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">  --}}
+                        <button type="submit" name="to_teamlead" class="pull btn btn-primary btn-block">Forward Application <i style="padding-left: 10px;" class="fa fa-send"></i></button>
                       </div>
                     </form>
-                    @if ($applicationReview->sub_category == 'ATC')
+                    @if ($applicationReview->sub_category == 'ATC' || $applicationReview->sub_category == 'LTO')
                       @if ($reportDocument)
                         <form role="form" method="post" action="/hgApproves">
                           {{ csrf_field() }}
@@ -109,19 +133,37 @@
                           <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
                           <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
                           <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                          <input type="text" hidden name="office" value="{{ $applicationReview->office }}">
                           <input type="text" hidden name="inboxID" value="{{ $inboxItem->id }}">
                           <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
                           <div class="box-footer">
-                            <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
-                            <input type="submit" name="approve" value="Issue License" class="pull-right btn btn-success">
+                            {{--  <input type="submit" style="margin-right: 2px;" name="decline" value="Decline LTO" class="pull-left btn btn-danger">  --}}
+                            <button type="submit" name="decline" class="pull-left btn btn-danger" value="Decline LTO">Decline LTO <i style="padding-left: 10px;" class="fa fa-ban"></i></button>
+                            <button type="submit" name="approve" class="pull-right btn btn-success" value="Issue LTO">Issue LTO <i style="padding-left: 10px;" class="fa fa-check"></i></button>
+                          </div>
+                        </form>
+                        <form role="form" method="post" action="/back_to_zopscon">
+                          {{ csrf_field() }}
+                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                          <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                          <input type="text" hidden name="office" value="{{ $applicationReview->office }}">
+                          <input type="text" hidden name="inboxID" value="{{ $inboxItem->id }}">
+                          <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                          <div class="box-footer">
+                            <button type="submit" class="pull btn btn-success btn-block">Back to {{ $applicationReview->office }} Zopscon <i style="padding-left: 10px;" class="fa fa-reply"></i></button>
                           </div>
                         </form>
                       @endif
                     @endif
-                    @if ($applicationReview->sub_category == 'LTO')
+                    {{--  @if ($applicationReview->sub_category == 'LTO')
                       @if ($reportDocument)
                         <form role="form" method="post" action="/send_job_to_hq">
-                          {{ csrf_field() }}
+                          {{ csrf_field() }}fa-reply
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                           <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
                           <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
@@ -136,7 +178,7 @@
                           </div>
                         </form>
                       @endif
-                    @endif
+                    @endif  --}}
                   @endif
 
                   {{--  @if ($applicationStatus != null)
@@ -274,6 +316,12 @@
                   @include('partials.m_view_application_docs')
                 @elseif($applicationReview->sub_category == 'LTO')
                   @include('partials.m_view_application_docs_lto')
+                @elseif($applicationReview->sub_category == 'ADD-ON ATI')
+                  @include('partials.m_view_application_docs_addon_ati')
+                @elseif($applicationReview->sub_category == 'ADD-ON LTO')
+                  @include('partials.m_view_application_docs_addon_lto')
+                @elseif($applicationReview->sub_category == 'CAT-D LTO')
+                  @include('partials.m_view_application_docs_catd_lto')
                 @elseif($applicationReview->sub_category == 'Renewal')
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
@@ -300,16 +348,10 @@
 @section('pagescript')
   <!-- page script -->
   <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+ $(function () {
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
   })
   </script>
 @endsection

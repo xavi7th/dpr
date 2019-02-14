@@ -16,4 +16,8 @@ class AppDocReview extends Model
     public function job_assignment(){
       return $this->hasOne(JobAssignment::class, 'application_id', 'application_id');
     }
+
+    public function company(){
+      return $this->belongsTo(Company::class, 'company_id', 'company_id');
+    }
 }

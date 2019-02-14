@@ -65,10 +65,12 @@
                   </thead>
                   <tbody>
                     @foreach ($appDocReviewsATC as $item)
+                    {{--  {{$appDocReviewsATC}}  --}}
                       <tr>
                         <td class="sorting_1">
                           @if (now()->lte($item->expiry_date))
                             <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            {{--  <a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a>  --}}
                           @else
                             <a class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @endif
@@ -113,16 +115,10 @@
   $.widget.bridge('uibutton', $.ui.button);
 </script>
 <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
+ $(function () {
+    $('#example1').DataTable({
+      'ordering'    : false,
+    });
   })
 </script>
 @endsection
