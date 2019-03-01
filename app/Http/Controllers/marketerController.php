@@ -2151,8 +2151,7 @@ class marketerController extends Controller
         'lga' => $companyATODetails->lga,
         'town' => $companyATODetails->town,
         'address' => $companyATODetails->address,
-        'application_status' => 'Application Pending',
-        'to_zopscon' => 'true'
+        'application_status' => 'Not Submitted'
       ]);
 
       // dd($request);
@@ -2212,3 +2211,5 @@ class marketerController extends Controller
 
 
 }
+
+

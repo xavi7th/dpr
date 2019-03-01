@@ -51,7 +51,7 @@
                   <apply-for-lto-renewal-component></apply-for-lto-renewal-component>
                   <!-- /.box-body -->
                   <!-- Date dd/mm/yyyy -->
-                  <div class="form-group">
+                  {{--  <div class="form-group">
                     <label>Date masks:</label>
 
                     <div class="input-group">
@@ -61,7 +61,7 @@
                       <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                     </div>
                     <!-- /.input group -->
-                  </div>
+                  </div>  --}}
                   <div class="box-footer">
                     <button type="submit" class="btn btn-primary" style="float: right;">Save & Continue</button>
                   </div>

@@ -14,7 +14,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.router_aside')
+    @include('partials.backend_aside_marketer')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -173,7 +173,7 @@
               </div>
               <!-- /.box-body -->
             </div>
-            @if ($licenseDetail != null)
+            @if ($licenseDetail != null && Auth::user()->role == 'Marketer')
               @if (now()->gte($licenseDetail->expiry_date) || now()->addMonths(3)->gte($licenseDetail->expiry_date))
                 <div class="box box-info">
                   <div class="box-header with-border">

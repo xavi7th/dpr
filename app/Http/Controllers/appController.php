@@ -133,7 +133,7 @@ class appController extends Controller
         ->join('companies', 'companies.company_id', '=', 'issued_atc_licenses.company_id')
         ->select('issued_atc_licenses.*', 'app_doc_reviews.*', 'companies.*')
         ->where('application_type', 'LPG Retailer Outlets')
-        ->where('application_status', 'ATC Issued')
+        // ->where('application_status', 'ATC Issued')
         ->get();    // get all application requests
         // dd($appDocReviewsATC);
       }elseif($type == 'cng_atc'){
@@ -147,7 +147,6 @@ class appController extends Controller
 
         // dd($appDocReviewsATC);
       }
-
       return view('backend.general.view_all_atc', compact('appDocReviewsATC'));
     }
 
@@ -157,18 +156,14 @@ class appController extends Controller
       $type = request('val');
 
       if($type == 'lpg_lto'){
-        $appDocReviewsLTO = DB::table('app_doc_reviews')
-        ->join('job_assignments', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
-          // ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id') // maybe this would be uncommented when we receive the license tatus From HQ
+        $appDocReviewsLTO = AppDocReview::with(['issued_lto_licenses','company'])
         ->where('application_type', 'LPG Retailer Outlets')
         ->where('sub_category', 'LTO')
         ->get();    // get all application requests
 
         // dd($appDocReviewsLTO);
-      } elseif ($type == 'cng_lto'){
-        $appDocReviewsLTO = DB::table('app_doc_reviews')
-        ->join('job_assignments', 'job_assignments.application_id', '=', 'app_doc_reviews.application_id')
-          // ->join('issued_lto_licenses', 'issued_lto_licenses.company_id', '=', 'app_doc_reviews.company_id') // maybe this would be uncommented when we receive the license tatus From HQ
+      } elseif ($type == 'cng_lto') {
+        $appDocReviewsLTO = AppDocReview::with(['issued_lto_licenses','company'])
         ->where('application_type', 'CNG Retailer Outlets')
         ->where('sub_category', 'LTO')
         ->get();    // get all application requests

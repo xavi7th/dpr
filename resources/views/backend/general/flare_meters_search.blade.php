@@ -13,21 +13,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @if (Auth::user()->role == 'Marketer')
-      @include('partials.backend_aside_marketer')
-    @elseif (Auth::user()->role == 'Admin')
-      @include('partials.backend_aside_admin')
-    @elseif (Auth::user()->role == 'Staff')
-      @include('partials.backend_aside_all')
-    @elseif (Auth::user()->role == 'Team Lead')
-      @include('partials.backend_aside_teamlead')
-    @elseif (Auth::user()->role == 'Head Gas M&G Lagos')
-      @include('partials.backend_aside_headgas')
-    @elseif (Auth::user()->role == 'ADO')
-      @include('partials.backend_aside_ado')
-    @elseif (Auth::user()->role == 'ZOPSCON')
-      @include('partials.backend_aside_zopscon')
-    @endif
+    @include('partials.backend_aside_all')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

@@ -13,7 +13,7 @@
 
     @include('partials.backend_top_nav_all')
 
-    @include('partials.router_aside')
+    @include('partials.backend_aside_all')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->

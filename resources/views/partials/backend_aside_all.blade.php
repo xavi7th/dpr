@@ -15,15 +15,50 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN NAVIGATION</li>
       <li>
-        <a href="/staff">
+        
+        @if (Auth::user()->role == 'Marketer')
+          <a href="/marketer">
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
-      </li>
-      <li>
-        <a href="/marketer_app_doc_review">
-          <i class="fa fa-dashboard"></i> <span>App. Document Review</span>
+        @elseif (Auth::user()->role == 'Admin')
+          <a href="/admin">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
+        @elseif (Auth::user()->role == 'Staff')
+          <a href="/staff">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+        @elseif (Auth::user()->role == 'Team Lead')
+          <a href="/teamlead">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+        @elseif (Auth::user()->role == 'Head Gas M&G Lagos')
+          <a href="/headgas">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+        @elseif (Auth::user()->role == 'ADO')
+          <a href="/ado">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+        @elseif (Auth::user()->role == 'ZOPSCON')
+          <a href="/zopscon">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+        @elseif (Auth::user()->role == 'Manager Gas')
+          <a href="/managergas">
+          <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+        @endif
       </li>
+      
+      
+      @if (Auth::user()->role == 'Marketer')
+        <li>
+          <a href="/marketer_app_doc_review">
+            <i class="fa fa-dashboard"></i> <span>App. Document Review</span>
+          </a>
+        </li>
+      @endif
       <li>
         <a href="/lpg_cng_dashboard">
           <i class="fa fa-dashboard"></i> <span>LPG/CNG Retailer Outlets</span>

@@ -13,21 +13,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @if (Auth::user()->role == 'Marketer')
-      @include('partials.backend_aside_marketer')
-    @elseif (Auth::user()->role == 'Admin')
-      @include('partials.backend_aside_admin')
-    @elseif (Auth::user()->role == 'Staff')
-      @include('partials.backend_aside_all')
-    @elseif (Auth::user()->role == 'Team Lead')
-      @include('partials.backend_aside_teamlead')
-    @elseif (Auth::user()->role == 'Head Gas M&G Lagos')
-      @include('partials.backend_aside_headgas')
-    @elseif (Auth::user()->role == 'ADO')
-      @include('partials.backend_aside_ado')
-    @elseif (Auth::user()->role == 'ZOPSCON')
-      @include('partials.backend_aside_zopscon')
-    @endif
+    @include('partials.backend_aside_all')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -66,43 +52,51 @@
                     @foreach ($appDocReviewsLTO as $item)
                       <tr>
                         <td class="sorting_1">
-                          {{--  @if (Auth::user()->role == 'Marketer')
-                            @if (now()->gte($item->expiry_date))
+
+                          @if($item->issued_lto_licenses['expiry_date'] == "")
+                              <a href="/mDocument_review/{{ $item->id }}" class="label label-default" style="font-size: 14px;">{{ $item->application_id }}</a>
+
+                          @elseif(now()->gte($item->issued_lto_licenses['expiry_date']))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
-                            @elseif (now()->addMonths(3)->gte($item->expiry_date))
+
+                          @elseif(now()->addMonths(3)->gte($item->issued_lto_licenses['expiry_date']))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
-                            @else
-                              if (now()->lte($item->expiry_date)) this was commented
+
+                          @elseif(now()->lte($item->issued_lto_licenses['expiry_date']))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
-                            @endif
-                          @else
-                            @if (now()->gte($item->expiry_date))
-                              <a href="/document_review/{{ $item->application_id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
-                            @elseif (now()->addMonths(3)->gte($item->expiry_date))
-                              <a href="/document_review/{{ $item->application_id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
-                            @else
-                              if (now()->lte($item->expiry_date)) this was commented
-                              <a href="/document_review/{{ $item->application_id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
-                            @endif
-                          @endif  --}}
-                          <a href="/document_review/{{ $item->application_id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+
+                          @endif
                         </td>
-                        <td>{{ $item->name_of_gas_plant }}</td>
+                        <td>{{ $item->name_of_gas_plant }}{{$item->issued_lto_licenses['expiry_date']}}</td>
                         <td>{{ $item->state }}</td>
                         <td>{{ $item->plant_type }}</td>
-                        <td>{{ $item->job_application_status }}</td>
-                        <td>null</td>
-                        {{--  <td>
-                          @if (now()->lte($item->expiry_date))
+                        <td>{{ $item->application_status }}</td>
+                        {{--  <td>null</td>  --}}
+                        <td>
+                          @if (now()->lte($item->issued_lto_licenses['expiry_date']))
                             Active
+                          @elseif ($item->issued_lto_licenses['expiry_date'] == "")
+                            --
                           @else
                             Expired
                           @endif
-                        </td>  --}}
+                        </td>
                         <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                         <td>{{ Carbon\Carbon::parse($item->updated_at)->toDayDateTimeString() }}</td>
-                        <td>null</td>
-                        <td>null</td>
+                        <td>
+                          @if ($item->issued_lto_licenses['date_issued'] == "")
+                            --
+                          @else
+                            {{Carbon\Carbon::parse($item->issued_lto_licenses['date_issued'])->toDayDateTimeString()}}
+                          @endif
+                        </td>
+                        <td>
+                          @if ($item->issued_lto_licenses['expiry_date'] == "")
+                            --
+                          @else
+                            {{Carbon\Carbon::parse($item->issued_lto_licenses['expiry_date'])->toDayDateTimeString()}}
+                          @endif
+                        </td>
 
                         {{--  <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                         <td>{{ Carbon\Carbon::parse($item->date_issued)->toDayDateTimeString() }}</td>

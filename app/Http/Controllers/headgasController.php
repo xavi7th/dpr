@@ -273,35 +273,25 @@ class headgasController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
     if(request('sub_category') == 'LTO'){
       $dateIssued = Carbon::now();
       $expiryDate = Carbon::now()->addYears(2);
       if (request('approve')) {
         $verdict = 'LTO Issued';
-
-      // update or create a record for this application inside issued atc_licences table
-      IssuedLtoLicense::create([
-        'application_id' => request('application_id'),
-        'company_id' => request('company_id'),
-        'staff_id' => request('staff_id'),
-        'date_issued' => $dateIssued->toDateTimeString(),
-        'expiry_date' => $expiryDate->toDateTimeString(),
-        'report_url' => request('report_url')
-      ]);
-
-      // lto inspection document
-      LtoInspectionDocument::where('application_id', request('application_id'))
-      ->update([
-        'company_id' => request('company_id')
-      ]);
+        // update or create a record for this application inside issued atc_licences table
+        IssuedLtoLicense::create([
+          'application_id' => request('application_id'),
+          'company_id' => request('company_id'),
+          'staff_id' => request('staff_id'),
+          'date_issued' => $dateIssued->toDateTimeString(),
+          'expiry_date' => $expiryDate->toDateTimeString(),
+          'report_url' => request('report_url')
+        ]);
+        // lto inspection document
+        LtoInspectionDocument::where('application_id', request('application_id'))
+        ->update([
+          'company_id' => request('company_id')
+        ]);
       } 
       
       if (request('decline')) {

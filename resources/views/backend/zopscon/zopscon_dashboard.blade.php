@@ -14,7 +14,7 @@
     @include('partials.backend_top_nav_all')
 
 
-    @include('partials.backend_aside_zopscon')
+    @include('partials.backend_aside_all')
     <div class="content-wrapper">
       <section class="content-header">
         <h1>
