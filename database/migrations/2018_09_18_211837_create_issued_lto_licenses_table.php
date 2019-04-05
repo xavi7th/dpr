@@ -18,7 +18,7 @@ class CreateIssuedLtoLicensesTable extends Migration
             $table->string('application_id');
             $table->string('company_id');
             $table->string('staff_id')->nullable();
-            $table->string('report_url')->nullable();
+            $table->string('license_url')->nullable();
             $table->datetime('date_issued')->nullable();
             $table->datetime('expiry_date')->nullable();
             $table->timestamps();

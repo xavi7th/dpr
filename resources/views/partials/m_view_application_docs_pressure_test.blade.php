@@ -1,9 +1,15 @@
 <ul class="todo-list ui-sortable">
+  <li class="list-group-item">
+    <b>Application Letter</b>
+    <a href="/displayDocument?pic=/storage/pressure_test_docs/{{ $applicationID->marketer_id }}/{{ $applicationID->company_name }}/{{ $applicationID->application_id }}/{{ $applicationID->application_letter_location_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
+  </li>
+  <br>
   <li class="list-group-item" id="pt_style">
-    <b>Test Certificate / Report</b>
-    <div class="box-tools pull-right tools" data-toggle="modal" data-target="#pressure_doc" style="position: relative; bottom: 5px;">
-      <button type="button" class="btn btn-box-tool"><i class="fa fa-eye" style="font-size: 18px;"></i></button>
-    </div>
+    <b>Equipment Name</b> <a class="pull-right">{{ $applicationID->equipment_name }}</a>
+  </li>
+  <br>
+  <li class="list-group-item" id="pt_style">
+    <b>Test Type</b> <a class="pull-right">{{ $applicationID->test_type }}</a>
   </li>
   <br>
   <li class="list-group-item" id="pt_style">
@@ -17,18 +23,18 @@
   <li class="list-group-item" id="pt_style">
     <b>Design Pressure</b> <a class="pull-right">{{ $applicationID->design_pressure }}</a>
   </li>
-  <br>
+  {{--  <br>
   <li class="list-group-item" id="pt_style">
     <b>Test Pressure</b> <a class="pull-right">{{ $applicationID->test_pressure }}</a>
-  </li>
-  <br>
+  </li>  --}}
+  {{--  <br>
   <li class="list-group-item" id="pt_style">
     <b>Date Last Tested</b> <a class="pull-right">{{ Carbon\Carbon::parse($applicationID->date_last_tested)->toFormattedDateString() }}</a>
-  </li>
-  <br>
+  </li>  --}}
+  {{--  <br>
   <li class="list-group-item" id="pt_style">
     <b>Due Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($applicationID->due_date)->toFormattedDateString() }}</a>
-  </li>
+  </li>  --}}
   <div class="modal fade" id="pressure_doc" style="display: none;">
     <div class="modal-dialog" style="width: 1400px;">
       <div class="modal-content" style="background: transparent;">

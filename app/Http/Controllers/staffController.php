@@ -72,6 +72,8 @@ class staffController extends Controller
         ['office', Auth::user()->office]
       ])->latest()->get();
 
+      // dd($inbox);
+
     $this->getMailDetails();
 
     $completedCount = $this->completedCount;
@@ -112,9 +114,34 @@ class staffController extends Controller
     return view('backend.staff.staff_completed', compact('outboxCount', 'inboxUnreadCount', 'completedCount', 'completed'));
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   public function showCreateCompany(SiteSuitabilityInspectionDocuments $applicationID){
     return view('backend.staff.create_company', compact('applicationID'));
   }
+
+
+
+
+
+
+
+
+
+
 
   public function staffDocumentReview(Request $request){
 
@@ -143,8 +170,18 @@ class staffController extends Controller
     $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
     $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
 
+    $issuedAtcLicense = IssuedAtcLicense::where('application_id', $applicationReview->application_id)->first();
+
     // check if the company that has this application has been registered into the system
     if($applicationReview->company_id != null){
+      
+      $activePressureTest = PressureTestRecords::where([
+        ['company_name', $applicationReview->company_id],
+        ['facility_name', $applicationReview->name_of_gas_plant],
+        ['due_date', '>', Carbon::now()]
+      ])->first();
+
+      // dd($activePressureTest);
       // redirect the staff to the document review area
       // check the pplication that is being assigned to this staff
       if($applicationReview->sub_category == "Site Suitability Inspection"){
@@ -156,10 +193,14 @@ class staffController extends Controller
       }elseif($applicationReview->sub_category == "LTO") {
         $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "Renewal") {
-        $applicationID = DB::table('lto_inspection_documents')
-        ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
-        // ->where()
-        ->first();
+        // $applicationID = DB::table('lto_inspection_documents')
+        // ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+        // // ->where()
+        // ->first();
+
+        $thisApplicationRenewalDetails = LtoLicenseRenewal::where('application_id', $applicationReview->application_id)->first();
+
+        $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "Take Over") {
         $applicationID = DB::table('takeover_inspection_documents')
         ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
@@ -176,7 +217,7 @@ class staffController extends Controller
         $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
       }
       $role = Auth::user()->role;
-      return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments','inboxItem','inboxID','role'));
+      return view('backend.staff.view_application_docs', compact('applicationReview','applicationID','applicationStatus','reportDocument','applicationComments','inboxItem','inboxID','role', 'thisApplicationRenewalDetails', 'activePressureTest', 'issuedAtcLicense'));
     }else{
       // redirect the staff to register this company
       return view('backend.staff.create_company', compact('applicationReview','applicationStatus'));
@@ -266,11 +307,62 @@ class staffController extends Controller
     }
   }
 
+  public function setDateTested(Request $request){
+    // dd($request);
+    $currentYear = Carbon::now()->year;
+    $manufactureYear = request('manufacture_year');
+
+    $tankAge = $currentYear - $manufactureYear;
+    $dateLastTested = date('Y-m-d', strtotime(request('date_tested')));  // this is in javascript time.....converted to PHP datetime
+
+    if($tankAge < 20){
+      // if the year of manufacture is not up to 20 years, pressure test should be carried out every 5 years
+      $dueDate = Carbon::createFromFormat('Y-m-d', $dateLastTested)->addYears(5);  // set due date to 5 years upfront of date last tested
+      $dueDate = date('Y-m-d', strtotime($dueDate));
+    }elseif ($tankAge >= 20) {
+      // if the year of manufacture is up to 20 years and above, pressure test should be carried out every 30 months
+      $dueDate = Carbon::createFromFormat('Y-m-d', $dateLastTested)->addMonths(30);  // set due date to 30 months upfront of date last tested
+      $dueDate = date('Y-m-d', strtotime($dueDate));
+    }
+
+    // dd($dateLastTested);
+
+    PressureTestRecords::where('application_id', request('application_id'))->update([
+      'date_last_tested' => $dateLastTested,
+      'due_date' => $dueDate
+    ]);
+
+    $verdict = "Pressure Test Succesful";
+
+    // update app_doc_review
+    AppDocReview::where('application_id', request('application_id'))
+      ->update([
+        'application_status' => $verdict
+      ]);
+    // update job_assignments
+    JobAssignment::where('application_id', request('application_id'))
+      ->update([
+        'job_application_status' => $verdict,
+        'company_id' => request('company_id'),
+        'approved_by' => Auth::user()->staff_id
+      ]);
+
+    // update completed job table
+    // CustomHelpers::toCompletedJobsTable($request);
+    // update inbox table
+    // Inbox::where('id', request('inboxID'))->update([
+    //   'to_outbox' => 'true'
+    //   ]);
+
+    return back();
+  }
+
   public function uploadReport(Request $request){
     // dd($request);
     $report_document = "";
     // check if request has the document
     if($request->hasFile('reportDocument')){
+      // dd($request);
       // store the document to the company folder in company reports folder
       $request->reportDocument->storeAs('comp_reports/'.request('company_id').'/'.request('staff_id').'/'.request('application_id'), $request->reportDocument->getClientOriginalName());
 
@@ -278,31 +370,62 @@ class staffController extends Controller
 
       $inspectionDate = date('Y-m-d', strtotime(request('date_of_inspection')));
 
-      // if this record exist, update the record else create a new record.
-      ReportDocument::updateOrCreate([
-        'application_id' => request('application_id')
-      ],
-      [
-        'application_id' => request('application_id'),
-        'staff_id' => request('staff_id'),
-        'company_id' => request('company_id'),
-        'report_url' => $report_document,
-        'report_type' => request('report_type'),
-        'office' => Auth::user()->office,
-        'date_of_inspection' => $inspectionDate
-      ]);
+      if(request('report_type') == 'Implementation Schedule Report'){
+        ReportDocument::Create(
+          [
+            'application_id' => request('application_id'),
+            'staff_id' => request('staff_id'),
+            'company_id' => request('company_id'),
+            'report_url' => $report_document,
+            'report_type' => request('report_type'),
+            'office' => Auth::user()->office,
+            'date_of_inspection' => $inspectionDate
+          ]
+        );
+      }else{
+        // if this record exist, update the record else create a new record.
+        ReportDocument::updateOrCreate(
+          [
+            'application_id' => request('application_id')
+          ],
+          [
+            'application_id' => request('application_id'),
+            'staff_id' => request('staff_id'),
+            'company_id' => request('company_id'),
+            'report_url' => $report_document,
+            'report_type' => request('report_type'),
+            'office' => Auth::user()->office,
+            'date_of_inspection' => $inspectionDate
+          ]
+        );
 
-      JobAssignment::where('application_id', request('application_id'))
-      ->update([
-        'job_application_status' => 'Started'
-      ]);
-
+        JobAssignment::where('application_id', request('application_id'))
+        ->update([
+          'job_application_status' => 'Started'
+        ]);
+      }
       // return back
       return back();
     }else{
       // return back with errors
       return back();
     }
+  }
+
+  public function constructionStarted(Request $request){
+    // dd($request);
+    $expiryDate = Carbon::now()->addMonths(18);
+
+    IssuedAtcLicense::where('application_id', request('application_id'))
+      ->update([
+        'expiry_date' => $expiryDate
+      ]);
+
+    Inbox::where('id', request('inbox_id'))->update([
+      'to_outbox' => 'true'
+      ]);
+
+    return redirect('/staff');
   }
 
   public function upToTeamlead(Request $request){

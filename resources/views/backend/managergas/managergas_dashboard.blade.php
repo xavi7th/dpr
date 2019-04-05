@@ -42,6 +42,7 @@
                   <thead>
                     <tr>
                       <th>Name of Company</th>
+                      <th>Name of Gas plant</th>
                       <th>Application Type</th>
                       <th>Sub-Category</th>
                       <th>Source</th>
@@ -53,10 +54,11 @@
                       <tr>
                         @if ($item->read == 'true')
                           @if ($item->app_doc_review['sub_category'] == "CAT-D LTO")
-                            <td></i><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
+                            <td></i><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
                           @else
-                            <td></i><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                            <td></i><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
                           @endif
+                          <td style="color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</td>
                           <td style="color: #333;">{{ $item->app_doc_review['application_type'] }}</td>
                           <td style="color: #333;">{{ $item->app_doc_review['sub_category'] }}</td>
                           <td style="color: #333;">{{ $item->sender_role }}</td>
@@ -67,6 +69,7 @@
                           @else
                             <td></i><a href="/managergas_document_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: bold; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
                           @endif
+                          <td style="color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</td>
                           <td style="font-weight: bold; color: #333;">{{ $item->app_doc_review['application_type'] }}</td>
                           <td style="font-weight: bold; color: #333;">{{ $item->app_doc_review['sub_category'] }}</td>
                           <td style="font-weight: bold; color: #333;">{{ $item->sender_role }}</td>

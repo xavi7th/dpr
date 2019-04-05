@@ -83,13 +83,15 @@
                         <td>{{ $item->tag_number }}</td>
                         <td>{{ $item->state }}</td>
                         <td>{{ $item->test_type }}</td>
-                        <td>{{ Carbon\Carbon::parse($item->manufacture_year)->toFormattedDateString() }}</td>
-                        <td>{{ Carbon\Carbon::parse($item->commission_year)->toFormattedDateString() }}</td>
+                        <td>{{ $item->manufacture_year }}</td>
+                        <td>{{ $item->commission_year }}</td>
                         <td>{{ $item->design_pressure }}</td>
                         {{--  <td>{{ $item->test_pressure }}</td>  --}}
                         <td>{{ Carbon\Carbon::parse($item->date_last_tested)->toFormattedDateString() }}</td>
-                        <td>{{ Carbon\Carbon::parse($item->due_date)->toFormattedDateString() }}</td>
-                        <td><a href="/displayDocument?pic=/storage/pressure_test_docs/{{ $item->marketer_id }}/{{ $item->atc_application_id }}/{{ $item->test_certificate_report_location_url }}" class="pull-right btn btn-default">View</a></td>
+                        <td>{{ Carbon\Carbon::parse($item->due_date)->toFormattedDateString() }}</td> 
+                        {{-- <td>{{ $item->date_last_tested }}</td>
+                        <td>{{ $item->due_date }}</td> --}}
+                        <td><a href="/displayDocument?pic=/storage/license_docs/{{ $item->company_id }}/{{ $item->application_id }}/{{ $item->license_url }}" class="pull-right btn btn-primary">View</a></td>
                       </tr>
                     @endforeach
                   </tbody>

@@ -111,6 +111,38 @@
                       <a href="/displayDocument?pic=/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
                     </li>
                   @endif
+                  @if (optional($issuedAtcLicense)->implementation_schedule != null)
+                    <li class="list-group-item">
+                      <b>Implementation Schedule</b>
+                      <a href="/displayDocument?pic=/storage/implementation_schedules/{{ $issuedAtcLicense->company_id }}/{{ $issuedAtcLicense->application_id }}/{{ $issuedAtcLicense->implementation_schedule }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
+                    </li>
+                  @endif
+                  @if ($applicationReview->sub_category == 'LTO' && $activePressureTest)
+                    <div class="box box-primary">
+                      <div class="box-body box-profile">
+
+                        <h3 class="profile-username text-center">Pressure Test Record</h3>
+
+                        <ul class="list-group list-group-unbordered">
+                          <li class="list-group-item">
+                            <b>Date Tested</b> <a class="pull-right">{{ Carbon\Carbon::parse($activePressureTest->date_last_tested)->toFormattedDateString() }}</a>
+                          </li>
+                          <li class="list-group-item">
+                            <b>Due Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($activePressureTest->due_date)->toFormattedDateString() }}</a>
+                          </li>
+                          <li class="list-group-item">
+                            <b>Pressure Test Status</b>
+                            <a class="pull-right text-green">Active</a>
+                          </li>
+                          <li class="list-group-item">
+                            <b>Current Active License</b>
+                            <a href="/displayDocument?pic=/storage/license_docs/{{ $activePressureTest->company_name }}/{{ $activePressureTest->application_id }}/{{ $activePressureTest->license_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
+                          </li>
+                        </ul>
+                      </div>
+                      <!-- /.box-body -->
+                    </div>
+                  @endif
                   @if (optional($inboxItem)->to_outbox == 'false')
                     <form role="form" method="post" action="/open_assign_tree">
                       {{ csrf_field() }}
@@ -121,6 +153,26 @@
                         <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">
                       </div>
                     </form>
+                    @if (optional($issuedAtcLicense)->implementation_schedule == null)
+                      @if ($reportDocument)
+                        <form role="form" method="post" action="/managergas_decides">
+                          {{ csrf_field() }}
+                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                          <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                          <input type="text" hidden name="inboxID" value="{{ $inboxItem->id }}">
+                          <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                          <div class="box-footer">
+                            <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
+                            <input type="submit" name="approve" value="Issue License" class="pull-right btn btn-success">
+                          </div>
+                        </form>
+                      @endif
+                    @endif
                     @if ($applicationReview->sub_category == 'Site Suitability Inspection')
                       @if ($reportDocument)
                         <form role="form" method="post" action="/tlApproves">
@@ -330,6 +382,11 @@
                 @elseif($applicationReview->sub_category == 'CAT-D LTO')
                   @include('partials.m_view_application_docs_catd_lto')
                 @elseif($applicationReview->sub_category == 'Renewal')
+                <li class="list-group-item">
+                  <span style="font-weight: 600; font-size: 16px; margin-left: 5px;">COPY OF LAST EXPIRED LICENSE</span>
+                  <i class="fa fa-check text-green" style="float: left;"></i>
+                  <a href="/displayDocument?pic=/storage/license_docs/{{ $applicationReview->company_id }}/{{ $thisApplicationRenewalDetails->comp_license_id }}/{{ $thisApplicationRenewalDetails->copy_of_last_expired_license_location_url }}" class="btn btn-primary btn-xs pull-right">View</a>
+                </li><br>
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
                   @include('partials.m_view_application_docs_takeover')

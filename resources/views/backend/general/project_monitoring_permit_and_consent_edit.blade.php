@@ -18,7 +18,7 @@
         font-size: 24px;
         text-transform: uppercase;
     }
-      
+
     .widget-user-2 .widget-user-username{
         font-size: 24px;
         font-weight: bold;
@@ -47,7 +47,7 @@
         margin: 10px 0 10px 0;
     }
 
-      
+
     .hider{
         visibility: hidden;
     }
@@ -162,197 +162,197 @@
                 </div>
             </div>
             <div class="col-md-8">
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                <h3 class="box-title" style="text-transform: uppercase">Oando Project | Permit and Consent Required Documents</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr>
-                                <th style="width: 10px">#</th>
-                                <th>Description of Approval / Links</th>
-                                <th style="width: 150px">Document Status</th>
-                                <th style="width: 50px">View</th>
-                            </tr>
-                            
-                            <tr>
-                                <td>1.</td>
-                                <td>Oil Industry Service Company Permits (General / Specialised / Other Specilaised categories)</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>Permit to Survey Pipeline Route - Production Flowlines</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>3.</td>
-                                <td>FEED Approval</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>Detailed Design Approval (including metering selection system)</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>5.</td>
-                                <td>Environmental Impact Accessment</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>6.</td>
-                                <td>Carry Out Comprehensive Risk Analysis</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>7.</td>
-                                <td>Obtain Approval for SIMOPS</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>8.</td>
-                                <td>Notification of Factory Acceptance test for meters and prover loop calibration for DPR participation</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>9.</td>
-                                <td>Notification and Approval to comission custody transfer meters (Both Oil and Gas)</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>10.</td>
-                                <td>Calibration Certificates / Tables</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>11.</td>
-                                <td>Notify DPR of Appointment of Operations Manager, resident in Nigeria responsible for all operations under license</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>12.</td>
-                                <td>Environmental Permit for waste management facilities</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>13.</td>
-                                <td>Permission from NGC to Hookup/Tie in</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>14.</td>
-                                <td>Approval for pipeline crossing existing facilities</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>15.</td>
-                                <td>Oil pipeline license (OPL)</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>16.</td>
-                                <td>Notify DPR of appoinment of competent persons</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>17.</td>
-                                <td>Approval to introduce Hydrocarbon</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>18.</td>
-                                <td>Set up monitoring programme to verify the quality of the water and sediments within the fields during the production phase</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>19.</td>
-                                <td>Submit Statutory Operation Manual</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>20.</td>
-                                <td>Pre-commissioning / Comissioning approval</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>21.</td>
-                                <td>Consent to Flare</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>22.</td>
-                                <td>Secure mothballing procedure approval for Saghara</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>23.</td>
-                                <td>Project Technical Review</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>24.</td>
-                                <td>Project Technical Review</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>25.</td>
-                                <td>Set up procedures to sample and analyse effluent / emmisions weekly with reporting monthly to DPR requirments (ENGASPIN 2002)</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>26.</td>
-                                <td>Permit for Diesel Tank Storage</td>
-                                <td><i class="fa fa-check text-green"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                            <tr>
-                                <td>27.</td>
-                                <td>Reliability Tests - License / Permit to Operate Facility</td>
-                                <td><i class="fa fa-close text-red"></i></td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.box-body -->
+              <div class="box box-primary">
+                  <div class="box-header with-border">
+                  <h3 class="box-title" style="text-transform: uppercase">Oando Project | Permit and Consent Required Documents</h3>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                      <table class="table table-bordered">
+                          <tbody>
+                              <tr>
+                                  <th style="width: 10px">#</th>
+                                  <th>Description of Approval / Links</th>
+                                  <th style="width: 150px">Document Status</th>
+                                  <th style="width: 50px">View</th>
+                              </tr>
+
+                              <tr>
+                                  <td>1.</td>
+                                  <td>Oil Industry Service Company Permits (General / Specialised / Other Specilaised categories)</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>2.</td>
+                                  <td>Permit to Survey Pipeline Route - Production Flowlines</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>3.</td>
+                                  <td>FEED Approval</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>4.</td>
+                                  <td>Detailed Design Approval (including metering selection system)</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>5.</td>
+                                  <td>Environmental Impact Accessment</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>6.</td>
+                                  <td>Carry Out Comprehensive Risk Analysis</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>7.</td>
+                                  <td>Obtain Approval for SIMOPS</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>8.</td>
+                                  <td>Notification of Factory Acceptance test for meters and prover loop calibration for DPR participation</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>9.</td>
+                                  <td>Notification and Approval to comission custody transfer meters (Both Oil and Gas)</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>10.</td>
+                                  <td>Calibration Certificates / Tables</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>11.</td>
+                                  <td>Notify DPR of Appointment of Operations Manager, resident in Nigeria responsible for all operations under license</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>12.</td>
+                                  <td>Environmental Permit for waste management facilities</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>13.</td>
+                                  <td>Permission from NGC to Hookup/Tie in</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>14.</td>
+                                  <td>Approval for pipeline crossing existing facilities</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>15.</td>
+                                  <td>Oil pipeline license (OPL)</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>16.</td>
+                                  <td>Notify DPR of appoinment of competent persons</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>17.</td>
+                                  <td>Approval to introduce Hydrocarbon</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>18.</td>
+                                  <td>Set up monitoring programme to verify the quality of the water and sediments within the fields during the production phase</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>19.</td>
+                                  <td>Submit Statutory Operation Manual</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>20.</td>
+                                  <td>Pre-commissioning / Comissioning approval</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>21.</td>
+                                  <td>Consent to Flare</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>22.</td>
+                                  <td>Secure mothballing procedure approval for Saghara</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>23.</td>
+                                  <td>Project Technical Review</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>24.</td>
+                                  <td>Project Technical Review</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>25.</td>
+                                  <td>Set up procedures to sample and analyse effluent / emmisions weekly with reporting monthly to DPR requirments (ENGASPIN 2002)</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>26.</td>
+                                  <td>Permit for Diesel Tank Storage</td>
+                                  <td><i class="fa fa-check text-green"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                              <tr>
+                                  <td>27.</td>
+                                  <td>Reliability Tests - License / Permit to Operate Facility</td>
+                                  <td><i class="fa fa-close text-red"></i></td>
+                                  <td><i class="fa fa-eye"></i></td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                  <!-- /.box-body -->
+              </div>
             </div>
-        </div>
         </form>
     </div>
     <div class="row">
-        
+
     </div>
     </section>
     <!-- /.content -->
-    
+
 </div>
 <!-- /.content-wrapper -->
 @include('partials.base_footer')

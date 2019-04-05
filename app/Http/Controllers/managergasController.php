@@ -86,6 +86,8 @@ class managergasController extends Controller
         $inboxUnreadCount = $this->inboxUnreadCount;
         $outboxCount = $this->outboxCount;
 
+        // dd($inbox);
+
 
         return view('backend.managergas.managergas_dashboard', compact('inbox', 'inboxUnreadCount', 'outboxCount', 'completedCount'));
     }
@@ -125,6 +127,8 @@ class managergasController extends Controller
     public function managergasDocumentReview(Request $request)
     {
 
+        
+
         $id = request('inboxIndex');
 
         $inboxItem = Inbox::where('id', $id)->first();
@@ -136,6 +140,8 @@ class managergasController extends Controller
             ]);
         }
 
+        
+
         $applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
         $applicationReview = AppDocReview::with(['job_assignment', 'company'])->where('id', $applicationID)->first();    // retrieve application review
         $staffs = Staff::where('role', 'staff')->get();    // retrieve all staffs
@@ -144,6 +150,16 @@ class managergasController extends Controller
         $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
         $reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 
+        $issuedAtcLicense = IssuedAtcLicense::where('application_id', $applicationReview->application_id)->first();
+
+        // dd($issuedAtcLicense);
+
+        $activePressureTest = PressureTestRecords::where([
+            ['company_name', $applicationReview->company_id],
+            ['facility_name', $applicationReview->name_of_gas_plant],
+            ['due_date', '>', Carbon::now()]
+        ])->first();
+
         if ($applicationReview->sub_category == "Site Suitability Inspection") {
             $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
         } elseif ($applicationReview->sub_category == "ATC") {
@@ -151,10 +167,13 @@ class managergasController extends Controller
         } elseif ($applicationReview->sub_category == "LTO") {
             $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
         } elseif ($applicationReview->sub_category == "Renewal") {
-            $applicationID = DB::table('lto_inspection_documents')
-                ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
-      // ->where()
-                ->first();
+    //         $applicationID = DB::table('lto_inspection_documents')
+    //             ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+    //   // ->where()
+    //             ->first();
+        $thisApplicationRenewalDetails = LtoLicenseRenewal::where('application_id', $applicationReview->application_id)->first();
+
+        $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
         } elseif ($applicationReview->sub_category == "Take Over") {
             $applicationID = DB::table('takeover_inspection_documents')
                 ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
@@ -171,7 +190,7 @@ class managergasController extends Controller
             $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
         }
         $role = Auth::user()->role;
-        return view('backend.managergas.view_application_docs', compact('role', 'inboxID', 'applicationID', 'applicationReview', 'staffs', 'applicationStatus', 'reportDocument', 'applicationComments', 'inboxItem'));
+        return view('backend.managergas.view_application_docs', compact('activePressureTest', 'role', 'inboxID', 'applicationID', 'applicationReview', 'staffs', 'applicationStatus', 'reportDocument', 'applicationComments', 'inboxItem', 'thisApplicationRenewalDetails', 'issuedAtcLicense'));
 
     }
 

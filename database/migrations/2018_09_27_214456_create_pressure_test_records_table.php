@@ -29,7 +29,8 @@ class CreatePressureTestRecordsTable extends Migration
             $table->string('test_pressure')->nullable();
             $table->datetime('date_last_tested')->nullable();
             $table->string('due_date')->nullable();
-            $table->string('test_certificate_report_location_url')->nullable();
+            $table->string('application_letter_location_url')->nullable();
+            $table->string('license_url')->nullable();
             $table->timestamps();
         });
     }

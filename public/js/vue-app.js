@@ -55313,27 +55313,6 @@ var staticRenderFns = [
               })
             ])
           ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-xs-6" }, [
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Test Pressure (BAR)")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group" }, [
-              _c("span", { staticClass: "input-group-addon" }, [
-                _c("i", { staticClass: "fa fa-calendar" })
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  name: "test_pressure",
-                  placeholder: "Enter Test Pressure"
-                }
-              })
-            ])
-          ])
         ])
       ])
     ])

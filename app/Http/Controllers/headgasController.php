@@ -144,10 +144,13 @@ class headgasController extends Controller
     }elseif($applicationReview->sub_category == "LTO") {
       $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "Renewal") {
-      $applicationID = DB::table('lto_inspection_documents')
-      ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
-      // ->where()
-      ->first();
+      // $applicationID = DB::table('lto_inspection_documents')
+      // ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+      // // ->where()
+      // ->first();
+      $thisApplicationRenewalDetails = LtoLicenseRenewal::where('application_id', $applicationReview->application_id)->first();
+
+      $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "Take Over") {
       $applicationID = DB::table('takeover_inspection_documents')
       ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
@@ -164,7 +167,7 @@ class headgasController extends Controller
       $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
     }
     $role = Auth::user()->role;
-    return view('backend.headgas.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments', 'inboxItem'));
+    return view('backend.headgas.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments', 'inboxItem', 'thisApplicationRenewalDetails'));
 
   }
 
@@ -284,8 +287,8 @@ class headgasController extends Controller
           'company_id' => request('company_id'),
           'staff_id' => request('staff_id'),
           'date_issued' => $dateIssued->toDateTimeString(),
-          'expiry_date' => $expiryDate->toDateTimeString(),
-          'report_url' => request('report_url')
+          'expiry_date' => $expiryDate->toDateTimeString()
+          // 'report_url' => request('report_url')
         ]);
         // lto inspection document
         LtoInspectionDocument::where('application_id', request('application_id'))

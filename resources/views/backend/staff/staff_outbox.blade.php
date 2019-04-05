@@ -42,6 +42,7 @@
                     <thead>
                       <tr>
                         <th>Name of Company</th>
+                        <th>Name of Gas plant</th>
                         <th>Application Type</th>
                         <th>Sub-Category</th>
                         <th>Destination</th>
@@ -54,8 +55,9 @@
                           @if ($item->app_doc_review['sub_category'] == "CAT-D LTO")
                             <td></i><a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
                           @else
-                            <td></i><a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</a></td>
+                            <td></i><a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
                           @endif
+                          <td>{{ $item->app_doc_review['name_of_gas_plant'] }}</td>
                           <td>{{ $item->app_doc_review['application_type'] }}</td>
                           <td>{{ $item->app_doc_review['sub_category'] }}</td>
                           <td>{{ $item->to }}</td>

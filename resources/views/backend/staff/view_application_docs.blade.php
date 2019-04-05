@@ -81,12 +81,6 @@
                       <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
                     </li>
                   @endif
-                  {{--  <li class="list-group-item">
-                    <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
-                  </li>  --}}
                   <li class="list-group-item">
                     <b>State</b> <a class="pull-right">{{ $applicationReview->state }}</a>
                   </li>
@@ -107,13 +101,56 @@
                     <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                   </li>
                 
-                  @if ($reportDocument)
+                  {{--  @if ($reportDocument)
                   <li class="list-group-item">
                     <b>Uploaded Report</b>
                     <a href="/displayDocument?pic=/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
                   </li>
+                  @endif  --}}
+                  @if (optional($issuedAtcLicense)->implementation_schedule != null)
+                    <li class="list-group-item">
+                      <b>Implementation Schedule</b>
+                      <a href="/displayDocument?pic=/storage/implementation_schedules/{{ $issuedAtcLicense->company_id }}/{{ $issuedAtcLicense->application_id }}/{{ $issuedAtcLicense->implementation_schedule }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
+                    </li>
+                  @endif
+                  @if ($applicationReview->sub_category == 'LTO' && $activePressureTest)
+                    <div class="box box-primary">
+                      <div class="box-body box-profile">
+
+                        <h3 class="profile-username text-center">Pressure Test Record</h3>
+
+                        <ul class="list-group list-group-unbordered">
+                          <li class="list-group-item">
+                            <b>Date Tested</b> <a class="pull-right">{{ Carbon\Carbon::parse($activePressureTest->date_last_tested)->toFormattedDateString() }}</a>
+                          </li>
+                          <li class="list-group-item">
+                            <b>Due Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($activePressureTest->due_date)->toFormattedDateString() }}</a>
+                          </li>
+                          <li class="list-group-item">
+                            <b>Pressure Test Status</b>
+                            <a class="pull-right text-green">Active</a>
+                          </li>
+                          <li class="list-group-item">
+                            <b>Current Active License</b>
+                            <a href="/displayDocument?pic=/storage/license_docs/{{ $activePressureTest->company_name }}/{{ $activePressureTest->application_id }}/{{ $activePressureTest->license_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
+                          </li>
+                        </ul>
+                      </div>
+                      <!-- /.box-body -->
+                    </div>
                   @endif
                   @if (optional($inboxItem)->to_outbox == 'false')
+                    @if (optional($issuedAtcLicense)->implementation_schedule != null)
+                    <form role="form" method="post" action="/construction_started">
+                      {{ csrf_field() }}
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                      <input type="text" hidden name="inbox_id" value="{{ $inboxID }}">
+                      <div class="box-footer">
+                        <input type="submit" name="to_teamlead" value="Click if Construction work has started" class="pull btn btn-success btn-block">
+                      </div>
+                    </form>
+                    @else
                     <form role="form" method="post" action="/open_assign_tree">
                       {{ csrf_field() }}
                       <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
@@ -123,40 +160,14 @@
                         <input type="submit" name="to_teamlead" value="Forward Application" class="pull btn btn-primary btn-block">
                       </div>
                     </form>
+                    @endif
                   @endif
-                    {{--  @if ($reportDocument)
-                    @if ($applicationStatus->job_application_status != "Report Submitted" || $applicationStatus->job_application_status == null)
-                    check if this application has been completed
-                      @if ($applicationReview->to_staff != "completed")
-                          <li class="list-group-item">
-                            <form role="form" method="post" action="/up_to_teamlead">
-                              {{ csrf_field() }}
-                              <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                              <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                              <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                              <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
-                              <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
-                              <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                              <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                              <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                              @if ($applicationStatus->job_application_status == "Report Submitted")
-                                // empty zone
-                              @else
-                                <div class="box-footer">
-                                  <input type="submit" name="upToTeamlead" value="Send to Team Lead" class="pull-right btn btn-primary">
-                                </div>
-                              @endif
-                            </form>
-                          </li>
-                      @endif
-                    @endif  --}}
-
-                  {{-- <h3 class="box-title">Job Assigned <i class="fa fa-check-circle text-green"></i> {{ $applicationReview->marketer_id }}</h3> --}}
                 </ul>
               </div>
               <!-- /.box-body -->
             </div>
-            @if ($applicationStatus->job_application_status == 'ATC Issued')
+            
+            {{--  @if ($applicationStatus->job_application_status == 'ATC Issued')
               <div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">Upload ATC follow up Document</h3>
@@ -182,7 +193,7 @@
                   </div>
                 </form>
               </div>
-            @endif
+            @endif  --}}
 
             {{--  <div class="modal fade" id="report" style="display: none;">
               <div class="modal-dialog" style="width: 1400px;">
@@ -250,7 +261,19 @@
         <div class="col-md-8">
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
+              @if ($applicationReview->sub_category == 'Pressure Testing')
+                    <h3 class="box-title"><b>Application Details</b></h3>
+                @else
+                    @if ($applicationReview->sub_category == 'Pressure Testing')
+                    <h3 class="box-title"><b>Application Details</b></h3>
+                @else
+                    @if ($applicationReview->sub_category == 'Pressure Testing')
+                    <h3 class="box-title"><b>Application Details</b></h3>
+                @else
+                    <h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
+                @endif
+                @endif
+                @endif
               <!-- tools box -->
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -270,6 +293,11 @@
               @elseif($applicationReview->sub_category == 'CAT-D LTO')
                 @include('partials.m_view_application_docs_catd_lto')
               @elseif($applicationReview->sub_category == 'Renewal')
+                <li class="list-group-item">
+                  <span style="font-weight: 600; font-size: 16px; margin-left: 5px;">COPY OF LAST EXPIRED LICENSE</span>
+                  <i class="fa fa-check text-green" style="float: left;"></i>
+                  <a href="/displayDocument?pic=/storage/license_docs/{{ $applicationReview->company_id }}/{{ $thisApplicationRenewalDetails->comp_license_id }}/{{ $thisApplicationRenewalDetails->copy_of_last_expired_license_location_url }}" class="btn btn-primary btn-xs pull-right">View</a>
+                </li><br>
                 @include('partials.m_view_application_docs_lto_renewal')
               @elseif($applicationReview->sub_category == 'Take Over')
                 @include('partials.m_view_application_docs_takeover')
@@ -296,6 +324,8 @@
                         <option value="Site Suitability Inspection Report">Site Suitability Inspection Report</option>
                         <option value="Pre-ATC Report">Pre-ATC Report</option>
                         <option value="Final Report">Final Report</option>
+                        <option value="Pressure Test Report">Pressure Test Report</option>
+                        <option value="Implementation Schedule Report">Implementation Schedule Report</option>
                       </select>
                     </div>
                     <div class="form-group" id="capacity_of_tank">
@@ -314,14 +344,107 @@
                     </div>
                   </div>
                 <!-- /.box-body -->
-
-                <div class="box-footer">
-                  <button type="submit" class="pull-right btn btn-success">Upload Report
+                  <div class="box-footer">
+                    <button type="submit" class="pull-right btn btn-success">Upload Report
                     <i class="fa fa-upload"></i></button>
                   </div>
                 </form>
               </div>
           @endif
+
+          @if (optional($applicationStatus)->job_application_status == 'ATC Issued' 
+          || optional($applicationStatus)->job_application_status == 'LTO Issued' 
+          || optional($applicationStatus)->job_application_status == 'Pressure Test Succesful')
+              <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title"><b>Upload License</b></h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" method="post" action="/upload_license" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="box-body">
+                    <div class="form-group" style="margin-bottom: 0;">
+                      {{--  <label for="exampleInputFile">Report Document</label>  --}}
+                      <input type="file" name="licenseDocument">
+                      <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                      <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
+                    </div>
+                  </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="submit" class="pull-right btn btn-success">Upload License
+                    <i class="fa fa-upload"></i></button>
+                  </div>
+                </form>
+              </div>
+          @endif
+
+          @if ($applicationReview->sub_category == 'Pressure Testing')
+              <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title"><b>Date Tested</b></h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" method="post" action="/set_due_date" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="box-body">
+                    <div class="form-group" style="margin-bottom: 0;">
+                      {{--  <label for="exampleInputFile">Report Document</label>  --}}
+                      {{--  <input type="file" name="licenseDocument">  --}}
+                      <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
+                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                      <input type="text" hidden name="manufacture_year" value="{{ $applicationID->manufacture_year }}">
+                    </div>
+                    <div class="col-xs-12">
+                      <div class="form-group">
+                        <label>Enter Date Tested</label>
+                        <div class="input-group date">
+                          <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                          </div>
+                          <input type="text" name="date_tested" class="form-control pull-right" id="datepicker2">
+                        </div>
+                        <!-- /.input group -->
+                      </div>
+                      <!-- /.form group -->
+
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer">
+                    <button type="submit" class="pull-right btn btn-success">Set Due Date</button>
+                  </div>
+                </form>
+              </div>
+          @endif
+          {{-- <div class="box box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title"><b>Upload Certificate</b></h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" method="post" action="/stUpload_report" enctype="multipart/form-data">
+              {{ csrf_field() }}
+              <div class="box-body">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="exampleInputFile">Select Document to upload</label>
+                  <input type="file" name="reportDocument">
+                  <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
+                  <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                  <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
+                </div>
+              </div>
+            <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" class="pull-right btn btn-success">Upload Certificate <i class="fa fa-upload"></i></button>
+              </div>
+            </form>
+          </div> --}}
           
           <!-- quick email widget -->
           {{--  <div class="box box-info">
@@ -376,6 +499,11 @@
 
   //Date picker
     $('#datepicker1').datepicker({
+      autoclose: true
+    })
+
+    //Date picker
+    $('#datepicker2').datepicker({
       autoclose: true
     })
   </script>

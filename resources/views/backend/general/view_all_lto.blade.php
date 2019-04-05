@@ -52,22 +52,17 @@
                     @foreach ($appDocReviewsLTO as $item)
                       <tr>
                         <td class="sorting_1">
-
                           @if($item->issued_lto_licenses['expiry_date'] == "")
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-default" style="font-size: 14px;">{{ $item->application_id }}</a>
-
                           @elseif(now()->gte($item->issued_lto_licenses['expiry_date']))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
-
                           @elseif(now()->addMonths(3)->gte($item->issued_lto_licenses['expiry_date']))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
-
                           @elseif(now()->lte($item->issued_lto_licenses['expiry_date']))
                               <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
-
                           @endif
                         </td>
-                        <td>{{ $item->name_of_gas_plant }}{{$item->issued_lto_licenses['expiry_date']}}</td>
+                        <td>{{ $item->name_of_gas_plant }}</td>
                         <td>{{ $item->state }}</td>
                         <td>{{ $item->plant_type }}</td>
                         <td>{{ $item->application_status }}</td>

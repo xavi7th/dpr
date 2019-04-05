@@ -91,6 +91,15 @@
                   <li class="list-group-item">
                     <b>Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($applicationReview->created_at)->toFormattedDateString() }}</a>
                   </li>
+                  @if ($licenseDetail != null && Auth::user()->role == 'Marketer')
+                  <li class="list-group-item">
+                    <b>Date Issued</b> <a class="pull-right">{{ Carbon\Carbon::parse($licenseDetail->date_issued)->toFormattedDateString() }}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Expiration Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($licenseDetail->expiry_date)->toFormattedDateString() }}</a>
+                  </li>
+                  @endif
+
                   @if ($applicationReview->application_status)
                     <li class="list-group-item">
                       <b>Status</b> <a class="pull-right">{{ $applicationReview->application_status }}</a>
@@ -101,12 +110,12 @@
                       @endif
                     </li>
                   @endif
-                  @if (optional($licenseRenewalDetail)->application_status == 'Application Pending')
+                  {{--  @if (optional($licenseRenewalDetail)->application_status == 'Application Pending')
                     <li class="list-group-item">
                       <b>Renewal Status</b> <a class="pull-right">{{ $licenseRenewalDetail->application_status }}</a>
                       <i class="fa fa-close text-red"></i>
                     </li>
-                  @endif
+                  @endif  --}}
                   <br>
                   @if ($applicationReview->application_status == 'Not Submitted')
                     <form class="" action="/mSubmitApplication" method="post">
@@ -134,13 +143,15 @@
                               <span class="input-group-addon"><i class="ion-beaker"></i></span>
                               <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
                           </div>
-                        </div>
+                        </div> 
                         <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                         <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
                       </form>
                     @endif  --}}
-                    @if ($applicationReview->sub_category == 'ATC' && $applicationReview->application_status == 'ATC Issued')
-                      <form class="" action="/apply_for_lto" method="post">
+                    @if($pressureTestRecord == null && $applicationReview->sub_category == 'ATC')
+                    <br>
+                    <a href="/apply_for_pressure_test_get" class="btn btn-primary btn-block">Apply For Pressure Test</a>
+                      {{--  <form class="" action="/apply_for_lto" method="post">
                         {{ csrf_field() }}
                         <div class="form-group" id="capacity_of_tank">
                           <label>Capacity of Tank (MT)</label>
@@ -151,8 +162,62 @@
                         </div>
                         <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                         <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
-                      </form>
+                      </form>  --}}
+                    @else
+                      @if ($licenseDetail != null && Auth::user()->role == 'Marketer')
+                        @if (now()->gte($licenseDetail->expiry_date) || now()->addMonths(3)->gte($licenseDetail->expiry_date))
+                          <div class="box box-info">
+                            <div class="box-header with-border">
+                              <h3 class="box-title">License Renewal</h3>
+                              {{--  @if ($applicationReview->sub_category == "ATC")
+                                <div class="tools pull-right" data-toggle="modal" data-target="#reason" style="cursor: pointer;">
+                                  <i class="fa fa-edit text-red"></i>
+                                </div>
+                              @endif  --}}
+                            </div>
+                            <!-- /.box-header -->
+                            <!-- form start -->
+                            <form role="form" method="POST" action="/apply_for_lto_renewal" enctype="multipart/form-data">
+                              {{ csrf_field() }}
+                              <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                              {{--  <div class="box-body">
+                                <div class="form-group">
+                                  <label style="text-transform: uppercase;">Copy of Last Expired License</label>
+                                  <input type="file" name="COLEL_doc">
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                  <label style="text-transform: uppercase;">Payment Receipt</label>
+                                  <input type="file" name="PR_doc">
+                                </div>
+                                <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                                <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                              </div>  --}}
+                              <!-- /.box-body -->
+                              <div class="box-footer">
+                                <button type="submit" class="btn btn-primary pull-right">Apply For License Renewal</button>
+                              </div>
+                              <!-- /.box-footer -->
+                            </form>
+                          </div>
+                        @endif
+                      @endif
+                      @if ($applicationReview->sub_category == 'ATC' && $applicationReview->application_status == 'ATC Issued')
+                        <form class="" action="/apply_for_lto" method="post">
+                          {{ csrf_field() }}
+                          <div class="form-group" id="capacity_of_tank">
+                            <label>Capacity of Tank (MT)</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="ion-beaker"></i></span>
+                                <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
+                            </div>
+                          </div>
+                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                          <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
+                        </form>
+                      @endif
                     @endif
+                    
                     @if ($applicationReview->sub_category == 'ADD-ON ATI' && $applicationReview->application_status == 'ATI Issued')
                       <form class="" action="/apply_for_lto" method="post">
                         {{ csrf_field() }}
@@ -168,49 +233,39 @@
                       </form>
                     @endif
                   @endif
-
                 </ul>
               </div>
               <!-- /.box-body -->
             </div>
-            @if ($licenseDetail != null && Auth::user()->role == 'Marketer')
-              @if (now()->gte($licenseDetail->expiry_date) || now()->addMonths(3)->gte($licenseDetail->expiry_date))
-                <div class="box box-info">
-                  <div class="box-header with-border">
-                    <h3 class="box-title">License Renewal</h3>
-                    @if ($applicationReview->sub_category == "ATC")
-                      <div class="tools pull-right" data-toggle="modal" data-target="#reason" style="cursor: pointer;">
-                        <i class="fa fa-edit text-red"></i>
-                      </div>
-                    @endif
-                  </div>
-                  <!-- /.box-header -->
-                  <!-- form start -->
-                  <form role="form" method="POST" action="/apply_for_lto_renewal" enctype="multipart/form-data">
-                    {{ csrf_field() }}
-                    <div class="box-body">
-                      <div class="form-group">
-                        <label style="text-transform: uppercase;">Copy of Last Expired License</label>
-                        <input type="file" name="COLEL_doc">
-                      </div>
-                      <hr>
-                      <div class="form-group">
-                        <label style="text-transform: uppercase;">Payment Receipt</label>
-                        <input type="file" name="PR_doc">
-                      </div>
-                      <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                      <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                      {{-- <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}"> --}}
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                      <button type="submit" class="btn btn-primary pull-right">Apply For License Renewal</button>
-                    </div>
-                    <!-- /.box-footer -->
-                  </form>
+
+            @if ($applicationReview->application_status == 'ATC Issued')
+              <div class="box box-primary">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Upload Implementation Schedule</h3>
                 </div>
-              @endif
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" method="post" action="/upload_implementation_schedule" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="box-body">
+                  <div class="form-group">
+                    {{--  <label for="exampleInputFile">Construction Document</label>  --}}
+                    <input type="file" name="implementationScheduleDoc">
+                    <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
+                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                    <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
+                  </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                  <button type="submit" class="pull-right btn btn-success">Upload
+                    <i class="fa fa-upload"></i></button>
+                  </div>
+                </form>
+              </div>
             @endif
+            
 
           </div>
           <div class="col-md-8">
@@ -230,12 +285,17 @@
                 @include('partials.m_view_application_docs_addon_lto')
               @elseif($applicationReview->sub_category == 'CAT-D LTO')
                 @include('partials.m_view_application_docs_catd_lto')
-              {{--  @elseif($applicationReview->sub_category == 'Renewal')
-                @include('partials.m_view_application_docs_lto_renewal')  --}}
+              @elseif($applicationReview->sub_category == 'Renewal')
+              <li class="list-group-item">
+                <span style="font-weight: 600; font-size: 16px; margin-left: 5px;">COPY OF LAST EXPIRED LICENSE</span>
+                <i class="fa fa-check text-green" style="float: left;"></i>
+                <a href="/displayDocument?pic=/storage/license_docs/{{ $applicationReview->company_id }}/{{ $thisApplicationRenewalDetails->comp_license_id }}/{{ $thisApplicationRenewalDetails->copy_of_last_expired_license_location_url }}" class="btn btn-primary btn-xs pull-right">View</a>
+              </li><br>
+                @include('partials.m_view_application_docs_lto_renewal')
               @elseif($applicationReview->sub_category == 'Take Over')
                 @include('partials.m_view_application_docs_takeover')
               @elseif($applicationReview->sub_category == 'Pressure Testing')
-                {{-- @include('partials.m_view_application_docs_takeover') --}}
+                @include('partials.m_view_application_docs_pressure_test')
               @endif
             </div>
             <!-- /.box-body -->

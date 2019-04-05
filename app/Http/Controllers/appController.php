@@ -22,6 +22,10 @@ use Auth;
 use DB;
 
 use Carbon\Carbon;
+use App\IssuedLtoLicense;
+use App\IssuedAtcLicense;
+use App\PressureTestRecords;
+use App\pressureTestLicense;
 
 class appController extends Controller
 {
@@ -111,6 +115,11 @@ class appController extends Controller
           ->update([
             $documentCheckName => $valid
           ]);
+      } elseif ($subCategory == 'Renewal') {
+        LtoInspectionDocument::where('application_id', $applicationID)
+          ->update([
+            $documentCheckName => $valid
+          ]);
       }
       
 
@@ -122,28 +131,86 @@ class appController extends Controller
       return view('backend.general.view_all_ssi', compact('appDocReviewsSSI'));
     }
 
+    public function advancedSearchAtc(Request $request){
+      // dd($request);
+      $application_type = request('application_type');
+      $search_type = request('search_type');
+      $from = request('from');
+      $to = request('to');
+
+      $from = date_create_from_format('m/d/Y', $from);
+
+      $to = date_create_from_format('m/d/Y', $to);
+
+      if($application_type == 'lpg retailer outlets'){
+        if($search_type == 'Application Date'){
+          
+          $appDocReviewsATC = AppDocReview::with(['issued_atc_licenses','company','job_assignment'])
+          ->where('application_type', 'LPG Retailer Outlets')
+          ->where('sub_category', 'ATC')
+          ->where('application_status', '!=', 'Not Submitted')
+          ->whereBetween('created_at', [$from, $to])
+          ->latest()
+          ->get();
+
+          // dd($appDocReviewsATC);
+
+        }elseif($search_type == 'date_issued' || $search_type == 'expiry_date'){
+
+          $appDocReviewsATC = IssuedAtcLicense::with(['app_doc_rev','company','job_assignment'])
+          ->whereBetween($search_type, [$from, $to])
+          ->latest()
+          ->get();
+          // ->toSql();
+
+          dd($appDocReviewsATC);
+        }
+      }elseif($application_type == 'cng retailer outlets'){
+
+      }
+      return view('backend.general.view_all_atc', compact('appDocReviewsATC'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function viewAllATC(Request $request){
       // dd($request);
 
       $type = request('val');
 
       if($type == 'lpg_atc'){
-        $appDocReviewsATC = DB::table('issued_atc_licenses')
-        ->join('app_doc_reviews', 'app_doc_reviews.application_id', '=', 'issued_atc_licenses.application_id')
-        ->join('companies', 'companies.company_id', '=', 'issued_atc_licenses.company_id')
-        ->select('issued_atc_licenses.*', 'app_doc_reviews.*', 'companies.*')
+        $appDocReviewsATC = AppDocReview::with(['issued_atc_licenses','company','job_assignment'])
         ->where('application_type', 'LPG Retailer Outlets')
-        // ->where('application_status', 'ATC Issued')
-        ->get();    // get all application requests
+        ->where('sub_category', 'ATC')
+        ->where('application_status', '!=' , 'Not Submitted')
+        ->latest()
+        ->get();
         // dd($appDocReviewsATC);
-      }elseif($type == 'cng_atc'){
-        $appDocReviewsATC = DB::table('issued_atc_licenses')
-        ->join('app_doc_reviews', 'app_doc_reviews.application_id', '=', 'issued_atc_licenses.application_id')
-        ->join('companies', 'companies.company_id', '=', 'issued_atc_licenses.company_id')
-        ->select('issued_atc_licenses.*', 'app_doc_reviews.*', 'companies.*')
+      }elseif($type == 'cng_atc'){ 
+        // $appDocReviewsATC = DB::table('issued_atc_licenses')
+        // ->join('app_doc_reviews', 'app_doc_reviews.application_id', '=', 'issued_atc_licenses.application_id')
+        // ->join('companies', 'companies.company_id', '=', 'issued_atc_licenses.company_id')
+        // ->select('issued_atc_licenses.*', 'app_doc_reviews.*', 'companies.*')
+        // ->where('application_type', 'CNG Retailer Outlets')
+        // ->where('application_status', 'ATC Issued')
+        // ->get();    // get all application requests
+
+        $appDocReviewsATC = AppDocReview::with(['issued_atc_licenses','company','job_assignment'])
         ->where('application_type', 'CNG Retailer Outlets')
-        ->where('application_status', 'ATC Issued')
-        ->get();    // get all application requests
+        ->where('sub_category', 'ATC')
+        ->where('application_status', '!=' , 'Not Submitted')
+        ->latest()
+        ->get();
 
         // dd($appDocReviewsATC);
       }
@@ -307,7 +374,7 @@ class appController extends Controller
 
         $thisJob = JobAssignment::where('application_id', request('application_id'))->first();
 
-        if(optional($thisJob)->job_application_status == 'Started'){
+        if(optional($thisJob)->job_application_status == 'Started' || optional($thisJob)->job_application_status == 'ATC Issued'){
           return redirect('/teamlead');
         }else{
           JobAssignment::updateOrCreate(
@@ -334,7 +401,57 @@ class appController extends Controller
 
 
 
+    // public function uploadLicense(Request $request){
 
+    // }
+
+    public function uploadLicense(Request $request){
+    // dd($request);
+    $license_document = "";
+    // check if request has the document
+    if($request->hasFile('licenseDocument')){
+      // store the document to the company folder in company reports folder
+      $request->licenseDocument->storeAs('license_docs/'.request('company_id').'/'.request('application_id'), $request->licenseDocument->getClientOriginalName());
+
+      $license_document = $request->licenseDocument->getClientOriginalName();
+
+      // if this record exist, update the record else create a new record.
+      // ReportDocument::updateOrCreate([
+      //   'application_id' => request('application_id')
+      // ],
+      // [
+      //   'application_id' => request('application_id'),
+      //   'staff_id' => request('staff_id'),
+      //   'company_id' => request('company_id'),
+      //   'report_url' => $report_document,
+      //   'report_type' => request('report_type'),
+      //   'office' => Auth::user()->office,
+      //   'date_of_inspection' => $inspectionDate
+      // ]);
+
+      if(request('sub_category') == 'ATC'){
+        IssuedAtcLicense::where('application_id', request('application_id'))
+        ->update([
+          'license_url' => $license_document
+        ]);
+      }elseif(request('sub_category') == 'LTO'){
+        IssuedLtoLicense::where('application_id', request('application_id'))
+        ->update([
+          'license_url' => $license_document
+        ]);
+      }elseif(request('sub_category') == 'Pressure Testing'){
+        PressureTestRecords::where('application_id', request('application_id'))
+        ->update([
+          'license_url' => $license_document
+        ]);
+      }
+      // return back
+      return back();
+    }else{
+      // return back with errors
+      return back();
+    }
+  }
 
 
 

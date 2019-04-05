@@ -72,6 +72,7 @@
                     </div>
                   </div>
                   <div class="box-footer">
+                    <b><a style="float: left;">lat: 34.032233, lng:  -118.256015</a></b>
                     <button type="submit" class="btn btn-primary" style="float: right;">Save & Continue</button>
                   </div>
               </form>

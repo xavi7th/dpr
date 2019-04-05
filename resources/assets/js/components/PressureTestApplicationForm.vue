@@ -99,7 +99,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-6">
+      <!-- <div class="col-xs-6">
         <div class="form-group">
           <label>Test Pressure (BAR)</label>
           <div class="input-group">
@@ -107,7 +107,7 @@
               <input type="text" name="test_pressure" class="form-control" placeholder="Enter Test Pressure">
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

@@ -21,7 +21,7 @@ use App\TakeoverInspectionDocuments;
 use App\AddonAtiInspectionDocument;
 use App\AddonLtoInspectionDocument;
 use App\CatdLtoInspectionDocument;
-use App\zopsconInbox;
+use App\IssuedAtcLicense;
 use App\Inbox;
 use Storage;
 use Carbon\Carbon;
@@ -44,7 +44,7 @@ class marketerController extends Controller
 
 
   public function marketerAppDocReview(){
-    $appDocReviews = AppDocReview::with('company')->where('marketer_id', Auth::user()->staff_id)
+    $appDocReviews = AppDocReview::with(['company','issued_lto_licenses'])->where('marketer_id', Auth::user()->staff_id)
     // ->where('application_status', 'Application Pending')
     // ->orWhere('application_status', 'Not Submitted')
     // ->orWhere('application_status', 'ATC Not Issued')
@@ -228,7 +228,23 @@ class marketerController extends Controller
     $licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id],['sub_category','Renewal'],['application_status','Application Pending']])
     ->first();
 
-    // dd($licenseDetail);
+    
+
+    //get pressure test record to check if it has been done for this facility
+
+    $pressureTestRecord = PressureTestRecords::where([
+      ['facility_name', $applicationReview->name_of_gas_plant],
+      ['company_name', $applicationReview->company_id],
+      ['due_date', '>', Carbon::now()]
+      ])->first();
+
+    // $pressureTestRecord = PressureTestRecords::where([
+    //   ['facility_name', 'ages gas'],
+    //   ['company_name', 'DPRCOMP00003'],
+    //   ['due_date', '>', Carbon::now()]
+    // ])->first();
+
+    // dd($pressureTestRecord);
 
     if($applicationReview->sub_category == "Site Suitability Inspection"){
       $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
@@ -247,25 +263,31 @@ class marketerController extends Controller
     }
     elseif($applicationReview->sub_category == "CAT-D LTO") {
       $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
-    }
-    elseif($applicationReview->sub_category == "Renewal") {
-      $applicationID = DB::table('lto_inspection_documents')
-      ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
-      // ->where()
-      ->first();
-    }
-    elseif($applicationReview->sub_category == "Take Over") {
+    }elseif($applicationReview->sub_category == "Renewal") {
+      // $applicationID = DB::table('lto_inspection_documents')
+      // ->Join('lto_license_renewals', 'lto_license_renewals.comp_license_id', '=', 'lto_inspection_documents.application_id')
+      // // ->where()
+      // ->first();
+
+      $thisApplicationRenewalDetails = LtoLicenseRenewal::where('application_id', $applicationReview->application_id)->first();
+
+      $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+
+      // dd($thisApplicationRenewalDetails);
+    }elseif($applicationReview->sub_category == "Take Over") {
       $applicationID = DB::table('takeover_inspection_documents')
       ->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
       // ->where()
       ->first();
+    } elseif ($applicationReview->sub_category == "Pressure Testing") {
+      $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
     }
 
     // dd($applicationID);
 
     $role = Auth::user()->role;
 
-    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail', 'role', 'theCompany'));
+    return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail', 'role', 'theCompany', 'thisApplicationRenewalDetails', 'pressureTestRecord'));
   }
 
 
@@ -1433,8 +1455,26 @@ class marketerController extends Controller
       'standard_operating_procedure_reason' => request('SOP_reason')
     ]);
 
+    if(session('sub_category')){
+      // retrieve the data from the about to be replaced lto license
+      $obsoleteLicense = IssuedLtoLicense::where('application_id', session('application_id'))->first();
+      // dd($obsoleteLicense);
+
+      // add the retrieved data needed to the new renewed license
+      LtoLicenseRenewal::create([
+        'application_id' =>  session('application_id'),
+        'comp_license_id' => session('app_id'),
+        'marketer_id' => Auth::user()->staff_id,
+        'company_id' => $obsoleteLicense->company_id,
+        'copy_of_last_expired_license' => 'yes',
+        'copy_of_last_expired_license_location_url' => $obsoleteLicense->license_url,
+        'previous_date_issued' => $obsoleteLicense->date_issued,
+        'previous_expiry_date' => $obsoleteLicense->expiry_date
+      ]);
+    }
+
     // clear the application ID from the session
-    $request->session()->forget('application_id');
+    $request->session()->forget(['application_id','sub_category', 'app_id']);
 
     if (Auth::user()->role == 'Marketer') {
       return redirect('/marketer');
@@ -1680,7 +1720,7 @@ class marketerController extends Controller
       'atc_application_id' => 'required'
     ]);
 
-    // retrieve the ATC application_id from AppDocReviews and check if ATC is approved
+    // retrieve the ATC application_id from AppDocReviews and check if ATC is issued
     $retrievedATC = AppDocReview::where([
       ['application_id', request('atc_application_id')],
       ['application_status','ATC Issued']
@@ -1710,77 +1750,107 @@ class marketerController extends Controller
         $dueDate = date('Y-m-d', strtotime($dueDate));
       }
 
-      $tcrDoc = 'null';
+      $tcrDoc =
+      'null';
       $marketerID = Auth::user()->staff_id;
 
-      // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
-      if($request->hasFile('TCR_doc')){
-        $applicationCount = DB::table('app_doc_reviews')->get();
+      $applicationCount = DB::table('app_doc_reviews')->get();
 
-        // adding 1 to that number
-        $indexIncremented = $applicationCount->count() + 1;
+      // adding 1 to that number
+      $indexIncremented = $applicationCount->count() + 1;
 
-        // padding the number to 4 leading zeros
-        $newApplicationIndex = sprintf('%05d', $indexIncremented);
+      // padding the number to 4 leading zeros
+      $newApplicationIndex = sprintf('%05d', $indexIncremented);
 
-        //appending the new application index to DPRCOMP to create the applications's ID
-        $applicationID = "DPRAPPLICATION".$newApplicationIndex;
-
-        // add the application ID to session
-        session(['application_id'=>$applicationID]);
-
-        // +++++ might need to do some custom verification here with decision statements
-        AppDocReview::create([
-          'application_id' => $applicationID,
-          'marketer_id' => $marketerID,
-          'company_id' => $retrievedATC->company_id,
-          'name_of_gas_plant' => $retrievedATC->name_of_gas_plant,
-          'application_type' => request('application_type'),
-          'sub_category' => request('sub_category'),
-          'plant_type' => $retrievedATC->plant_type,
-          'capacity_of_tank' => $retrievedATC->capacity_of_tank,
-          'state' => $retrievedATC->state,
-          'lga' => $retrievedATC->lga,
-          'town' => $retrievedATC->town,
-          'address' => $retrievedATC->address,
-          'application_status' => 'Application Pending',
-          'to_zopscon' => 'true'
-        ]);
+      //appending the new application index to DPRCOMP to create the applications's ID
+      $applicationID = "DPRAPPLICATION".$newApplicationIndex;
 
 
-        // dd('here3');
-        // $request->TCR_doc->storeAs('press$appDocReviewsLTO$appDocReviewsLTOure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
-        $request->TCR_doc->storeAs('pressure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
-        $tcrDoc = $request->TCR_doc->getClientOriginalName();
 
-        // insert records into the pressure_test_records database
+      // add the application ID   to session
+      session(['application_id'=>$applicationID]);
 
-        PressureTestRecords::create([
-          'application_id' => $applicationID,
-          'atc_application_id' => request('atc_application_id'),
-          'marketer_id' => $marketerID,
-          'company_name' => request('company_name'),
-          'equipment_name' => request('equipment_name'),
-          'facility_name' => $retrievedATC->name_of_gas_plant,
-          'test_type' => request('test_type'),
-          'tag_number' => request('tag_number'),
-          'manufacture_year' => $manufactureYear,
-          'commission_year' => request('commission_year'),
-          'design_pressure' => request('design_pressure'),
-          'test_pressure' => request('test_pressure'),
-          'date_last_tested' => $dateLastTested,
-          'due_date' => $dueDate,
-          'test_certificate_report_location_url' => $tcrDoc
+      // dd($applicationID);
+
+      // +++++ might need to do so me  custom verification here with decision statements
+      AppDocReview::create([
+        'application_id' => $applicationID,
+        'marketer_id' => $marketerID,
+        'office' => $retrievedATC->office,
+        'company_id' => $retrievedATC->company_id,
+        'name_of_gas_plant' => $retrievedATC->name_of_gas_plant,
+        'application_type' => request('application_type'),
+        'sub_category' => request('sub_category'),
+        'plant_type' => $retrievedATC->plant_type,
+        'capacity_of_tank' => $retrievedATC->capacity_of_tank,
+        'state' => $retrievedATC->state,
+        'lga' => $retrievedATC->lga,
+        'town' => $retrievedATC->town,
+        'address' => $retrievedATC->address,
+        'application_status' => 'Not Submitted',
+        'to_zopscon' => 'true'
+      ]);
+
+      // this is the id of the pressure test application from app doc rev db
+      // $app_id = AppDocReview::where('application_id', $applicationID)->first();
+
+      // Inbox::create([
+      //   'application_id' => $app_id->id,
+      //   'to' => 'NA',
+      //   'from' => Auth::user()->staff_id,
+      //   'receiver_role' => 'ZOPSCON',
+      //   'sender_role' => Auth::user()->role,
+      //   'office' => 'Warri',
+      //   'read' => 'false',
+      //   'to_outbox' => 'false'
+      // ]);
+
+
+      // dd('here3');
+      // $request->TCR_doc->storeAs('press$appDocReviewsLTO$appDocReviewsLTOure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
+
+      // if($request->hasFile('TCR_doc')){
+      //   $request->TCR_doc->storeAs('pressure_test_docs/'.$marketerID.'/'.request('atc_application_id'), $request->TCR_doc->getClientOriginalName());
+      //   $tcrDoc = $request->TCR_doc->getClientOriginalName();
+      // }
+
+      if($request->hasFile('AL_doc')){
+        $request->AL_doc->storeAs('pressure_test_docs/'.$marketerID.'/'.request('company_name').'/'. $applicationID, $request->AL_doc->getClientOriginalName());
+        $alDoc = $request->AL_doc->getClientOriginalName();
+      }
+
+      // insert records into the pressure_test_records database
+
+      PressureTestRecords::create([
+        'application_id' => $applicationID,
+        'atc_application_id' => request('atc_application_id'),
+        'marketer_id' => $marketerID,
+        'company_name' => request('company_name'),
+        'equipment_name' => request('equipment_name'),
+        'facility_name' => $retrievedATC->name_of_gas_plant,
+        'test_type' => request('test_type'),
+        'tag_number' => request('tag_number'),
+        'manufacture_year' => $manufactureYear,
+        'commission_year' => request('commission_year'),
+        'design_pressure' => request('design_pressure'),
+          // 'test_pressure' => request('test_pressure')
+          // 'date_last_tested' => $dateLastTested,
+          // 'due_date' => $dueDate,
+        'application_letter_location_url' => $alDoc
         ]);
 
 
 
         return redirect('/marketer');
-      }else{
-        dd('here4');
-        // return back with a custom error === Please upload test report
-        // return back();
-      }
+
+      // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+      // if($request->hasFile('TCR_doc')){
+        
+      // }else{
+      //   dd('here4');
+      //   // return back with a custom error === Please upload test report
+      //   // return back();
+      // }
 
 
 
@@ -1900,6 +1970,45 @@ class marketerController extends Controller
       return redirect('/staff');
     }
 
+  }
+
+  public function uploadImplementationSchedule(Request $request){
+    // dd($request);
+    $implementation_schedule = "";
+    // check if request has the document
+    if($request->hasFile('implementationScheduleDoc')){
+      // store the document to the company folder in company reports folder
+      $request->implementationScheduleDoc->storeAs('implementation_schedules/'.request('company_id').'/'.request('application_id'), $request->implementationScheduleDoc->getClientOriginalName());
+
+      $implementation_schedule = $request->implementationScheduleDoc->getClientOriginalName();
+
+      // upload the implementation schedule
+      IssuedAtcLicense::where('application_id', request('application_id'))
+      ->update([
+        'implementation_schedule' => $implementation_schedule
+      ]);
+
+      // forward the application to manager gas of that zone that appliction was made
+
+      $application = AppDocReview::where('application_id', request('application_id'))->first();
+
+      Inbox::create([
+        'application_id' => $application->id,
+        'to' => 'NA',
+        'from' => Auth::user()->staff_id,
+        'receiver_role' => 'Manager Gas',
+        'sender_role' => Auth::user()->role,
+        'office' => 'Warri',
+        'read' => 'false',
+        'to_outbox' => 'false'
+      ]);
+
+
+      return back();
+    }else{
+      // return back with errors
+      return back();
+    }
   }
 
 
@@ -2113,9 +2222,57 @@ class marketerController extends Controller
 
   }
 
-
   public function applyForLTORenewal(Request $request){
     // dd($request);
+
+    // retrieve lto fields for this company from app_doc_reviews using the application_id from request
+    $companyATODetails = AppDocReview::where('application_id', request('application_id'))->first();
+
+    // create a new application for Renewal for this company inside app_doc_reviews (Set status to Not Submitted)
+    // getting the current number of created applications
+    $applicationCount = DB::table('app_doc_reviews')->get();
+
+    // adding 1 to that number
+    $indexIncremented = $applicationCount->count() + 1;
+
+    // padding the number to 4 leading zeros
+    $newApplicationIndex = sprintf('%05d', $indexIncremented);
+
+    //appending the new application index to DPRAPPLICATION to create the applications's ID
+    $applicationID = "DPRAPPLICATION" . $newApplicationIndex;
+
+    // add the application ID to session
+    // session(['application_id'=>$applicationID]);
+
+    // +++++ might need to do some custom verification here with decision statements
+    AppDocReview::create([
+      'application_id' => $applicationID,
+      'marketer_id' => Auth::user()->staff_id,
+      'company_id' => $companyATODetails->company_id,
+      'office' => $companyATODetails->office,
+      'name_of_gas_plant' => $companyATODetails->name_of_gas_plant,
+      'application_type' => $companyATODetails->application_type,
+      'sub_category' => 'Renewal',
+      'capacity_of_tank' => $companyATODetails->capacity_of_tank,
+      'plant_type' => $companyATODetails->plant_type,
+      'state' => $companyATODetails->state,
+      'lga' => $companyATODetails->lga,
+      'town' => $companyATODetails->town,
+      'address' => $companyATODetails->address,
+      'application_status' => 'Not Submitted'
+    ]);
+
+    // add the application ID to session
+    session(['application_id' => $applicationID, 'app_id' => $companyATODetails->application_id, 'sub_category' => 'Renewal']);
+
+
+    // redirect the marketer to uploads area
+    return redirect('/lto_requirement');
+  }
+
+
+  public function OldapplyForLTORenewalOLD(Request $request){ // deprecated
+    dd($request);
     if(request('COLEL_doc') && request('PR_doc')){
 
       // retrieve site suitability fields for this company from app_doc_reviews using the application_id from request
@@ -2161,11 +2318,11 @@ class marketerController extends Controller
       // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
       if($request->hasFile('COLEL_doc')){
         $request->COLEL_doc->storeAs('license_docs/'.$marketerID.'/'.$applicationID, $request->COLEL_doc->getClientOriginalName());
-        $colelDoc = $request->COLEL_doc->getClientOriginalName();
+        $colelDoc = $request->COLEL_doc->getClientOriginalName().Carbon::now();
       }
 
       if($request->hasFile('PR_doc')){
-        $request->PR_doc->storeAs('license_docs/'.$marketerID.'/'.$applicationID, $request->PR_doc->getClientOriginalName());
+        $request->PR_doc->storeAs('license_docs/'.$marketerID.'/'.$applicationID, $request->PR_doc->getClientOriginalName().Carbon::now());
         $prDoc = $request->PR_doc->getClientOriginalName();
       }
 

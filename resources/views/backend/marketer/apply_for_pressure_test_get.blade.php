@@ -50,7 +50,7 @@
                   </div>
                   <apply-for-pressure-test-component></apply-for-pressure-test-component>
                   <!-- /.box-body -->
-                  <div class="row">
+                  {{--  <div class="row">
                     <div class="col-xs-6">
                       <div class="form-group">
                         <label>Date Last Tested</label>
@@ -65,7 +65,7 @@
                       </div>
                       <!-- /.form group -->
                     </div>
-                    {{--  <div class="col-xs-6">
+                    <div class="col-xs-6">
                       <div class="form-group">
                         <label>Due Date (MOSR/RBI)</label>
 
@@ -79,14 +79,18 @@
                       </div>
                       <!-- /.form group -->
 
-                    </div>  --}}
-                  </div>
-                  <div class="form-group">
+                    </div>
+                  </div>  --}}
+                  {{--  <div class="form-group">
                     <label for="exampleInputFile">Upload Test Report / Certificate</label>
                     <input type="file" name="TCR_doc">
+                  </div>  --}}
+                  <div class="form-group">
+                    <label for="exampleInputFile">Upload Application Letter</label>
+                    <input type="file" name="AL_doc">
                   </div>
                   <div class="box-footer">
-                    <button type="submit" class="btn btn-primary" style="float: right;">Submit</button>
+                    <button type="submit" class="btn btn-primary" style="float: right;">Save</button>
                   </div>
                 </form>
               </div>

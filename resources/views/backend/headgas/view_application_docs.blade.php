@@ -303,7 +303,19 @@
           <div class="col-md-8">
             <div class="box box-primary">
               <div class="box-header">
-                <h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
+                @if ($applicationReview->sub_category == 'Pressure Testing')
+                    <h3 class="box-title"><b>Application Details</b></h3>
+                @else
+                    @if ($applicationReview->sub_category == 'Pressure Testing')
+                    <h3 class="box-title"><b>Application Details</b></h3>
+                @else
+                    @if ($applicationReview->sub_category == 'Pressure Testing')
+                    <h3 class="box-title"><b>Application Details</b></h3>
+                @else
+                    <h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
+                @endif
+                @endif
+                @endif
                 <!-- tools box -->
                 <div class="pull-right box-tools">
                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -323,6 +335,11 @@
                 @elseif($applicationReview->sub_category == 'CAT-D LTO')
                   @include('partials.m_view_application_docs_catd_lto')
                 @elseif($applicationReview->sub_category == 'Renewal')
+                <li class="list-group-item">
+                  <span style="font-weight: 600; font-size: 16px; margin-left: 5px;">COPY OF LAST EXPIRED LICENSE</span>
+                  <i class="fa fa-check text-green" style="float: left;"></i>
+                  <a href="/displayDocument?pic=/storage/license_docs/{{ $applicationReview->company_id }}/{{ $thisApplicationRenewalDetails->comp_license_id }}/{{ $thisApplicationRenewalDetails->copy_of_last_expired_license_location_url }}" class="btn btn-primary btn-xs pull-right">View</a>
+                </li><br>
                   @include('partials.m_view_application_docs_lto_renewal')
                 @elseif($applicationReview->sub_category == 'Take Over')
                   @include('partials.m_view_application_docs_takeover')

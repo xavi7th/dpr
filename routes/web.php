@@ -49,6 +49,9 @@ Route::post('/open_assign_tree', 'appController@assignTree')->middleware(['auth'
 Route::post('/send_job', 'appController@sendJob')->middleware(['auth']);
 Route::post('/send_job_to_hq', 'appController@sendJobToHQ')->middleware(['auth']);
 Route::post('/document_valid', 'appController@documentValid')->middleware(['auth']);
+Route::post('/upload_license', 'appController@uploadLicense')->middleware(['auth']);
+
+Route::post('/advanced_search_atc', 'appController@advancedSearchAtc')->middleware(['auth']);
 
 //LPG-CNG-ROUTES
 Route::get('/lpg_cng_dashboard', 'appController@lpgCngDashboard')->middleware(['auth']);
@@ -216,6 +219,8 @@ Route::post('/takeover_req_upload', 'marketerController@handleTakeover')->middle
 Route::post('/apply_for_pressure_test', 'marketerController@handlePressureTestPhase1')->middleware(['auth']);
 
 
+Route::post('/upload_implementation_schedule', 'marketerController@uploadImplementationSchedule')->middleware(['auth']);
+
 
 Route::post('/apply_for_atc', 'marketerController@applyForATC')->middleware(['auth']);
 Route::post('/apply_for_lto', 'marketerController@applyForLTO')->middleware(['auth']);
@@ -242,6 +247,8 @@ Route::post('/staff_create_company', 'staffController@createCompany')->middlewar
 Route::post('/stUpload_report', 'staffController@uploadReport')->middleware(['auth', 'staff']);
 Route::post('/stUpload_construction_report', 'staffController@uploadContructionReportATC')->middleware(['auth', 'staff']);
 Route::post('/up_to_teamlead', 'staffController@upToTeamlead')->middleware(['auth', 'staff']);
+Route::post('/set_due_date', 'staffController@setDateTested')->middleware(['auth', 'staff']);
+Route::post('/construction_started', 'staffController@constructionStarted')->middleware(['auth', 'staff']);
 
 
 //TEAMLEAD-CONTROLLER

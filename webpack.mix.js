@@ -34,6 +34,7 @@ mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/select2/dist/js/select2.full.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/jquery-slimscroll/jquery.slimscroll.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+     'resources/assets/lte/AdminLTE-2.4.3/bower_components/bootstrap-daterangepicker/dist/js/daterangepicker.js',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/datatables.net/js/jquery.dataTables.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
      'resources/assets/lte/AdminLTE-2.4.3/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js',

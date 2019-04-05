@@ -54,6 +54,7 @@
                   <thead>
                   <tr>
                     <th>Application ID</th>
+                    <th>Company Name</th>
                     <th>Name of Gas Plant</th>
                     <th>Application Type</th>
                     <th>Sub-Category</th>
@@ -69,19 +70,25 @@
                     @foreach ($appDocReviews as $item)
                       <tr>
                         <td class="sorting_1">
-                          @if ($item->application_status == 'Application Pending'
-                          || $item->application_status == 'Site Not Suitable'
-                          || $item->application_status == 'ATC Not Issued'
-                          || $item->application_status == 'ATI Not Issued'
-                          || $item->application_status == 'LTO Not Issued'
-                          || $item->application_status == 'Renewal Declined'
-                          || $item->application_status == 'Take Over Not Approved'
-                          )
+                          @if ($item->application_status == 'Application Pending')
                             <a class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @else
-                            <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @if ($item->issued_lto_licenses)
+                              @if($item->issued_lto_licenses['expiry_date'] == "")
+                                <a href="/mDocument_review/{{ $item->id }}" class="label label-default" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              @elseif(now()->gte($item->issued_lto_licenses['expiry_date']))
+                                <a href="/mDocument_review/{{ $item->id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              @elseif(now()->addMonths(3)->gte($item->issued_lto_licenses['expiry_date']))
+                                <a href="/mDocument_review/{{ $item->id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              @elseif(now()->lte($item->issued_lto_licenses['expiry_date']))
+                                <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              @endif
+                            @else
+                                <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                            @endif
                           @endif
                         </td>
+                        <td>{{ $item->company['company_name'] }}</td>
                         <td>
                           @if ($item->sub_category == "CAT-D LTO")
                             {{ $item->company['company_name'] }}
@@ -149,3 +156,13 @@
   })
   </script>
 @endsection
+
+
+{{--  @if ($item->application_status == 'Application Pending'
+|| $item->application_status == 'Site Not Suitable'
+|| $item->application_status == 'ATC Not Issued'
+|| $item->application_status == 'ATI Not Issued'
+|| $item->application_status == 'LTO Not Issued'
+|| $item->application_status == 'Renewal Declined'
+|| $item->application_status == 'Take Over Not Approved'
+)  --}}
