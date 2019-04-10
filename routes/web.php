@@ -30,8 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/view_atc_records', 'appController@viewAllATC');
 	Route::get('/view_ati_records', 'appController@viewAllAddOnATI');
 
-	Route::get('/view_lto_records', 'appController@viewAllLTO');
-	Route::post('/view_lto_records/search', 'appController@viewAllLTO')->name('search_lto');
+	Route::get('/view_lto_records', 'appController@viewAllLTO')->name('lto.all');
+	Route::post('/view_lto_records/search', 'appController@viewAllLTO')->name('lto.search');
 	Route::get('/view_addon_lto_records', 'appController@viewAllAddonLTO');
 	Route::get('/view_catd_lto_records', 'appController@viewAllCatDLTO');
 

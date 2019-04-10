@@ -26,10 +26,83 @@
 
       <!-- Main content -->
       <section class="content">
+
         <div class="row">
           <div class="col-md-12">
             <div class="box">
-              <div class="box-header">
+              <div class="box-header mb-4 shadow-sm">
+							<form action="{{ route('lto.search') }}" method="post">
+                {{ csrf_field() }}
+                {{-- <input type="text" hidden name="application_type" value="lpg retailer outlets"> --}}
+                <div class="row d-flex justify-content-center flex-wrap">
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>Type</label>
+                      <select class="form-control" name="search_type">
+                        <option value="date">Application Date</option>
+                        <option value="date_issued">Date Issued</option>
+                        <option value="expiry_date">Expiry Date</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>From:</label>
+                      <div class="input-group date">
+                        <div class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" name="from" class="form-control pull-right" id="datepicker1" autocomplete="false">
+                      </div>
+                      <!-- /.input group -->
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label>To:</label>
+                      <div class="input-group date">
+                        <div class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" name="to" class="form-control pull-right" id="datepicker2">
+                      </div>
+                      <!-- /.input group -->
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                    <div class="form-group">
+                      <label style="visibility: hidden;">:</label>
+                      <br>
+                      <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label style="visibility: hidden;">:</label>
+                      <br>
+                      <a href="{{ route('lto.all') }}?val=lpg_lto" class="btn btn-info">View All LTOs</a>
+                    </div>
+                  </div>
+
+									@if (count($errors) > 0)
+										<div class="has-error w-75 shadow mb-5 mt-2">
+												<ul class="input-group-addon ">
+														@foreach ($errors->all() as $error)
+																<li class="list-inline">{{ $error }}</li>
+														@endforeach
+												</ul>
+										</div>
+									@endif
+
+									@if (session('status'))
+											<div class="alert alert-success">
+													{{ session('status') }}
+											</div>
+									@endif
+                </div>
+
+
+              </form>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
@@ -127,5 +200,15 @@
       'ordering'    : false,
     });
   })
+
+    //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
+
+    //Date picker
+    $('#datepicker2').datepicker({
+      autoclose: true
+    })
 </script>
 @endsection
