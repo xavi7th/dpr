@@ -166,13 +166,15 @@ class appController extends Controller
 
 			} elseif ($search_type == 'date_issued' || $search_type == 'expiry_date') {
 
-				$appDocReviewsATC = IssuedAtcLicense::with(['app_doc_rev', 'company', 'job_assignment'])
-					->whereBetween($search_type, [$from, $to])
+				$appDocReviewsATC = AppDocReview::with(['company', 'issued_lto_licenses', 'job_assignment'])
+					->whereHas('issued_atc_licenses', function ($query) use ($from, $to, $search_type) {
+						$query->whereBetween($search_type, [$from, $to]);
+					})
+					->where('application_type', 'LPG Retailer Outlets')
+					->where('sub_category', 'ATC')
+					->where('application_status', '!=', 'Not Submitted')
 					->latest()
 					->get();
-				// ->toSql();
-
-				dd($appDocReviewsATC);
 			}
 		} elseif ($application_type == 'cng retailer outlets') { }
 		return view('backend.general.view_all_atc', compact('appDocReviewsATC'));
@@ -276,13 +278,6 @@ class appController extends Controller
 					->where('sub_category', 'LTO')
 					->latest()
 					->get();
-
-				// $appDocReviewsLTO = IssuedLTOLicense::with(['app_doc_rev', 'company'])
-				// 	->whereBetween($search_type, [$from, $to])
-				// 	->latest()
-				// 	->get();
-
-				// dd($appDocReviewsLTO->toArray());
 			} else {
 				return back()->withErrors('Error processing the request');
 			}
