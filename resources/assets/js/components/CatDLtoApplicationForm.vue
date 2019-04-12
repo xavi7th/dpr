@@ -130,9 +130,7 @@
           }
 
         },
-        computed(){
 
-        }
     }
 
 </script>

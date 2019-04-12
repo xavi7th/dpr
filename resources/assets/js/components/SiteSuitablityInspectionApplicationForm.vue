@@ -154,9 +154,7 @@
           }
 
         },
-        computed(){
 
-        }
     }
 
 </script>

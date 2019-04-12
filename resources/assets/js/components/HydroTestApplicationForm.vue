@@ -169,9 +169,7 @@
           }
 
         },
-        computed(){
 
-        }
     }
 
 </script>
