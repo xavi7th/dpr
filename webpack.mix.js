@@ -12,6 +12,9 @@ let mix = require('laravel-mix')
  */
 
 mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
+    .autoload({
+        jquery: ['$', 'jQuery'],
+    })
     .sass('resources/assets/sass/app.scss', 'public/css/custom.css')
     .styles(
         [
