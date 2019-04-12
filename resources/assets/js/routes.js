@@ -5,22 +5,42 @@ import zopsconOutbox from './components/zopsconOutbox.vue'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  routes: [
-    {
-      path: "/zopscon_inbox",
-      component: zopsconInbox
+    mode: 'history',
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return {
+                x: 0,
+                y: 0,
+            }
+        }
     },
-    {
-      path: "/zopscon_outbox",
-      component: zopsconOutbox
-    }
-    // {
-    //   path : '*',
-    //   redirect : '/zopscon_inbox'
-    // }
-  ]
+    routes: [
+        {
+            path: '/zopscon_inbox',
+            component: zopsconInbox,
+        },
+        {
+            path: '/zopscon_outbox',
+            component: zopsconOutbox,
+        },
+        // {
+        //   path : '*',
+        //   redirect : '/zopscon_inbox'
+        // }
+    ],
 })
 
 // router.replace('/zopscon_inbox')
 // router.replace({ path: '/zopscon_inbox', redirect: '/zopscon' })
 export default router
+
+/**
+ * API Endpoints
+ */
+export const GetNewNotifications = 'api/notifications/new'
+export const GetAllNotifications = 'api/notifications/all'
+export const GetNotificationDetails = id => `api/notification/${id}/read`
+export const DeleteNotification = id => `api/notification/${id}/delete`
+export const MarkNotificationRead = id => `api/notification/${id}/read`

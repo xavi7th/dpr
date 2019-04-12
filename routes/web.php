@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\APIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -321,6 +322,12 @@ Route::post('/push_down_to_headgas', 'managergasController@forwardApplicationToH
 Route::post('/managergas_decides', 'managergasController@managergasApproves')->middleware(['auth', 'managergas']);
 
 
+/**
+ * API Routes
+ */
+
+
+APIController::routes();
 
 
 
