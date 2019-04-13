@@ -44,3 +44,4 @@ export const GetAllNotifications = 'api/notifications/all'
 export const GetNotificationDetails = id => `api/notification/${id}/read`
 export const DeleteNotification = id => `api/notification/${id}/delete`
 export const MarkNotificationRead = id => `api/notification/${id}/read`
+export const sendNotification = `api/notification/send`

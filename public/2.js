@@ -62,7 +62,7 @@ var content = __webpack_require__(161);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("6dac0942", content, false, {});
+var update = __webpack_require__(2)("6dac0942", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -82,12 +82,12 @@ if(false) {
 /***/ 161:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(false);
+exports = module.exports = __webpack_require__(1)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -99,12 +99,90 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n", ""]);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(15);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "ViewANotification",
+  props: ["propsData"],
+  data: function data() {
+    return {
+      notif_msg: null
+    };
+  },
+
+  methods: {
+    replyNotification: function replyNotification() {
+      var _this = this;
+
+      if (this.notif_msg == null) {
+        swal("Empty notification", "", "warning");
+        return;
+      }
+      axios.post(__WEBPACK_IMPORTED_MODULE_0__routes__["f" /* sendNotification */], {
+        recipient_id: this.propsData.sender_id,
+        msg: this.notif_msg
+      }).then(function (rsp) {
+        console.log(rsp);
+        if (rsp.status == 201) {
+          swal("Sent", "Notitification sent to " + _this.propsData.sender_name, "success");
+          _this.notif_msg = null;
+        }
+      }).catch(function (err) {
+        console.log(err.response);
+        if (err.response) {
+          swal("Server Error", "" + err.response.message, "error");
+        } else if (err.request) {
+          swal("Request Error", "" + err.request, "error");
+        } else {
+          swal("Requset Error", "" + err.message, "error");
+        }
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -115,9 +193,102 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c(
+    "div",
+    [
+      _vm._t("close-button"),
+      _vm._v(" "),
+      _c("div", { staticClass: "row d-flex justify-content-center mt-5" }, [
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "box box-widget" }, [
+            _c("div", { staticClass: "box-header with-border" }, [
+              _c("div", { staticClass: "user-block" }, [
+                _c("span", { staticClass: "username" }, [
+                  _c("a", [_vm._v(_vm._s(_vm.propsData.sender_name))])
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "description" }, [
+                  _vm._v(
+                    "Shared publicly - " + _vm._s(_vm.propsData.created_at)
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "box-body" }, [
+              _c("p", [_vm._v(_vm._s(_vm.propsData.notification))])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "box-footer" }, [
+              _c(
+                "form",
+                {
+                  attrs: { method: "post" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.replyNotification($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "img-push" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.notif_msg,
+                          expression: "notif_msg"
+                        }
+                      ],
+                      staticClass: "form-control input-sm",
+                      attrs: {
+                        type: "text",
+                        placeholder:
+                          "Send notification to " + _vm.propsData.sender_name
+                      },
+                      domProps: { value: _vm.notif_msg },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.notif_msg = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ]
+              )
+            ])
+          ])
+        ])
+      ])
+    ],
+    2
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "box-footer px-0 d-flex justify-content-end" },
+      [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          [_vm._v("Submit")]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

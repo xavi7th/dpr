@@ -1,24 +1,24 @@
 webpackJsonp([0],{
 
-/***/ 151:
+/***/ 152:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(152)
+  __webpack_require__(157)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(154)
+var __vue_script__ = __webpack_require__(159)
 /* template */
-var __vue_template__ = __webpack_require__(155)
+var __vue_template__ = __webpack_require__(160)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-00adc362"
+var __vue_scopeId__ = "data-v-6d9a171a"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -29,7 +29,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/Nav/ViewAllNotifications.vue"
+Component.options.__file = "resources/assets/js/components/Nav/ViewNotification.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -38,9 +38,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-00adc362", Component.options)
+    hotAPI.createRecord("data-v-6d9a171a", Component.options)
   } else {
-    hotAPI.reload("data-v-00adc362", Component.options)
+    hotAPI.reload("data-v-6d9a171a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -52,23 +52,23 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 152:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(153);
+var content = __webpack_require__(158);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("44b2a4fa", content, false, {});
+var update = __webpack_require__(2)("6dac0942", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-00adc362\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewAllNotifications.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-00adc362\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewAllNotifications.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d9a171a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewNotification.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d9a171a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewNotification.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -79,7 +79,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 153:
+/***/ 158:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -87,14 +87,14 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.box[data-v-00adc362] {\n  max-height: 72vh;\n  overflow: scroll;\n}\n.product-info[data-v-00adc362] {\n  margin: 0 30px;\n}\n.label[data-v-00adc362] {\n  margin-right: 10px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 154:
+/***/ 159:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -139,69 +139,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
-/**
- * Using webpack code splitting to load the notification components only if requested
- */
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "UserNotifications",
+  name: "ViewANotification",
+  props: ["propsData"],
   data: function data() {
     return {
-      all_notifications: {},
-      currentComponent: null
+      notif_msg: null
     };
   },
-  created: function created() {
-    var _this = this;
 
-    axios.get(__WEBPACK_IMPORTED_MODULE_0__routes__["b" /* GetAllNotifications */]).then(function (rsp) {
-      _this.all_notifications = rsp.data.data;
-    }).catch(function (err) {
-      console.log(err.response);
-
-      if (err.response) {
-        swal("Server Error", "" + err.response.message, "error");
-      } else if (err.request) {
-        swal("Request Error", "" + err.request, "error");
-      } else {
-        swal("Requset Error", "" + err.message, "error");
-      }
-    });
-  },
-
-  computed: {
-    all_notifications_count: function all_notifications_count() {
-      return _.size(this.all_notifications);
-    }
-  },
   methods: {
-    deleteNotification: function deleteNotification(notif) {
-      var _this2 = this;
+    replyNotification: function replyNotification() {
+      var _this = this;
 
-      axios.get(Object(__WEBPACK_IMPORTED_MODULE_0__routes__["a" /* DeleteNotification */])(notif.id)).then(function (rsp) {
-        swal("Deleted", "", "info");
-        var removed = _this2.all_notifications.indexOf(notif);
-        _this2.all_notifications.splice(removed, 1);
-      }).catch(function (err) {
-        console.log(err.response);
-
-        if (err.response) {
-          swal("Server Error", "" + err.response.message, "error");
-        } else if (err.request) {
-          swal("Request Error", "" + err.request, "error");
-        } else {
-          swal("Requset Error", "" + err.message, "error");
+      if (this.notif_msg == null) {
+        swal("Empty notification", "", "warning");
+        return;
+      }
+      axios.post(__WEBPACK_IMPORTED_MODULE_0__routes__["f" /* sendNotification */], {
+        recipient_id: this.propsData.sender_id,
+        msg: this.notif_msg
+      }).then(function (rsp) {
+        console.log(rsp);
+        if (rsp.status == 201) {
+          swal("Sent", "Notitification sent to " + _this.propsData.sender_name, "success");
+          _this.notif_msg = null;
         }
-      });
-    },
-    markAsRead: function markAsRead(notif) {
-      axios.get(Object(__WEBPACK_IMPORTED_MODULE_0__routes__["d" /* MarkNotificationRead */])(notif.id)).then(function (rsp) {
-        // swal("Done", ``, "success");
-        notif.is_read = true;
       }).catch(function (err) {
         console.log(err.response);
-
         if (err.response) {
           swal("Server Error", "" + err.response.message, "error");
         } else if (err.request) {
@@ -216,7 +186,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 155:
+/***/ 160:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -228,78 +198,72 @@ var render = function() {
     [
       _vm._t("close-button"),
       _vm._v(" "),
-      _c("div", { staticClass: "row d-flex justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "box box-primary" }, [
+      _c("div", { staticClass: "row d-flex justify-content-center mt-5" }, [
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "box box-widget" }, [
             _c("div", { staticClass: "box-header with-border" }, [
-              _c("h3", { staticClass: "box-title" }, [
-                _vm._v(
-                  "All Notifications (" +
-                    _vm._s(_vm.all_notifications_count) +
-                    ")"
-                )
+              _c("div", { staticClass: "user-block" }, [
+                _c("span", { staticClass: "username" }, [
+                  _c("a", [_vm._v(_vm._s(_vm.propsData.sender_name))])
+                ]),
+                _vm._v(" "),
+                _c("span", { staticClass: "description" }, [
+                  _vm._v(
+                    "Shared publicly - " + _vm._s(_vm.propsData.created_at)
+                  )
+                ])
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "box-body" }, [
-              _c(
-                "ul",
-                { staticClass: "products-list product-list-in-box" },
-                _vm._l(_vm.all_notifications, function(n) {
-                  return _c("li", { key: n.id, staticClass: "item" }, [
-                    _c("div", { staticClass: "product-info" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "product-title",
-                          attrs: { href: "javascript:void(0)" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                  " +
-                              _vm._s(n.sender_name) +
-                              "\n                  "
-                          ),
-                          !n.is_read
-                            ? _c(
-                                "span",
-                                {
-                                  staticClass: "label label-warning pull-right",
-                                  on: {
-                                    click: function($event) {
-                                      _vm.markAsRead(n)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Mark as Read")]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "label label-danger pull-right",
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteNotification(n)
-                                }
-                              }
-                            },
-                            [_vm._v("Delete")]
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "product-description" }, [
-                        _vm._v(_vm._s(n.notification) + ".")
-                      ])
-                    ])
-                  ])
-                })
-              )
+              _c("p", [_vm._v(_vm._s(_vm.propsData.notification))])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "box-footer text-center" })
+            _c("div", { staticClass: "box-footer" }, [
+              _c(
+                "form",
+                {
+                  attrs: { method: "post" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.replyNotification($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "img-push" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.notif_msg,
+                          expression: "notif_msg"
+                        }
+                      ],
+                      staticClass: "form-control input-sm",
+                      attrs: {
+                        type: "text",
+                        placeholder:
+                          "Send notification to " + _vm.propsData.sender_name
+                      },
+                      domProps: { value: _vm.notif_msg },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.notif_msg = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ]
+              )
+            ])
           ])
         ])
       ])
@@ -307,13 +271,30 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "box-footer px-0 d-flex justify-content-end" },
+      [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          [_vm._v("Submit")]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-00adc362", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-6d9a171a", module.exports)
   }
 }
 

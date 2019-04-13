@@ -12,17 +12,21 @@
             <ul class="products-list product-list-in-box">
               <li class="item" v-for="n in all_notifications" :key="n.id">
                 <div class="product-info">
-                  <a href="javascript:void(0)" class="product-title">
+                  <a
+                    href="javascript:void(0)"
+                    @click="$emit('view-notif', n)"
+                    class="product-title"
+                  >
                     {{ n.sender_name }}
+                    <span
+                      class="label label-danger pull-right"
+                      @click="deleteNotification(n)"
+                    >Delete</span>
                     <span
                       class="label label-warning pull-right"
                       @click="markAsRead(n)"
                       v-if="!n.is_read"
                     >Mark as Read</span>
-                    <span
-                      class="label label-danger pull-right"
-                      @click="deleteNotification(n)"
-                    >Delete</span>
                   </a>
                   <span class="product-description">{{ n.notification }}.</span>
                 </div>

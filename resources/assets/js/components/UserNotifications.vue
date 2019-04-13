@@ -10,7 +10,7 @@
         <!-- inner menu: contains the actual data -->
         <ul class="menu">
           <li v-for="(n, idx) in new_notifications" :key="idx">
-            <a href="#">
+            <a @click="viewNotification(n)" class="view-notification">
               <h4 class="ml-1">
                 {{ n.sender_name }}
                 <small>
@@ -28,7 +28,12 @@
       </li>
     </ul>
     <transition name="nav-transition" mode="out-in">
-      <component :is="currentComponent" id="notifications-container">
+      <component
+        :is="currentComponent"
+        id="notifications-container"
+        v-bind:propsData="current_notification"
+        @view-notif="viewNotification($event)"
+      >
         <template slot="close-button">
           <i class="fa fa-times close-button" @click="currentComponent = null"></i>
         </template>
@@ -41,20 +46,26 @@
   /**
    * Using webpack code splitting to load the notification components only if requested
    */
-  import { GetNewNotifications } from "../routes";
+  import { GetNewNotifications, GetNotificationDetails } from "../routes";
   // import ViewAllNotifications from "./Nav/ViewAllNotifications";
+  // const ViewAllNotifications = () => import("./Nav/ViewAllNotifications");
   export default {
     name: "UserNotifications",
     components: {
       // ViewAllNotifications,
       ViewAllNotifications: resolve =>
-        require(["./Nav/ViewAllNotifications"], resolve) //import("./Nav/ViewAllNotifications.vue")
+        require([
+          /* webpackChunkName: "hello" */ "./Nav/ViewAllNotifications"
+        ], resolve), //import("./Nav/ViewAllNotifications.vue")
+      ViewNotification: resolve => require(["./Nav/ViewNotification"], resolve)
     },
 
     data() {
       return {
         new_notifications: {},
+        current_notification: {},
         currentComponent: null
+        // propsData: {}
       };
     },
     created() {
@@ -64,6 +75,8 @@
           this.new_notifications = rsp.data.data;
         })
         .catch(err => {
+          console.log(err.response);
+
           if (err.response) {
             swal("Server Error", `${err.response.data}`, "error");
           } else if (err.request) {
@@ -76,6 +89,32 @@
     computed: {
       new_notifications_count() {
         return _.size(this.new_notifications);
+      }
+    },
+    methods: {
+      viewNotification(notif) {
+        axios
+          .get(GetNotificationDetails(notif.id))
+          .then(rsp => {
+            this.current_notification = rsp.data.notification;
+            var removed = this.new_notifications.indexOf(notif);
+            if (removed != -1) {
+              /* A match was found */
+              this.new_notifications.splice(removed, 1);
+            }
+            this.currentComponent = "ViewNotification";
+          })
+          .catch(err => {
+            console.log(err.response);
+
+            if (err.response) {
+              swal("Server Error", `${err.response.data}`, "error");
+            } else if (err.request) {
+              swal("Request Error", `${err.request}`, "error");
+            } else {
+              swal("Requset Error", `${err.message}`, "error");
+            }
+          });
       }
     }
   };
@@ -104,6 +143,9 @@
     font-weight: 100;
     color: #fff;
     text-shadow: -1px 1px 1px black;
+    cursor: pointer;
+  }
+  .view-notification {
     cursor: pointer;
   }
 </style>

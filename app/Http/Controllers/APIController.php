@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Debugbar;
+use App\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\UserNotificationsListResource;
-use App\UserNotification;
 
 class APIController extends Controller
 {
@@ -29,14 +31,18 @@ class APIController extends Controller
 				 * Get all the authenticated user's new notifications
 				 */
 				Route::get('/notifications/new', function () {
-					$notifs = Auth::user()->new_notifications;
+					$notifs = Cache::remember('new_notifs' . auth()->id(), 1, function () {
+						return Auth::user()->new_notifications;
+					});
 					return UserNotificationsListResource::collection($notifs);
 				});
 				/**
 				 * Get all the authenticated user's notifications
 				 */
 				Route::get('/notifications/all', function () {
-					$notifs = Auth::user()->received_notifications;
+					$notifs = Cache::remember('all_notifs' . auth()->id(), 1, function () {
+						return Auth::user()->received_notifications;
+					});
 					return UserNotificationsListResource::collection($notifs);
 				});
 				/**
@@ -50,8 +56,20 @@ class APIController extends Controller
 				 */
 				Route::get('/notification/{notif}/read', function (UserNotification $notif) {
 					$notif->is_read = true;
-					$notif->save();
-					return ['status' => true];
+					// $notif->save();
+					return ['notification' => $notif];
+				});
+				/**
+				 * Send notification
+				 */
+				Route::post('/notification/send', function () {
+					// return request()->all();
+					Auth::user()->sent_notifications()->create([
+						'recipient_id' => request('recipient_id'),
+						'notification' => request('msg'),
+						'sender_name' => Auth::user()->role
+					]);
+					return response()->json(['status' => true], 201);
 				});
 			});
 		});

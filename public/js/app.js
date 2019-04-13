@@ -14083,7 +14083,7 @@ $(function () {
 /******/
 /******/ 	// objects to store loaded and loading chunks
 /******/ 	var installedChunks = {
-/******/ 		1: 0
+/******/ 		2: 0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -36931,9 +36931,10 @@ module.exports = Vue;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return GetNewNotifications; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return GetAllNotifications; });
-/* unused harmony export GetNotificationDetails */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return GetNotificationDetails; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DeleteNotification; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return MarkNotificationRead; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return MarkNotificationRead; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return sendNotification; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(142);
@@ -36987,6 +36988,7 @@ var DeleteNotification = function DeleteNotification(id) {
 var MarkNotificationRead = function MarkNotificationRead(id) {
     return 'api/notification/' + id + '/read';
 };
+var sendNotification = 'api/notification/send';
 
 /***/ }),
 /* 16 */
@@ -67607,7 +67609,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.view-all[data-v-c0045994] {\n  cursor: pointer;\n}\n#notifications-container[data-v-c0045994] {\n  top: 50px;\n  left: 230px;\n  right: 0;\n  bottom: 0;\n  position: fixed;\n  background-color: rgb(0, 0, 0, 0.5);\n  padding: 0 15px;\n}\n.close-button[data-v-c0045994] {\n  font-size: 32px;\n  display: block;\n  text-align: right;\n  margin-bottom: 35px;\n  padding-right: 3%;\n  padding-top: 1%;\n  font-weight: 100;\n  color: #fff;\n  text-shadow: -1px 1px 1px black;\n  cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.view-all[data-v-c0045994] {\n  cursor: pointer;\n}\n#notifications-container[data-v-c0045994] {\n  top: 50px;\n  left: 230px;\n  right: 0;\n  bottom: 0;\n  position: fixed;\n  background-color: rgb(0, 0, 0, 0.5);\n  padding: 0 15px;\n}\n.close-button[data-v-c0045994] {\n  font-size: 32px;\n  display: block;\n  text-align: right;\n  margin-bottom: 35px;\n  padding-right: 3%;\n  padding-top: 1%;\n  font-weight: 100;\n  color: #fff;\n  text-shadow: -1px 1px 1px black;\n  cursor: pointer;\n}\n.view-notification[data-v-c0045994] {\n  cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -67658,25 +67660,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /**
  * Using webpack code splitting to load the notification components only if requested
  */
 
 // import ViewAllNotifications from "./Nav/ViewAllNotifications";
+// const ViewAllNotifications = () => import("./Nav/ViewAllNotifications");
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "UserNotifications",
   components: {
     // ViewAllNotifications,
     ViewAllNotifications: function ViewAllNotifications(resolve) {
-      return __webpack_require__.e/* require */(0).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(151)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
-    } //import("./Nav/ViewAllNotifications.vue")
+      return __webpack_require__.e/* require */(1).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [
+      /* webpackChunkName: "hello" */__webpack_require__(151)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+    }, //import("./Nav/ViewAllNotifications.vue")
+    ViewNotification: function ViewNotification(resolve) {
+      return __webpack_require__.e/* require */(0).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(152)]; ((resolve).apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+    }
   },
 
   data: function data() {
     return {
       new_notifications: {},
+      current_notification: {},
       currentComponent: null
+      // propsData: {}
     };
   },
   created: function created() {
@@ -67685,6 +67699,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     axios.get(__WEBPACK_IMPORTED_MODULE_0__routes__["c" /* GetNewNotifications */]).then(function (rsp) {
       _this.new_notifications = rsp.data.data;
     }).catch(function (err) {
+      console.log(err.response);
+
       if (err.response) {
         swal("Server Error", "" + err.response.data, "error");
       } else if (err.request) {
@@ -67698,6 +67714,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   computed: {
     new_notifications_count: function new_notifications_count() {
       return _.size(this.new_notifications);
+    }
+  },
+  methods: {
+    viewNotification: function viewNotification(notif) {
+      var _this2 = this;
+
+      axios.get(Object(__WEBPACK_IMPORTED_MODULE_0__routes__["d" /* GetNotificationDetails */])(notif.id)).then(function (rsp) {
+        _this2.current_notification = rsp.data.notification;
+        var removed = _this2.new_notifications.indexOf(notif);
+        if (removed != -1) {
+          /* A match was found */
+          _this2.new_notifications.splice(removed, 1);
+        }
+        _this2.currentComponent = "ViewNotification";
+      }).catch(function (err) {
+        console.log(err.response);
+
+        if (err.response) {
+          swal("Server Error", "" + err.response.data, "error");
+        } else if (err.request) {
+          swal("Request Error", "" + err.request, "error");
+        } else {
+          swal("Requset Error", "" + err.message, "error");
+        }
+      });
     }
   }
 });
@@ -70653,27 +70694,38 @@ var render = function() {
             { staticClass: "menu" },
             _vm._l(_vm.new_notifications, function(n, idx) {
               return _c("li", { key: idx }, [
-                _c("a", { attrs: { href: "#" } }, [
-                  _c("h4", { staticClass: "ml-1" }, [
-                    _vm._v(
-                      "\n              " +
-                        _vm._s(n.sender_name) +
-                        "\n              "
-                    ),
-                    _c("small", [
-                      _c("i", { staticClass: "fa fa-clock-o" }),
+                _c(
+                  "a",
+                  {
+                    staticClass: "view-notification",
+                    on: {
+                      click: function($event) {
+                        _vm.viewNotification(n)
+                      }
+                    }
+                  },
+                  [
+                    _c("h4", { staticClass: "ml-1" }, [
                       _vm._v(
-                        "\n                " +
-                          _vm._s(n.created_at) +
+                        "\n              " +
+                          _vm._s(n.sender_name) +
                           "\n              "
-                      )
+                      ),
+                      _c("small", [
+                        _c("i", { staticClass: "fa fa-clock-o" }),
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(n.created_at) +
+                            "\n              "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "ml-1" }, [
+                      _vm._v(_vm._s(n.notification))
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "ml-1" }, [
-                    _vm._v(_vm._s(n.notification))
-                  ])
-                ])
+                  ]
+                )
               ])
             })
           )
@@ -70701,7 +70753,18 @@ var render = function() {
         [
           _c(
             _vm.currentComponent,
-            { tag: "component", attrs: { id: "notifications-container" } },
+            {
+              tag: "component",
+              attrs: {
+                id: "notifications-container",
+                propsData: _vm.current_notification
+              },
+              on: {
+                "view-notif": function($event) {
+                  _vm.viewNotification($event)
+                }
+              }
+            },
             [
               _c("template", { slot: "close-button" }, [
                 _c("i", {
