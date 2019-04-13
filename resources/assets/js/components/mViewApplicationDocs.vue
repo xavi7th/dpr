@@ -14,7 +14,7 @@
     {'label-danger' : nameval == 'no'},
     {'label-warning' : nameval == 'null'}
     ] ">{{ namevalModified }}</small> -->
-    
+
     <!-- General tools such as edit or delete-->
     <!-- <form v-on:click="viewDocument()">
       <input type="text" hidden value="nokia" name="phone">
@@ -24,8 +24,8 @@
     <!-- <button type="submit" class="btn btn-primary btn-xs pull-right" v-on:click="viewDocument()">View</button> -->
     <a :href="`/displayDocument?pic=${picURL}`" class="btn btn-primary btn-xs pull-right">View</a>
 
-    
-    <input v-if="role != 'Marketer'" id="checkform" type="checkbox" name="documentCheck" v-on:change="markValid()" v-model="documentcheck">
+
+    <input v-if="role != 'Marketer'" id="checkform" type="checkbox" name="documentCheck" v-on:change="markValid()" v-model="documentcheck_value">
 
     <!-- <input id="checkform" type="checkbox" name="documentCheck" v-on:change="markValid()" v-model="valid" :checked="`${valid}`"> -->
     <!-- <div v-show="!reasonBtn" class="tools" data-toggle="modal" :data-target="`#${modality}`">
@@ -64,81 +64,110 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-          if(this.imgurl != 'null'){
-            this.picURL = '/storage/comp_docs/'+this.marketerid+'/'+this.applicationid+'/'+this.imgurl+'';
-          }else{
-            this.picURL = '';
-          }
+  export default {
+    mounted() {
+      if (this.imgurl != "null") {
+        this.picURL =
+          "/storage/comp_docs/" +
+          this.marketerid +
+          "/" +
+          this.applicationid +
+          "/" +
+          this.imgurl +
+          "";
+      } else {
+        this.picURL = "";
+      }
 
-          if(this.nameval == 'null'){
-            this.namevalModified = 'Not Applicable';
-          }else{
-            this.namevalModified = this.nameval
-          }
+      if (this.nameval == "null") {
+        this.namevalModified = "Not Applicable";
+      } else {
+        this.namevalModified = this.nameval;
+      }
 
-          if(this.nameval == 'no' || this.nameval == 'null'){
-            this.reasonBtn = true;
-          }
-          
-          if(this.documentcheck == "true"){
-            this.documentcheck = true
-          }else if(this.documentcheck == "false"){
-            this.documentcheck = false
-          }
-        },
-        props:['applicationid','marketerid','imgurl','title','nameval','modality','reason','reasonspecified','documentcheck', 'subcategory', 'documentcheckname','role'],
-        data(){
-          return{
-            docsData: [],
-            namevalModified: this.nameval,
-            picURL: this.imgurl,
-            docReason: this.reasonspecified,
-            reasonBtn: false,
-            specifiedReason: '',
-            documentcheck: this.documentCheck,
-            role: this.role
-          }
-        },
-        methods:{
-          getReason(){
-            // axios.get('/getReson',{params: {data:''}}).then(response => { {img:this.picURL, reason:this.docReason}
-            //   this.states = response.data.nigeria;
-            // });
-            this.specifiedReason = this.title;
-          },
-          viewDocument(){
-            axios.post('/viewDocument',{img:this.picURL, reason:this.docReason}).then(response => {
-              window.location.href = '/displayDocument';
-              console.log("successful");
-              
-              // this.states = response.data.nigeria;
-            });
-          },
-          markValid(){
-            console.log(this.documentcheck);
-            axios.post('/document_valid', {applicationid:this.applicationid, subcategory:this.subcategory, valid:this.documentcheck+"", documentcheck:this.documentcheckname}).then(response => {
-              console.log("successful");
-            });
-          }
-        }
+      if (this.nameval == "no" || this.nameval == "null") {
+        this.reasonBtn = true;
+      }
+
+      if (this.documentcheck == "true") {
+        this.documentcheck_value = true;
+      } else if (this.documentcheck == "false") {
+        this.documentcheck_value = false;
+      }
+    },
+    props: [
+      "applicationid",
+      "marketerid",
+      "imgurl",
+      "title",
+      "nameval",
+      "modality",
+      "reason",
+      "reasonspecified",
+      "documentcheck",
+      "subcategory",
+      "documentcheckname",
+      "role"
+    ],
+    data() {
+      return {
+        docsData: [],
+        namevalModified: this.nameval,
+        picURL: this.imgurl,
+        docReason: this.reasonspecified,
+        reasonBtn: false,
+        specifiedReason: "",
+        documentcheck_value: this.documentcheck
+        // role: this.role
+      };
+    },
+    methods: {
+      getReason() {
+        // axios.get('/getReson',{params: {data:''}}).then(response => { {img:this.picURL, reason:this.docReason}
+        //   this.states = response.data.nigeria;
+        // });
+        this.specifiedReason = this.title;
+      },
+      viewDocument() {
+        axios
+          .post("/viewDocument", { img: this.picURL, reason: this.docReason })
+          .then(response => {
+            window.location.href = "/displayDocument";
+            console.log("successful");
+
+            // this.states = response.data.nigeria;
+          });
+      },
+      markValid() {
+        console.log(this.documentcheck_value);
+        axios
+          .post("/document_valid", {
+            applicationid: this.applicationid,
+            subcategory: this.subcategory,
+            valid: this.documentcheck_value + "",
+            documentcheck: this.documentcheckname
+          })
+          .then(response => {
+            console.log("successful");
+          });
+      }
     }
+  };
 </script>
 
 <style>
-  #label-shift{
+  #label-shift {
     margin-bottom: 10px;
   }
-  #label-shift span{
+  #label-shift span {
     font-size: 16px;
     text-transform: uppercase;
   }
-  #label-shift small{
+  #label-shift small {
     margin-left: 30px;
     font-size: 12px;
   }
-  #checkform{
+  #checkform {
     float: right;
     margin-right: 20px;
   }

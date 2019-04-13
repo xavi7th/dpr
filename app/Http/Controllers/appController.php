@@ -86,6 +86,7 @@ class appController extends Controller
 	public function documentValid(Request $request)
 	{
 		// dd($request);
+		// return $request;
 
 		$applicationID = request('applicationid');
 		$subCategory = request('subcategory');
@@ -129,8 +130,8 @@ class appController extends Controller
 				]);
 		}
 
-
-		return back();
+		return response()->json(['status' => true], 201);
+		// return back();
 	}
 
 	public function viewAllSSI()
