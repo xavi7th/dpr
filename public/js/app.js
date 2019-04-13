@@ -67665,6 +67665,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /**
  * Using webpack code splitting to load the notification components only if requested
@@ -70762,6 +70763,9 @@ var render = function() {
               on: {
                 "view-notif": function($event) {
                   _vm.viewNotification($event)
+                },
+                "all-notifs": function($event) {
+                  _vm.currentComponent = "ViewAllNotifications"
                 }
               }
             },

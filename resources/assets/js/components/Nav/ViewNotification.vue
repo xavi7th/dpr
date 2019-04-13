@@ -6,13 +6,18 @@
       <div class="col-md-6">
         <!-- Box Comment -->
         <div class="box box-widget">
-          <div class="box-header with-border">
+          <div class="box-header with-border d-flex ml-1">
             <div class="user-block">
-              <span class="username">
+              <span class="username mx-0">
                 <a>{{ propsData.sender_name }}</a>
               </span>
-              <span class="description">Shared publicly - {{ propsData.created_at }}</span>
+              <span class="description mx-0">Sent - {{ propsData.created_at }}</span>
             </div>
+            <button
+              type="button"
+              class="btn bg-orange btn-flat btn-sm ml-auto"
+              @click="$emit('all-notifs')"
+            >View All</button>
           </div>
 
           <div class="box-body">

@@ -2887,3 +2887,7 @@
   opacity: 0;
 }
 
+.pointer {
+  cursor: pointer !important;
+}
+

@@ -87,7 +87,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -100,6 +100,11 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(15);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -201,18 +206,30 @@ var render = function() {
       _c("div", { staticClass: "row d-flex justify-content-center mt-5" }, [
         _c("div", { staticClass: "col-md-6" }, [
           _c("div", { staticClass: "box box-widget" }, [
-            _c("div", { staticClass: "box-header with-border" }, [
+            _c("div", { staticClass: "box-header with-border d-flex ml-1" }, [
               _c("div", { staticClass: "user-block" }, [
-                _c("span", { staticClass: "username" }, [
+                _c("span", { staticClass: "username mx-0" }, [
                   _c("a", [_vm._v(_vm._s(_vm.propsData.sender_name))])
                 ]),
                 _vm._v(" "),
-                _c("span", { staticClass: "description" }, [
-                  _vm._v(
-                    "Shared publicly - " + _vm._s(_vm.propsData.created_at)
-                  )
+                _c("span", { staticClass: "description mx-0" }, [
+                  _vm._v("Sent - " + _vm._s(_vm.propsData.created_at))
                 ])
-              ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn bg-orange btn-flat btn-sm ml-auto",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.$emit("all-notifs")
+                    }
+                  }
+                },
+                [_vm._v("View All")]
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "box-body" }, [

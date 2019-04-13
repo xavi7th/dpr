@@ -33,6 +33,7 @@
         id="notifications-container"
         v-bind:propsData="current_notification"
         @view-notif="viewNotification($event)"
+        @all-notifs="currentComponent = 'ViewAllNotifications'"
       >
         <template slot="close-button">
           <i class="fa fa-times close-button" @click="currentComponent = null"></i>

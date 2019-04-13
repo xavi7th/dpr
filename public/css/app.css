@@ -3273,3 +3273,7 @@ ul.wysihtml5-toolbar{margin:0;padding:0;display:block}ul.wysihtml5-toolbar::afte
   opacity: 0;
 }
 
+.pointer {
+  cursor: pointer !important;
+}
+

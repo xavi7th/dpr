@@ -141,8 +141,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /**
  * Using webpack code splitting to load the notification components only if requested
@@ -189,7 +187,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.all_notifications.splice(removed, 1);
       }).catch(function (err) {
         console.log(err.response);
-
         if (err.response) {
           swal("Server Error", "" + err.response.message, "error");
         } else if (err.request) {
@@ -263,41 +260,37 @@ var render = function() {
                             }
                           }
                         },
-                        [
-                          _vm._v(
-                            "\n                  " +
-                              _vm._s(n.sender_name) +
-                              "\n                  "
-                          ),
-                          _c(
+                        [_vm._v(_vm._s(n.sender_name))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "pointer label label-danger pull-right",
+                          on: {
+                            click: function($event) {
+                              _vm.deleteNotification(n)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      ),
+                      _vm._v(" "),
+                      !n.is_read
+                        ? _c(
                             "span",
                             {
-                              staticClass: "label label-danger pull-right",
+                              staticClass:
+                                "pointer label label-warning pull-right",
                               on: {
                                 click: function($event) {
-                                  _vm.deleteNotification(n)
+                                  _vm.markAsRead(n)
                                 }
                               }
                             },
-                            [_vm._v("Delete")]
-                          ),
-                          _vm._v(" "),
-                          !n.is_read
-                            ? _c(
-                                "span",
-                                {
-                                  staticClass: "label label-warning pull-right",
-                                  on: {
-                                    click: function($event) {
-                                      _vm.markAsRead(n)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Mark as Read")]
-                              )
-                            : _vm._e()
-                        ]
-                      ),
+                            [_vm._v("Mark as Read")]
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("span", { staticClass: "product-description" }, [
                         _vm._v(_vm._s(n.notification) + ".")
