@@ -48,19 +48,19 @@ class staffController extends Controller
 	private function getMailDetails()
 	{
 
-		$this->completedCount = CompletedJobs::all()->count();
+		$this->completedCount = CompletedJobs::count();
 
 		$this->inboxUnreadCount = Inbox::where([
 			['read', 'false'],
 			['receiver_role', Auth::user()->role],
 			['office', Auth::user()->office]
-		])->get()->count();
+		])->count();
 
 		$this->outboxCount = Inbox::where([
 			['to_outbox', 'true'],
 			['receiver_role', Auth::user()->role],
 			['office', Auth::user()->office]
-		])->get()->count();
+		])->count();
 	}
 
 	public function index()
