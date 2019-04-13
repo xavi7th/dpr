@@ -73,8 +73,6 @@ class staffController extends Controller
 				['office', Auth::user()->office]
 			])->latest()->get();
 
-		// dd($inbox);
-
 		$this->getMailDetails();
 
 		$completedCount = $this->completedCount;
@@ -117,35 +115,10 @@ class staffController extends Controller
 		return view('backend.staff.staff_completed', compact('outboxCount', 'inboxUnreadCount', 'completedCount', 'completed'));
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public function showCreateCompany(SiteSuitabilityInspectionDocuments $applicationID)
 	{
 		return view('backend.staff.create_company', compact('applicationID'));
 	}
-
-
-
-
-
-
-
-
-
-
 
 	public function staffDocumentReview(Request $request)
 	{
@@ -153,9 +126,11 @@ class staffController extends Controller
 		$id = request('inboxIndex');
 
 		$inboxItem = Inbox::where('id', $id)->first();
+		$inboxID = $inboxItem->id; // this is the id of this application from inbox
 
-		if ($inboxItem) {
-			$inboxID = $inboxItem->id; // this is the id of this application from inbox
+		debug($inboxItem->toArray());
+
+		if ($inboxItem && $inboxItem->read !== 'true') {
 			Inbox::where('id', $id)->update([
 				'read' => 'true'
 			]);
@@ -164,14 +139,24 @@ class staffController extends Controller
 		$applicationID = request('applicationIndex'); // this is the id of this application from app_doc_review
 		$applicationReview = AppDocReview::with(['job_assignment', 'company'])->where('id', $applicationID)->first();    // retrieve application review
 
-		$thisJob = JobAssignment::where('application_id', $applicationReview->application_id)->first();
+		/**
+		 * No need for a new query. The job is already in the $applicationReview variable as a relationship
+		 */
+		$thisJob = $applicationReview->job_assignment;   //JobAssignment::where('application_id', $applicationReview->application_id)->first();
+
+		debug($applicationReview->toArray());
 
 		if ($thisJob->job_assignment_status == 'Assigned') {
 			JobAssignment::where('application_id', $applicationReview->application_id)->update([
 				'job_application_status' => 'Started'
 			]);
+			$applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve the new application status
+		} else {
+			$applicationStatus = $thisJob;    // retrieve application status
 		}
-		$applicationStatus = JobAssignment::where('application_id', $applicationReview->application_id)->first();    // retrieve application status
+
+		// debug($applicationStatus->toArray());
+
 		$reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 		$applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
 
