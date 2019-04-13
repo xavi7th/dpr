@@ -12,7 +12,7 @@ class Staff extends Authenticatable
 
 	public function appDocReviews()
 	{
-		return $this->hasMany(AppDocReview::class);
+		return $this->hasMany(AppDocReview::class, 'marketer_id', 'staff_id');
 	}
 
 	public function received_notifications()
