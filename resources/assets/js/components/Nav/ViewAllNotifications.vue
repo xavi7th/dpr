@@ -16,18 +16,16 @@
                     href="javascript:void(0)"
                     @click="$emit('view-notif', n)"
                     class="product-title"
-                  >
-                    {{ n.sender_name }}
-                    <span
-                      class="label label-danger pull-right"
-                      @click="deleteNotification(n)"
-                    >Delete</span>
-                    <span
-                      class="label label-warning pull-right"
-                      @click="markAsRead(n)"
-                      v-if="!n.is_read"
-                    >Mark as Read</span>
-                  </a>
+                  >{{ n.sender_name }}</a>
+                  <span
+                    class="pointer label label-danger pull-right"
+                    @click="deleteNotification(n)"
+                  >Delete</span>
+                  <span
+                    class="pointer label label-warning pull-right"
+                    @click="markAsRead(n)"
+                    v-if="!n.is_read"
+                  >Mark as Read</span>
                   <span class="product-description">{{ n.notification }}.</span>
                 </div>
               </li>
@@ -92,7 +90,6 @@
           })
           .catch(err => {
             console.log(err.response);
-
             if (err.response) {
               swal("Server Error", `${err.response.message}`, "error");
             } else if (err.request) {
