@@ -49,6 +49,8 @@ class APIController extends Controller
 				 * Delete notification
 				 */
 				Route::get('/notification/{id}/delete', function ($id) {
+					Cache::forget('new_notifs' . auth()->id());
+					Cache::forget('all_notifs' . auth()->id());
 					return ['status' => UserNotification::destroy($id)];
 				});
 				/**
@@ -56,7 +58,7 @@ class APIController extends Controller
 				 */
 				Route::get('/notification/{notif}/read', function (UserNotification $notif) {
 					$notif->is_read = true;
-					// $notif->save();
+					$notif->save();
 					return ['notification' => $notif];
 				});
 				/**
