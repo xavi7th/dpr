@@ -59,46 +59,46 @@ mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
         'public/js/app.js'
     )
 
-mix.browserSync('localhost:8000')
+// mix.browserSync('localhost:8000')
 
-// mix.browserSync({
-// 	//  proxy: "localhost:8000",
-// 	reloadDelay: 1000,
-// 	// Don't show any notifications in the browser.
-// 	notify: false,
-// 	// Inject CSS changes
-// 	injectChanges: true,
-// 	ghostMode: {
-// 			clicks: false,
-// 			forms: false,
-// 			scroll: false
-// 	},
-// 	// Attempt to use the URL "http://my-private-site.localtunnel.me"
-// 	tunnel: "daniel",
-// 	// Will not attempt to determine your network status, assumes you're ONLINE.
-// 	online: false,
-// 	proxy: {
-// 		target: 'localhost:8000',
-// 		reqHeaders: function () {
-// 			return {
-// 				host: "localhost:3000"
-// 			};
-// 		}
-// 	},
-// 	// browser: "vivaldi",
-// 	browser: ["google chrome"],
-// 	files: [
-//
-//         //  'app/**/*.php',
-//          'resources/views/**/*.php',
-//          '!resources/**/*.js',
-//          'public/**/*.html',
-//          'public/**/*.php',
-//          'public/js/**/*.js',
-//          '!public/js/**/libraries.js',
-//          '!public/css/**/*.css',
-//          '!public/css/**/*.map',
-//          'app/Modules/**/*.vue',
-//          'app/Modules/**/*.blade.php'
-//      ],
-// });
+mix.browserSync({
+	 proxy: "localhost:8000",
+	// reloadDelay: 1000,
+	// Don't show any notifications in the browser.
+	// notify: false,
+	// Inject CSS changes
+	injectChanges: true,
+	ghostMode: {
+			clicks: false,
+			forms: false,
+			scroll: false
+	},
+	// Attempt to use the URL "http://my-private-site.localtunnel.me"
+	// tunnel: "daniel",
+	// Will not attempt to determine your network status, assumes you're ONLINE.
+	// online: false,
+	// proxy: {
+	// 	target: 'localhost:8000',
+	// 	reqHeaders: function () {
+	// 		return {
+	// 			host: "localhost:3000"
+	// 		};
+	// 	}
+	// },
+	// browser: "vivaldi",
+	// browser: ["google chrome"],
+	// files: [
+
+  //       //  'app/**/*.php',
+  //        'resources/views/**/*.php',
+  //        '!resources/**/*.js',
+  //        'public/**/*.html',
+  //        'public/**/*.php',
+  //        'public/js/**/*.js',
+  //        '!public/js/**/libraries.js',
+  //        '!public/css/**/*.css',
+  //        '!public/css/**/*.map',
+  //        'app/Modules/**/*.vue',
+  //        'app/Modules/**/*.blade.php'
+  //    ],
+});
