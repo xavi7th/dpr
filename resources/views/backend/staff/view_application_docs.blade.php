@@ -14,7 +14,7 @@
       color: red;
     }
 
-    
+
   .hider{
     visibility: hidden;
   }
@@ -36,6 +36,9 @@
         <h1>
           Application Review
           <small>Staff Control panel</small>
+					@if( $applicationReview->is_under_review() )
+						<small class="label label-danger"><i class="fa fa-warning"></i> Application under marketer review</small>
+					@endif
         </h1>
       </section>
 
@@ -48,10 +51,10 @@
               <div class="box-body box-profile">
 
                 @if ($applicationReview->sub_category == "CAT-D LTO")
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
                 @else
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
                 @endif
                 <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
@@ -75,7 +78,7 @@
                     <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                   </li>
                   @endif
-                  
+
                   @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
                     <li class="list-group-item">
                       <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
@@ -100,7 +103,7 @@
                     <b>Application Status</b>
                     <a class="pull-right text-red">{{ $applicationStatus->job_application_status }}</a>
                   </li>
-                
+
                   {{--  @if ($reportDocument)
                   <li class="list-group-item">
                     <b>Uploaded Report</b>
@@ -166,7 +169,7 @@
               </div>
               <!-- /.box-body -->
             </div>
-            
+
             {{--  @if ($applicationStatus->job_application_status == 'ATC Issued')
               <div class="box box-primary">
                 <div class="box-header with-border">
@@ -260,22 +263,25 @@
         </div>
         <div class="col-md-8">
           <div class="box box-primary">
-            <div class="box-header">
-              @if ($applicationReview->sub_category == 'Pressure Testing')
+            <div class="box-header d-flex justify-content-between">
+              	@if ($applicationReview->sub_category == 'Pressure Testing')
                     <h3 class="box-title"><b>Application Details</b></h3>
                 @else
                     @if ($applicationReview->sub_category == 'Pressure Testing')
-                    <h3 class="box-title"><b>Application Details</b></h3>
-                @else
-                    @if ($applicationReview->sub_category == 'Pressure Testing')
-                    <h3 class="box-title"><b>Application Details</b></h3>
-                @else
-                    <h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
-                @endif
-                @endif
+                    	<h3 class="box-title"><b>Application Details</b></h3>
+                		@else
+                    	@if ($applicationReview->sub_category == 'Pressure Testing')
+                    		<h3 class="box-title"><b>Application Details</b></h3>
+               				@else
+                    		<h3 class="box-title"><b>REQUIRED DOCUMENTS</b></h3>
+                			@endif
+                		@endif
                 @endif
               <!-- tools box -->
-              <div class="pull-right box-tools">
+							@if( !$applicationReview->is_under_review() )
+								<btn-back-to-marketer class="ml-auto mr-2" marketer-id="{{ $applicationReview->marketer_id }}" :application-id="{{ $applicationReview->id }}"></btn-back-to-marketer>
+							@endif
+              <div class="pull-righ box-tool @if( $applicationReview->is_under_review() ) ml-auto @endif">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
               </div>
               <!-- /. tools -->
@@ -352,8 +358,8 @@
               </div>
           @endif
 
-          @if (optional($applicationStatus)->job_application_status == 'ATC Issued' 
-          || optional($applicationStatus)->job_application_status == 'LTO Issued' 
+          @if (optional($applicationStatus)->job_application_status == 'ATC Issued'
+          || optional($applicationStatus)->job_application_status == 'LTO Issued'
           || optional($applicationStatus)->job_application_status == 'Pressure Test Succesful')
               <div class="box box-success">
                 <div class="box-header with-border">
@@ -445,7 +451,7 @@
               </div>
             </form>
           </div> --}}
-          
+
           <!-- quick email widget -->
           {{--  <div class="box box-info">
             <div class="box-header">
@@ -508,7 +514,3 @@
     })
   </script>
 @endsection
-
-
-
-

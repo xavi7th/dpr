@@ -18,6 +18,7 @@ class CreateUserNotificationsTable extends Migration
 			$table->integer('recipient_id')->unsigned();
 			$table->integer('sender_id')->unsigned();
 			$table->string('sender_name');
+			$table->string('application_id')->nullable();
 			$table->text('notification');
 			$table->boolean('is_read')->default(false);
 

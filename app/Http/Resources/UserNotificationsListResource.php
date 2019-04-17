@@ -19,7 +19,8 @@ class UserNotificationsListResource extends JsonResource
 			'sender_name' => $this->sender_name,
 			'notification' => str_limit($this->notification, 20),
 			'created_at' => $this->created_at->diffForHumans(),
-			'is_read' => (bool)$this->is_read
+			'is_read' => (bool)$this->is_read,
+			'app_doc_review' => $this->app_doc_review
 		];
 	}
 }

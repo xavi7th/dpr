@@ -5,6 +5,21 @@
 @endsection
 
 @section('pagestyles')
+	<style>
+		.m-r{
+			position:relative;
+		}
+		.m-r .label-danger{
+			position: absolute;
+			top: 9px;
+			right: 7px;
+			text-align: center;
+			font-size: 9px;
+			padding: 2px 3px;
+			line-height: .9;
+			transform:rotateZ(30deg);
+		}
+	</style>
 @endsection
 
 @section('content')
@@ -51,12 +66,17 @@
                   </thead>
                   <tbody>
                     @foreach ($inbox as $item)
-                      <tr>
+                      <tr class="@if( $item->app_doc_review->is_under_review() ) danger @endif">
                         @if ($item->read == 'true')
                           @if ($item->app_doc_review['sub_category'] == "CAT-D LTO")
-                            <td></i><a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
+                            <td><a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
                           @else
-                            <td></i><a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a></td>
+                            <td class="@if( $item->app_doc_review->is_under_review() ) m-r @endif">
+															@if( $item->app_doc_review->is_under_review() )
+																<span class="label label-danger">M.R.</span>
+															@endif
+															<a href="/stDocument_review?inboxIndex={{ $item->id }}&applicationIndex={{ $item->application_id }}" class="" style="font-size: 16px; text-transform: capitalize; font-weight: 500; color: #333;">{{ $item->app_doc_review->company->company_name }}</a>
+														</td>
                           @endif
                           <td style="color: #333;">{{ $item->app_doc_review['name_of_gas_plant'] }}</td>
                           <td style="color: #333;">{{ $item->app_doc_review['application_type'] }}</td>

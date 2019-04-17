@@ -5,7 +5,21 @@
 @endsection
 
 @section('pagestyles')
-
+<style>
+		.m-r{
+			position:relative;
+		}
+		.m-r .label-danger{
+			position: absolute;
+			top: 9px;
+			right: 7px;
+			text-align: center;
+			font-size: 9px;
+			padding: 2px 3px;
+			line-height: .9;
+			transform:rotateZ(30deg);
+		}
+	</style>
 @endsection
 
 @section('content')
@@ -68,10 +82,12 @@
                   </thead>
                   <tbody>
                     @foreach ($appDocReviews as $item)
-                      <tr>
+                      <tr class="@if( $item->is_under_review() ) warning @endif">
                         <td class="sorting_1">
                           @if ($item->application_status == 'Application Pending')
                             <a class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                          @elseif( $item->is_under_review() )
+                                <a href="/mDocument_review/{{ $item->id }}" class="label label-danger bg-yellow-gradient" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @else
                             @if ($item->issued_lto_licenses)
                               @if($item->issued_lto_licenses['expiry_date'] == "")
@@ -97,7 +113,12 @@
                           @endif
                         </td>
                         <td>{{ $item->application_type }}</td>
-                        <td>{{ $item->sub_category }}</td>
+                        <td class="@if( $item->is_under_review() ) m-r @endif">
+													@if( $item->is_under_review() )
+																<span class="label label-danger">Review</span>
+													@endif
+													{{ $item->sub_category }}
+												</td>
                         {{-- <td>{{ $item->plant_type }}</td> --}}
                         <td>{{ $item->state }}</td>
                         <td>{{ $item->lga }}</td>
@@ -120,6 +141,8 @@
                             <i class="fa fa-check-circle text-green"></i>
                           @elseif ($item->application_status == 'Application Pending')
                             <i class="fa fa-send text-blue"></i>
+                          @elseif( $item->is_under_review() )
+                            <a href="/mDocument_edit/{{ $item->id }}" class="" style="font-size: 13px;"><i class="fa fa-gears text-yellow"></i></a>
                           @else
                             <a href="/mDocument_edit/{{ $item->id }}" class="" style="font-size: 13px;"><i class="fa fa-gears text-black"></i></a>
                           @endif

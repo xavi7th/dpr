@@ -52,7 +52,7 @@ class marketerController extends Controller
     // $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
     ->latest()->get();
 
-    // dd($appDocReviews);
+    // debug($appDocReviews->toArray());
     return view('backend.marketer.marketer_app_doc_review', compact('appDocReviews'));
   }
 
@@ -130,7 +130,7 @@ class marketerController extends Controller
     return view('backend.marketer.gas_pipelines_pts_create', compact('companies'));
   }
 
-  
+
   public function applyForOPLL(){
     $companies = Company::where('marketer_id', Auth::user()->staff_id)->get();
     return view('backend.marketer.gas_pipelines_opll_create', compact('companies'));
@@ -228,7 +228,7 @@ class marketerController extends Controller
     $licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id],['sub_category','Renewal'],['application_status','Application Pending']])
     ->first();
 
-    
+
 
     //get pressure test record to check if it has been done for this facility
 
@@ -283,9 +283,7 @@ class marketerController extends Controller
       $applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
     }
 
-    // dd($applicationID);
-
-    $role = Auth::user()->role;
+		$role = Auth::user()->role;
 
     return view('backend.marketer.view_application_docs', compact('applicationID','applicationReview','licenseDetail','licenseRenewalDetail', 'role', 'theCompany', 'thisApplicationRenewalDetails', 'pressureTestRecord'));
   }
@@ -1845,7 +1843,7 @@ class marketerController extends Controller
 
       // Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
       // if($request->hasFile('TCR_doc')){
-        
+
       // }else{
       //   dd('here4');
       //   // return back with a custom error === Please upload test report
@@ -2365,8 +2363,4 @@ class marketerController extends Controller
     return view('backend.general.view_all_lto', compact('appDocReviewsLTO'));
   }
 
-
-
 }
-
-

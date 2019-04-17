@@ -1,18 +1,18 @@
 webpackJsonp([1],{
 
-/***/ 151:
+/***/ 161:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(153)
+  __webpack_require__(163)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(155)
+var __vue_script__ = __webpack_require__(165)
 /* template */
-var __vue_template__ = __webpack_require__(156)
+var __vue_template__ = __webpack_require__(166)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -52,13 +52,13 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 153:
+/***/ 163:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(154);
+var content = __webpack_require__(164);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -79,7 +79,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 154:
+/***/ 164:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -94,12 +94,12 @@ exports.push([module.i, "\n.box[data-v-00adc362] {\n  max-height: 72vh;\n  overf
 
 /***/ }),
 
-/***/ 155:
+/***/ 165:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__(5);
 //
 //
 //
@@ -157,7 +157,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   created: function created() {
     var _this = this;
 
-    axios.get(__WEBPACK_IMPORTED_MODULE_0__routes__["b" /* GetAllNotifications */]).then(function (rsp) {
+    axios.get(__WEBPACK_IMPORTED_MODULE_0__routes__["c" /* GetAllNotifications */]).then(function (rsp) {
       _this.all_notifications = rsp.data.data;
     }).catch(function (err) {
       console.log(err.response);
@@ -181,7 +181,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     deleteNotification: function deleteNotification(notif) {
       var _this2 = this;
 
-      axios.get(Object(__WEBPACK_IMPORTED_MODULE_0__routes__["a" /* DeleteNotification */])(notif.id)).then(function (rsp) {
+      axios.get(Object(__WEBPACK_IMPORTED_MODULE_0__routes__["b" /* DeleteNotification */])(notif.id)).then(function (rsp) {
         swal("Deleted", "", "info");
         var removed = _this2.all_notifications.indexOf(notif);
         _this2.all_notifications.splice(removed, 1);
@@ -197,7 +197,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     markAsRead: function markAsRead(notif) {
-      axios.get(Object(__WEBPACK_IMPORTED_MODULE_0__routes__["e" /* MarkNotificationRead */])(notif.id)).then(function (rsp) {
+      axios.get(Object(__WEBPACK_IMPORTED_MODULE_0__routes__["f" /* MarkNotificationRead */])(notif.id)).then(function (rsp) {
         // swal("Done", ``, "success");
         notif.is_read = true;
       }).catch(function (err) {
@@ -217,7 +217,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ 156:
+/***/ 166:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {

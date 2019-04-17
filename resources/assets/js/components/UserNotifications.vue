@@ -131,7 +131,7 @@
     right: 0;
     bottom: 0;
     position: fixed;
-    background-color: rgb(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 0 15px;
   }
   .close-button {

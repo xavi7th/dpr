@@ -39,9 +39,11 @@ export default router
 /**
  * API Endpoints
  */
-export const GetNewNotifications = 'api/notifications/new'
-export const GetAllNotifications = 'api/notifications/all'
-export const GetNotificationDetails = id => `api/notification/${id}/read`
-export const DeleteNotification = id => `api/notification/${id}/delete`
-export const MarkNotificationRead = id => `api/notification/${id}/read`
-export const sendNotification = `api/notification/send`
+export const GetNewNotifications = '/api/notifications/new'
+export const GetAllNotifications = '/api/notifications/all'
+export const GetNotificationDetails = id => `/api/notification/${id}/read`
+export const DeleteNotification = id => `/api/notification/${id}/delete`
+export const MarkNotificationRead = id => `/api/notification/${id}/read`
+export const sendNotification = `/api/notification/send`
+export const BackToMarketer = `/api/application/reject/by-staff`
+export const ResubmitApplication = (id) => `/api/application/re-submit/${id}`

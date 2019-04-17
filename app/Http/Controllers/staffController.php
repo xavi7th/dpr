@@ -128,8 +128,6 @@ class staffController extends Controller
 		$inboxItem = Inbox::where('id', $id)->first();
 		$inboxID = $inboxItem->id; // this is the id of this application from inbox
 
-		debug($inboxItem->toArray());
-
 		if ($inboxItem && $inboxItem->read !== 'true') {
 			Inbox::where('id', $id)->update([
 				'read' => 'true'
@@ -144,8 +142,6 @@ class staffController extends Controller
 		 */
 		$thisJob = $applicationReview->job_assignment;   //JobAssignment::where('application_id', $applicationReview->application_id)->first();
 
-		debug($applicationReview->toArray());
-
 		if ($thisJob->job_assignment_status == 'Assigned') {
 			JobAssignment::where('application_id', $applicationReview->application_id)->update([
 				'job_application_status' => 'Started'
@@ -154,8 +150,6 @@ class staffController extends Controller
 		} else {
 			$applicationStatus = $thisJob;    // retrieve application status
 		}
-
-		// debug($applicationStatus->toArray());
 
 		$reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
 		$applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
@@ -207,6 +201,19 @@ class staffController extends Controller
 				$applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
 			}
 			$role = Auth::user()->role;
+
+			// debug(
+			// $applicationReview->toArray()
+			// $applicationID
+			// $applicationStatus->toArray()
+			// $reportDocument->toArray(),
+			// $applicationComments->toArray(),
+			// $inboxItem->toArray(),
+			// $inboxID,
+			// $role,
+			// $activePressureTest->toArray(),
+			// $issuedAtcLicense
+			// );
 			return view('backend.staff.view_application_docs', compact('applicationReview', 'applicationID', 'applicationStatus', 'reportDocument', 'applicationComments', 'inboxItem', 'inboxID', 'role', 'thisApplicationRenewalDetails', 'activePressureTest', 'issuedAtcLicense'));
 		} else {
 			// redirect the staff to register this company

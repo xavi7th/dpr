@@ -16,14 +16,10 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini login-page">
 
-
-
   <div id="app">
-    @yield('content')
-    @yield('footer')
+			@yield('content')
+			@yield('footer')
   </div>
-
-
 
   <script src="/js/vue-app.js" charset="utf-8"></script>
   <script src="/js/app.js" charset="utf-8"></script>

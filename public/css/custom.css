@@ -2891,3 +2891,14 @@
   cursor: pointer !important;
 }
 
+/** Reduce the size of swal modals on mobiule devices **/
+
+@media (max-width: 767px) {
+  .swal-overlay .swal-modal {
+    -webkit-transition: all ease 300ms;
+    transition: all ease 300ms;
+    -webkit-transform: scale(0.7);
+            transform: scale(0.7);
+  }
+}
+

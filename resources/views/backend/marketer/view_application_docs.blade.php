@@ -34,13 +34,13 @@
             <div class="box box-primary">
               <div class="box-body box-profile">
 
-                
+
 
                 @if ($applicationReview->sub_category == "CAT-D LTO")
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
                 @else
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
                 @endif
 
@@ -53,7 +53,7 @@
                   <li class="list-group-item">
                     <b>Sub-category</b> <a class="pull-right">{{ $applicationReview->sub_category }}</a>
                   </li>
-                  
+
                   @if ($applicationReview->sub_category == "CAT-D LTO")
                     <li class="list-group-item">
                       <b>No. of Bottles</b> <a class="pull-right">{{ $applicationID->catdLtoApplicationExtention['no_of_bottles'] }}</a>
@@ -66,7 +66,7 @@
                     <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                   </li>
                   @endif
-                  
+
                   @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
                     <li class="list-group-item">
                       <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
@@ -102,7 +102,11 @@
 
                   @if ($applicationReview->application_status)
                     <li class="list-group-item">
-                      <b>Status</b> <a class="pull-right">{{ $applicationReview->application_status }}</a>
+											@if( $applicationReview->is_under_review() )
+												<b>Status</b> <a href="/mDocument_edit/{{ $applicationReview->id }}" class="pull-right text-red">Review Application</a>
+											@else
+												<b>Status</b> <a class="pull-right">{{ $applicationReview->application_status }}</a>
+											@endif
                       @if($applicationReview->application_status == 'Site Suitable' || $applicationReview->application_status == 'ATC Issued')
                         <i class="fa fa-check text-green"></i>
                       @elseif ($applicationReview->application_status == 'Site NOT Suitable' || $applicationReview->application_status == 'ATC Not Issued')
@@ -125,6 +129,9 @@
                       <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
                       <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
                     </form>
+                  @elseif( $applicationReview->is_under_review() )
+										<a href="/mDocument_edit/{{ $applicationReview->id }}" class="btn btn-block bg-yellow-gradient">Edit Application</a>
+										<btn-resubmit-application :application-id="{{  $applicationReview->id }}"></btn-resubmit-application>
                   @else
                     @if ($applicationReview->application_status == 'Site Suitable')
                       <form class="" action="/apply_for_atc" method="post">
@@ -143,7 +150,7 @@
                               <span class="input-group-addon"><i class="ion-beaker"></i></span>
                               <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
                           </div>
-                        </div> 
+                        </div>
                         <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                         <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
                       </form>
@@ -217,7 +224,7 @@
                         </form>
                       @endif
                     @endif
-                    
+
                     @if ($applicationReview->sub_category == 'ADD-ON ATI' && $applicationReview->application_status == 'ATI Issued')
                       <form class="" action="/apply_for_lto" method="post">
                         {{ csrf_field() }}
@@ -265,7 +272,7 @@
                 </form>
               </div>
             @endif
-            
+
 
           </div>
           <div class="col-md-8">

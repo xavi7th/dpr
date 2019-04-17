@@ -13,6 +13,9 @@
               </span>
               <span class="description mx-0">Sent - {{ propsData.created_at }}</span>
             </div>
+            <span
+              class="username"
+            >Affected Application ID: <b class="text-red ml-auto">{{ propsData.app_doc_review.application_id }}</b></span>
             <button
               type="button"
               class="btn bg-orange btn-flat btn-sm ml-auto"

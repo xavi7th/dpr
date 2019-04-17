@@ -41,10 +41,17 @@ Vue.component('m-view-application-docs', require('./components/mViewApplicationD
 Vue.component('m-view-application-docs-lto-renewal', require('./components/mViewApplicationDocsLtoRenewal.vue'))
 Vue.component('project-monitoring-feed-req-doc', require('./components/ProjectMonitoringFeedReqDoc..vue'))
 Vue.component('user-notifications', require('./components/UserNotifications.vue'))
+Vue.component('btn-back-to-marketer', require('./components/Utilities/BtnBackToMarketer.vue'))
+Vue.component('btn-resubmit-application', require('./components/Utilities/BtnResubmitApplication.vue'))
 // Vue.component('zopscon-inbox', require('./components/zopsconInbox.vue'));
 // Vue.component('zopscon-outbox', require('./components/zopsconOutbox.vue'));
 
 const app = new Vue({
     el: '#app',
     // router: Router
+    data() {
+        return {
+            testData: 'This is a test data',
+        }
+    },
 })
