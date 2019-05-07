@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApplicationCommentsTable extends Migration
+class CreateStatesTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -13,12 +13,11 @@ class CreateApplicationCommentsTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('application_comments', function (Blueprint $table) {
+		Schema::create('states', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('application_id');
-			$table->string('staff_id');
-			$table->string('comment');
-			$table->string('office')->nullable();
+			$table->string('name');
+			$table->double('square_area')->nullable();
+			$table->integer('population')->nullable();
 			$table->timestamps();
 		});
 	}
@@ -30,6 +29,6 @@ class CreateApplicationCommentsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('application_comments');
+		Schema::dropIfExists('states');
 	}
 }

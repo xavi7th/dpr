@@ -50,5 +50,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(TeamleadOutboxesTableSeeder::class);
 		$this->call(ZopsconInboxesTableSeeder::class);
 		$this->call(UserNotificationsSeeder::class);
-	}
+	    $this->call(StatesTableSeeder::class);
+        $this->call(LocalGovtsTableSeeder::class);
+    }
 }
