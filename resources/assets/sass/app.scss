@@ -5,7 +5,9 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap-flex-only';
+@import './bootstrap-flex-only';
+
+@import '~vue-select/dist/vue-select.css';
 
 /**
 * CUSTOM STYLES
