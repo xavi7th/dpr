@@ -15,7 +15,7 @@
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<h1 id="caps">
-				REPORTS
+				REPORTS DASHBOARD
 			</h1>
 		</section>
 

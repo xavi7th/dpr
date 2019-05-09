@@ -12,6 +12,10 @@ class DatabaseSeeder extends Seeder
 	public function run()
 	{
 		// $this->call(UsersTableSeeder::class);
+		$this->call(StatesTableSeeder::class);
+		$this->call(LocalGovtsTableSeeder::class);
+		$this->call(CompaniesTableSeeder::class);
+		$this->call(StaffTableSeeder::class);
 		$this->call(AddonAtiInspectionDocumentsTableSeeder::class);
 		$this->call(AddonLtoInspectionDocumentsTableSeeder::class);
 		$this->call(AdoInboxesTableSeeder::class);
@@ -21,7 +25,6 @@ class DatabaseSeeder extends Seeder
 		$this->call(AtcInspectionDocumentsTableSeeder::class);
 		$this->call(CatdLtoApplicationExtentionsTableSeeder::class);
 		$this->call(CatdLtoInspectionDocumentsTableSeeder::class);
-		$this->call(CompaniesTableSeeder::class);
 		$this->call(CompletedJobsTableSeeder::class);
 		$this->call(HeadgasInboxesTableSeeder::class);
 		$this->call(HeadgasOutboxesTableSeeder::class);
@@ -41,7 +44,6 @@ class DatabaseSeeder extends Seeder
 		$this->call(ReportDocumentsTableSeeder::class);
 		$this->call(SiteSuitabilityInspectionDocumentsTableSeeder::class);
 		$this->call(SiteSuitabilityReportsTableSeeder::class);
-		$this->call(StaffTableSeeder::class);
 		$this->call(StaffInboxesTableSeeder::class);
 		$this->call(StaffOutboxesTableSeeder::class);
 		$this->call(TakeoverInspectionDocumentsTableSeeder::class);
@@ -50,7 +52,5 @@ class DatabaseSeeder extends Seeder
 		$this->call(TeamleadOutboxesTableSeeder::class);
 		$this->call(ZopsconInboxesTableSeeder::class);
 		$this->call(UserNotificationsSeeder::class);
-	    $this->call(StatesTableSeeder::class);
-        $this->call(LocalGovtsTableSeeder::class);
-    }
+	}
 }

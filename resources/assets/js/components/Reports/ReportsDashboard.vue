@@ -1,12 +1,12 @@
 <template>
   <section class="content">
     <hr>
-    <h5 id="caps">LPG Penetration &amp; Population Densities</h5>
+    <h5 id="caps">LPG REPORTS</h5>
     <div class="row">
       <div class="col-md-3">
         <div class="box box-widget widget-user-2">
           <div class="widget-user-header bg-light-blue-active">
-            <h3 class="widget-user-username">LPG Penetration &amp; Population Densities</h3>
+            <h3 class="widget-user-username">Penetration &amp; Population Densities</h3>
             <h5 class="widget-user-desc">Enter a state below to view reports</h5>
           </div>
           <div class="box-footer no-padding">

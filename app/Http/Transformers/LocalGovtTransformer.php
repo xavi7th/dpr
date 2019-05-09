@@ -39,7 +39,7 @@ class LocalGovtTransformer
 	{
 		// return $lga;
 		$density = 0;
-		$density = $lga->square_area > 0 ? $lga->population /  $lga->square_area : $density;
+		$density = number_format(($lga->square_area > 0 ? $lga->population /  $lga->square_area : $density), 2);
 		return [
 			'id' => $lga->id,
 			'app_doc_reviews_count' => $lga->app_doc_reviews_count,
