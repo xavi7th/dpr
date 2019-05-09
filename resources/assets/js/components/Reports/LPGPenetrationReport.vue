@@ -142,8 +142,6 @@
                 response.data.data.length
               );
 
-              console.log(this);
-
               this.chartData = [
                 [
                   { label: "Task", type: "string" },

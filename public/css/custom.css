@@ -2855,6 +2855,12 @@
 * CUSTOM STYLES
 **/
 
+li.list-group-item:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
 .navbar-laravel {
   background-color: #fff;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);

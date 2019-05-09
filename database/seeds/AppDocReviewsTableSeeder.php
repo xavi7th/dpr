@@ -938,6 +938,6 @@ class AppDocReviewsTableSeeder extends Seeder
 			),
 		));
 
-		factory(AppDocReview::class, 7000)->create();
+		factory(AppDocReview::class, 70)->create();
 	}
 }

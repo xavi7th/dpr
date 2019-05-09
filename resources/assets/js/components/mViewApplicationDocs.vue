@@ -4,7 +4,7 @@
     <i :class="[
     {'fa fa-check text-green' : nameval == 'yes'},
     {'fa fa-times text-red' : nameval == 'no'},
-    {'ion-checkmark-circled text-yellow' : nameval == 'null'}
+    {'ion-checkmark-circled text-yellow' : (nameval == 'null' || nameval == '') }
     ]"></i>
     <span class="text">{{ title }}</span>
     <!-- Emphasis label -->

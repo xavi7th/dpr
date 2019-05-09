@@ -253,8 +253,9 @@ class marketerController extends Controller
 	public function showDocumentsRequirement($id)
 	{
 		$applicationReview = AppDocReview::with('company')->where('id', $id)->first();
+		// dd($applicationReview->toArray());
 
-		$theCompany = Company::where('company_id', $applicationReview->company_id)->first();
+		$theCompany = $applicationReview->company;
 
 		$licenseDetail = IssuedLtoLicense::where('application_id', $applicationReview->application_id)->first();
 		$licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id], ['sub_category', 'Renewal'], ['application_status', 'Application Pending']])
@@ -309,6 +310,7 @@ class marketerController extends Controller
 		} elseif ($applicationReview->sub_category == "Pressure Testing") {
 			$applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
 		}
+		// dd($thisApplicationRenewalDetails);
 
 		$role = Auth::user()->role;
 
@@ -1169,7 +1171,7 @@ class marketerController extends Controller
 
 	public function handleLTOPhase1(Request $request)
 	{
-		dd($request->all());
+		// dd($request->all());
 
 		$this->validate(request(), [
 			'gas_plant_name' => 'required'
@@ -1206,6 +1208,17 @@ class marketerController extends Controller
 			'town' => request('town'),
 			'address' => request('address'),
 			'application_status' => 'Not Submitted',
+			/**
+			 * ? Why was this removed from the application before?
+			 */
+			'company_id' => request('company_id'),
+			/**
+			 * ? What was this for?
+			 */
+			'office' => 'Warri',
+			/**
+			 * !Temporary Hack. Switch to id inputs fully
+			 */
 			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
 			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);

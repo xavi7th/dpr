@@ -27,7 +27,7 @@ mix.webpackConfig({
 
 mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
     .autoload({
-        jquery: ['$', 'jQuery'],
+        jquery: ['$', 'window.jQuery', 'jQuery'],
     })
     .sass('resources/assets/sass/app.scss', 'public/css/custom.css')
     .styles(
@@ -68,7 +68,7 @@ mix.js('resources/assets/js/app.js', 'public/js/vue-app.js')
             'resources/assets/lte/AdminLTE-2.4.3/bower_components/fastclick/lib/fastclick.js',
             'resources/assets/lte/AdminLTE-2.4.3/dist/js/adminlte.min.js',
             'resources/assets/lte/AdminLTE-2.4.3/dist/js/demo.js',
-            'public/js/vue-app.js',
+            // 'public/js/vue-app.js',
         ],
         'public/js/app.js'
     )
