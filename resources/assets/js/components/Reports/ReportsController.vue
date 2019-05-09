@@ -2,6 +2,7 @@
   <component
     :is="currentTabComponent"
     @change-component="changeComponent($event)"
+    @view-reports-dashboard="changeComponent()"
     :propsData="propsData"
   ></component>
 </template>
@@ -22,10 +23,14 @@
       "lpg-penetration-report": LPGPenetrationReport
     },
     methods: {
-      changeComponent(evt) {
-        this.currentTabComponent = evt.component;
-        this.propsData = evt.payload;
-        console.log(evt);
+      changeComponent(evt = null) {
+        if (null == evt) {
+          this.currentTabComponent = "reports-dashboard";
+        } else {
+          this.currentTabComponent = evt.component;
+          this.propsData = evt.payload;
+          // console.log(evt);
+        }
       }
     }
   };
