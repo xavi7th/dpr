@@ -863,4 +863,35 @@ class appController extends Controller
 	{
 		dd($request);
 	}
+
+	public function previousRecords()
+	{
+		return view('backend.general.previous_records_dashboard');
+	}
+
+	public function prevSSIRecordGet()
+	{
+		return view('backend.general.previous_ssi_records');
+	}
+
+	public function prevATCRecordGet()
+	{
+		return view('backend.general.previous_atc_records');
+	}
+
+	public function prevLTORecordGet()
+	{
+		return view('backend.general.previous_lto_records');
+	}
+
+	public function prevRenewalRecordGet()
+	{
+		return view('backend.general.previous_renewal_records');
+	}
+
+	public function prevTakeoverRecordGet()
+	{
+		return view('backend.general.previous_takeover_records');
+	}
+
 }

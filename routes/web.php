@@ -117,6 +117,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/make_report_comment', 'appController@makeReportComment');
 	Route::post('/project_monitoring_feed_create', 'appController@projectMonitoringFeedCreate');
 
+	//PREVIOUS RECORDS
+	Route::get('/previous_records', 'appController@previousRecords');
+
+	Route::get('/prev_ssi_record_get', 'appController@prevSSIRecordGet');
+	Route::get('/prev_atc_record_get', 'appController@prevATCRecordGet');
+	Route::get('/prev_lto_record_get', 'appController@prevLTORecordGet');
+	Route::get('/prev_lpg_renewal_record_get', 'appController@prevRenewalRecordGet');
+	Route::get('/prev_takeover_record_get', 'appController@prevTakeoverRecordGet');
 
 
 
