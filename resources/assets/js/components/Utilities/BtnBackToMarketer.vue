@@ -38,7 +38,7 @@
 </template>
 
 <script>
-  import { BackToMarketer } from "../../routes";
+  import { BackToMarketer } from "@js-assets/routes";
   export default {
     name: "BtnBackToMarketer",
     props: ["marketerId", "applicationId"],

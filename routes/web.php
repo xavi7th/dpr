@@ -111,6 +111,9 @@ Route::group(['middleware' => 'auth'], function () {
 	//INSPECTION-ROUTES
 	Route::get('/inspection_dashboard', 'appController@inspectionDashboard');
 
+	//REPORTS-ROUTES
+	Route::get('/reports_dashboard', 'appController@reportsDashboard');
+
 
 	Route::post('/change_password', 'appController@changePassword');
 	Route::post('/update_staff_records', 'appController@updateStaffRecords');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Debugbar;
 use App\Staff;
+use App\State;
+use App\LocalGovt;
 use App\AppDocReview;
 use App\UserNotification;
 use Illuminate\Http\Request;
@@ -11,7 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use App\Http\Transformers\StateTransformer;
 use App\Http\Resources\UserNotificationsListResource;
+use App\Http\Transformers\LocalGovtTransformer;
 
 class APIController extends Controller
 {
@@ -137,6 +141,39 @@ class APIController extends Controller
 					 */
 					return response()->json(['status' => true], 201);
 				});
+
+				/**
+				 * Get penetration and population densities for a particular item
+				 */
+				Route::get('/penetration-and-population-density/{product}/{state_id}', function ($product, $state_id) {
+
+					// return request()->all();
+
+					// return (LocalGovt::withCount('app_doc_reviews')->where('state_id', $state_id)->has('app_doc_reviews')->get())->sortBy('id')->values();
+					if (request('sort_by')) {
+						if (request('sort_dir') == 'asc') {
+							$local_govts = LocalGovt::withCount('app_doc_reviews')->where('state_id', $state_id)->get()->sortBy(request('sort_by'))->values();
+						} else {
+							$local_govts = LocalGovt::withCount('app_doc_reviews')->where('state_id', $state_id)->get()->sortByDesc(request('sort_by'))->values();
+						}
+					} else {
+						$local_govts = LocalGovt::withCount('app_doc_reviews')->where('state_id', $state_id)->get();
+					}
+					return (new LocalGovtTransformer)->collectionTransformer($local_govts, 'transformForPenetrationReports');
+
+					/**
+					 * Create a notification for the staff
+					 */
+
+					// appdocrevioew refillplanmt lto issued vis-a-visissltolices where appid == and not expired group by lg and count
+					// map and aggregate all where count <= 1 as others
+
+					return response()->json(['status' => true], 201);
+				});
+			});
+
+			Route::get('states', function () {
+				return (new StateTransformer)->collectionTransformer(State::all(), 'transformBase');
 			});
 		});
 	}

@@ -859,6 +859,13 @@ class appController extends Controller
 
 
 
+	public function reportsDashboard()
+	{
+		return view('backend.general.reports_dashboard');
+	}
+
+
+
 	public function projectMonitoringFeedCreate(Request $request)
 	{
 		dd($request);

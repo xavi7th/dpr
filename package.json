@@ -23,6 +23,8 @@
     },
     "dependencies": {
         "sweetalert": "^2.1.2",
-        "vue-router": "^3.0.1"
+        "vue-router": "^3.0.1",
+        "vue-select": "^3.1.0",
+        "vuejs-datatable": "^1.7.0"
     }
 }

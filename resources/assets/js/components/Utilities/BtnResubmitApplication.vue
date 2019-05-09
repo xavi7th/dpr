@@ -38,7 +38,7 @@
 </template>
 
 <script>
-  import { ResubmitApplication } from "../../routes";
+  import { ResubmitApplication } from "@js-assets/routes";
   export default {
     name: "BtnBackToMarketer",
     props: ["applicationId"],

@@ -8,6 +8,10 @@ require('./bootstrap')
 
 window.Vue = require('vue')
 import swal from 'sweetalert'
+import vSelect from 'vue-select'
+
+Vue.use(require('vuejs-datatable'))
+
 // import Router from './routes.js'
 
 /**
@@ -15,6 +19,8 @@ import swal from 'sweetalert'
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+Vue.component('v-select', vSelect)
 
 Vue.component('app-doc-rev-upload-component', require('./components/SiteSuitablityInspectionReqDoc.vue'))
 Vue.component('atc-inspection-upload-component', require('./components/ATCInspectionDoc.vue'))
@@ -43,6 +49,8 @@ Vue.component('project-monitoring-feed-req-doc', require('./components/ProjectMo
 Vue.component('user-notifications', require('./components/UserNotifications.vue'))
 Vue.component('btn-back-to-marketer', require('./components/Utilities/BtnBackToMarketer.vue'))
 Vue.component('btn-resubmit-application', require('./components/Utilities/BtnResubmitApplication.vue'))
+Vue.component('reports-controller', require('@reports-components/ReportsController.vue'))
+// Vue.component('reports-dashboard', require('@reports-components/ReportsDashboard.vue'))
 // Vue.component('zopscon-inbox', require('./components/zopsconInbox.vue'));
 // Vue.component('zopscon-outbox', require('./components/zopsconOutbox.vue'));
 

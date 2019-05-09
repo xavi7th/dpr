@@ -46,4 +46,7 @@ export const DeleteNotification = id => `/api/notification/${id}/delete`
 export const MarkNotificationRead = id => `/api/notification/${id}/read`
 export const sendNotification = `/api/notification/send`
 export const BackToMarketer = `/api/application/reject/by-staff`
-export const ResubmitApplication = (id) => `/api/application/re-submit/${id}`
+export const ResubmitApplication = id => `/api/application/re-submit/${id}`
+export const getStates = `/api/states`
+export const getLGs = `/api/local-govts`
+export const getLPGPenetration = (state, product) => `/api/penetration-and-population-density/${product}/${state}`

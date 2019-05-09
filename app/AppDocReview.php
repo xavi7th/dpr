@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\State;
+use App\LocalGovt;
 use App\UserNotification;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,6 +26,16 @@ class AppDocReview extends Model
 	public function notifications()
 	{
 		return $this->hasMany(UserNotification::class, 'application_id');
+	}
+
+	public function state()
+	{
+		return $this->belongsTo(State::class);
+	}
+
+	public function local_govt()
+	{
+		return $this->belongsTo(LocalGovt::class);
 	}
 
 	public function job_assignment()
@@ -52,13 +64,13 @@ class AppDocReview extends Model
 	}
 
 	// /**
-  //    * Get the user's first name.
-  //    *
-  //    * @param  string  $value
-  //    * @return string
-  //    */
-  //   public function getFirstNameAttribute($value)
-  //   {
-  //       return ucfirst($value);
-  //   }
+	//    * Get the user's first name.
+	//    *
+	//    * @param  string  $value
+	//    * @return string
+	//    */
+	//   public function getFirstNameAttribute($value)
+	//   {
+	//       return ucfirst($value);
+	//   }
 }

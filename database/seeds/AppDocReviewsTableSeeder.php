@@ -12,15 +12,17 @@ class AppDocReviewsTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('app_doc_reviews')->delete();
-        
+
         \DB::table('app_doc_reviews')->insert(array (
-            0 => 
+            0 =>
             array (
                 'id' => 1,
                 'application_id' => 'DPRAPPLICATION00001',
+                'state_id' => '1',
+                'local_govt_id' => '2',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -43,10 +45,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2018-12-09 22:56:41',
                 'updated_at' => '2018-12-09 22:56:41',
             ),
-            1 => 
+            1 =>
             array (
                 'id' => 2,
                 'application_id' => 'DPRAPPLICATION00002',
+                'state_id' => '1',
+                'local_govt_id' => '3',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00001',
@@ -69,10 +73,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2018-12-09 23:23:58',
                 'updated_at' => '2018-12-13 19:32:37',
             ),
-            2 => 
+            2 =>
             array (
                 'id' => 3,
                 'application_id' => 'DPRAPPLICATION00003',
+                'state_id' => '1',
+                'local_govt_id' => '3',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00001',
@@ -95,10 +101,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2018-12-13 20:12:48',
                 'updated_at' => '2018-12-21 15:00:28',
             ),
-            3 => 
+            3 =>
             array (
                 'id' => 4,
                 'application_id' => 'DPRAPPLICATION00004',
+                'state_id' => '1',
+                'local_govt_id' => '2',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00002',
@@ -121,10 +129,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2018-12-23 13:58:00',
                 'updated_at' => '2018-12-24 21:57:59',
             ),
-            4 => 
+            4 =>
             array (
                 'id' => 5,
                 'application_id' => 'DPRAPPLICATION00005',
+                'state_id' => '1',
+                'local_govt_id' => '2',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -147,10 +157,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-01-18 22:23:29',
                 'updated_at' => '2019-03-09 12:33:15',
             ),
-            5 => 
+            5 =>
             array (
                 'id' => 6,
                 'application_id' => 'DPRAPPLICATION00006',
+                'state_id' => '2',
+                'local_govt_id' => '20',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -173,10 +185,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-01-19 00:44:34',
                 'updated_at' => '2019-01-25 19:28:10',
             ),
-            6 => 
+            6 =>
             array (
                 'id' => 7,
                 'application_id' => 'DPRAPPLICATION00007',
+                'state_id' => '1',
+                'local_govt_id' => '2',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -199,10 +213,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-01-20 01:23:51',
                 'updated_at' => '2019-01-20 01:27:26',
             ),
-            7 => 
+            7 =>
             array (
                 'id' => 8,
                 'application_id' => 'DPRAPPLICATION00008',
+                'state_id' => '1',
+                'local_govt_id' => '2',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -225,10 +241,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-01-27 17:06:34',
                 'updated_at' => '2019-01-27 17:06:34',
             ),
-            8 => 
+            8 =>
             array (
                 'id' => 9,
                 'application_id' => 'DPRAPPLICATION00009',
+                'state_id' => '12',
+                'local_govt_id' => '235',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -251,10 +269,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-01-29 20:18:46',
                 'updated_at' => '2019-01-31 09:33:03',
             ),
-            9 => 
+            9 =>
             array (
                 'id' => 10,
                 'application_id' => 'DPRAPPLICATION00010',
+                'state_id' => '10',
+                'local_govt_id' => '210',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -277,10 +297,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-01 13:40:06',
                 'updated_at' => '2019-02-03 09:11:09',
             ),
-            10 => 
+            10 =>
             array (
                 'id' => 11,
                 'application_id' => 'DPRAPPLICATION00011',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -303,10 +325,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-02 18:24:11',
                 'updated_at' => '2019-02-06 20:14:25',
             ),
-            11 => 
+            11 =>
             array (
                 'id' => 14,
                 'application_id' => 'DPRAPPLICATION00012',
+                'state_id' => '6',
+                'local_govt_id' => '116',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRST00007',
                 'company_id' => 'DPRCOMP00004',
@@ -329,10 +353,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-03 13:00:51',
                 'updated_at' => '2019-02-03 17:15:39',
             ),
-            12 => 
+            12 =>
             array (
                 'id' => 16,
                 'application_id' => 'DPRAPPLICATION00013',
+                'state_id' => '6',
+                'local_govt_id' => '116',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRST00007',
                 'company_id' => 'DPRCOMP00004',
@@ -355,10 +381,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-03 21:16:40',
                 'updated_at' => '2019-02-03 21:31:42',
             ),
-            13 => 
+            13 =>
             array (
                 'id' => 17,
                 'application_id' => 'DPRAPPLICATION00014',
+                'state_id' => '5',
+                'local_govt_id' => '95',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -381,10 +409,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-04 15:27:51',
                 'updated_at' => '2019-02-04 15:27:51',
             ),
-            14 => 
+            14 =>
             array (
                 'id' => 18,
                 'application_id' => 'DPRAPPLICATION00015',
+                'state_id' => '2',
+                'local_govt_id' => '20',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -407,10 +437,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-04 20:27:47',
                 'updated_at' => '2019-02-04 21:01:08',
             ),
-            15 => 
+            15 =>
             array (
                 'id' => 19,
                 'application_id' => 'DPRAPPLICATION00016',
+                'state_id' => '2',
+                'local_govt_id' => '20',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -433,10 +465,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-04 21:09:21',
                 'updated_at' => '2019-02-04 21:11:35',
             ),
-            16 => 
+            16 =>
             array (
                 'id' => 22,
                 'application_id' => 'DPRAPPLICATION00017',
+                'state_id' => '10',
+                'local_govt_id' => '205',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -459,10 +493,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-04 23:20:10',
                 'updated_at' => '2019-02-04 23:49:26',
             ),
-            17 => 
+            17 =>
             array (
                 'id' => 23,
                 'application_id' => 'DPRAPPLICATION00018',
+                'state_id' => '10',
+                'local_govt_id' => '205',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -485,10 +521,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-05 00:32:54',
                 'updated_at' => '2019-02-05 00:33:39',
             ),
-            18 => 
+            18 =>
             array (
                 'id' => 24,
                 'application_id' => 'DPRAPPLICATION00019',
+                'state_id' => '10',
+                'local_govt_id' => '205',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -511,10 +549,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-05 01:36:26',
                 'updated_at' => '2019-02-05 01:36:26',
             ),
-            19 => 
+            19 =>
             array (
                 'id' => 25,
                 'application_id' => 'DPRAPPLICATION00020',
+                'state_id' => '1',
+                'local_govt_id' => '3',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00001',
@@ -537,10 +577,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-05 13:08:03',
                 'updated_at' => '2019-03-03 07:05:58',
             ),
-            20 => 
+            20 =>
             array (
                 'id' => 26,
                 'application_id' => 'DPRAPPLICATION00021',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -563,10 +605,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-06 20:38:03',
                 'updated_at' => '2019-02-06 23:54:58',
             ),
-            21 => 
+            21 =>
             array (
                 'id' => 27,
                 'application_id' => 'DPRAPPLICATION00022',
+                'state_id' => '4',
+                'local_govt_id' => '73',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -589,10 +633,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-06 23:22:36',
                 'updated_at' => '2019-02-06 23:22:36',
             ),
-            22 => 
+            22 =>
             array (
                 'id' => 28,
                 'application_id' => 'DPRAPPLICATION00023',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -615,10 +661,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-06 23:59:45',
                 'updated_at' => '2019-02-26 20:23:20',
             ),
-            23 => 
+            23 =>
             array (
                 'id' => 29,
                 'application_id' => 'DPRAPPLICATION00024',
+                'state_id' => '7',
+                'local_govt_id' => '128',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -641,10 +689,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-11 21:28:31',
                 'updated_at' => '2019-02-12 19:24:17',
             ),
-            24 => 
+            24 =>
             array (
                 'id' => 30,
                 'application_id' => 'DPRAPPLICATION00025',
+                'state_id' => '1',
+                'local_govt_id' => '11',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -667,10 +717,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-12 06:28:20',
                 'updated_at' => '2019-02-12 18:04:17',
             ),
-            25 => 
+            25 =>
             array (
                 'id' => 32,
                 'application_id' => 'DPRAPPLICATION00026',
+                'state_id' => '10',
+                'local_govt_id' => '210',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -693,10 +745,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-02-13 05:53:11',
                 'updated_at' => '2019-02-13 07:46:17',
             ),
-            26 => 
+            26 =>
             array (
                 'id' => 37,
                 'application_id' => 'DPRAPPLICATION00027',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -719,10 +773,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-03-02 18:54:35',
                 'updated_at' => '2019-03-02 20:08:11',
             ),
-            27 => 
+            27 =>
             array (
                 'id' => 45,
                 'application_id' => 'DPRAPPLICATION00028',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -745,10 +801,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-03-02 23:20:16',
                 'updated_at' => '2019-03-03 07:12:15',
             ),
-            28 => 
+            28 =>
             array (
                 'id' => 52,
                 'application_id' => 'DPRAPPLICATION00029',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -771,10 +829,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-03-03 20:48:38',
                 'updated_at' => '2019-03-05 20:04:49',
             ),
-            29 => 
+            29 =>
             array (
                 'id' => 53,
                 'application_id' => 'DPRAPPLICATION00030',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00004',
@@ -797,10 +857,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-03-05 21:49:34',
                 'updated_at' => '2019-03-05 22:00:00',
             ),
-            30 => 
+            30 =>
             array (
                 'id' => 55,
                 'application_id' => 'DPRAPPLICATION00031',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => 'Warri',
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -823,10 +885,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-03-09 13:08:00',
                 'updated_at' => '2019-03-09 13:13:24',
             ),
-            31 => 
+            31 =>
             array (
                 'id' => 56,
                 'application_id' => 'DPRAPPLICATION00032',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => NULL,
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -849,10 +913,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-03-17 11:41:12',
                 'updated_at' => '2019-03-17 11:43:30',
             ),
-            32 => 
+            32 =>
             array (
                 'id' => 57,
                 'application_id' => 'DPRAPPLICATION00033',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => NULL,
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -875,10 +941,12 @@ class AppDocReviewsTableSeeder extends Seeder
                 'created_at' => '2019-03-17 11:57:20',
                 'updated_at' => '2019-03-17 11:58:45',
             ),
-            33 => 
+            33 =>
             array (
                 'id' => 58,
                 'application_id' => 'DPRAPPLICATION00034',
+                'state_id' => '10',
+                'local_govt_id' => '199',
                 'office' => NULL,
                 'marketer_id' => 'DPRMKT00008',
                 'company_id' => 'DPRCOMP00003',
@@ -902,7 +970,7 @@ class AppDocReviewsTableSeeder extends Seeder
                 'updated_at' => '2019-03-17 12:00:41',
             ),
         ));
-        
-        
+
+
     }
 }
