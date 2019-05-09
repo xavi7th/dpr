@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="row justify-content-center d-flex mt-4">
     <div class="col-md-9">
       <div class="box box-success">
         <div class="box-header with-border">
@@ -25,6 +25,20 @@
           </div>
         </div>
         <!-- /.box-body -->
+
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <!-- <GChart type="PieChart" @ready="onChartReady" :data="chartData"/> -->
+              <GChart
+                type="PieChart"
+                :data="chartData"
+                :options="chartOptions"
+                style="width: 100%; min-height: 500px;"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -32,8 +46,10 @@
 
 <script>
   import { getLPGPenetration } from "@js-assets/routes";
+  import { GChart } from "vue-google-charts";
   export default {
     name: "LPGPenetrationReport",
+    components: { GChart },
     props: ["propsData"],
     mounted() {},
     data() {
@@ -62,12 +78,55 @@
           //   sortable: false
           // }
         ],
-        rows: window.rows,
         page: 1,
-        per_page: 10
+        per_page: 10,
+        chartData: [
+          /** for bar chart */
+          // ["Year", "Sales", "Expenses", "Profit"],
+          // ["2014", 1000, 400, 200],
+          // ["2015", 1170, 460, 250],
+          // ["2016", 660, 1120, 300],
+          // ["2017", 1030, 540, 350]
+          /** for pie chart */
+          // [
+          //   { label: "Task", type: "string" },
+          //   { label: "Hours per Day", type: "string" },
+          //   { role: "tooltip", type: "string" }
+          // ],
+          // ["Work", 11, "2"],
+          // ["Eat", 2, "32"],
+          // ["Commute", 2, "12"],
+          // ["Watch TV", 2, "9"],
+          // ["Sleep", 7, "10"]
+        ],
+        chartOptions: {
+          // chart: {
+          //   title: "Company Performance",
+          //   subtitle: "Sales, Expenses, and Profit: 2014-2017"
+          // },
+          title: "Population Density vs No. of Plants",
+          /** for pie chart */
+          is3D: true,
+          legend: "none"
+        }
       };
     },
     methods: {
+      onChartReady(chart, api) {
+        // const dataTable = new api.visualization.DataTable();
+        // dataTable.addColumn("string", "Name");
+        // dataTable.addColumn("number", "Sales");
+        // dataTable.addColumn({
+        //   type: "string",
+        //   role: "tooltip"
+        // });
+        // dataTable.addRows([
+        //   ["Name", 1000, "Tooltip string"],
+        //   ["Name", 1170, "Tooltip string"],
+        //   ["Name", 660, "Tooltip string"]
+        // ]);
+        // this.chartData = dataTable;
+      },
       getData: function(params, setRowData) {
         axios
           .get(getLPGPenetration(this.propsData.selected_state, "lpg"), {
@@ -82,6 +141,27 @@
                 response.data.data.slice(start_index, end_index),
                 response.data.data.length
               );
+
+              console.log(this);
+
+              this.chartData = [
+                [
+                  { label: "Task", type: "string" },
+                  { label: "Hours per Day", type: "string" },
+                  { role: "tooltip", type: "string" }
+                ],
+                ...Object.keys(response.data.data).map(function(key) {
+                  return [
+                    response.data.data[key]["name"],
+                    response.data.data[key]["app_doc_reviews_count"],
+                    `${response.data.data[key]["name"]},  ${
+                      response.data.data[key]["density"]
+                    }. No of filling plants: ${
+                      response.data.data[key]["app_doc_reviews_count"]
+                    }`
+                  ];
+                })
+              ];
             }.bind(this)
           );
       }
