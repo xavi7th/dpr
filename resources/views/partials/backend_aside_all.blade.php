@@ -133,6 +133,11 @@
         </a>
 			</li> --}}
 			<li>
+				<a href="/previous_records">
+          <i class="fa fa-book"></i> <span>Pevious Records</span>
+        </a>
+			</li>
+			<li>
 				<a href="/preferences">
           <i class="ion ion-android-settings"></i> <span>Settings</span>
         </a>
