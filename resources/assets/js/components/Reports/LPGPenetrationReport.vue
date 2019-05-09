@@ -59,7 +59,7 @@
           { label: "#", field: "id", sortable: false },
           { label: "Local Govt", field: "name", sortable: true },
           { label: "Population", field: "population", sortable: false },
-          { label: "Area", field: "area", sortable: false },
+          { label: "Area (km2)", field: "area", sortable: false },
           {
             label: "Density(Population/km2)",
             field: "density",
