@@ -22,7 +22,7 @@
       <button type="submit" class="btn btn-xs btn-primary pull-right">View</button>
     </form> -->
     <!-- <button type="submit" class="btn btn-primary btn-xs pull-right" v-on:click="viewDocument()">View</button> -->
-    <a :href="`/displayDocument?pic=${picURL}`" class="btn btn-primary btn-xs pull-right">View</a>
+    <a :href="`/displayDocument?pic=${picURL}`" class="btn btn-primary btn-xs pull-right" :target="targetBlank ? '_blank' : '_self'">View</a>
 
 
     <input v-if="role != 'Marketer'" id="checkform" type="checkbox" name="documentCheck" v-on:change="markValid()" v-model="documentcheck_value">
@@ -107,7 +107,8 @@
       "documentcheck",
       "subcategory",
       "documentcheckname",
-      "role"
+      "role",
+      "targetBlank"
     ],
     data() {
       return {

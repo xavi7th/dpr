@@ -22,7 +22,9 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "moment": "^2.24.0",
         "sweetalert": "^2.1.2",
+        "vee-validate": "^2.2.7",
         "vue-google-charts": "^0.3.2",
         "vue-router": "^3.0.1",
         "vue-select": "^3.1.0",

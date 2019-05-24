@@ -6,16 +6,28 @@ use Debugbar;
 use App\Staff;
 use App\State;
 use App\LocalGovt;
+use Carbon\Carbon;
 use App\AppDocReview;
+use App\ReportDocument;
+use App\IssuedAtcLicense;
 use App\UserNotification;
+use App\LtoLicenseRenewal;
+use App\ApplicationComments;
+use App\PressureTestRecords;
 use Illuminate\Http\Request;
+use App\LtoInspectionDocument;
+use App\AtcInspectionDocuments;
+use App\CatdLtoInspectionDocument;
 use Illuminate\Support\Facades\DB;
+use App\AddonAtiInspectionDocument;
+use App\AddonLtoInspectionDocument;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use App\Http\Transformers\StateTransformer;
-use App\Http\Resources\UserNotificationsListResource;
+use App\SiteSuitabilityInspectionDocuments;
 use App\Http\Transformers\LocalGovtTransformer;
+use App\Http\Resources\UserNotificationsListResource;
 
 class APIController extends Controller
 {
@@ -169,6 +181,85 @@ class APIController extends Controller
 					// map and aggregate all where count <= 1 as others
 
 					return response()->json(['status' => true], 201);
+				});
+
+
+				Route::get('/application/{app_id}', function ($app_id) {
+					try {
+						$applicationReview = AppDocReview::with(['job_assignment', 'company'])->where('application_id', $app_id)->firstOrFail();
+					} catch (\Throwable $e) {
+						return response()->json(['error' => 'Application not found'], 409);
+					}
+
+					$thisApplicationRenewalDetails = $applicationID = null;
+					$applicationStatus = $applicationReview->job_assignment;
+
+					$reportDocument = ReportDocument::where('application_id', $applicationReview->application_id)->first();    // retrieve report document
+					$applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
+					$issuedAtcLicense = IssuedAtcLicense::where('application_id', $applicationReview->application_id)->first();
+
+					// check if the company that has this application has been registered into the system
+					if ($applicationReview->company_id != null) {
+
+						$activePressureTest = PressureTestRecords::where([
+							['company_name', $applicationReview->company_id],
+							['facility_name', $applicationReview->name_of_gas_plant],
+							['due_date', '>', Carbon::now()]
+						])->first();
+
+						if ($applicationReview->sub_category == "Site Suitability Inspection") {
+							$applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+						} elseif ($applicationReview->sub_category == "ATC") {
+							$applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+						} elseif ($applicationReview->sub_category == "LTO") {
+							$applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+						} elseif ($applicationReview->sub_category == "Renewal") {
+							$thisApplicationRenewalDetails = LtoLicenseRenewal::where('application_id', $applicationReview->application_id)->first();
+
+							$applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+						} elseif ($applicationReview->sub_category == "Take Over") {
+							$applicationID = DB::table('takeover_inspection_documents')
+								->Join('takeover_reviews', 'takeover_reviews.application_id', '=', 'takeover_inspection_documents.application_id')
+								->first();
+						} elseif ($applicationReview->sub_category == "Pressure Testing") {
+							$applicationID = PressureTestRecords::where('application_id', $applicationReview->application_id)->first();
+						} elseif ($applicationReview->sub_category == "ADD-ON ATI") {
+							$applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+						} elseif ($applicationReview->sub_category == "ADD-ON LTO") {
+							$applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+						} elseif ($applicationReview->sub_category == "CAT-D LTO") {
+							$applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
+						}
+						$role = Auth::user()->role;
+
+						// debug(
+						// 	$applicationReview->toArray(),
+						// 	$applicationID,
+						// 	$applicationStatus->toArray(),
+						// 	$reportDocument->toArray(),
+						// 	$applicationComments->toArray(),
+						// 	$role,
+						// 	$activePressureTest,
+						// 	$issuedAtcLicense
+						// );
+						$applicationReview['is_under_review'] = $applicationReview->is_under_review();
+						return [
+							'application' => [
+								'applicationReview' => $applicationReview,
+								'applicationID' => $applicationID,
+								'applicationStatus' => $applicationStatus,
+								'reportDocument' => $reportDocument,
+								'applicationComments' => $applicationComments,
+								'role' => $role,
+								'thisApplicationRenewalDetails' => $thisApplicationRenewalDetails,
+								'activePressureTest' => $activePressureTest,
+								'issuedAtcLicense' => $issuedAtcLicense
+							]
+						];
+					} else {
+						// redirect the staff to register this company
+						dd('This application does not have a coy');
+					}
 				});
 			});
 

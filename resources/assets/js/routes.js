@@ -2,12 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import zopsconInbox from './components/zopsconInbox.vue'
 import zopsconOutbox from './components/zopsconOutbox.vue'
-Vue.use(VueRouter)
+Vue.use( VueRouter )
 
-const router = new VueRouter({
+const router = new VueRouter( {
     mode: 'history',
-    scrollBehavior(to, from, savedPosition) {
-        if (savedPosition) {
+    scrollBehavior( to, from, savedPosition ) {
+        if ( savedPosition ) {
             return savedPosition
         } else {
             return {
@@ -16,8 +16,7 @@ const router = new VueRouter({
             }
         }
     },
-    routes: [
-        {
+    routes: [ {
             path: '/zopscon_inbox',
             component: zopsconInbox,
         },
@@ -30,7 +29,7 @@ const router = new VueRouter({
         //   redirect : '/zopscon_inbox'
         // }
     ],
-})
+} )
 
 // router.replace('/zopscon_inbox')
 // router.replace({ path: '/zopscon_inbox', redirect: '/zopscon' })
@@ -49,4 +48,5 @@ export const BackToMarketer = `/api/application/reject/by-staff`
 export const ResubmitApplication = id => `/api/application/re-submit/${id}`
 export const getStates = `/api/states`
 export const getLGs = `/api/local-govts`
-export const getLPGPenetration = (state, product) => `/api/penetration-and-population-density/${product}/${state}`
+export const getLPGPenetration = ( state, product ) => `/api/penetration-and-population-density/${product}/${state}`
+export const getApplicationDetails = id => `/api/application/${id}`

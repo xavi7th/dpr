@@ -10,6 +10,7 @@
 <script>
   import ReportsDashboard from "@reports-components/ReportsDashboard.vue";
   import LPGPenetrationReport from "@reports-components/LPGPenetrationReport.vue";
+  import SearchApplication from "@reports-components/SearchApplication.vue";
   export default {
     name: "ReportsController",
     data() {
@@ -20,7 +21,8 @@
     },
     components: {
       ReportsDashboard,
-      "lpg-penetration-report": LPGPenetrationReport
+      "lpg-penetration-report": LPGPenetrationReport,
+      SearchApplication
     },
     methods: {
       changeComponent(evt = null) {
@@ -29,7 +31,7 @@
         } else {
           this.currentTabComponent = evt.component;
           this.propsData = evt.payload;
-          // console.log(evt);
+          console.log(evt);
         }
       }
     }

@@ -8,9 +8,11 @@ require( './bootstrap' )
 
 window.Vue = require( 'vue' )
 import swal from 'sweetalert'
+import VeeValidate from 'vee-validate';
 import vSelect from 'vue-select'
 
 Vue.use( require( 'vuejs-datatable' ) )
+Vue.use( VeeValidate );
 
 // import Router from './routes.js'
 

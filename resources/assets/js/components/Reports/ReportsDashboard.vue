@@ -37,6 +37,25 @@
           </div>
         </div>
       </div>
+
+      <div class="col-md-3">
+        <div class="box box-widget widget-user-2">
+          <div class="widget-user-header bg-light-blue-active">
+            <h3 class="widget-user-username">Search For Application Details</h3>
+            <h5 class="widget-user-desc">Enter an application ID to view its details</h5>
+          </div>
+          <div class="box-footer no-padding">
+            <ul class="nav nav-stacked">
+              <li>
+                <a href @click.prevent="changeComponent('search-application')">
+                  Track
+                  <i class="pull-right fa fa-search"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -74,6 +93,12 @@
         } else {
           swal("Choose a state");
         }
+      },
+      changeComponent(component, payload) {
+        this.$emit("change-component", {
+          component,
+          payload
+        });
       }
     }
   };
