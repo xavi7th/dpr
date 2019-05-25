@@ -170,6 +170,66 @@
                     </ul>
                   </div>
                 </div>
+
+                <div class="box box-primary direct-chat direct-chat-warning">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Report Comments</h3>
+                    <div class="box-tools pull-right">
+                      <span
+                        data-toggle="tooltip"
+                        title
+                        class="badge bg-blue"
+                        :data-original-title="`${countSize(application_details.applicationComments)} Comment`"
+                      >{{ countSize(application_details.applicationComments) }}</span>
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <!-- Conversations are loaded here -->
+                    <div class="direct-chat-messages">
+                      <!-- Message. Default to the left -->
+
+                      <div
+                        v-for="comment in application_details.applicationComments"
+                        :key="comment.id"
+                      >
+                        <div class="direct-chat-msg">
+                          <div class="direct-chat-info clearfix">
+                            <span
+                              class="direct-chat-name pull-left"
+                              style="text-transform: capitalize;"
+                            >
+                              {{ comment.staff['first_name'] }} {{comment.staff['last_name'] }}
+                              <i class="text-yellow">
+                                <b>({{ comment.staff['role'] }})</b>
+                              </i>
+                            </span>
+                            <span class="direct-chat-timestamp pull-right">
+                              <time-ago :date="comment.created_at"></time-ago>
+                            </span>
+                          </div>
+                          <!-- /.direct-chat-info -->
+                          <img
+                            class="direct-chat-img"
+                            src="/dist/img/user1-128x128.jpg"
+                            alt="message user image"
+                          >
+                          <!-- /.direct-chat-img -->
+                          <div class="direct-chat-text">{{ comment.comment }}</div>
+                          <!-- /.direct-chat-text -->
+                        </div>
+                        <!-- /.direct-chat-msg -->
+                        <br>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer"></div>
+                  <!-- /.box-footer-->
+                </div>
               </div>
               <div class="col-md-8">
                 <div class="box box-primary">
