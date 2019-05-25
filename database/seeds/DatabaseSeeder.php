@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
 		$this->call(LocalGovtsTableSeeder::class);
 		$this->call(CompaniesTableSeeder::class);
 		$this->call(StaffTableSeeder::class);
+		$this->call(IssuedAtcLicensesTableSeeder::class);
+		$this->call(JobAssignmentsTableSeeder::class);
 		$this->call(AddonAtiInspectionDocumentsTableSeeder::class);
 		$this->call(AddonLtoInspectionDocumentsTableSeeder::class);
 		$this->call(AdoInboxesTableSeeder::class);
@@ -31,9 +33,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(InboxesTableSeeder::class);
 		$this->call(IssuedAddonAtiLicensesTableSeeder::class);
 		$this->call(IssuedAddonLtoLicensesTableSeeder::class);
-		$this->call(IssuedAtcLicensesTableSeeder::class);
 		$this->call(IssuedLtoLicensesTableSeeder::class);
-		$this->call(JobAssignmentsTableSeeder::class);
 		$this->call(JobsTimelinesTableSeeder::class);
 		$this->call(LtoInspectionDocumentsTableSeeder::class);
 		$this->call(LtoLicenseRenewalsTableSeeder::class);

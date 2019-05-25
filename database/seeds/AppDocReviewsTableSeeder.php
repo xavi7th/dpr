@@ -1,7 +1,9 @@
 <?php
 
 use App\AppDocReview;
+use App\IssuedAtcLicense;
 use Illuminate\Database\Seeder;
+use App\JobAssignment;
 
 class AppDocReviewsTableSeeder extends Seeder
 {
@@ -938,6 +940,12 @@ class AppDocReviewsTableSeeder extends Seeder
 			),
 		));
 
-		factory(AppDocReview::class, 70)->create();
+		factory(AppDocReview::class, 700)->create()->each(function ($doc) {
+			// dump(['sub_category' => $doc->sub_category, 'application_type' => $doc->application_type, 'application_status' => $doc->application_status]);
+			if ($doc->sub_category == 'ATC' && $doc->application_type == 'LPG Retailer Outlets' && $doc->application_status != 'Not Submitted') {
+				$doc->issued_atc_licenses()->save(factory(IssuedAtcLicense::class)->make());
+				$doc->job_assignment()->save(factory(JobAssignment::class)->make());
+			}
+		});
 	}
 }
