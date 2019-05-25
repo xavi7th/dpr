@@ -188,7 +188,7 @@ class appController extends Controller
 		$type = request('val');
 
 		if ($type == 'lpg_atc') {
-			$appDocReviewsATC = AppDocReview::with(['issued_atc_licenses', 'company', 'job_assignment'])
+			$appDocReviewsATC = AppDocReview::whereHas('issued_atc_licenses')->with(['issued_atc_licenses', 'company', 'job_assignment'])
 				->where('application_type', 'LPG Retailer Outlets')
 				->where('sub_category', 'ATC')
 				->where('application_status', '!=', 'Not Submitted')
@@ -900,5 +900,4 @@ class appController extends Controller
 	{
 		return view('backend.general.previous_takeover_records');
 	}
-
 }
