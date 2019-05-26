@@ -40,18 +40,35 @@ Vue.component( 'apply-for-site-suitability-inspection-component', require( './co
 Vue.component( 'apply-for-takeover-component', require( './components/TakeoverApplicationForm.vue' ) )
 Vue.component( 'atc-inspection-upload-component', require( './components/ATCInspectionDoc.vue' ) )
 Vue.component( 'ati-inspection-upload-component', require( './components/ATIInspectionDoc.vue' ) )
-Vue.component( 'btn-back-to-marketer', require( './components/Utilities/BtnBackToMarketer.vue' ) )
-Vue.component( 'btn-resubmit-application', require( './components/Utilities/BtnResubmitApplication.vue' ) )
+/**
+ * Asynchronously load view (Webpack Lazy loading compatible)
+ * @param  {string}   name     the filename (basename) of the view to load.
+ */
+Vue.component( 'btn-back-to-marketer', resolve => {
+    require( [ './components/Utilities/BtnBackToMarketer.vue' ], resolve )
+} )
+Vue.component( 'btn-resubmit-application', resolve => {
+    require( [ './components/Utilities/BtnResubmitApplication.vue' ], resolve )
+} )
 Vue.component( 'catd-lto-inspection-upload-component', require( './components/CatDLTOInspectionDoc.vue' ) )
 Vue.component( 'document-upload-component', require( './components/documentUploads.vue' ) )
 Vue.component( 'lto-inspection-upload-component', require( './components/LTOInspectionDoc.vue' ) )
 Vue.component( 'm-view-application-docs', require( './components/mViewApplicationDocs.vue' ) )
 Vue.component( 'm-view-application-docs-lto-renewal', require( './components/mViewApplicationDocsLtoRenewal.vue' ) )
+Vue.component( 'marketers-dashboard', resolve => {
+    require( [ './components/Marketers/Dashboard.vue' ], resolve )
+} )
 Vue.component( 'project-monitoring-feed-req-doc', require( './components/ProjectMonitoringFeedReqDoc..vue' ) )
-Vue.component( 'reports-controller', require( '@reports-components/ReportsController.vue' ) )
-Vue.component( 'state-component', require( './components/StateComponent.vue' ) )
+Vue.component( 'reports-controller', resolve => {
+    require( [ '@reports-components/ReportsController.vue' ], resolve )
+} )
+Vue.component( 'state-component', resolve => {
+    require( [ './components/StateComponent.vue' ], resolve )
+} )
 Vue.component( 'takeover-inspection-upload-component', require( './components/TakeoverInspectionDoc.vue' ) )
-Vue.component( 'user-notifications', require( './components/UserNotifications.vue' ) )
+Vue.component( 'user-notifications', resolve => {
+    require( [ './components/UserNotifications.vue' ], resolve )
+} )
 
 // Vue.component('reports-dashboard', require('@reports-components/ReportsDashboard.vue'))
 // Vue.component('zopscon-inbox', require('./components/zopsconInbox.vue'));

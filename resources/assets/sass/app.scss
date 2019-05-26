@@ -60,9 +60,9 @@ li.list-group-item:after {
 
 /** Reduce the size of swal modals on mobiule devices **/
 
-.swal-overlay .swal-modal {
-    @media (max-width: 767px) {
-        transition: all ease 300ms;
-        transform: scale(0.7);
-    }
-}
+// .swal-overlay .swal-modal {
+//     @media (max-width: 767px) {
+//         transition: all ease 300ms;
+//         transform: scale(0.7);
+//     }
+// }
