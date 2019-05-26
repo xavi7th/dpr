@@ -2011,7 +2011,7 @@ class marketerController extends Controller
 		]);
 
 		if (Auth::user()->role == 'Marketer') {
-			return redirect('/marketer');
+			return redirect('/marketer_app_doc_review');
 		} elseif (Auth::user()->role == 'Staff') {
 			return redirect('/staff');
 		}
