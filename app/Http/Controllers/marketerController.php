@@ -1953,7 +1953,7 @@ class marketerController extends Controller
 
 
 
-			return redirect('/marketer_app_doc_review');
+			return back();
 		}
 	}
 
