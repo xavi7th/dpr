@@ -18,7 +18,7 @@ class CreateCompaniesTable extends Migration
 			$table->string('marketer_id')->nullable();
 			$table->string('company_id')->unique();
 			$table->string('company_name');
-			$table->string('company_alias');
+			$table->string('company_alias')->nullable();
 			$table->string('contract_type');
 			$table->string('state');
 			$table->string('lga');
