@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(AddonLtoInspectionDocumentsTableSeeder::class);
 		$this->call(AdoInboxesTableSeeder::class);
 		$this->call(AdoOutboxesTableSeeder::class);
+		$this->call(SiteSuitabilityInspectionDocumentsTableSeeder::class);
 		$this->call(AppDocReviewsTableSeeder::class);
 		$this->call(ApplicationCommentsTableSeeder::class);
 		$this->call(AtcInspectionDocumentsTableSeeder::class);
@@ -42,7 +43,6 @@ class DatabaseSeeder extends Seeder
 		$this->call(PressureTestRecordsTableSeeder::class);
 		$this->call(RenewedLtoLicensesTableSeeder::class);
 		$this->call(ReportDocumentsTableSeeder::class);
-		$this->call(SiteSuitabilityInspectionDocumentsTableSeeder::class);
 		$this->call(SiteSuitabilityReportsTableSeeder::class);
 		$this->call(StaffInboxesTableSeeder::class);
 		$this->call(StaffOutboxesTableSeeder::class);

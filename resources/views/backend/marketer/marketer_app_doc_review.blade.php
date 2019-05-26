@@ -87,9 +87,11 @@ DPR {{Auth::user()->role}} | Application Document Records
                                     <tr class="@if( $item->is_under_review() ) warning @endif">
                                         <td class="sorting_1">
                                             @if ($item->application_status == 'Application Pending')
-                                            <a class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                                            <a class="label label-success"
+                                                style="font-size: 14px;">{{ $item->application_id }}</a>
                                             @elseif( $item->is_under_review() )
-                                            <a href="/mDocument_review/{{ $item->id }}" class="label label-danger bg-yellow-gradient"
+                                            <a href="/mDocument_review/{{ $item->id }}"
+                                                class="label label-danger bg-yellow-gradient"
                                                 style="font-size: 14px;">{{ $item->application_id }}</a>
                                             @else
                                             @if ($item->issued_lto_licenses)
@@ -146,15 +148,18 @@ DPR {{Auth::user()->role}} | Application Document Records
                                             || $item->application_status == 'Renewal Approved'
                                             || $item->application_status == 'Take Over Approved'
                                             )
-                                            <i title="{{ $item->application_status }}" class="fa fa-check-circle text-green"></i>
+                                            <i title="{{ $item->application_status }}"
+                                                class="fa fa-check-circle text-green"></i>
                                             @elseif ($item->application_status == 'Application Pending')
                                             <i title="{{ $item->application_status }}" class="fa fa-send text-blue"></i>
                                             @elseif( $item->is_under_review() )
-                                            <a href="/mDocument_edit/{{ $item->id }}" class="" style="font-size: 13px;"><i
-                                                    title="{{ $item->application_status }}" class="fa fa-gears text-yellow"></i></a>
+                                            <a href="/mDocument_edit/{{ $item->id }}" class=""
+                                                style="font-size: 13px;"><i title="{{ $item->application_status }}"
+                                                    class="fa fa-gears text-yellow"></i></a>
                                             @else
-                                            <a href="/mDocument_edit/{{ $item->id }}" class="" style="font-size: 13px;"><i
-                                                    title="{{ $item->application_status }}" class="fa fa-gears text-black"></i></a>
+                                            <a href="/mDocument_edit/{{ $item->id }}" class=""
+                                                style="font-size: 13px;"><i title="{{ $item->application_status }}"
+                                                    class="fa fa-gears text-black"></i></a>
                                             @endif
                                         </td>
                                         <td>{{ Carbon\Carbon::parse($item->created_at)->toFormattedDateString() }}</td>

@@ -6,6 +6,7 @@ use App\State;
 use App\LocalGovt;
 use App\UserNotification;
 use Illuminate\Database\Eloquent\Model;
+use App\SiteSuitabilityInspectionDocuments;
 
 class AppDocReview extends Model
 {
@@ -51,6 +52,11 @@ class AppDocReview extends Model
 	public function issued_atc_licenses()
 	{
 		return $this->hasOne(IssuedAtcLicense::class, 'application_id', 'application_id');
+	}
+
+	public function site_suitability_inspection_documents()
+	{
+		return $this->hasOne(SiteSuitabilityInspectionDocuments::class, 'application_id', 'application_id');
 	}
 
 	public function company()

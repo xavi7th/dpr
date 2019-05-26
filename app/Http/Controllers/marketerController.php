@@ -474,7 +474,9 @@ class marketerController extends Controller
 			'lga' => request('lga'),
 			'town' => request('town'),
 			'address' => request('address'),
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 		// check to see which application ths marketer is applying for
@@ -538,7 +540,9 @@ class marketerController extends Controller
 			'lga' => request('lga'),
 			'town' => request('town'),
 			'address' => request('address'),
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 
@@ -742,7 +746,9 @@ class marketerController extends Controller
 			'lga' => request('lga'),
 			'town' => request('town'),
 			'address' => request('address'),
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 
@@ -808,7 +814,9 @@ class marketerController extends Controller
 			'lga' => request('lga'),
 			'town' => request('town'),
 			'address' => request('address'),
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 
@@ -1109,7 +1117,9 @@ class marketerController extends Controller
 			'lga' => request('lga'),
 			'town' => request('town'),
 			'address' => request('address'),
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 
@@ -1156,7 +1166,9 @@ class marketerController extends Controller
 			'lga' => $company->lga,
 			'town' => $company->town,
 			'address' => $company->address,
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 		CatdLtoApplicationExtention::create([
@@ -1585,7 +1597,9 @@ class marketerController extends Controller
 				'lga' => request('lga'),
 				'town' => request('town'),
 				'address' => request('address'),
-				'application_status' => 'Not Submitted'
+				'application_status' => 'Not Submitted',
+				'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+				'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 			]);
 
 			// Note conversion from javascript date to php date was carried out below.
@@ -1833,7 +1847,9 @@ class marketerController extends Controller
 				'town' => $retrievedATC->town,
 				'address' => $retrievedATC->address,
 				'application_status' => 'Not Submitted',
-				'to_zopscon' => 'true'
+				'to_zopscon' => 'true',
+				'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+				'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 			]);
 
 			// this is the id of the pressure test application from app doc rev db
@@ -2100,7 +2116,9 @@ class marketerController extends Controller
 			'lga' => $companySSIDetails->lga,
 			'town' => $companySSIDetails->town,
 			'address' => $companySSIDetails->address,
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 		// Carry out file transfer process from site_suitability_inspection_documents to atc_inspection_documents
@@ -2255,7 +2273,9 @@ class marketerController extends Controller
 			'lga' => $companyATODetails->lga,
 			'town' => $companyATODetails->town,
 			'address' => $companyATODetails->address,
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 		// add the application ID to session
@@ -2304,7 +2324,9 @@ class marketerController extends Controller
 			'lga' => $companyATODetails->lga,
 			'town' => $companyATODetails->town,
 			'address' => $companyATODetails->address,
-			'application_status' => 'Not Submitted'
+			'application_status' => 'Not Submitted',
+			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 		]);
 
 		// add the application ID to session
@@ -2354,7 +2376,9 @@ class marketerController extends Controller
 				'lga' => $companyATODetails->lga,
 				'town' => $companyATODetails->town,
 				'address' => $companyATODetails->address,
-				'application_status' => 'Not Submitted'
+				'application_status' => 'Not Submitted',
+				'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
+				'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
 			]);
 
 			// dd($request);
