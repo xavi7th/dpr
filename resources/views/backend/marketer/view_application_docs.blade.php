@@ -144,7 +144,8 @@ DPR {{Auth::user()->role}} | View Application Documents
                                         value="{{ $applicationReview->application_type }}">
                                     <input type="text" hidden name="sub_category"
                                         value="{{ $applicationReview->sub_category }}">
-                                    <a href="submit" class="btn btn-maroon btn-block">Edit Application</a>
+                                    <a href="/mDocument_edit/{{ $applicationReview->id }}"
+                                        class="btn bg-maroon btn-block">Edit Application</a>
                                     <button type="submit" class="btn btn-primary btn-block">Submit
                                         Application</button>
                                 </form>
