@@ -38,7 +38,8 @@ DPR {{Auth::user()->role}} | View Application Documents
 
                             @if ($applicationReview->sub_category == "CAT-D LTO")
 
-                            <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
+                            <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}
+                            </h3>
                             @else
 
                             <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
@@ -48,7 +49,8 @@ DPR {{Auth::user()->role}} | View Application Documents
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
-                                    <b>Application type</b> <a class="pull-right">{{ $applicationReview->application_type }}</a>
+                                    <b>Application type</b> <a
+                                        class="pull-right">{{ $applicationReview->application_type }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Sub-category</b> <a class="pull-right">{{ $applicationReview->sub_category }}</a>
@@ -56,10 +58,12 @@ DPR {{Auth::user()->role}} | View Application Documents
 
                                 @if ($applicationReview->sub_category == "CAT-D LTO")
                                 <li class="list-group-item">
-                                    <b>No. of Bottles</b> <a class="pull-right">{{ $applicationID->catdLtoApplicationExtention['no_of_bottles'] }}</a>
+                                    <b>No. of Bottles</b> <a
+                                        class="pull-right">{{ $applicationID->catdLtoApplicationExtention['no_of_bottles'] }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Name of Sponsoring Company</b> <a class="pull-right">{{ $applicationID->catdLtoApplicationExtention['sponsoring_company'] }}</a>
+                                    <b>Name of Sponsoring Company</b> <a
+                                        class="pull-right">{{ $applicationID->catdLtoApplicationExtention['sponsoring_company'] }}</a>
                                 </li>
                                 @else
                                 <li class="list-group-item">
@@ -70,7 +74,8 @@ DPR {{Auth::user()->role}} | View Application Documents
                                 @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category ==
                                 "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
                                 <li class="list-group-item">
-                                    <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
+                                    <b>Capacity of tank</b> <a
+                                        class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
                                 </li>
                                 @endif
 
@@ -90,21 +95,25 @@ DPR {{Auth::user()->role}} | View Application Documents
                                     <b>Address</b> <a class="pull-right">{{ $applicationReview->address }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($applicationReview->created_at)->toFormattedDateString() }}</a>
+                                    <b>Date</b> <a
+                                        class="pull-right">{{ Carbon\Carbon::parse($applicationReview->created_at)->toFormattedDateString() }}</a>
                                 </li>
                                 @if ($licenseDetail != null && Auth::user()->role == 'Marketer')
                                 <li class="list-group-item">
-                                    <b>Date Issued</b> <a class="pull-right">{{ Carbon\Carbon::parse($licenseDetail->date_issued)->toFormattedDateString() }}</a>
+                                    <b>Date Issued</b> <a
+                                        class="pull-right">{{ Carbon\Carbon::parse($licenseDetail->date_issued)->toFormattedDateString() }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Expiration Date</b> <a class="pull-right">{{ Carbon\Carbon::parse($licenseDetail->expiry_date)->toFormattedDateString() }}</a>
+                                    <b>Expiration Date</b> <a
+                                        class="pull-right">{{ Carbon\Carbon::parse($licenseDetail->expiry_date)->toFormattedDateString() }}</a>
                                 </li>
                                 @endif
 
                                 @if ($applicationReview->application_status)
                                 <li class="list-group-item">
                                     @if( $applicationReview->is_under_review() )
-                                    <b>Status</b> <a href="/mDocument_edit/{{ $applicationReview->id }}" class="pull-right text-red">Review
+                                    <b>Status</b> <a href="/mDocument_edit/{{ $applicationReview->id }}"
+                                        class="pull-right text-red">Review
                                         Application</a>
                                     @else
                                     <b>Status</b> <a class="pull-right">{{ $applicationReview->application_status }}</a>
@@ -126,22 +135,31 @@ DPR {{Auth::user()->role}} | View Application Documents
                                 @endif --}}
                                 <br>
                                 @if ($applicationReview->application_status == 'Not Submitted')
-                                <form class="" action="/mSubmitApplication" method="post">
+                                <form class="" action="/mSubmitApplication" method="post"
+                                    v-confirm-form-submit:msg="'Once submitted, you can no longer edit application'">
                                     {{ csrf_field() }}
-                                    <input type="text" hidden name="application_id" value="{{ $applicationReview->id }}">
-                                    <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
-                                    <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                                    <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+                                    <input type="text" hidden name="application_id"
+                                        value="{{ $applicationReview->id }}">
+                                    <input type="text" hidden name="application_type"
+                                        value="{{ $applicationReview->application_type }}">
+                                    <input type="text" hidden name="sub_category"
+                                        value="{{ $applicationReview->sub_category }}">
+                                    <a href="submit" class="btn btn-maroon btn-block">Edit Application</a>
+                                    <button type="submit" class="btn btn-primary btn-block">Submit
+                                        Application</button>
                                 </form>
                                 @elseif( $applicationReview->is_under_review() )
-                                <a href="/mDocument_edit/{{ $applicationReview->id }}" class="btn btn-block bg-yellow-gradient">Edit
+                                <a href="/mDocument_edit/{{ $applicationReview->id }}"
+                                    class="btn btn-block bg-yellow-gradient">Edit
                                     Application</a>
-                                <btn-resubmit-application :application-id="{{  $applicationReview->id }}"></btn-resubmit-application>
+                                <btn-resubmit-application :application-id="{{  $applicationReview->id }}">
+                                </btn-resubmit-application>
                                 @else
                                 @if ($applicationReview->application_status == 'Site Suitable')
                                 <form class="" action="/apply_for_atc" method="post">
                                     {{ csrf_field() }}
-                                    <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                                    <input type="text" hidden name="application_id"
+                                        value="{{ $applicationReview->application_id }}">
                                     <button type="submit" class="btn btn-primary btn-block">Apply For ATC</button>
                                 </form>
                                 @endif
@@ -153,10 +171,12 @@ DPR {{Auth::user()->role}} | View Application Documents
                                     <label>Capacity of Tank (MT)</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="ion-beaker"></i></span>
-                                        <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
+                                        <input type="text" name="capacity_of_tank" class="form-control"
+                                            placeholder="Enter Capacity of tank">
                                     </div>
                                 </div>
-                                <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                                <input type="text" hidden name="application_id"
+                                    value="{{ $applicationReview->application_id }}">
                                 <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
                                 </form>
                                 @endif --}}
@@ -170,10 +190,12 @@ DPR {{Auth::user()->role}} | View Application Documents
                                     <label>Capacity of Tank (MT)</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="ion-beaker"></i></span>
-                                        <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
+                                        <input type="text" name="capacity_of_tank" class="form-control"
+                                            placeholder="Enter Capacity of tank">
                                     </div>
                                 </div>
-                                <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                                <input type="text" hidden name="application_id"
+                                    value="{{ $applicationReview->application_id }}">
                                 <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
                                 </form> --}}
                                 @else
@@ -191,9 +213,11 @@ DPR {{Auth::user()->role}} | View Application Documents
                                     </div>
                                     <!-- /.box-header -->
                                     <!-- form start -->
-                                    <form role="form" method="POST" action="/apply_for_lto_renewal" enctype="multipart/form-data">
+                                    <form role="form" method="POST" action="/apply_for_lto_renewal"
+                                        enctype="multipart/form-data">
                                         {{ csrf_field() }}
-                                        <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                                        <input type="text" hidden name="application_id"
+                                            value="{{ $applicationReview->application_id }}">
                                         {{-- <div class="box-body">
                                 <div class="form-group">
                                   <label style="text-transform: uppercase;">Copy of Last Expired License</label>
@@ -205,11 +229,13 @@ DPR {{Auth::user()->role}} | View Application Documents
                                   <input type="file" name="PR_doc">
                                 </div>
                                 <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                                        <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                                        <input type="text" hidden name="marketer_id"
+                                            value="{{ $applicationReview->marketer_id }}">
                                 </div> --}}
                                 <!-- /.box-body -->
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary pull-right">Apply For License Renewal</button>
+                                    <button type="submit" class="btn btn-primary pull-right">Apply For License
+                                        Renewal</button>
                                 </div>
                                 <!-- /.box-footer -->
                                 </form>
@@ -224,10 +250,12 @@ DPR {{Auth::user()->role}} | View Application Documents
                                 <label>Capacity of Tank (MT)</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="ion-beaker"></i></span>
-                                    <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
+                                    <input type="text" name="capacity_of_tank" class="form-control"
+                                        placeholder="Enter Capacity of tank">
                                 </div>
                             </div>
-                            <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                            <input type="text" hidden name="application_id"
+                                value="{{ $applicationReview->application_id }}">
                             <button type="submit" class="btn btn-primary btn-block">Apply For LTO</button>
                         </form>
                         @endif
@@ -241,10 +269,12 @@ DPR {{Auth::user()->role}} | View Application Documents
                                 <label>Capacity of Tank (MT)</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="ion-beaker"></i></span>
-                                    <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
+                                    <input type="text" name="capacity_of_tank" class="form-control"
+                                        placeholder="Enter Capacity of tank">
                                 </div>
                             </div>
-                            <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                            <input type="text" hidden name="application_id"
+                                value="{{ $applicationReview->application_id }}">
                             <button type="submit" class="btn btn-primary btn-block">Apply For ADD-ON LTO</button>
                         </form>
                         @endif
@@ -261,14 +291,17 @@ DPR {{Auth::user()->role}} | View Application Documents
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form role="form" method="post" action="/upload_implementation_schedule" enctype="multipart/form-data">
+                    <form role="form" method="post" action="/upload_implementation_schedule"
+                        enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="box-body">
                             <div class="form-group">
                                 {{-- <label for="exampleInputFile">Construction Document</label>  --}}
                                 <input type="file" name="implementationScheduleDoc">
-                                <input type="text" hidden name="company_id" value="{{ $applicationReview->company_id }}">
-                                <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                                <input type="text" hidden name="company_id"
+                                    value="{{ $applicationReview->company_id }}">
+                                <input type="text" hidden name="application_id"
+                                    value="{{ $applicationReview->application_id }}">
                                 <input type="text" hidden name="staff_id" value="{{ Auth::user()->staff_id }}">
                             </div>
                         </div>

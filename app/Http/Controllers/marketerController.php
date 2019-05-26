@@ -568,7 +568,7 @@ class marketerController extends Controller
 	public function handleSiteSuitablityInspection(Request $request)
 	{
 		$alfsiDoc = $amaDoc = $ctcDoc = $ciDoc = $fcDoc = $prcDoc = $cafDoc = $abpDoc = $spDoc = $dcDoc = $pidDoc = $eiaDoc = $bsfpDoc = $lcmlsDoc = $csatdDoc = $alacdDoc = 'null';
-
+		$applicationSerialNo = AppDocReview::where('application_id', session('application_id'))->first()->id;
 		$marketerID = Auth::user()->staff_id;
 
 		// Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
@@ -658,7 +658,7 @@ class marketerController extends Controller
 			$alacdDoc = $request->ALACD_doc->getClientOriginalName();
 		}
 
-		SiteSuitabilityInspectionDocuments::create([
+		$docs = SiteSuitabilityInspectionDocuments::create([
 			'application_id' => session('application_id'),
 			'marketer_id' => $marketerID,
 			'applications_letter_for_suitability_inspection' => request('ALFSI'),
@@ -698,7 +698,9 @@ class marketerController extends Controller
 		// clear the application ID from the session
 		$request->session()->forget('application_id');
 
-		return redirect('/marketer');
+		// return redirect('/marketer');
+		return redirect()->route('marketer.docs.review', ['id' => $applicationSerialNo]);
+		// mDocument_review / 3
 	}
 
 

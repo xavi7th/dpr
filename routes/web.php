@@ -180,7 +180,7 @@ Route::get('/lto_requirement', 'marketerController@getLTORequirementView');
 Route::get('/addon_lto_requirement', 'marketerController@getAddonLTORequirementView');
 Route::get('/catd_lto_requirement', 'marketerController@getCatDLTORequirementView');
 Route::get('/takeover_requirement', 'marketerController@getTakeoverRequirementView');
-Route::get('/mDocument_review/{id}', 'marketerController@showDocumentsRequirement');
+Route::get('/mDocument_review/{id}', 'marketerController@showDocumentsRequirement')->name('marketer.docs.review');
 Route::get('/mDocument_edit/{id}', 'marketerController@showDocumentsRequirementDocEdit');
 Route::get('/mUpload_documents', 'marketerController@marketerUploadDocumentsView');
 Route::get('/m_view_lto_records', 'marketerController@viewAllLTO');

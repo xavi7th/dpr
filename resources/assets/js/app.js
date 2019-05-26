@@ -74,6 +74,40 @@ Vue.component( 'user-notifications', resolve => {
 // Vue.component('zopscon-inbox', require('./components/zopsconInbox.vue'));
 // Vue.component('zopscon-outbox', require('./components/zopsconOutbox.vue'));
 
+
+
+/**
+ * Custom Vue directives
+ */
+Vue.directive( 'confirm-form-submit', {
+    inserted( el, binding, vnode ) {
+        let f = evt => {
+            evt.preventDefault();
+            swal( {
+                    title: "Are you sure?",
+                    text: binding.value,
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                } )
+                .then( ( confirmAction ) => {
+                    if ( confirmAction ) {
+                        vnode.elm.submit();
+                        return;
+                    } else {
+                        // evt.preventDefault();
+                    }
+                } );
+        }
+        window.addEventListener( 'submit', f )
+    }
+} );
+
+
+/**
+ * Initialise a new Vue instance
+ */
+
 const app = new Vue( {
     el: '#app',
     // router: Router
