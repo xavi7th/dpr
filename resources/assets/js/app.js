@@ -113,7 +113,7 @@ const app = new Vue( {
     // router: Router
     data() {
         return {
-            testData: 'This is a test data',
+            submitDisabled: true,
         }
     },
 } )

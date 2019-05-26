@@ -15,7 +15,7 @@
         <input type="radio" :name="name" value="null" v-model="optionSelected">
         Not Applicable
       </label>
-      <label :for="inputid" class="btn btn-success">Select file</label>
+      <label :for="inputid" class="btn btn-success" :class="{'disabled' : fileInputStatus}">Select file</label>
       <input style="display: none;" type="file" :id="inputid" :name="inputid" :disabled="fileInputStatus" @change="previewFile">
       <span id="doc_icon">
         <i v-bind:style="{color: fileColor}" v-bind:class="docIcon"></i>
@@ -27,49 +27,64 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component hmm.');
-        },
-        props:['title','name','inputid'],
-        data(){
-          return{
-            optionSelected: 'no',
-            docIcon: 'ion-android-cancel text-red',
-            fileInputStatus: true,
-            fileValue: null,
-            fileColor: '#ccc'
-          }
-        },
-        methods:{
-          previewFile(event){
-            console.log(event.target.files[0].name);
-            this.fileValue = event.target.files[0].name;
-            this.fileColor = 'green';
-          }
-        },
-        updated(){
-          if(this.optionSelected == 'no'){
-            this.docIcon = 'ion-android-cancel text-red';
-            this.fileInputStatus = true;
-            this.fileValue = null;
-            this.fileColor = '#ccc';
-          }else if (this.optionSelected == 'yes') {
-            this.docIcon = 'ion-checkmark-circled';
-            this.fileInputStatus = false;
-          }else if (this.optionSelected == 'null') {
-            this.docIcon = 'ion-android-remove-circle text-yellow';
-            this.fileInputStatus = true;
-            this.fileValue = null;
-            this.fileColor = '#ccc';
-          }
+  export default {
+    mounted() {
+      console.log("Component hmm.");
+    },
+    props: ["title", "name", "inputid"],
+    data() {
+      return {
+        optionSelected: "no",
+        docIcon: "ion-android-cancel text-red",
+        fileInputStatus: true,
+        fileValue: null,
+        fileColor: "#ccc"
+      };
+    },
+    methods: {
+      previewFile(event) {
+        console.log(event.target.files[0].name);
+        this.fileValue = event.target.files[0].name;
+        this.fileColor = "green";
+        this.$root.submitDisabled = false;
+      }
+    },
+    updated() {
+      if (this.optionSelected == "no") {
+        this.docIcon = "ion-android-cancel text-red";
+        this.fileInputStatus = true;
+        this.fileValue = null;
+        this.fileColor = "#ccc";
+        this.$root.submitDisabled = true;
+      } else if (this.optionSelected == "yes") {
+        this.docIcon = "ion-checkmark-circled";
+        this.fileInputStatus = false;
 
+        if (!this.fileValue) {
+          this.$root.submitDisabled = true;
         }
+      } else if (this.optionSelected == "null") {
+        this.docIcon = "ion-android-remove-circle text-yellow";
+        this.fileInputStatus = true;
+        this.fileValue = null;
+        this.fileColor = "#ccc";
+        this.$root.submitDisabled = true;
+      }
     }
+  };
 </script>
 
 <style>
-  #doc_icon{
+  #doc_icon {
     color: #ccc;
+  }
+
+  label.btn-success:not(.disabled) {
+    background-color: #00a65a !important;
+    border-color: #008d4c !important;
+  }
+
+  label.disabled {
+    cursor: not-allowed;
   }
 </style>
