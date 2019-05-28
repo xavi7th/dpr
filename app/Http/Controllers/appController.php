@@ -134,11 +134,27 @@ class appController extends Controller
 		// return back();
 	}
 
-	public function viewAllSSI()
+	// public function viewAllSSI()
+	// {
+	// 	$appDocReviewsSSI = AppDocReview::where('application_status', 'Site Suitable')->get();    // get all application requests
+	// 	return view('backend.general.view_all_ssi', compact('appDocReviewsSSI'));
+	// }
+
+	public function viewAllSSI(Request $request)
 	{
-		$appDocReviewsSSI = AppDocReview::where('application_status', 'Site Suitable')->get();    // get all application requests
+		// dd($request);
+
+		$appDocReviewsSSI = AppDocReview::with(['issued_atc_licenses', 'company', 'job_assignment'])
+			->where('application_type', 'LPG Retailer Outlets')
+			->where('sub_category', 'Site Suitability Inspection')
+			// ->where('application_status', '!=', 'Not Submitted')
+			->latest()
+			->get();
+		// dd($appDocReviewsSSI);
+
 		return view('backend.general.view_all_ssi', compact('appDocReviewsSSI'));
 	}
+
 
 	public function advancedSearchAtc(Request $request)
 	{
