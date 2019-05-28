@@ -152,11 +152,11 @@
                   return [
                     response.data.data[key]["name"],
                     response.data.data[key]["app_doc_reviews_count"],
-                    `${response.data.data[key]["name"]},  ${
+                    `${response.data.data[key]["name"]} (Density: ${
                       response.data.data[key]["density"]
-                    }. No of filling plants: ${
+                    }, Filling plants: ${
                       response.data.data[key]["app_doc_reviews_count"]
-                    }`
+                    })`
                   ];
                 })
               ];
