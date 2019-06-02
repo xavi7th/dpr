@@ -140,14 +140,14 @@ DPR Access | Previous ATC Records Input
                                         <div class="form-group">
                                             <label>Date Issued</label>
                                             <input type="text" name="date_issued" class="form-control"
-                                                placeholder="Date Issued"  id="datepicker3">
+                                                placeholder="Date Issued"  id="datepicker2">
                                         </div>
                                     </div>
                                     <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Expiry Date</label>
                                             <input type="text" name="expiry_date" class="form-control"
-                                                placeholder="Expiry Date"  id="datepicker4">
+                                                placeholder="Expiry Date"  id="datepicker3">
                                         </div>
                                     </div>
                                 </div>
@@ -392,11 +392,6 @@ DPR Access | Previous ATC Records Input
     
     //Date picker
     $('#datepicker3').datepicker({
-      autoclose: true
-    })
-    
-    //Date picker
-    $('#datepicker4').datepicker({
       autoclose: true
     })
 

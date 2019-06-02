@@ -901,13 +901,13 @@ class appController extends Controller
 	public function prevATCRecordGet()
 	{
 		$companies = Company::all();
-		// dd($companies);
 		return view('backend.general.previous_atc_records', compact('companies'));
 	}
 
 	public function prevLTORecordGet()
 	{
-		return view('backend.general.previous_lto_records');
+		$companies = Company::all();
+		return view('backend.general.previous_lto_records', compact('companies'));
 	}
 
 	public function prevRenewalRecordGet()
@@ -994,6 +994,77 @@ class appController extends Controller
 		]);
 
 		return back();
+	}
+
+	public function sendLtoOldRecords(Request $request){
+		// dd($request);
+
+		$companyID = request('company_id');
+		$gasPlantName = request('gas_plant_name');
+		$applicationType = request('application_type');
+		$subCategory = request('sub_category');
+		$plantType = request('plant_type');
+		$state = request('state');
+		$lga = request('lga');
+		$town = request('town');
+		$address = request('address');
+		$applicationDate = date('Y-m-d', strtotime(request('application_date')));
+		// $dateToHq = date('Y-m-d', strtotime(request('date_to_hq')));
+		$dateIssued = date('Y-m-d', strtotime(request('date_issued')));
+		$expiryDate = date('Y-m-d', strtotime(request('expiry_date')));
+
+		// create the application id
+		$applicationCount = DB::table('app_doc_reviews')->get();
+		$indexIncremented = $applicationCount->count() + 1;  // adding 1 to that number
+		$newApplicationIndex = sprintf('%05d', $indexIncremented);  // padding the number to 4 leading zeros
+		$applicationID = "DPRAPPLICATION" . $newApplicationIndex;
+
+		// grab the state_id and LGA id
+		$localGovt = LocalGovt::where('name', $lga)->first();
+		$state_id = $localGovt->state_id;
+		$lga_id = $localGovt->id;
+
+		// application status
+		$applicationStatus = 'LTO Issued';
+
+		// insert into app doc rev
+		AppDocReview::create([
+			'application_id' => $applicationID,
+			'state_id' => $state_id,
+			'local_govt_id' => $lga_id,
+			'company_id' => $companyID,
+			'name_of_gas_plant' => $gasPlantName,
+			'application_type' => $applicationType,
+			'sub_category' => $subCategory,
+			'plant_type' => $plantType,
+			'state' => $state,
+			'lga' => $lga,
+			'town' => $town,
+			'address' => $address,
+			'application_status' => $applicationStatus,
+		]);
+
+		// insert into job assignments
+		JobAssignment::create([
+			'application_id' => $applicationID,
+			'assigned_by' => 'old record',
+			'staff_id' => Auth::user()->staff_id,
+			'company_id' => $companyID,
+			'job_application_status' => $applicationStatus,
+			'approved_by' => 'old record'
+		]);
+
+		// insert into issued act licenses
+		IssuedLtoLicense::create([
+			'application_id' => $applicationID,
+			'staff_id' => Auth::user()->staff_id,
+			'company_id' => $companyID,
+			'date_issued' => $dateIssued,
+			'expiry_date' => $expiryDate
+		]);
+
+		return back();
+
 	}
 
 

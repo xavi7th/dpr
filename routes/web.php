@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/prev_takeover_record_get', 'appController@prevTakeoverRecordGet');
 
 	Route::post('/send_atc_old_records', 'appController@sendAtcOldRecords');
+	Route::post( '/send_lto_old_records', 'appController@sendLtoOldRecords');
 
 
 
