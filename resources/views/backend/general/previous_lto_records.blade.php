@@ -113,7 +113,7 @@ DPR Access | Previous LTO Records Input
             <div class="row">
 
                 <div class="col-md-6">
-                    <form role="form" method="POST" action="/apply_for_site_suitability_inspection">
+                    <form role="form" method="POST" action="/send_lto_old_records">
                         {{ csrf_field() }}
                         <div class="box box-primary">
                             <div class="box-body">
@@ -121,6 +121,9 @@ DPR Access | Previous LTO Records Input
                                     <label>Company Name</label>
                                     <select class="form-control select2" name="company_id" style="width: 100%;">
                                         <option selected="selected">Select Company</option>
+                                        @foreach ($companies as $item)
+                                            <option value="{{$item->company_id}}">{{$item->company_name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <apply-for-lto-component>
@@ -129,22 +132,29 @@ DPR Access | Previous LTO Records Input
                                     <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Application Date</label>
-                                            <input type="text" name="town" class="form-control"
-                                                placeholder="Application Date">
+                                            <input type="text" name="application_date" class="form-control"
+                                                placeholder="Application Date" id="datepicker1">
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                    {{--  <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Date Sent to HQ</label>
-                                            <input type="text" name="town" class="form-control"
-                                                placeholder="Date Sent to HQ">
+                                            <input type="text" name="date_to_hq" class="form-control"
+                                                placeholder="Date Sent to HQ" id="datepicker2">
                                         </div>
-                                    </div>
+                                    </div>  --}}
                                     <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Date Issued</label>
-                                            <input type="text" name="town" class="form-control"
-                                                placeholder="Date Issued">
+                                            <input type="text" name="date_issued" class="form-control"
+                                                placeholder="Date Issued" id="datepicker3">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label>Expiry Date</label>
+                                            <input type="text" name="expiry_date" class="form-control"
+                                                placeholder="Expiry Date"  id="datepicker4">
                                         </div>
                                     </div>
                                 </div>
@@ -378,6 +388,27 @@ DPR Access | Previous LTO Records Input
     $(function () {
         //Initialize Select2 Elements
         $('.select2').select2()
+    })
+
+    
+    //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
+    
+    //Date picker
+    $('#datepicker2').datepicker({
+      autoclose: true
+    })
+    
+    //Date picker
+    $('#datepicker3').datepicker({
+      autoclose: true
+    })
+    
+    //Date picker
+    $('#datepicker4').datepicker({
+      autoclose: true
     })
 
 </script>

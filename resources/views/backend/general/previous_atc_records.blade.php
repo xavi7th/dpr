@@ -113,7 +113,7 @@ DPR Access | Previous ATC Records Input
             <div class="row">
 
                 <div class="col-md-6">
-                    <form role="form" method="POST" action="/apply_for_site_suitability_inspection">
+                    <form role="form" method="POST" action="/send_atc_old_records">
                         {{ csrf_field() }}
                         <div class="box box-primary">
                             <div class="box-body">
@@ -121,6 +121,9 @@ DPR Access | Previous ATC Records Input
                                     <label>Company Name</label>
                                     <select class="form-control select2" name="company_id" style="width: 100%;">
                                         <option selected="selected">Select Company</option>
+                                        @foreach ($companies as $item)
+                                            <option value="{{$item->company_id}}">{{$item->company_name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <apply-for-atc-component>
@@ -129,22 +132,22 @@ DPR Access | Previous ATC Records Input
                                     <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Application Date</label>
-                                            <input type="text" name="town" class="form-control"
-                                                placeholder="Application Date">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label>Date Sent to HQ</label>
-                                            <input type="text" name="town" class="form-control"
-                                                placeholder="Date Sent to HQ">
+                                            <input type="text" name="application_date" class="form-control"
+                                                placeholder="Application Date"  id="datepicker1">
                                         </div>
                                     </div>
                                     <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Date Issued</label>
-                                            <input type="text" name="town" class="form-control"
-                                                placeholder="Date Issued">
+                                            <input type="text" name="date_issued" class="form-control"
+                                                placeholder="Date Issued"  id="datepicker2">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <label>Expiry Date</label>
+                                            <input type="text" name="expiry_date" class="form-control"
+                                                placeholder="Expiry Date"  id="datepicker3">
                                         </div>
                                     </div>
                                 </div>
@@ -170,14 +173,12 @@ DPR Access | Previous ATC Records Input
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Company Name</label>
-                                                <select class="form-control select2" name="doc_type"
+                                                <select class="form-control select2" name="company_id"
                                                     style="width: 100%;">
                                                     <option selected="selected" value="null">Select Company</option>
-                                                    <option value="">Company 1</option>
-                                                    <option value="">Company 2</option>
-                                                    <option value="">Company 3</option>
-                                                    <option value="">Company 4</option>
-                                                    <option value="">Company 5</option>
+                                                    @foreach ($companies as $item)
+                                                        <option value="{{$item}}">{{$item}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -200,31 +201,22 @@ DPR Access | Previous ATC Records Input
                                     <label>Select Document to Upload</label>
                                     <select class="form-control select2" name="doc_type" style="width: 100%;">
                                         <option selected="selected" value="null">Select Document</option>
-                                        <option value="applications_letter_for_suitability_inspection">Applications
-                                            Letter for Suitability Inspection</option>
-                                        <option value="article_and_memorandum_of_association">Article and Memorandum of
-                                            Association</option>
+                                        <option value="applications_letter_for_suitability_inspection">Applications Letter for Suitability Inspection</option>
+                                        <option value="article_and_memorandum_of_association">Article and Memorandum of Association</option>
                                         <option value="current_tax_clearance">Current Tax Clearance</option>
-                                        <option value="certificate_of_incorporation">Certificate of Incorporation
-                                        </option>
+                                        <option value="certificate_of_incorporation">Certificate of Incorporation</option>
                                         <option value="fire_certificate">Fire Certificate</option>
                                         <option value="police_report">Police Report / Certificate</option>
                                         <option value="completed_application_form">Completed Application Form</option>
                                         <option value="approved_building_plan">Approved Building Plan</option>
                                         <option value="survey_plan">Survey Plan</option>
                                         <option value="deed_of_conveyance">Deed of Conveyance</option>
-                                        <option value="piping_and_instrumentation_diagram">Piping and Instrumentation
-                                            Diagram</option>
-                                        <option value="environmental_impact_accessment">Environmental Impact Assessment
-                                        </option>
-                                        <option value="bankdraft_of_statutory_fees">Bankdraft of Statutory Fees Payable
-                                            to FGN-DPR Fees Account</option>
-                                        <option value="letter_confirmation_ministry_of_lands_and_survey">Letter of
-                                            Confirmation from Ministry of Lands and Survey</option>
-                                        <option value="codes_and_standard_adopted_in_the_tank_design">Codes and Standard
-                                            Adopted in the Tank Design</option>
-                                        <option value="application_letter_addressed_to_the_controller">Application
-                                            Letter Addressed to the Controller DPR</option>
+                                        <option value="piping_and_instrumentation_diagram">Piping and Instrumentation Diagram</option>
+                                        <option value="environmental_impact_accessment">Environmental Impact Assessment</option>
+                                        <option value="bankdraft_of_statutory_fees">Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account</option>
+                                        <option value="letter_confirmation_ministry_of_lands_and_survey">Letter of Confirmation from Ministry of Lands and Survey</option>
+                                        <option value="codes_and_standard_adopted_in_the_tank_design">Codes and Standard Adopted in the Tank Design</option>
+                                        <option value="application_letter_addressed_to_the_controller">Application Letter Addressed to the Controller DPR</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -387,6 +379,29 @@ DPR Access | Previous ATC Records Input
         $('.select2').select2()
     })
 
+    
+    //Date picker
+    $('#datepicker1').datepicker({
+      autoclose: true
+    })
+    
+    //Date picker
+    $('#datepicker2').datepicker({
+      autoclose: true
+    })
+    
+    //Date picker
+    $('#datepicker3').datepicker({
+      autoclose: true
+    })
+
 </script>
 
 @endsection
+
+
+
+
+
+
+

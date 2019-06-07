@@ -126,13 +126,13 @@
                       <tr>
                         <td class="sorting_1">
                           @if($item->issued_lto_licenses['expiry_date'] == "")
-                              <a href="/mDocument_review/{{ $item->id }}" class="label label-default" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              <a class="label label-default" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @elseif(now()->gte($item->issued_lto_licenses['expiry_date']))
-                              <a href="/mDocument_review/{{ $item->id }}" class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              <a class="label label-danger" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @elseif(now()->addMonths(3)->gte($item->issued_lto_licenses['expiry_date']))
-                              <a href="/mDocument_review/{{ $item->id }}" class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              <a class="label label-warning" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @elseif(now()->lte($item->issued_lto_licenses['expiry_date']))
-                              <a href="/mDocument_review/{{ $item->id }}" class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
+                              <a class="label label-success" style="font-size: 14px;">{{ $item->application_id }}</a>
                           @endif
                         </td>
                         <td>{{ $item->name_of_gas_plant }}</td>
@@ -150,7 +150,7 @@
                           @endif
                         </td>
                         <td>{{ Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
-                        <td>{{ Carbon\Carbon::parse($item->updated_at)->toDayDateTimeString() }}</td>
+                        <td>{{ Carbon\Carbon::parse($item->updated_at)->toDayDateTimeString() }}</td> {{--  date sent to HQ needs to be treated urgently....it's a pending issue likey to be raised by Mr. Elvis  --}}
                         <td>
                           @if ($item->issued_lto_licenses['date_issued'] == "")
                             --
