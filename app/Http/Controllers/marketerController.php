@@ -433,7 +433,12 @@ class marketerController extends Controller
 			// }
 
 			// redirect to staff view document
-			return redirect('/marketer');
+
+			if (request('continue') == 'application') {
+				return redirect('/lpg_retailer_outlet');
+			} else {
+				return redirect('/marketer');
+			}
 		}
 	}
 
