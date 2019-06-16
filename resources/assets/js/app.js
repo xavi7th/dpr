@@ -46,6 +46,10 @@ Vue.component( 'ati-inspection-upload-component', require( './components/ATIInsp
 Vue.component( 'btn-back-to-marketer', resolve => {
     require( [ './components/Utilities/BtnBackToMarketer.vue' ], resolve )
 } )
+
+Vue.component( 'view-company-details', resolve => {
+    require( [ '@partials-components/ViewCompanyDetails.vue' ], resolve )
+} )
 Vue.component( 'btn-resubmit-application', resolve => {
     require( [ './components/Utilities/BtnResubmitApplication.vue' ], resolve )
 } )

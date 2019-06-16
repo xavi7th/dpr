@@ -11,44 +11,44 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
-    /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array
-     */
-    protected $dontReport = [
-        //
-    ];
+	/**
+	 * A list of the exception types that are not reported.
+	 *
+	 * @var array
+	 */
+	protected $dontReport = [
+		//
+	];
 
-    /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
-     */
-    protected $dontFlash = [
-        'password',
-        'password_confirmation',
-    ];
+	/**
+	 * A list of the inputs that are never flashed for validation exceptions.
+	 *
+	 * @var array
+	 */
+	protected $dontFlash = [
+		'password',
+		'password_confirmation',
+	];
 
-    /**
-     * Report or log an exception.
-     *
-     * @param  \Exception  $exception
-     * @return void
-     */
-    public function report(Exception $exception)
-    {
-        parent::report($exception);
-    }
+	/**
+	 * Report or log an exception.
+	 *
+	 * @param  \Exception  $exception
+	 * @return void
+	 */
+	public function report(Exception $exception)
+	{
+		parent::report($exception);
+	}
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
-     */
-    public function render($request, Exception $exception)
+	/**
+	 * Render an exception into an HTTP response.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Exception  $exception
+	 * @return \Illuminate\Http\Response
+	 */
+	public function render($request, Exception $exception)
 	{
 		// dd(get_class($exception));
 		if ($exception instanceof TokenMismatchException) {
@@ -58,9 +58,11 @@ class Handler extends ExceptionHandler
 			return redirect()
 				->back()
 				->withInput($request->except('password'))
-				->withAlert(['title' => 'Expired Token',
-											'text' => 'Your page was opened for too long, the validation token has expired. Please try again',
-											'type' => 'error']);
+				->withAlert([
+					'title' => 'Expired Token',
+					'text' => 'Your page was opened for too long, the validation token has expired. Please try again',
+					'type' => 'error'
+				]);
 		} else if ($exception instanceof QueryException) {
 			// if (!$request->ajax()) {
 			// 	session()->flash('alert', ['title' => 'Database error', 'type' => 'error', 'toast' => true]);
@@ -73,9 +75,7 @@ class Handler extends ExceptionHandler
 					return response()->json(str_before(str_after($exception->getMessage(), 1062), 'for key'), 500);
 					exit('Query Exception');
 				}
-				return redirect()
-					->back()
-					->withInput($request->except('password'))
+				return redirect('/create_company')
 					->withAlert([
 						'text' => str_before(str_after($exception->getMessage(), 1062), 'for key'),
 						'title' => 'Duplicate Entry',
@@ -85,9 +85,7 @@ class Handler extends ExceptionHandler
 				if ($request->ajax()) {
 					return response()->json(['Error' => 'Query Exception ' . $exception->getMessage()], 500);
 				}
-				return redirect()
-					->back()
-					->withInput($request->except('password'))
+				return redirect('create_company')
 					->withAlert([
 						'text' => 'The requested resource returned an unexpected reply. Try again later.',
 						'title' => 'Connection Error',
