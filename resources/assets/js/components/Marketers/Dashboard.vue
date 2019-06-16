@@ -268,7 +268,8 @@
           })
           .then(result => {
             if (result.value) {
-              this.viewDashboard = true;
+              // this.viewDashboard = true;
+              location.assign("/lpg_retailer_outlet");
             } else if (result.dismiss === swal.DismissReason.cancel) {
               location.assign("/create_company?continue=application");
             }
