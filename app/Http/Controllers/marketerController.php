@@ -252,7 +252,10 @@ class marketerController extends Controller
 
 	public function showDocumentsRequirement($id)
 	{
-		$applicationReview = AppDocReview::with('company')->where('id', $id)->first();
+		/**
+		 * Throw a 404 error if no AppDocReview record found for this id
+		 */
+		$applicationReview = AppDocReview::with('company')->findOrFail($id);
 		// dd($applicationReview->toArray());
 
 		$theCompany = $applicationReview->company;
