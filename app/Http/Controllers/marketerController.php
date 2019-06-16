@@ -19,6 +19,7 @@ use App\IssuedLtoLicense;
 use App\LtoLicenseRenewal;
 use App\PressureTestRecords;
 use Illuminate\Http\Request;
+use App\IssuedAddonAtiLicense;
 use App\LtoInspectionDocument;
 use App\AtcInspectionDocuments;
 use App\CatdLtoInspectionDocument;
@@ -261,7 +262,6 @@ class marketerController extends Controller
 		$theCompany = $applicationReview->company;
 
 		$licenseDetail = IssuedLtoLicense::where('application_id', $applicationReview->application_id)->first();
-		$atcLicenceDetails = null;
 
 
 		$licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id], ['sub_category', 'Renewal'], ['application_status', 'Application Pending']])
@@ -291,10 +291,16 @@ class marketerController extends Controller
 			$atcLicenceDetails = IssuedAtcLicense::where('application_id', $applicationReview->application_id)->first();
 			if ($atcLicenceDetails) {
 				$atcLicenceDetails['ltoIssued'] = AppDocReview::where('name_of_gas_plant', $applicationReview->name_of_gas_plant)->where('application_status', 'LTO Issued')->exists();
+				$applicationReview['atcLicenceDetails'] = $atcLicenceDetails;
 			}
 			$applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
 		} elseif ($applicationReview->sub_category == "ADD-ON ATI") {
 			$applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+			$addonAtiLicenceDetails = IssuedAddonAtiLicense::where('application_id', $applicationReview->application_id)->first();
+			if ($addonAtiLicenceDetails) {
+				$addonAtiLicenceDetails['addonLtoIssued'] = AppDocReview::where('name_of_gas_plant', $applicationReview->name_of_gas_plant)->where('application_status', 'Addon LTO Issued')->exists();
+				$applicationReview['addonAtiLicenceDetails'] = $addonAtiLicenceDetails;
+			}
 		} elseif ($applicationReview->sub_category == "ADD-ON LTO") {
 			$applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
 		} elseif ($applicationReview->sub_category == "LTO") {
@@ -324,7 +330,7 @@ class marketerController extends Controller
 
 		$role = Auth::user()->role;
 
-		return view('backend.marketer.view_application_docs', compact('applicationID', 'applicationReview', 'licenseDetail', 'atcLicenceDetails', 'licenseRenewalDetail', 'role', 'theCompany', 'thisApplicationRenewalDetails', 'pressureTestRecord'));
+		return view('backend.marketer.view_application_docs', compact('applicationID', 'applicationReview', 'licenseDetail', 'licenseRenewalDetail', 'role', 'theCompany', 'thisApplicationRenewalDetails', 'pressureTestRecord'));
 	}
 
 

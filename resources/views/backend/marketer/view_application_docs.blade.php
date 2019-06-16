@@ -73,7 +73,9 @@ DPR {{Auth::user()->role}} | View Application Documents
 
                                 @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category ==
                                 "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
+
                                 <li class="list-group-item">
+                                    <br>
                                     <b>Capacity of tank</b> <a
                                         class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
                                 </li>
@@ -94,26 +96,53 @@ DPR {{Auth::user()->role}} | View Application Documents
                                 <li class="list-group-item">
                                     <b>Address</b> <a class="pull-right">{{ $applicationReview->address }}</a>
                                 </li>
+                                @if ($applicationReview->atcLicenceDetails)
                                 <li class="list-group-item">
                                     <b>Application Date</b> <a
-                                        class="pull-right">{{ $atcLicenceDetails->application_date ? Carbon\Carbon::parse($atcLicenceDetails->application_date)->toFormattedDateString() : null}}</a>
+                                        class="pull-right">{{ $applicationReview->atcLicenceDetails->application_date ? Carbon\Carbon::parse($applicationReview->atcLicenceDetails->application_date)->toFormattedDateString() : null}}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Issue Date</b> <a
-                                        class="pull-right">{{ Carbon\Carbon::parse($atcLicenceDetails->date_issued)->toFormattedDateString() }}</a>
+                                        class="pull-right">{{ Carbon\Carbon::parse($applicationReview->atcLicenceDetails->date_issued)->toFormattedDateString() }}</a>
                                 </li>
 
                                 <li class="list-group-item">
                                     <b>Expiry Date </b>
-                                    @if (!$atcLicenceDetails->ltoIssued)
+                                    @if (!$applicationReview->atcLicenceDetails->ltoIssued)
                                     <a class="pull-right">
-                                        {{ Carbon\Carbon::parse($atcLicenceDetails->expiry_date)->toFormattedDateString() }}
+                                        {{ Carbon\Carbon::parse($applicationReview->atcLicenceDetails->expiry_date)->toFormattedDateString() }}
                                     </a>
                                     @else
                                     <a class="pull-right">N/A</a>
                                     @endif
                                 </li>
+                                @endif
+                                @if ($applicationReview->sub_category == 'Pressure Testing')
+                                <li class="list-group-item">
+                                    <b>Application Date</b> <a
+                                        class="pull-right">{{ Carbon\Carbon::parse($applicationReview->created_at)->toFormattedDateString() }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Last Test Date</b> <a
+                                        class="pull-right">{{ Carbon\Carbon::parse($applicationID->date_last_tested)->toFormattedDateString() }}</a>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <b>Expiry Date </b>
+                                    @if (!$applicationID->ltoIssued)
+                                    <a class="pull-right">
+                                        {{ Carbon\Carbon::parse($applicationID->due_date)->toFormattedDateString() }}
+                                    </a>
+                                    @else
+                                    <a class="pull-right">N/A</a>
+                                    @endif
+                                </li>
+                                @endif
                                 @if ($licenseDetail != null && Auth::user()->role == 'Marketer')
+                                <li class="list-group-item">
+                                    <b>Application Date</b> <a
+                                        class="pull-right">{{ $licenseDetail->application_date ? Carbon\Carbon::parse($licenseDetail->application_date)->toFormattedDateString() : null }}</a>
+                                </li>
                                 <li class="list-group-item">
                                     <b>Date Issued</b> <a
                                         class="pull-right">{{ Carbon\Carbon::parse($licenseDetail->date_issued)->toFormattedDateString() }}</a>
@@ -148,7 +177,7 @@ DPR {{Auth::user()->role}} | View Application Documents
                                 <i class="fa fa-close text-red"></i>
                                 </li>
                                 @endif --}}
-                                <br>
+                                {{-- <br> --}}
                                 @if ($applicationReview->application_status == 'Not Submitted')
                                 <form class="" action="/mSubmitApplication" method="post"
                                     v-confirm-form-submit:msg="'Once submitted, you can no longer edit application'">
@@ -262,6 +291,7 @@ DPR {{Auth::user()->role}} | View Application Documents
                         'ATC Issued')
                         <form class="" action="/apply_for_lto" method="post">
                             {{ csrf_field() }}
+                            <br>
                             <div class="form-group" id="capacity_of_tank">
                                 <label>Capacity of Tank (MT)</label>
                                 <div class="input-group">
@@ -279,8 +309,28 @@ DPR {{Auth::user()->role}} | View Application Documents
 
                         @if ($applicationReview->sub_category == 'ADD-ON ATI' && $applicationReview->application_status
                         == 'ATI Issued')
+                        <li class="list-group-item">
+                            <b>Application Date</b> <a
+                                class="pull-right">{{ $applicationReview->addonAtiLicenceDetails->application_date ? Carbon\Carbon::parse($applicationReview->addonAtiLicenceDetails->application_date)->toFormattedDateString() : null}}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Issue Date</b> <a
+                                class="pull-right">{{ Carbon\Carbon::parse($applicationReview->addonAtiLicenceDetails->date_issued)->toFormattedDateString() }}</a>
+                        </li>
+
+                        <li class="list-group-item">
+                            <b>Expiry Date </b>
+                            @if (!$applicationReview->addonAtiLicenceDetails->ltoIssued)
+                            <a class="pull-right">
+                                {{ Carbon\Carbon::parse($applicationReview->addonAtiLicenceDetails->expiry_date)->toFormattedDateString() }}
+                            </a>
+                            @else
+                            <a class="pull-right">N/A</a>
+                            @endif
+                        </li>
                         <form class="" action="/apply_for_lto" method="post">
                             {{ csrf_field() }}
+                            <br>
                             <div class="form-group" id="capacity_of_tank">
                                 <label>Capacity of Tank (MT)</label>
                                 <div class="input-group">
