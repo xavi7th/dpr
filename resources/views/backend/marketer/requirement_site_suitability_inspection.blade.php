@@ -128,7 +128,7 @@ DPR Marketer | Requirement For Site Suitability Inspection
 
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary" style="float: right;"
-                                    :disabled="submitDisabled">Save
+                                    :disabled="false && submitDisabled">Save
                                     Application Document</button>
                             </div>
                         </form>

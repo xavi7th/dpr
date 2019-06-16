@@ -79,6 +79,11 @@ Vue.component( 'user-notifications', resolve => {
 /**
  * Custom Vue directives
  */
+
+/**
+ * This directive goes in a form element Example
+ * * <form action="" v-confirm-form-submit:msg="'Once submitted, you can no longer edit application'">
+ */
 Vue.directive( 'confirm-form-submit', {
     inserted( el, binding, vnode ) {
         let f = evt => {
