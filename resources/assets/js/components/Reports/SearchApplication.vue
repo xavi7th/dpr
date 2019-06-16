@@ -203,7 +203,9 @@
                               style="text-transform: capitalize;"
                             >
                               {{ comment.staff['first_name'] }} {{comment.staff['last_name'] }}
-                              <i class="text-yellow">
+                              <i
+                                class="text-yellow"
+                              >
                                 <b>({{ comment.staff['role'] }})</b>
                               </i>
                             </span>
@@ -403,7 +405,7 @@
                 this.application_id = null;
 
                 if (err.response.status == 409) {
-                  swal(err.response.data.error);
+                  swal.fire(err.response.data.error);
                 }
               });
           }

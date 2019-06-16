@@ -51,7 +51,7 @@
     methods: {
       sendNotification() {
         if (!this.notif_msg) {
-          swal("", "Empty Notification", "warning");
+          swal.fire("", "Empty Notification", "warning");
           return;
         }
 
@@ -65,21 +65,11 @@
             console.log(rsp);
             if (rsp.status == 201) {
               this.notif_msg = null;
-              swal("Sent", "Notitification sent to marketer", "success").then(
-                rsp => {
+              swal
+                .fire("Sent", "Notitification sent to marketer", "success")
+                .then(rsp => {
                   location.reload();
-                }
-              );
-            }
-          })
-          .catch(err => {
-            console.log(err.response);
-            if (err.response) {
-              swal("Server Error", `${err.response.message}`, "error");
-            } else if (err.request) {
-              swal("Request Error", `${err.request}`, "error");
-            } else {
-              swal("Requset Error", `${err.message}`, "error");
+                });
             }
           });
       }

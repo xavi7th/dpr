@@ -252,20 +252,27 @@
     },
     methods: {
       newApplication() {
-        swal({
-          title: "Have you created a company?",
-          text:
-            "Every application requires a company. Have you already created the company for this new application?",
-          icon: "warning",
-          buttons: ["No, create company", "Yes, create aplication"]
-          // dangerMode: true
-        }).then(createApplication => {
-          if (createApplication) {
-            this.viewDashboard = true;
-          } else {
-            location.assign("/create_company");
-          }
-        });
+        swal
+          .fire({
+            title: "Have you created a company?",
+            text:
+              "Every application requires a company. Have you already created the company for this new application?",
+            type: "question",
+            footer: "<a href='#'>Why do I have to create a company?</a>",
+            showCancelButton: true,
+            confirmButtonText:
+              "<i class='fa fa-thumbs-up'></i> Yes, create aplication",
+            cancelButtonText: "No, create company",
+            cancelButtonColor: "#d33",
+            reverseButtons: true
+          })
+          .then(result => {
+            if (result.value) {
+              this.viewDashboard = true;
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+              location.assign("/create_company?continue=application");
+            }
+          });
       }
     }
   };

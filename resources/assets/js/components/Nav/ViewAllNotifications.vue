@@ -66,11 +66,11 @@
           console.log(err.response);
 
           if (err.response) {
-            swal("Server Error", `${err.response.message}`, "error");
+            swal.fire("Server Error", `${err.response.message}`, "error");
           } else if (err.request) {
-            swal("Request Error", `${err.request}`, "error");
+            swal.fire("Request Error", `${err.request}`, "error");
           } else {
-            swal("Requset Error", `${err.message}`, "error");
+            swal.fire("Requset Error", `${err.message}`, "error");
           }
         });
     },
@@ -81,42 +81,16 @@
     },
     methods: {
       deleteNotification(notif) {
-        axios
-          .get(DeleteNotification(notif.id))
-          .then(rsp => {
-            swal("Deleted", ``, "info");
-            var removed = this.all_notifications.indexOf(notif);
-            this.all_notifications.splice(removed, 1);
-          })
-          .catch(err => {
-            console.log(err.response);
-            if (err.response) {
-              swal("Server Error", `${err.response.message}`, "error");
-            } else if (err.request) {
-              swal("Request Error", `${err.request}`, "error");
-            } else {
-              swal("Requset Error", `${err.message}`, "error");
-            }
-          });
+        axios.get(DeleteNotification(notif.id)).then(rsp => {
+          swal.fire("Deleted", ``, "info");
+          var removed = this.all_notifications.indexOf(notif);
+          this.all_notifications.splice(removed, 1);
+        });
       },
       markAsRead(notif) {
-        axios
-          .get(MarkNotificationRead(notif.id))
-          .then(rsp => {
-            // swal("Done", ``, "success");
-            notif.is_read = true;
-          })
-          .catch(err => {
-            console.log(err.response);
-
-            if (err.response) {
-              swal("Server Error", `${err.response.message}`, "error");
-            } else if (err.request) {
-              swal("Request Error", `${err.request}`, "error");
-            } else {
-              swal("Requset Error", `${err.message}`, "error");
-            }
-          });
+        axios.get(MarkNotificationRead(notif.id)).then(rsp => {
+          notif.is_read = true;
+        });
       }
     }
   };

@@ -70,22 +70,9 @@
       };
     },
     created() {
-      axios
-        .get(GetNewNotifications)
-        .then(rsp => {
-          this.new_notifications = rsp.data.data;
-        })
-        .catch(err => {
-          console.log(err.response);
-
-          if (err.response) {
-            swal("Server Error", `${err.response.data}`, "error");
-          } else if (err.request) {
-            swal("Request Error", `${err.request}`, "error");
-          } else {
-            swal("Requset Error", `${err.message}`, "error");
-          }
-        });
+      axios.get(GetNewNotifications).then(rsp => {
+        this.new_notifications = rsp.data.data;
+      });
     },
     computed: {
       new_notifications_count() {
@@ -94,28 +81,15 @@
     },
     methods: {
       viewNotification(notif) {
-        axios
-          .get(GetNotificationDetails(notif.id))
-          .then(rsp => {
-            this.current_notification = rsp.data.notification;
-            var removed = this.new_notifications.indexOf(notif);
-            if (removed != -1) {
-              /* A match was found */
-              this.new_notifications.splice(removed, 1);
-            }
-            this.currentComponent = "ViewNotification";
-          })
-          .catch(err => {
-            console.log(err.response);
-
-            if (err.response) {
-              swal("Server Error", `${err.response.data}`, "error");
-            } else if (err.request) {
-              swal("Request Error", `${err.request}`, "error");
-            } else {
-              swal("Requset Error", `${err.message}`, "error");
-            }
-          });
+        axios.get(GetNotificationDetails(notif.id)).then(rsp => {
+          this.current_notification = rsp.data.notification;
+          var removed = this.new_notifications.indexOf(notif);
+          if (removed != -1) {
+            /* A match was found */
+            this.new_notifications.splice(removed, 1);
+          }
+          this.currentComponent = "ViewNotification";
+        });
       }
     }
   };
