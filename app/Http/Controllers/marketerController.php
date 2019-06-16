@@ -408,7 +408,8 @@ class marketerController extends Controller
 			|| (request('state') == 'Select State')
 			|| (request('town') == 'Select LGA')
 		) {
-			back()->withAlert(['text' => 'Help Again', 'type' => 'error']);
+
+			return	back()->withAlert(['text' => 'State, LGA and Contract Type are required fields', 'type' => 'error', 'title' => 'error']);
 		} else {
 
 
@@ -488,12 +489,16 @@ class marketerController extends Controller
 
 					$user->save();
 				} catch (\Throwable $e) {
-					back()->withAlert(['text' => 'Help', 'type' => 'error']);
+					// dd($e);
+					return back()->withAlert(['text' => str_before(str_after($e->getMessage(), 1062), 'for key'),
+																		'type' => 'warning',
+																		'toast' => true,
+																		'position' => 'top',
+																		'timer' => 5000]);
 				}
 
 				DB::commit();
 
-				dd('ggf');
 				return back();
 			}
 		}
