@@ -164,7 +164,7 @@ Route::group(['middleware' => 'auth'], function () {
 // ADMINISTRATOR-CONTROLLER
 Route::get('/admin', 'administratorController@index')->middleware(['auth', 'admin']);
 Route::get('/staffs_list', 'administratorController@showAllStaffs')->middleware(['auth', 'admin']);
-Route::get('/companies_list', 'administratorController@showAllCompanies');
+Route::get('/companies_list', 'administratorController@showAllCompanies')->middleware(['auth', 'admin:staff']);
 Route::get('/create_staff', 'administratorController@displayCreateStaffForm')->middleware(['auth', 'admin']);
 Route::get('/create_company', 'administratorController@displayCreateCompanyForm')->middleware(['auth', 'admin']);
 Route::get('/settings', 'administratorController@displayCreateCompanyForm')->middleware(['auth', 'admin']);
