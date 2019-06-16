@@ -6,6 +6,7 @@ use DB;
 
 use Auth;
 use Storage;
+use App\User;
 use App\Inbox;
 use App\Staff;
 use App\State;
@@ -27,6 +28,7 @@ use App\AddonAtiInspectionDocument;
 use App\AddonLtoInspectionDocument;
 use App\CatdLtoApplicationExtention;
 use App\TakeoverInspectionDocuments;
+use Illuminate\Support\Facades\Validator;
 use App\SiteSuitabilityInspectionDocuments;
 
 class marketerController extends Controller
@@ -370,11 +372,11 @@ class marketerController extends Controller
 
 	public function createCompany(Request $request)
 	{
+		// session()->forget('alert');
 
 		// dd($request);
 
-		// validate this form
-		$this->validate(request(), [
+		$response = customValidator([
 			'comp_name' => 'required',
 			'contract_type' => 'required',
 			'state' => 'required',
@@ -384,6 +386,10 @@ class marketerController extends Controller
 			'mobile_number' => 'required',
 			'email' => 'required'
 		]);
+
+		if ($response) {
+			return $response;
+		}
 
 		// getting the current number of created companies
 		$companyCount = DB::table('companies')->get();
@@ -402,22 +408,9 @@ class marketerController extends Controller
 			|| (request('state') == 'Select State')
 			|| (request('town') == 'Select LGA')
 		) {
-			return back();
+			back()->withAlert(['text' => 'Help Again', 'type' => 'error']);
 		} else {
-			// create and save the company
-			Company::create([
-				'company_id' => $companyID,
-				'marketer_id' => Auth::user()->staff_id,
-				'company_name' => request('comp_name'),
-				'company_alias' => request('comp_alias'),
-				'contract_type' => request('contract_type'),
-				'state' => request('state'),
-				'lga' => request('lga'),
-				'town' => request('town'),
-				'address' => request('address'),
-				'mobile_number' => request('mobile_number'),
-				'email_address' => request('email')
-			]);
+
 
 			// update the application to contain the company idea
 			// AppDocReview::where('application_id', request('application_id'))
@@ -449,11 +442,59 @@ class marketerController extends Controller
 			// }
 
 			// redirect to staff view document
+			if (Auth::user()->role == 'Marketer') {
+				// create and save the company
+				Company::create([
+					'company_id' => $companyID,
+					'marketer_id' => Auth::user()->staff_id,
+					'company_name' => request('comp_name'),
+					'company_alias' => request('comp_alias'),
+					'contract_type' => request('contract_type'),
+					'state' => request('state'),
+					'lga' => request('lga'),
+					'town' => request('town'),
+					'address' => request('address'),
+					'mobile_number' => request('mobile_number'),
+					'email_address' => request('email')
+				]);
+				if (request('continue') == 'application') {
+					return redirect('/lpg_retailer_outlet');
+				} else {
+					return redirect('/marketer');
+				}
+			} elseif (Auth::user()->role == 'Staff') {
 
-			if (request('continue') == 'application') {
-				return redirect('/lpg_retailer_outlet');
-			} else {
-				return redirect('/marketer');
+				DB::beginTransaction();
+				/**
+				 * Create a temp user detail for this company
+				 */
+				$user = factory(Staff::class)->make();
+
+				// create and save the company
+				try {
+					Company::create([
+						'company_id' => $companyID,
+						'marketer_id' => $user->staff_id,
+						'company_name' => request('comp_name'),
+						'company_alias' => request('comp_alias'),
+						'contract_type' => request('contract_type'),
+						'state' => request('state'),
+						'lga' => request('lga'),
+						'town' => request('town'),
+						'address' => request('address'),
+						'mobile_number' => request('mobile_number'),
+						'email_address' => request('email')
+					]);
+
+					$user->save();
+				} catch (\Throwable $e) {
+					back()->withAlert(['text' => 'Help', 'type' => 'error']);
+				}
+
+				DB::commit();
+
+				dd('ggf');
+				return back();
 			}
 		}
 	}
