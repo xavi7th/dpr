@@ -13,7 +13,15 @@ DPR {{Auth::user()->role}} | Create Company
 
     @include('partials.backend_top_nav_all')
 
+
+    @if (Auth::user()->role == 'Admin')
+    @include('partials.backend_aside_admin')
+    @elseif(Auth::user()->role == 'Marketer')
     @include('partials.router_aside')
+    @else
+    @include('partials.backend_aside_all')
+    @endif
+
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
