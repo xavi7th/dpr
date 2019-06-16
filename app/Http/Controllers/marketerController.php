@@ -258,6 +258,9 @@ class marketerController extends Controller
 		$theCompany = $applicationReview->company;
 
 		$licenseDetail = IssuedLtoLicense::where('application_id', $applicationReview->application_id)->first();
+		$atcLicenceDetails = null;
+
+
 		$licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id], ['sub_category', 'Renewal'], ['application_status', 'Application Pending']])
 			->first();
 
@@ -282,6 +285,10 @@ class marketerController extends Controller
 		if ($applicationReview->sub_category == "Site Suitability Inspection") {
 			$applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
 		} elseif ($applicationReview->sub_category == "ATC") {
+			$atcLicenceDetails = IssuedAtcLicense::where('application_id', $applicationReview->application_id)->first();
+			if ($atcLicenceDetails) {
+				$atcLicenceDetails['ltoIssued'] = AppDocReview::where('name_of_gas_plant', $applicationReview->name_of_gas_plant)->where('application_status', 'LTO Issued')->exists();
+			}
 			$applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
 		} elseif ($applicationReview->sub_category == "ADD-ON ATI") {
 			$applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
@@ -314,7 +321,7 @@ class marketerController extends Controller
 
 		$role = Auth::user()->role;
 
-		return view('backend.marketer.view_application_docs', compact('applicationID', 'applicationReview', 'licenseDetail', 'licenseRenewalDetail', 'role', 'theCompany', 'thisApplicationRenewalDetails', 'pressureTestRecord'));
+		return view('backend.marketer.view_application_docs', compact('applicationID', 'applicationReview', 'licenseDetail', 'atcLicenceDetails', 'licenseRenewalDetail', 'role', 'theCompany', 'thisApplicationRenewalDetails', 'pressureTestRecord'));
 	}
 
 

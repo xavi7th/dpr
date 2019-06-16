@@ -95,8 +95,23 @@ DPR {{Auth::user()->role}} | View Application Documents
                                     <b>Address</b> <a class="pull-right">{{ $applicationReview->address }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Date</b> <a
-                                        class="pull-right">{{ Carbon\Carbon::parse($applicationReview->created_at)->toFormattedDateString() }}</a>
+                                    <b>Application Date</b> <a
+                                        class="pull-right">{{ $atcLicenceDetails->application_date ? Carbon\Carbon::parse($atcLicenceDetails->application_date)->toFormattedDateString() : null}}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Issue Date</b> <a
+                                        class="pull-right">{{ Carbon\Carbon::parse($atcLicenceDetails->date_issued)->toFormattedDateString() }}</a>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <b>Expiry Date </b>
+                                    @if (!$atcLicenceDetails->ltoIssued)
+                                    <a class="pull-right">
+                                        {{ Carbon\Carbon::parse($atcLicenceDetails->expiry_date)->toFormattedDateString() }}
+                                    </a>
+                                    @else
+                                    <a class="pull-right">N/A</a>
+                                    @endif
                                 </li>
                                 @if ($licenseDetail != null && Auth::user()->role == 'Marketer')
                                 <li class="list-group-item">
