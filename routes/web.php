@@ -129,6 +129,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/prev_lpg_renewal_record_get', 'appController@prevRenewalRecordGet');
 	Route::get('/prev_takeover_record_get', 'appController@prevTakeoverRecordGet');
 
+
+	Route::get( '/old_atc_requirement', 'appController@oldATCRequirementGet');
+
+	Route::post( '/old_atc_req_upload', 'appController@oldATCRequirementPOST');
 	Route::post('/send_atc_old_records', 'appController@sendAtcOldRecords');
 	Route::post( '/send_lto_old_records', 'appController@sendLtoOldRecords');
 

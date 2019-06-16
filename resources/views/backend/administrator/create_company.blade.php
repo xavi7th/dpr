@@ -64,6 +64,7 @@ DPR Administrator | Create Company
                                         <option value="Sole Risk">Sole Risk</option>
                                         <option value="PLC">PLC</option>
                                         <option value="Limited">Limited</option>
+                                        <option value="Venture">Venture</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

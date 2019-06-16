@@ -170,7 +170,7 @@ DPR Access | Previous LTO Records Input
                     </form>
                 </div>
 
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <form role="form" method="POST" action="/edit_document_upload" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="box box-primary">
@@ -231,7 +231,6 @@ DPR Access | Previous LTO Records Input
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    {{--  <label>Project Report</label>  --}}
                                     <div class="input-group">
                                         <input type="file" name="project_report">
                                     </div>
@@ -245,7 +244,7 @@ DPR Access | Previous LTO Records Input
                             <!-- /.box-footer -->
                         </div>
                     </form>
-                </div>
+                </div> --}}
 
                 {{--  <div class="col-md-6">
                     <div class="box box-primary">
@@ -390,22 +389,22 @@ DPR Access | Previous LTO Records Input
         $('.select2').select2()
     })
 
-    
+
     //Date picker
     $('#datepicker1').datepicker({
       autoclose: true
     })
-    
+
     //Date picker
     $('#datepicker2').datepicker({
       autoclose: true
     })
-    
+
     //Date picker
     $('#datepicker3').datepicker({
       autoclose: true
     })
-    
+
     //Date picker
     $('#datepicker4').datepicker({
       autoclose: true
