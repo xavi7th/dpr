@@ -26,6 +26,8 @@ class CreateAppDocReviewsTable extends Migration
 			$table->string('sub_category')->nullable();
 			$table->string('plant_type')->nullable();
 			$table->string('capacity_of_tank')->nullable();
+			$table->string('bank_draft_amount')->nullable();
+			$table->string('rru_number')->nullable();
 			$table->string('state')->nullable();
 			$table->string('lga')->nullable();
 			$table->string('town')->nullable();
