@@ -152,7 +152,7 @@ DPR Access | Previous ATC Records Input
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary" style="float: right;">Save &
+                                    <button type="submit" class="btn btn-primary" style="float: right;" id="saveCont">Save &
                                         Continue</button>
                                 </div>
                             </div>
