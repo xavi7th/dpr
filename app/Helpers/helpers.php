@@ -1,11 +1,6 @@
 <?php
 
-use Math\Combinatorics\Combination;
-use Math\Combinatorics\Permutation;
 use Illuminate\Support\Facades\Validator;
-use drupol\phpermutations\Generators\Permutations;
-use Symfony\Component\Debug\Exception\FatalErrorException;
-use App\Modules\BasicSite\Transformers\CombinationTransformer;
 use League\Flysystem\FileNotFoundException as FileDownloadException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException as FileGetException;
 
@@ -240,193 +235,13 @@ if (!function_exists('convertFileSize')) {
 	}
 }
 
-if (!function_exists('get_combinations')) {
-
-	/**
-	 * Get the possible mathematical combinations of the given array in an optional subset size
-	 *
-	 * This function using Combinatronics gets all the possible subset size combinations of the supplied array with repitition
-	 *
-	 * @param array $sourceDataSet The array to combine
-	 * @param int $subsetSize The size of each combination
-	 * @return array
-	 *
-	 **/
-
-	function get_combinations($sourceDataSet = [], $subsetSize = 7)
-	{
-
-		/**
-		 * retrieve the numeric indices to use in our permutation, to allow proper sorting of non numeric values
-		 */
-		$arr_keys = collect($sourceDataSet)->keys()->toArray();
-
-		$permutation      = new Permutation();
-
-		/**
-		 * Get permutations using the sourceDataset keys
-		 */
-		set_time_limit(120);
-		$permutationsList = $permutation->getPermutations($arr_keys, $subsetSize);
-
-		unset($permutation);
-
-		$arr = [];
-		$arr22 = [];
-
-		/**
-		 * sort() 	Sort for uniformity
-		 * values() to reset the keys after sorting, thus maintaining the sort order
-		 * map() 		to break them up into arrays by number of sequentials
-		 */
-		$all_permutations = collect($permutationsList)->sort()->values();
-
-		unset($permutationsList);
-
-		$all_permutations->map(function ($items, $key) use (&$arr, &$arr22, $sourceDataSet) {
-
-			$consecutive = true;
-			for ($i = 1; $consecutive && $i <  count($items); $i++) {
-
-				/**
-				 * ? Test for consecutivity
-				 */
-				$consecutive = $consecutive && $items[$i] - $items[$i - 1] == 1;
-				if (!$consecutive) {
-					if ($i > 1) {
-
-						/**
-						 * ? get_array_values_from_indexes() retrieves the value from the sourceDataset Array using the index
-						 */
-						$arr[$i][] = ['combination' => implode(',', get_array_values_from_indexes($sourceDataSet, $items))];
-					} else {
-						$arr['Non'][] = ['combination' => implode(',', get_array_values_from_indexes($sourceDataSet, $items))];
-					}
-				} else if ($consecutive && $i == (count($items) - 1)) {
-
-					/**
-					 * ? If it's still consecutive at this point, then this is a serial consecutive array of the subsetSize
-					 */
-					$arr[$i + 1][] = ['combination' => implode(',', get_array_values_from_indexes($sourceDataSet, $items))];
-				}
-			}
-
-			/**
-			 * ! Transform the data for our data table component
-			 * (new Transformer)->collectionTransformer(collection, transformer);
-			 */
-
-			foreach ($arr as $key => $temp) {
-				$arr22[$key] = (object)[
-					'columns' => [
-						[
-							'label' => "sn",
-							'field' => "sn",
-							'sort' => "asc"
-						],
-						[
-							'label' => $key . " sequential values",
-							'field' => "combination",
-							'sort' => "asc"
-						]
-					],
-					'rows' => $temp
-				];
-			}
-		});
-
-		unset($arr);
-
-		foreach ($all_permutations as $key => $temp) {
-			$arr2[$key] = ['combination' => implode(',', get_array_values_from_indexes($sourceDataSet, $temp))];
-		}
-
-		return [
-			'results' => [
-				'sorted' => (new CombinationTransformer)->collectionTransformer(collect($arr22), 'base'),
-				'all' => [
-					'columns' => [
-						[
-							'label' => "sn",
-							'field' => "sn",
-							'sort' => "asc"
-						],
-						[
-							'label' => "All values",
-							'field' => "combination",
-							'sort' => "asc"
-						]
-					],
-					'rows' => (new CombinationTransformer)->rows($arr2)
-				],
-			]
-		];
-	}
-}
-
-if (!function_exists('get_combinations2')) {
-
-	function get_combinations2($sourceDataSet = [], $subsetSize = 7)
-	{
-		$permutations = new Permutations($sourceDataSet, $subsetSize);
-		// Use a foreach loop.
-		// foreach ($permutations->generator() as $permutation) {
-		// 	dump(convertFileSize(memory_get_usage()));
-		// 	dump($permutation);
-		// 	$arr[] = $permutation;
-		// }
-		// dump($arr);
-
-		// Or get the whole array at once.
-
-		$arr = [];
-		$nonArr = [];
-		collect($permutations->toArray())->sort()->values()->map(function ($items, $key) use (&$arr, &$nonArr) {
-			if (!$key) {
-				$arr[count($items)][] = $items;
-			}
-			$consecutive = true;
-			$nonconsecutive = true;
-			for ($i = 1; $consecutive && $i <  count($items); $i++) {
-				$consecutive = $consecutive && $items[$i] - $items[$i - 1] == 1;
-				if (!$consecutive) {
-					if ($i > 1) {
-						$arr[$i][] = $items;
-					}
-				}
-			}
-			for ($i = 1; $i <  count($items); $i++) {
-				$nonconsecutive = $nonconsecutive && $items[$i] - $items[$i - 1] > 1;
-			}
-			if ($nonconsecutive) {
-				$nonArr[] = $items;
-			}
-		});
-
-		return [
-			'non_sequential' => $nonArr,
-			'sequential' => $arr
-		];
-	}
-}
-
-if (!function_exists('get_array_values_from_indexes')) {
-	function get_array_values_from_indexes($main_array, $array_of_keys)
-	{
-		foreach ($array_of_keys as $i) {
-			$arr[] = $main_array[$i];
-		}
-		return $arr;
-	}
-}
-
 if (!function_exists('customValidator')) {
 	function customValidator($rules)
 	{
 		$validator = Validator::make(request()->all(), $rules);
 
 		if ($validator->fails()) {
-				return back()->withAlert(['text' => implode('<br>', $validator->getMessageBag()->all()), 'type' => 'error']);
+			return back()->withAlert(['text' => implode('<br>', $validator->getMessageBag()->all()), 'type' => 'error']);
 		}
 	}
 }

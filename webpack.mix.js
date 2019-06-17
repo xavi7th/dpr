@@ -1,5 +1,8 @@
 let mix = require('laravel-mix')
 
+console.log(__dirname);
+
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -17,6 +20,7 @@ mix.webpackConfig({
         alias: {
             // 'vue$': 'vue/dist/vue.esm.js',
             '@utilities-components': __dirname + '/resources/assets/js/components/Utilities',
+            '@partials-components': __dirname + '/resources/assets/js/components/Partials',
             '@nav-components': __dirname + '/resources/assets/js/components/Nav',
             '@reports-components': __dirname + '/resources/assets/js/components/Reports',
             '@components': __dirname + '/resources/assets/js/components',

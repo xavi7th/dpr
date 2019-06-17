@@ -14,8 +14,18 @@ class Marketer
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, ...$acceptableRoles)
     {
+				/**
+				 * Allow other roles as permitted to this middleware call
+				 * Example usage
+				 * ->middleware(['auth', 'marketer:staff,admin,etc'])
+				 */
+				foreach ($acceptableRoles as  $role) {
+					if (strtolower(Auth::user()->role) == strtolower($role)) {
+						return $next($request);
+					}
+				}
         if (Auth::user()->role != 'Marketer') {
           Auth::logout();
           session()->invalidate();
