@@ -198,7 +198,7 @@ DPR Access | Previous ATC Records Input
         autoclose: true
     } )
 
-    $( '#saveCont' ).click( evt => {
+    {{-- $( '#saveCont' ).click( evt => {
         evt.preventDefault();
         /**
          * Call $.post() here instead so that we can check if the sumbit was successful before showing the next step prompt
@@ -239,7 +239,7 @@ DPR Access | Previous ATC Records Input
 
 
 
-    } )
+    } ) --}}
 
 </script>
 
