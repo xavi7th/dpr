@@ -11,6 +11,10 @@ class Staff extends Authenticatable
 {
 	protected $guarded = [];
 
+	protected $casts = [
+		'activated' => 'boolean'
+	];
+
 	public function appDocReviews()
 	{
 		return $this->hasMany(AppDocReview::class, 'marketer_id', 'staff_id');

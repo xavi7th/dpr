@@ -4,9 +4,9 @@
       type="button"
       class="btn btn-default btn-xs bg-navy"
       data-toggle="modal"
-      data-target="#modal-default"
+      :data-target="`#modal-default${companyDetails.id}`"
     >View More Details</button>
-    <div class="modal fade" id="modal-default">
+    <div class="modal fade" :id="`modal-default${companyDetails.id}`">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -66,11 +66,11 @@
 
                 <p class="mt-5">
                   <strong>User Name</strong>
-                  {{ (companyDetails.user || {}).username }}
+                  {{ (companyDetails.user || {}).username || 'No marketer attached to this company' }}
                 </p>
                 <p>
                   <strong>Password</strong>
-                  {{ (companyDetails.user || {}).activated ? null : 'pass' }}.
+                  {{ (companyDetails.user || {}).activated ? 'Account already activated' : 'pass' }}.
                 </p>
               </div>
             </div>
@@ -87,7 +87,7 @@
 
 <script>
   export default {
-    name: "ShowComapnyDetails",
+    name: "ShowCompanyDetails",
     props: ["details"],
     data() {
       return {};

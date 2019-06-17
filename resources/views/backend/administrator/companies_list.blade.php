@@ -24,6 +24,8 @@ DPR {{Auth::user()->role}} | Companies
             </h1>
         </section>
 
+        {{-- {{ dump($companies) }} --}}
+
         <!-- Main content -->
         <section class="content">
 
@@ -55,7 +57,8 @@ DPR {{Auth::user()->role}} | Companies
                                         <td>{{ $company->state }}</td>
                                         <td>{{ $company->town }}</td>
                                         <td>
-                                            <view-company-details details="{{$company}}"></view-company-details>
+                                            <view-company-details :details="'{{ $company }}'" :key="{{ $company->id }}">
+                                            </view-company-details>
                                         </td>
                                     </tr>
                                     @endforeach

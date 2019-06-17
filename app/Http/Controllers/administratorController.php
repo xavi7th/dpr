@@ -32,7 +32,7 @@ class administratorController extends Controller
 
 	public function showAllCompanies()
 	{
-		$companies = Company::with('user')->get();
+		$companies = Company::with('user:id,username,staff_id,activated')->get();
 		return view('backend.administrator.companies_list', compact('companies'));
 	}
 
