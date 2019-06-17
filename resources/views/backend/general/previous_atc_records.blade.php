@@ -113,7 +113,8 @@ DPR Access | Previous ATC Records Input
             <div class="row">
 
                 <div class="col-md-6">
-                    <form role="form" method="POST" action="/send_atc_old_records" enctype="multipart/form-data">
+                    <form role="form" method="POST" action="/send_atc_old_records" enctype="multipart/form-data"
+                        id="saveContForm">
                         {{ csrf_field() }}
                         <div class="box box-primary">
                             <div class="box-body">
@@ -122,7 +123,7 @@ DPR Access | Previous ATC Records Input
                                     <select class="form-control select2" name="company_id" style="width: 100%;">
                                         <option selected="selected">Select Company</option>
                                         @foreach ($companies as $item)
-                                            <option value="{{$item->company_id}}">{{$item->company_name}}</option>
+                                        <option value="{{$item->company_id}}">{{$item->company_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -144,15 +145,16 @@ DPR Access | Previous ATC Records Input
                                         </div>
                                     </div>
                                     <div class="col-xs-12">
-                                      <div class="form-group">
-                                          <label for="exampleInputFile">Implementation Schedule</label>
-                                          <input type="file" name="implementationScheduleDoc">
-                                      </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputFile">Implementation Schedule</label>
+                                            <input type="file" name="implementationScheduleDoc">
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary" style="float: right;" id="saveCont">Save &
+                                    <button type="submit" class="btn btn-primary" style="float: right;"
+                                        id="saveCont">Save &
                                         Continue</button>
                                 </div>
                             </div>
@@ -176,26 +178,68 @@ DPR Access | Previous ATC Records Input
 
 @section('pagescript')
 <script>
-    $(function () {
+    $( function () {
         //Initialize Select2 Elements
-        $('.select2').select2()
-    })
-
-
-    //Date picker
-    $('#datepicker1').datepicker({
-      autoclose: true
-    })
+        $( '.select2' ).select2()
+    } )
 
     //Date picker
-    $('#datepicker2').datepicker({
-      autoclose: true
-    })
+    $( '#datepicker1' ).datepicker( {
+        autoclose: true
+    } )
 
     //Date picker
-    $('#datepicker3').datepicker({
-      autoclose: true
-    })
+    $( '#datepicker2' ).datepicker( {
+        autoclose: true
+    } )
+
+    //Date picker
+    $( '#datepicker3' ).datepicker( {
+        autoclose: true
+    } )
+
+    $( '#saveCont' ).click( evt => {
+        evt.preventDefault();
+        /**
+         * Call $.post() here instead so that we can check if the sumbit was successful before showing the next step prompt
+         */
+
+        $.post( '/send_atc_old_records', $( "#saveContForm" ).serialize() ).done( rsp => {
+
+            swal
+                .fire( {
+                    title: "Where are you going next?",
+                    text: "Not all who wander are lost?",
+                    type: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "<i class='fa fa-thumbs-up'></i> Proceed to next stage",
+                    cancelButtonText: "Go back home",
+                    // cancelButtonColor: "#d33",
+                    reverseButtons: false
+                } )
+                .then( result => {
+                    if ( result.value ) {
+                        location.assign( "/old_atc_requirement" );
+                    } else if ( result.dismiss === swal.DismissReason.cancel ) {
+                        location.assign( "/create_company" );
+                    }
+                } );
+
+
+        } ).fail( err => {
+            console.log( err );
+            swal.fire( 'Error', 'We couldn\'t make the request for some wierd reason. Try Again',
+                'error' );
+        } )
+
+
+        /**
+         * Show next step prompt
+         */
+
+
+
+    } )
 
 </script>
 

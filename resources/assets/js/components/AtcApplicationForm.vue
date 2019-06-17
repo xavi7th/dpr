@@ -61,7 +61,7 @@
         <div class="form-group">
           <label>State</label>
           <select id="dropdown2" v-on:change="onChangeTwo()" v-model="state" class="form-control" name="state" style="width: 100%;">
-            <option selected="selected">Select State</option>
+            <option selected="selected" :value="null">Select State</option>
             <option v-for="item in states" :value="item.state">{{item.state}}</option>
           </select>
         </div>
@@ -70,7 +70,7 @@
         <div class="form-group">
           <label>L.G.A</label>
           <select id="dropdown3" class="form-control" name="lga" style="width: 100%;">
-            <option selected="selected">Select LGA</option>
+            <option selected="selected" :value="null">Select LGA</option>
             <option v-for="item in lga" :value="item">{{item}}</option>
           </select>
         </div>
@@ -94,68 +94,75 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            // console.log('Component hmm.');
-            axios.get('js/location.json').then(response => {
-              this.states = response.data.nigeria;
-              console.log(response.data);
-            });
-            axios.get('js/applicationTypesAndSubCategory.json').then(response => {
-              this.application_types = response.data.app_doc;
-            });
-
-        },
-        data(){
-          return{
-            application_types: [],
-            sub_categories: [],
-            states: [],
-            lga: [],
-            state: 'Select State',
-            application_type: 'Select Application Type',
-            sub_category: 'Select Sub-Category',
-            typeValid: false
-          }
-        },
-        methods:{
-          onChangeOne(){
-            this.sub_categories = [];
-            axios.get('js/applicationTypesAndSubCategory.json').then(response => {
-              var appTypeCount = this.application_types.length;
-              for (let i = 0; i < appTypeCount; i++) {
-                if(this.application_types[i].application_type == this.application_type){
-
-                  for (var j = 0; j < response.data.app_doc[i].sub_category.length; j++) {
-                    this.sub_categories.push(response.data.app_doc[i].sub_category[j]);
-                  }
-                }
+  export default {
+    mounted() {
+      // console.log('Component hmm.');
+      axios.get("js/location.json").then(response => {
+        this.states = response.data.nigeria;
+        console.log(response.data);
+      });
+      axios.get("js/applicationTypesAndSubCategory.json").then(response => {
+        this.application_types = response.data.app_doc;
+      });
+    },
+    data() {
+      return {
+        application_types: [],
+        sub_categories: [],
+        states: [],
+        lga: [],
+        state: null,
+        application_type: "Select Application Type",
+        sub_category: "Select Sub-Category",
+        typeValid: false
+      };
+    },
+    methods: {
+      onChangeOne() {
+        this.sub_categories = [];
+        axios.get("js/applicationTypesAndSubCategory.json").then(response => {
+          var appTypeCount = this.application_types.length;
+          for (let i = 0; i < appTypeCount; i++) {
+            if (
+              this.application_types[i].application_type == this.application_type
+            ) {
+              for (
+                var j = 0;
+                j < response.data.app_doc[i].sub_category.length;
+                j++
+              ) {
+                this.sub_categories.push(
+                  response.data.app_doc[i].sub_category[j]
+                );
               }
-            });
-          },
-          onChangeTwo(){
-            this.lga = [];
-            axios.get('js/location.json').then(response => {
-              var stateCount = this.states.length;
-              for (let i = 0; i < stateCount; i++) {
-                if(this.states[i].state == this.state){
-                  for (var j = 0; j < response.data.nigeria[i].lga.length; j++) {
-                    this.lga.push(response.data.nigeria[i].lga[j]);
-                  }
-                }
-              }
-            });
-          },
-          type_valid(){
-            if(this.sub_category == 'Select Sub-Category' || this.sub_category == 'Site Suitability Inspection' || this.sub_category == 'LPG-ATC'){
-              this.typeValid = false;
-            }else{
-              this.typeValid = true;
             }
           }
-
-        },
-
+        });
+      },
+      onChangeTwo() {
+        this.lga = [];
+        axios.get("js/location.json").then(response => {
+          var stateCount = this.states.length;
+          for (let i = 0; i < stateCount; i++) {
+            if (this.states[i].state == this.state) {
+              for (var j = 0; j < response.data.nigeria[i].lga.length; j++) {
+                this.lga.push(response.data.nigeria[i].lga[j]);
+              }
+            }
+          }
+        });
+      },
+      type_valid() {
+        if (
+          this.sub_category == "Select Sub-Category" ||
+          this.sub_category == "Site Suitability Inspection" ||
+          this.sub_category == "LPG-ATC"
+        ) {
+          this.typeValid = false;
+        } else {
+          this.typeValid = true;
+        }
+      }
     }
-
+  };
 </script>
