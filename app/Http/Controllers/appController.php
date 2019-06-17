@@ -936,7 +936,6 @@ class appController extends Controller
 		}
 		// return 'here';
 
-
 		$companyID = request('company_id');
 		$gasPlantName = request('gas_plant_name');
 		$applicationType = request('application_type');

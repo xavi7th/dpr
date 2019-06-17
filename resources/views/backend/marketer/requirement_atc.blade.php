@@ -97,7 +97,7 @@
 
                   <atc-inspection-upload-component title="Environmental Impact Assessment" reason="EIA_reason" name="EIA" inputid="EIA_doc"></atc-inspection-upload-component>
 
-                  <atc-inspection-upload-component title="Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account" reason="BSFP_reason" name="BSFP" inputid="BSFP_doc"></atc-inspection-upload-component>
+                  <atc-inspection-upload-component title="Bankdraft of Statutory Fees Payable to FGN-DPR Fees Account" reason="BSFP_reason" name="BSFP" inputid="BSFP_doc" rru_number="{{ session('rru_number') }}"></atc-inspection-upload-component>
 
                   <atc-inspection-upload-component title="Letter of Confirmation from Ministry of Lands and Survey" reason="LCMLS_reason" name="LCMLS" inputid="LCMLS_doc"></atc-inspection-upload-component>
 

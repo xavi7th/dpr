@@ -18,7 +18,8 @@
       </div>
     </div>
     <input type="text" :name="title" hidden :value="title">
-    <label id="req">{{title}}</label><i v-show="showReasonBtn" id="reason-btn" class="fa fa-edit text-red" data-toggle="modal" :data-target="`#${name}`"></i>
+  <label id="req">{{title}}</label><i v-show="showReasonBtn" id="reason-btn" class="fa fa-edit text-red" data-toggle="modal" :data-target="`#${name}`"></i>
+		<span v-if="rru_number" class="label label-success h4 ml-5"><b>RRU NUMBER: </b>{{ rru_number }}</span>
     <span id="req_ind">
       <label>
         <input type="radio" :name="name" value="no" checked v-model="optionSelected">
@@ -44,61 +45,64 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component hmm.');
-        },
-        props:['title','name','inputid','reason'],
-        data(){
-          return{
-            optionSelected: 'no',
-            docIcon: 'ion-android-cancel text-red',
-            fileInputStatus: true,
-            showReasonBtn: true,
-            fileValue: null,
-            fileColor: '#ccc'
-          }
-        },
-        methods:{
-          previewFile(event){
-            console.log(event.target.files[0].name);
-            this.fileValue = event.target.files[0].name;
-            this.fileColor = 'green';
-          }
-        },
-        updated(){
-          if(this.optionSelected == 'no'){
-            this.docIcon = 'ion-android-cancel text-red';
-            this.fileInputStatus = true;
-            this.fileValue = null;
-            this.fileColor = '#ccc';
-            this.showReasonBtn = true;
-          }else if (this.optionSelected == 'yes') {
-            this.docIcon = 'ion-checkmark-circled';
-            this.fileInputStatus = false;
-            this.showReasonBtn = false;
-          }else if (this.optionSelected == 'null') {
-            this.docIcon = 'ion-android-remove-circle text-yellow';
-            this.fileInputStatus = true;
-            this.fileValue = null;
-            this.fileColor = '#ccc';
-            this.showReasonBtn = true;
-          }
-
-        }
+  export default {
+    mounted() {
+      console.log("Component hmm.");
+    },
+    props: ["title", "name", "inputid", "reason", "rru_number"],
+    data() {
+      return {
+        optionSelected: "no",
+        docIcon: "ion-android-cancel text-red",
+        fileInputStatus: true,
+        showReasonBtn: true,
+        fileValue: null,
+        fileColor: "#ccc"
+      };
+    },
+    methods: {
+      previewFile(event) {
+        console.log(event.target.files[0].name);
+        this.fileValue = event.target.files[0].name;
+        this.fileColor = "green";
+      }
+    },
+    updated() {
+      if (this.optionSelected == "no") {
+        this.docIcon = "ion-android-cancel text-red";
+        this.fileInputStatus = true;
+        this.fileValue = null;
+        this.fileColor = "#ccc";
+        this.showReasonBtn = true;
+      } else if (this.optionSelected == "yes") {
+        this.docIcon = "ion-checkmark-circled";
+        this.fileInputStatus = false;
+        this.showReasonBtn = false;
+      } else if (this.optionSelected == "null") {
+        this.docIcon = "ion-android-remove-circle text-yellow";
+        this.fileInputStatus = true;
+        this.fileValue = null;
+        this.fileColor = "#ccc";
+        this.showReasonBtn = true;
+      }
     }
+  };
 </script>
 
-<style>
-  #doc_icon{
+<style scoped>
+  #doc_icon {
     color: #ccc;
   }
 
-  #req{
+  #req {
     margin-right: 10px;
   }
 
-  #reason-btn{
+  #reason-btn {
     cursor: pointer;
+  }
+
+  .label.h4 {
+    font-size: 14px;
   }
 </style>
