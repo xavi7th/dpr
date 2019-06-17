@@ -917,14 +917,13 @@ class appController extends Controller
 
 	public function prevTakeoverRecordGet()
 	{
-		return view('backend.general.previous_takeover_records');
+		$companies = Company::all();
+		return view('backend.general.previous_takeover_records', compact('companies'));
 	}
 
 	public function sendAtcOldRecords(Request $request)
 	{
-
 		// dd($request);
-
 		$companyID = request('company_id');
 		$gasPlantName = request('gas_plant_name');
 		$applicationType = request('application_type');
@@ -937,7 +936,7 @@ class appController extends Controller
 		$applicationDate = date('Y-m-d', strtotime(request('application_date')));
 		// $dateToHq = date('Y-m-d', strtotime(request('date_to_hq')));
 		$dateIssued = date('Y-m-d', strtotime(request('date_issued')));
-		$expiryDate = date('Y-m-d', strtotime(request('expiry_date')));
+		// $expiryDate = date('Y-m-d', strtotime(request('expiry_date')));
 
 		// create the application id
 		$applicationCount = DB::table('app_doc_reviews')->get();
@@ -984,6 +983,22 @@ class appController extends Controller
 			'approved_by' => 'old record'
 		]);
 
+		// To get expiry date, check if ATC issued date is greater than 2years ago or less than 2years ago
+		// If greater than 2 yaers...set expiry date to 2 years from date issued
+		// If less than 2 years...set expiry date to 6months from date issued
+
+		if (Carbon::parse(request('date_issued'))->gte(Carbon::now()->subMonths(24))) {
+			// dd('greater');
+			$expiryDate = Carbon::parse(request('date_issued'))->addYear();
+
+			$k = 12 - $expiryDate->month; // where k = the number of months remaining for that particular year
+
+			$expiryDate = $expiryDate->addMonth($k);
+		} else {
+			// dd('lesser');
+			$expiryDate = Carbon::parse(request('date_issued'))->addMonths(6);
+		}
+
 		// insert into issued act licenses
 		IssuedAtcLicense::create([
 			'application_id' => $applicationID,
@@ -992,6 +1007,32 @@ class appController extends Controller
 			'date_issued' => $dateIssued,
 			'expiry_date' => $expiryDate
 		]);
+
+		// If implementation shedule is uploaded...set expiry date to 2 years from date issued
+
+		$implementation_schedule = "";
+		// check if request has the document
+		if ($request->hasFile('implementationScheduleDoc')) {
+			// store the document to the company folder in company reports folder
+			$request->implementationScheduleDoc->storeAs('implementation_schedules/' . request('company_id') . '/' . request('application_id'), $request->implementationScheduleDoc->getClientOriginalName());
+
+			$implementation_schedule = $request->implementationScheduleDoc->getClientOriginalName();
+
+			$expiryDate = Carbon::parse(request('date_issued'))->addYear();
+
+			$k = 12 - $expiryDate->month; // where k = the number of months remaining for that particular year
+
+			$expiryDate = $expiryDate->addMonth($k);
+
+			// upload the implementation schedule
+			IssuedAtcLicense::where('application_id', request('application_id'))
+			->update([
+				'implementation_schedule' => $implementation_schedule,
+				'expiry_date' => $expiryDate
+			]);
+		}
+
+		
 
 		// clear any exisiting application ID from the session
 		$request->session()->forget('application_id');
@@ -1152,7 +1193,7 @@ class appController extends Controller
 		// clear the application ID from the session
 		$request->session()->forget('application_id');
 
-		// supposed to do some type of decisional redirections here either to inout ATC again or Just go straight to input LTO records
+		// supposed to do some type of decisional redirections here either to input ATC again or Just go straight to input LTO records
 
 		// redirect the user to old record LTO
 		return redirect('/prev_lto_record_get');
@@ -1173,7 +1214,7 @@ class appController extends Controller
 		$applicationDate = date('Y-m-d', strtotime(request('application_date')));
 		// $dateToHq = date('Y-m-d', strtotime(request('date_to_hq')));
 		$dateIssued = date('Y-m-d', strtotime(request('date_issued')));
-		$expiryDate = date('Y-m-d', strtotime(request('expiry_date')));
+		// $expiryDate = date('Y-m-d', strtotime(request('expiry_date')));
 
 		// create the application id
 		$applicationCount = DB::table('app_doc_reviews')->get();
@@ -1216,6 +1257,12 @@ class appController extends Controller
 			'approved_by' => 'old record'
 		]);
 
+		$expiryDate = Carbon::parse(request('date_issued'))->addYear();
+
+		$k = 12 - $expiryDate->month; // where k = the number of months remaining for that particular year
+
+		$expiryDate = $expiryDate->addMonth($k);
+
 		// insert into issued act licenses
 		IssuedLtoLicense::create([
 			'application_id' => $applicationID,
@@ -1225,8 +1272,134 @@ class appController extends Controller
 			'expiry_date' => $expiryDate
 		]);
 
-		return back();
+		// clear any exisiting application ID from the session
+		$request->session()->forget('application_id');
 
+		// save application_id to session
+		session(['application_id' => $applicationID]);
+
+		// redirect to page for uploading LTO old data files
+		return redirect('/old_lto_requirement');
+
+	}
+
+	public function oldLTORequirementGet(){
+		return view('backend.general.old_lto_requirement');
+	}
+
+	public function oldLTORequirementPOST(Request $request){
+		// dd($request);
+		$cafDoc = $bsfpDoc = $paclpgDoc = $cwmcvDoc = $alacdDoc = $frcDoc = $cptrcDoc = $ctyitcDoc = $appDoc = $sopDoc = 'null';
+		$marketerID = Auth::user()->staff_id;
+
+		// Below are just decision statements to check if actually a file has been uploaded and can be stored to the specified destination
+		if ($request->hasFile('CAF_doc')) {
+			$request->CAF_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->CAF_doc->getClientOriginalName());
+			$cafDoc = $request->CAF_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('BSFP_doc')) {
+			$request->BSFP_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->BSFP_doc->getClientOriginalName());
+			$bsfpDoc = $request->BSFP_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('PACLPG_doc')) {
+			$request->PACLPG_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->PACLPG_doc->getClientOriginalName());
+			$paclpgDoc = $request->PACLPG_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('CWMCV_doc')) {
+			$request->CWMCV_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->CWMCV_doc->getClientOriginalName());
+			$cwmcvDoc = $request->CWMCV_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('ALACD_doc')) {
+			$request->ALACD_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->ALACD_doc->getClientOriginalName());
+			$alacdDoc = $request->ALACD_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('FRC_doc')) {
+			$request->FRC_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->FRC_doc->getClientOriginalName());
+			$frcDoc = $request->FRC_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('CPTRC_doc')) {
+			$request->CPTRC_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->CPTRC_doc->getClientOriginalName());
+			$cptrcDoc = $request->CPTRC_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('CTYITC_doc')) {
+			$request->CTYITC_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->CTYITC_doc->getClientOriginalName());
+			$ctyitcDoc = $request->CTYITC_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('APP_doc')) {
+			$request->APP_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->APP_doc->getClientOriginalName());
+			$appDoc = $request->APP_doc->getClientOriginalName();
+		}
+
+		if ($request->hasFile('SOP_doc')) {
+			$request->SOP_doc->storeAs('comp_docs/' . $marketerID . '/' . session('application_id'), $request->SOP_doc->getClientOriginalName());
+			$sopDoc = $request->SOP_doc->getClientOriginalName();
+		}
+
+
+		LtoInspectionDocument::create([
+			'application_id' => session('application_id'),
+			'marketer_id' => $marketerID,
+			'completed_application_form' => request('CAF'),
+			'bankdraft_of_statutory_fees' => request('BSFP'),
+			'photocopy_of_approval_to_construct_lpg' => request('PACLPG'),
+			'current_weight_measures_cert_of_verification' => request('CWMCV'),
+			'application_letter_addressed_to_the_controller' => request('ALACD'),
+			'fire_report_certificate' => request('FRC'),
+			'current_pressure_test_report_certificate' => request('CPTRC'),
+			'current_three_years_income_tax_clearance' => request('CTYITC'),
+			'appropriate_plant_photography' => request('APP'),
+			'standard_operating_procedure' => request('SOP'),
+			'completed_application_form_location_url' => $cafDoc,
+			'bankdraft_of_statutory_fees_location_url' => $bsfpDoc,
+			'photocopy_of_approval_to_construct_lpg_location_url' => $paclpgDoc,
+			'current_weight_measures_cert_of_verification_location_url' => $cwmcvDoc,
+			'application_letter_addressed_to_the_controller_location_url' => $alacdDoc,
+			'fire_report_certificate_location_url' => $frcDoc,
+			'current_pressure_test_report_certificate_location_url' => $cptrcDoc,
+			'current_three_years_income_tax_clearance_location_url' => $ctyitcDoc,
+			'appropriate_plant_photography_location_url' => $appDoc,
+			'standard_operating_procedure_location_url' => $sopDoc,
+			'completed_application_form_reason' => request('CAF_reason'),
+			'bankdraft_of_statutory_fees_reason' => request('BSFP_reason'),
+			'photocopy_of_approval_to_construct_lpg_reason' => request('PACLPG_reason'),
+			'current_weight_measures_cert_of_verification_reason' => request('CWMCV_reason'),
+			'application_letter_addressed_to_the_controller_reason' => request('ALACD_reason'),
+			'fire_report_certificate_reason' => request('FRC_reason'),
+			'current_pressure_test_report_certificate_reason' => request('CPTRC_reason'),
+			'current_three_years_income_tax_clearance_reason' => request('CTYITC_reason'),
+			'appropriate_plant_photography_reason' => request('APP_reason'),
+			'standard_operating_procedure_reason' => request('SOP_reason')
+		]);
+
+		// clear the application ID from the session
+		$request->session()->forget('application_id');
+
+		// supposed to do some type of decisional redirections here either to input LTO again or Just go straight to input takeover records
+
+		// redirect the user to old record takeover
+		return redirect('/previous_records');
+	}
+
+	public function sendTakeoverOldRecords(Request $request)
+	{
+		dd($request);
+
+		// clear any exisiting application ID from the session
+		$request->session()->forget('application_id');
+
+		// save application_id to session
+		session(['application_id' => $applicationID]);
+
+		// redirect to page for uploading LTO old data files
+		return redirect('/old_lto_requirement');
 	}
 
 

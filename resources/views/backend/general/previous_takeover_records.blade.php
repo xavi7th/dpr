@@ -121,6 +121,9 @@ DPR Access | Previous Takeover Records Input
                                     <label>Company Name</label>
                                     <select class="form-control select2" name="company_id" style="width: 100%;">
                                         <option selected="selected">Select Company</option>
+                                        @foreach ($companies as $item)
+                                            <option value="{{$item->company_id}}">{{$item->company_name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <apply-for-takeover-component>
@@ -133,13 +136,13 @@ DPR Access | Previous Takeover Records Input
                                                 placeholder="Application Date">
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                    {{-- <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Date Sent to HQ</label>
                                             <input type="text" name="town" class="form-control"
                                                 placeholder="Date Sent to HQ">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Date Issued</label>
@@ -160,7 +163,7 @@ DPR Access | Previous Takeover Records Input
                     </form>
                 </div>
 
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <form role="form" method="POST" action="/edit_document_upload" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <div class="box box-primary">
@@ -227,7 +230,6 @@ DPR Access | Previous Takeover Records Input
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    {{--  <label>Project Report</label>  --}}
                                     <div class="input-group">
                                         <input type="file" name="project_report">
                                     </div>
@@ -241,9 +243,9 @@ DPR Access | Previous Takeover Records Input
                             <!-- /.box-footer -->
                         </div>
                     </form>
-                </div>
+                </div> --}}
 
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title" style="text-transform: uppercase">Take Over Inspection Required
@@ -362,7 +364,7 @@ DPR Access | Previous Takeover Records Input
                         </div>
                         <!-- /.box-body -->
                     </div>
-                </div>
+                </div> --}}
 
 
 
