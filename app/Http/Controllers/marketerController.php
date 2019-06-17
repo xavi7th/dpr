@@ -28,7 +28,6 @@ use App\AddonAtiInspectionDocument;
 use App\AddonLtoInspectionDocument;
 use App\CatdLtoApplicationExtention;
 use App\TakeoverInspectionDocuments;
-use Illuminate\Support\Facades\Validator;
 use App\SiteSuitabilityInspectionDocuments;
 use App\gasplants;
 use Validator;
