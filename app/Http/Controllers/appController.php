@@ -923,7 +923,20 @@ class appController extends Controller
 
 	public function sendAtcOldRecords(Request $request)
 	{
-		// dd($request);
+		$response = customValidator([
+			'lga' => 'required'
+		]);
+
+		if ($response) {
+			if ($request->ajax()) {
+				return response()->json(['status' => 'Validation errors'], 422);
+			} else {
+				return $response;
+			}
+		}
+		// return 'here';
+
+
 		$companyID = request('company_id');
 		$gasPlantName = request('gas_plant_name');
 		$applicationType = request('application_type');
@@ -1026,13 +1039,13 @@ class appController extends Controller
 
 			// upload the implementation schedule
 			IssuedAtcLicense::where('application_id', request('application_id'))
-			->update([
-				'implementation_schedule' => $implementation_schedule,
-				'expiry_date' => $expiryDate
-			]);
+				->update([
+					'implementation_schedule' => $implementation_schedule,
+					'expiry_date' => $expiryDate
+				]);
 		}
 
-		
+
 
 		// clear any exisiting application ID from the session
 		$request->session()->forget('application_id');
@@ -1041,14 +1054,19 @@ class appController extends Controller
 		session(['application_id' => $applicationID]);
 
 		// redirect to page for uploading ATC old data files
+		if ($request->ajax()) {
+			return response()->json(['success' => '/old_atc_requirement'], 201);
+		}
 		return redirect('/old_atc_requirement');
 	}
 
-	public function oldATCRequirementGet(){
+	public function oldATCRequirementGet()
+	{
 		return view('backend.general.old_atc_requirement');
 	}
 
-	public function oldATCRequirementPOST(Request $request){
+	public function oldATCRequirementPOST(Request $request)
+	{
 		// dd($request);
 		$alfsiDoc = $amaDoc = $ctcDoc = $ciDoc = $fcDoc = $prcDoc = $cafDoc = $abpDoc = $spDoc = $dcDoc = $pidDoc = $eiaDoc = $bsfpDoc = $lcmlsDoc = $csatdDoc = $alacdDoc = 'null';
 		$marketerID = Auth::user()->staff_id;
@@ -1281,14 +1299,15 @@ class appController extends Controller
 
 		// redirect to page for uploading LTO old data files
 		return redirect('/old_lto_requirement');
-
 	}
 
-	public function oldLTORequirementGet(){
+	public function oldLTORequirementGet()
+	{
 		return view('backend.general.old_lto_requirement');
 	}
 
-	public function oldLTORequirementPOST(Request $request){
+	public function oldLTORequirementPOST(Request $request)
+	{
 		// dd($request);
 		$cafDoc = $bsfpDoc = $paclpgDoc = $cwmcvDoc = $alacdDoc = $frcDoc = $cptrcDoc = $ctyitcDoc = $appDoc = $sopDoc = 'null';
 		$marketerID = Auth::user()->staff_id;
