@@ -130,11 +130,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/prev_takeover_record_get', 'appController@prevTakeoverRecordGet');
 
 
-	Route::get( '/old_atc_requirement', 'appController@oldATCRequirementGet');
+	Route::get('/old_atc_requirement', 'appController@oldATCRequirementGet');
+	Route::get('/old_lto_requirement', 'appController@oldLTORequirementGet');
 
-	Route::post( '/old_atc_req_upload', 'appController@oldATCRequirementPOST');
+	Route::post('/old_atc_req_upload', 'appController@oldATCRequirementPOST');
+	Route::post('/old_lto_req_upload', 'appController@oldLTORequirementPOST');
+	
 	Route::post('/send_atc_old_records', 'appController@sendAtcOldRecords');
-	Route::post( '/send_lto_old_records', 'appController@sendLtoOldRecords');
+	Route::post('/send_lto_old_records', 'appController@sendLtoOldRecords');
+	Route::post('/send_takeover_old_records', 'appController@sendTakeoverOldRecords');
 
 
 

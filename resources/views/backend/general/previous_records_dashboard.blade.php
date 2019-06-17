@@ -131,7 +131,7 @@
           </div>
 
 
-          <div class="col-md-3">
+          {{-- <div class="col-md-3">
             <!-- Widget: user widget style 1 -->
             <div class="box box-widget widget-user-2">
               <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -143,12 +143,11 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   <li><a href="#">Add Record<i class="pull-right fa fa-plus"></i></a></li>
-                  {{--  <li><a href="/prev_lpg_renewal_record_get">Add Record<i class="pull-right fa fa-plus"></i></a></li>  --}}
                 </ul>
               </div>
             </div>
             <!-- /.widget-user -->
-          </div>
+          </div> --}}
 
 
           <div class="col-md-3">
@@ -170,7 +169,7 @@
           </div>
 
 
-          <div class="col-md-3">
+          {{-- <div class="col-md-3">
             <!-- Widget: user widget style 1 -->
             <div class="box box-widget widget-user-2">
               <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -182,13 +181,12 @@
               <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                   <li><a href="#">Add Record<i class="pull-right fa fa-plus"></i></a></li>
-                  {{--  <li><a href="/prev_takeover_record_get">Add Record<i class="pull-right fa fa-plus"></i></a></li>  --}}
                 </ul>
               </div>
             </div>
             <!-- /.widget-user -->
-          </div>
-          
+          </div> --}}
+
         </div>
       </section>
     </div>

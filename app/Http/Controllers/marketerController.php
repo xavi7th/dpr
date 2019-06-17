@@ -28,8 +28,9 @@ use App\AddonAtiInspectionDocument;
 use App\AddonLtoInspectionDocument;
 use App\CatdLtoApplicationExtention;
 use App\TakeoverInspectionDocuments;
-use Illuminate\Support\Facades\Validator;
 use App\SiteSuitabilityInspectionDocuments;
+use App\gasplants;
+use Validator;
 
 class marketerController extends Controller
 {
@@ -580,7 +581,7 @@ class marketerController extends Controller
 		// dd($request);
 
 		$this->validate(request(), [
-			'gas_plant_name' => 'required'
+			'gas_plant_name' => 'required|unique::gasplants'
 		]);
 
 		// getting the current number of created applications
@@ -614,6 +615,11 @@ class marketerController extends Controller
 			'application_status' => 'Not Submitted',
 			'state_id' => State::where('name', str_before(request('state'), ' State'))->first()->id,
 			'local_govt_id' => LocalGovt::where('name', str_before(request('lga'), ' State'))->first()->id
+		]);
+
+		gasplants::create([
+			'company_id' => request('company_id'),
+			'gas_plant_name' => request('gas_plant_name')
 		]);
 
 
@@ -1620,16 +1626,18 @@ class marketerController extends Controller
 	{
 
 		// dd($request);
+		// dd(request()->all());
 
-		$this->validate(request(), [
-			'gas_plant_name' => 'required',
+		$validator = Validator::make(request()->all(), [
+			'gas_plant_name' => 'exists:gasplants',
 			'company_id' => 'required',
-			'gas_plant_name' => 'required',
 			'new_name_of_gas_plant' => 'required',
 			'capacity_of_tank' => 'required',
 			'last_lto_issue_date' => 'required',
 			'expiry_date_of_lto' => 'required'
 		]);
+
+		dd($validator->errors());
 
 		$proposedCompany = Company::where('company_id', request('company_id'))->first();
 
@@ -1680,7 +1688,7 @@ class marketerController extends Controller
 				'marketer_id' => Auth::user()->staff_id,
 				'company_id' => request('company_id'),
 				'new_name_of_gas_plant' => request('new_name_of_gas_plant'),
-				'company_alias' => request('company_alias'),
+				// 'company_alias' => request('company_alias'),
 				'lpg_category' => request('lpg_category'),
 				'last_lto_issue_date' => date('Y-m-d', strtotime(request('last_lto_issue_date'))),
 				'expiry_date_of_lto' => date('Y-m-d', strtotime(request('expiry_date_of_lto')))

@@ -1,17 +1,17 @@
 <template lang="html">
   <div>
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label>Gas Plant Company ID</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
         <input type="text" name="company_id" class="form-control" placeholder="Enter Company ID of Gas Plant">
       </div>
-    </div>
+    </div> -->
     <div class="form-group">
       <label>Name of Gas Plant</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
-        <input type="text" name="gas_plant_name" class="form-control" placeholder="Enter Name of Gas Plant">
+        <input type="text" name="gas_plant_nae" class="form-control" placeholder="Enter Name of Gas Plant">
       </div>
     </div>
     <div class="form-group">

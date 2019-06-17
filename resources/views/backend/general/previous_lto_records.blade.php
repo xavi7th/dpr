@@ -150,13 +150,13 @@ DPR Access | Previous LTO Records Input
                                                 placeholder="Date Issued" id="datepicker3">
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                    {{-- <div class="col-xs-4">
                                         <div class="form-group">
                                             <label>Expiry Date</label>
                                             <input type="text" name="expiry_date" class="form-control"
                                                 placeholder="Expiry Date"  id="datepicker4">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer">
