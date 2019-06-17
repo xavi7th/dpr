@@ -469,7 +469,9 @@ class marketerController extends Controller
 				/**
 				 * Create a temp user detail for this company
 				 */
-				$user = factory(Staff::class)->make();
+				$user = factory(Staff::class)->make([
+					'activated' => false
+				]);
 
 				// create and save the company
 				try {
@@ -490,11 +492,13 @@ class marketerController extends Controller
 					$user->save();
 				} catch (\Throwable $e) {
 					// dd($e);
-					return back()->withAlert(['text' => str_before(str_after($e->getMessage(), 1062), 'for key'),
-																		'type' => 'warning',
-																		'toast' => true,
-																		'position' => 'top',
-																		'timer' => 5000]);
+					return back()->withAlert([
+						'text' => str_before(str_after($e->getMessage(), 1062), 'for key'),
+						'type' => 'warning',
+						'toast' => true,
+						'position' => 'top',
+						'timer' => 5000
+					]);
 				}
 
 				DB::commit();
