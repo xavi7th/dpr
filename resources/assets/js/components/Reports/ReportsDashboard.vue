@@ -91,7 +91,7 @@
             payload: { selected_state: this.selected_state }
           });
         } else {
-          swal("Choose a state");
+          swal.fire("Choose a state");
         }
       },
       changeComponent(component, payload) {

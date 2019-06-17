@@ -7,7 +7,6 @@
 require( './bootstrap' )
 
 window.Vue = require( 'vue' )
-import swal from 'sweetalert'
 import VeeValidate from 'vee-validate';
 import vSelect from 'vue-select'
 
@@ -88,12 +87,12 @@ Vue.directive( 'confirm-form-submit', {
     inserted( el, binding, vnode ) {
         let f = evt => {
             evt.preventDefault();
-            swal( {
+            swal.fire( {
                     title: "Are you sure?",
                     text: binding.value,
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
+                    type: "warning",
+                    showCancelButton: true,
+                    cancelButtonColor: "#d33",
                 } )
                 .then( ( confirmAction ) => {
                     if ( confirmAction ) {

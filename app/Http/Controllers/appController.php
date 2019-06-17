@@ -939,8 +939,8 @@ class appController extends Controller
 		// $expiryDate = date('Y-m-d', strtotime(request('expiry_date')));
 
 		// create the application id
-		$applicationCount = DB::table('app_doc_reviews')->get();
-		$indexIncremented = $applicationCount->count() + 1;  // adding 1 to that number
+		$applicationCount = DB::table('app_doc_reviews')->count(); //get the count directly from SQL to speed up the process instead of ->get()
+		$indexIncremented = $applicationCount + 1;  // adding 1 to that number
 		$newApplicationIndex = sprintf('%05d', $indexIncremented);  // padding the number to 4 leading zeros
 		$applicationID = "DPRAPPLICATION" . $newApplicationIndex;
 
@@ -1199,7 +1199,8 @@ class appController extends Controller
 		return redirect('/prev_lto_record_get');
 	}
 
-	public function sendLtoOldRecords(Request $request){
+	public function sendLtoOldRecords(Request $request)
+	{
 		// dd($request);
 
 		$companyID = request('company_id');
@@ -1217,8 +1218,8 @@ class appController extends Controller
 		// $expiryDate = date('Y-m-d', strtotime(request('expiry_date')));
 
 		// create the application id
-		$applicationCount = DB::table('app_doc_reviews')->get();
-		$indexIncremented = $applicationCount->count() + 1;  // adding 1 to that number
+		$applicationCount = DB::table('app_doc_reviews')->count(); //get the count directly from SQL to speed up the process instead of ->get()
+		$indexIncremented = $applicationCount + 1;  // adding 1 to that number
 		$newApplicationIndex = sprintf('%05d', $indexIncremented);  // padding the number to 4 leading zeros
 		$applicationID = "DPRAPPLICATION" . $newApplicationIndex;
 
@@ -1401,6 +1402,4 @@ class appController extends Controller
 		// redirect to page for uploading LTO old data files
 		return redirect('/old_lto_requirement');
 	}
-
-
 }

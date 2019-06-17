@@ -1,4 +1,26 @@
 window._ = require( 'lodash' )
+window.swal = require( 'sweetalert2' )
+
+/**
+ * The fields are overwritable
+ */
+window.Toast = swal.mixin( {
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000000,
+    type: "success",
+
+} );
+
+window.swalWithBootstrapButtons = swal.mixin( {
+    customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+} );
+
 window.Popper = require( 'popper.js' ).default
 
 /**
@@ -35,52 +57,46 @@ window.axios.interceptors.response.use(
         if ( err.response ) {
             console.log( err.response )
             if ( err.response.status == 422 ) {
-                swal( {
-                    html: true,
+                swal.fire( {
                     title: err.response.data.error,
                     text: err.response.data.message,
                     type: 'warning',
                 } )
                 return
             } else if ( err.response.status == 500 && err.response.data.message == 'Expired token' ) {
-                swal( {
-                        // html: true,
+                swal.fire( {
                         title: 'Session timed out',
                         text: 'You have been logged out automatically to protect your account',
                         type: 'info',
-                    },
-                    () => {
-                        location.reload()
                     }
-                )
+
+                ).then( () => {
+                    location.reload()
+                } )
             } else if ( err.response.status == 404 ) {
-                swal( {
-                    // html: true,
+                swal.fire( {
                     title: '404',
                     text: 'Resource Not Found',
                     type: 'info',
                 } )
             } else if ( err.response.status == 403 ) {
-                swal( {
-                    // html: true,
+                swal.fire( {
                     title: 'Forbidden',
                     text: 'Action is forbidden to user',
                     type: 'error',
                 } )
             } else if ( err.response.status == 401 ) {
-                swal( {
-                        // html: true,
+                swal.fire( {
                         title: 'Access Denied',
                         text: 'Access to requested resource is denied',
                         type: 'error',
-                    },
-                    () => {
-                        location.reload()
                     }
-                )
+
+                ).then( () => {
+                    location.reload()
+                } )
             } else if ( err.response.status == 429 ) {
-                swal( {
-                    // html: true,
+                swal.fire( {
                     title: 'Too many attempts',
                     text: 'You have made too many attempts. Try again later.',
                     type: 'error',
@@ -92,8 +108,7 @@ window.axios.interceptors.response.use(
             console.log( err.request )
 
             if ( err.request.status == 422 ) {
-                swal( {
-                    html: true,
+                swal.fire( {
                     title: err.request.data.error,
                     text: err.request.data.message,
                     type: 'warning',
@@ -103,7 +118,7 @@ window.axios.interceptors.response.use(
             }
         } else {
             console.log( err )
-            swal( 'Request Error', `${err.message}`, 'error' )
+            swal.fire( 'Request Error', `${err.message}`, 'error' )
         }
     }
 )

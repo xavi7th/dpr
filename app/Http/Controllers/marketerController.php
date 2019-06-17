@@ -6,6 +6,7 @@ use DB;
 
 use Auth;
 use Storage;
+use App\User;
 use App\Inbox;
 use App\Staff;
 use App\State;
@@ -19,6 +20,7 @@ use App\IssuedLtoLicense;
 use App\LtoLicenseRenewal;
 use App\PressureTestRecords;
 use Illuminate\Http\Request;
+use App\IssuedAddonAtiLicense;
 use App\LtoInspectionDocument;
 use App\AtcInspectionDocuments;
 use App\CatdLtoInspectionDocument;
@@ -26,6 +28,7 @@ use App\AddonAtiInspectionDocument;
 use App\AddonLtoInspectionDocument;
 use App\CatdLtoApplicationExtention;
 use App\TakeoverInspectionDocuments;
+use Illuminate\Support\Facades\Validator;
 use App\SiteSuitabilityInspectionDocuments;
 use App\gasplants;
 use Validator;
@@ -254,12 +257,17 @@ class marketerController extends Controller
 
 	public function showDocumentsRequirement($id)
 	{
-		$applicationReview = AppDocReview::with('company')->where('id', $id)->first();
+		/**
+		 * Throw a 404 error if no AppDocReview record found for this id
+		 */
+		$applicationReview = AppDocReview::with('company')->findOrFail($id);
 		// dd($applicationReview->toArray());
 
 		$theCompany = $applicationReview->company;
 
 		$licenseDetail = IssuedLtoLicense::where('application_id', $applicationReview->application_id)->first();
+
+
 		$licenseRenewalDetail = AppDocReview::where([['company_id', $applicationReview->company_id], ['sub_category', 'Renewal'], ['application_status', 'Application Pending']])
 			->first();
 
@@ -284,9 +292,19 @@ class marketerController extends Controller
 		if ($applicationReview->sub_category == "Site Suitability Inspection") {
 			$applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
 		} elseif ($applicationReview->sub_category == "ATC") {
+			$atcLicenceDetails = IssuedAtcLicense::where('application_id', $applicationReview->application_id)->first();
+			if ($atcLicenceDetails) {
+				$atcLicenceDetails['ltoIssued'] = AppDocReview::where('name_of_gas_plant', $applicationReview->name_of_gas_plant)->where('application_status', 'LTO Issued')->exists();
+				$applicationReview['atcLicenceDetails'] = $atcLicenceDetails;
+			}
 			$applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
 		} elseif ($applicationReview->sub_category == "ADD-ON ATI") {
 			$applicationID = AddonAtiInspectionDocument::where('application_id', $applicationReview->application_id)->first();
+			$addonAtiLicenceDetails = IssuedAddonAtiLicense::where('application_id', $applicationReview->application_id)->first();
+			if ($addonAtiLicenceDetails) {
+				$addonAtiLicenceDetails['addonLtoIssued'] = AppDocReview::where('name_of_gas_plant', $applicationReview->name_of_gas_plant)->where('application_status', 'Addon LTO Issued')->exists();
+				$applicationReview['addonAtiLicenceDetails'] = $addonAtiLicenceDetails;
+			}
 		} elseif ($applicationReview->sub_category == "ADD-ON LTO") {
 			$applicationID = AddonLtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
 		} elseif ($applicationReview->sub_category == "LTO") {
@@ -356,11 +374,11 @@ class marketerController extends Controller
 
 	public function createCompany(Request $request)
 	{
+		// session()->forget('alert');
 
 		// dd($request);
 
-		// validate this form
-		$this->validate(request(), [
+		$response = customValidator([
 			'comp_name' => 'required',
 			'contract_type' => 'required',
 			'state' => 'required',
@@ -370,6 +388,10 @@ class marketerController extends Controller
 			'mobile_number' => 'required',
 			'email' => 'required'
 		]);
+
+		if ($response) {
+			return $response;
+		}
 
 		// getting the current number of created companies
 		$companyCount = DB::table('companies')->get();
@@ -388,22 +410,9 @@ class marketerController extends Controller
 			|| (request('state') == 'Select State')
 			|| (request('town') == 'Select LGA')
 		) {
-			return back();
+			back()->withAlert(['text' => 'Help Again', 'type' => 'error']);
 		} else {
-			// create and save the company
-			Company::create([
-				'company_id' => $companyID,
-				'marketer_id' => Auth::user()->staff_id,
-				'company_name' => request('comp_name'),
-				'company_alias' => request('comp_alias'),
-				'contract_type' => request('contract_type'),
-				'state' => request('state'),
-				'lga' => request('lga'),
-				'town' => request('town'),
-				'address' => request('address'),
-				'mobile_number' => request('mobile_number'),
-				'email_address' => request('email')
-			]);
+
 
 			// update the application to contain the company idea
 			// AppDocReview::where('application_id', request('application_id'))
@@ -435,7 +444,60 @@ class marketerController extends Controller
 			// }
 
 			// redirect to staff view document
-			return redirect('/marketer');
+			if (Auth::user()->role == 'Marketer') {
+				// create and save the company
+				Company::create([
+					'company_id' => $companyID,
+					'marketer_id' => Auth::user()->staff_id,
+					'company_name' => request('comp_name'),
+					'company_alias' => request('comp_alias'),
+					'contract_type' => request('contract_type'),
+					'state' => request('state'),
+					'lga' => request('lga'),
+					'town' => request('town'),
+					'address' => request('address'),
+					'mobile_number' => request('mobile_number'),
+					'email_address' => request('email')
+				]);
+				if (request('continue') == 'application') {
+					return redirect('/lpg_retailer_outlet');
+				} else {
+					return redirect('/marketer');
+				}
+			} elseif (Auth::user()->role == 'Staff') {
+
+				DB::beginTransaction();
+				/**
+				 * Create a temp user detail for this company
+				 */
+				$user = factory(Staff::class)->make();
+
+				// create and save the company
+				try {
+					Company::create([
+						'company_id' => $companyID,
+						'marketer_id' => $user->staff_id,
+						'company_name' => request('comp_name'),
+						'company_alias' => request('comp_alias'),
+						'contract_type' => request('contract_type'),
+						'state' => request('state'),
+						'lga' => request('lga'),
+						'town' => request('town'),
+						'address' => request('address'),
+						'mobile_number' => request('mobile_number'),
+						'email_address' => request('email')
+					]);
+
+					$user->save();
+				} catch (\Throwable $e) {
+					back()->withAlert(['text' => 'Help', 'type' => 'error']);
+				}
+
+				DB::commit();
+
+				dd('ggf');
+				return back();
+			}
 		}
 	}
 

@@ -13,9 +13,10 @@
               </span>
               <span class="description mx-0">Sent - {{ propsData.created_at }}</span>
             </div>
-            <span
-              class="username"
-            >Affected Application ID: <b class="text-red ml-auto">{{ propsData.app_doc_review.application_id }}</b></span>
+            <span class="username">
+              Affected Application ID:
+              <b class="text-red ml-auto">{{ propsData.app_doc_review.application_id }}</b>
+            </span>
             <button
               type="button"
               class="btn bg-orange btn-flat btn-sm ml-auto"
@@ -61,7 +62,7 @@
     methods: {
       replyNotification() {
         if (this.notif_msg == null) {
-          swal("Empty notification", ``, "warning");
+          swal.fire("Empty notification", ``, "warning");
           return;
         }
         axios
@@ -72,22 +73,12 @@
           .then(rsp => {
             console.log(rsp);
             if (rsp.status == 201) {
-              swal(
+              swal.fire(
                 "Sent",
                 "Notitification sent to " + this.propsData.sender_name,
                 "success"
               );
               this.notif_msg = null;
-            }
-          })
-          .catch(err => {
-            console.log(err.response);
-            if (err.response) {
-              swal("Server Error", `${err.response.message}`, "error");
-            } else if (err.request) {
-              swal("Request Error", `${err.request}`, "error");
-            } else {
-              swal("Requset Error", `${err.message}`, "error");
             }
           });
       }

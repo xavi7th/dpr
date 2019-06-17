@@ -416,11 +416,15 @@ class staffController extends Controller
 	public function constructionStarted(Request $request)
 	{
 		// dd($request);
-		$expiryDate = Carbon::now()->addMonths(18);
+		// $expiryDate = Carbon::now()->addMonths(18);
 
+		/**
+		 * Refactor using MySQL add date function
+		 * DATE_ADD(date, INTERVAL value addunit)
+		 */
 		IssuedAtcLicense::where('application_id', request('application_id'))
 			->update([
-				'expiry_date' => $expiryDate
+				'expiry_date' => DB::raw('DATE_ADD(expiry_date, INTERVAL 18 MONTH)')
 			]);
 
 		Inbox::where('id', request('inbox_id'))->update([
