@@ -1,30 +1,45 @@
 <template lang="html">
-  <div>
-    <!-- <div class="form-group">
+    <div>
+        <!-- <div class="form-group">
       <label>Company ID</label>
       <div class="input-group">
         <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
         <input type="text" name="company_id" class="form-control" placeholder="Enter Company ID">
       </div>
     </div> -->
-    <div class="form-group">
-      <label>Name of Gas Plant</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
-        <input type="text" name="gas_plant_name" class="form-control" placeholder="Enter Name of Gas Plant">
-      </div>
-    </div>
-    <!-- <input type="text" name="application_type" value="LPG Retailer Outlets" hidden> -->
-    <div class="form-group">
-      <label>Application Type</label>
-      <select class="form-control select2" name="application_type" style="width: 100%;">
-        <option selected="selected">Select Type</option>
-        <option value="LPG Retailer Outlets">LPG Retailer Outlets</option>
-        <option value="CNG Retailer Outlets">CNG Retailer Outlets</option>
-      </select>
-    </div>
-    <input type="text" name="sub_category" value="ATC" hidden>
-    <!-- <div class="form-group">
+        <div class="form-group">
+            <label>Name of Gas Plant</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="ion-ios-list-outline"></i></span>
+                <input type="text" name="gas_plant_name" class="form-control" placeholder="Enter Name of Gas Plant">
+            </div>
+        </div>
+        <!-- <input type="text" name="application_type" value="LPG Retailer Outlets" hidden> -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Application Type</label>
+                    <select class="form-control select2" name="application_type" style="width: 100%;">
+                        <option selected="selected" :value="null">Select Type</option>
+                        <option value="LPG Retailer Outlets">LPG Retailer Outlets</option>
+                        <option value="CNG Retailer Outlets">CNG Retailer Outlets</option>
+                    </select>
+                </div>
+                <input type="text" name="sub_category" value="ATC" hidden>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Plant Type</label>
+                    <select class="form-control select2" name="plant_type" style="width: 100%;">
+                        <option selected="selected" :value="null">Select Type</option>
+                        <option value="Refilling Plant">Refilling Plant</option>
+                        <option value="Industrial Plant">Industrial Plant</option>
+                        <option value="Auto Gas Plant">Auto Gas Plant</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="form-group">
       <label>Sub-Category</label>
       <select class="form-control select2" name="sub_category" style="width: 100%;">
         <option selected="selected">Select Sub-Category</option>
@@ -40,57 +55,70 @@
         <option value="Pressure Testing">Pressure Testing</option>
       </select>
     </div> -->
-    <div class="form-group">
-      <label>Plant Type</label>
-      <select class="form-control select2" name="plant_type" style="width: 100%;">
-        <option selected="selected">Select Type</option>
-        <option value="Refilling Plant">Refilling Plant</option>
-        <option value="Industrial Plant">Industrial Plant</option>
-        <option value="Auto Gas Plant">Auto Gas Plant</option>
-      </select>
-    </div>
-    <!-- <div class="form-group" id="capacity_of_tank">
+
+        <!-- <div class="form-group" id="capacity_of_tank">
       <label>Capacity of Tank (MT)</label>
       <div class="input-group">
           <span class="input-group-addon"><i class="ion-beaker"></i></span>
           <input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
       </div>
     </div> -->
-    <div class="row">
-      <div class="col-xs-6">
-        <div class="form-group">
-          <label>State</label>
-          <select id="dropdown2" v-on:change="onChangeTwo()" v-model="state" class="form-control" name="state" style="width: 100%;">
-            <option selected="selected" :value="null">Select State</option>
-            <option v-for="item in states" :value="item.state">{{item.state}}</option>
-          </select>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>Draft Amount</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ion ion-android-cart"></i></span>
+                        <input type="text" name="bank_draft_amount" class="form-control" placeholder="Amount: ₦10,000">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>RRU Number</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ion ion-android-cart"></i></span>
+                        <input type="text" name="rru_number" class="form-control" placeholder="Enter RRU">
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-xs-6">
-        <div class="form-group">
-          <label>L.G.A</label>
-          <select id="dropdown3" class="form-control" name="lga" style="width: 100%;">
-            <option selected="selected" :value="null">Select LGA</option>
-            <option v-for="item in lga" :value="item">{{item}}</option>
-          </select>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>State</label>
+                    <select id="dropdown2" v-on:change="onChangeTwo()" v-model="state" class="form-control" name="state"
+                        style="width: 100%;">
+                        <option selected="selected" :value="null">Select State</option>
+                        <option v-for="item in states" :value="item.state">{{item.state}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>L.G.A</label>
+                    <select id="dropdown3" class="form-control" name="lga" style="width: 100%;">
+                        <option selected="selected" :value="null">Select LGA</option>
+                        <option v-for="item in lga" :value="item">{{item}}</option>
+                    </select>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="form-group">
+            <label>Town</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="ion ion-location"></i></span>
+                <input type="text" name="town" class="form-control" placeholder="Enter Town">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="ion ion-location"></i></span>
+                <input type="text" name="address" class="form-control" placeholder="Enter Address">
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-      <label>Town</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="ion ion-location"></i></span>
-        <input type="text" name="town" class="form-control" placeholder="Enter Town">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Address</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="ion ion-location"></i></span>
-        <input type="text" name="address" class="form-control" placeholder="Enter Address">
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>

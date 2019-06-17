@@ -23,22 +23,54 @@ Vue.use( VeeValidate );
 
 Vue.component( 'v-select', vSelect )
 
-Vue.component( 'addon-lto-inspection-upload-component', require( './components/AddonLTOInspectionDoc.vue' ) )
-Vue.component( 'app-doc-rev-upload-component', require( './components/SiteSuitablityInspectionReqDoc.vue' ) )
-Vue.component( 'app-doc-rev-component', require( './components/ApplicationDocumentReview.vue' ) )
-Vue.component( 'apply-for-addon-lto-component', require( './components/AddonLtoApplicationForm.vue' ) )
-Vue.component( 'apply-for-atc-component', require( './components/AtcApplicationForm.vue' ) )
-Vue.component( 'apply-for-ati-component', require( './components/AtiApplicationForm.vue' ) )
-Vue.component( 'apply-for-catd-lto-component', require( './components/CatDLtoApplicationForm.vue' ) )
-Vue.component( 'apply-for-hydro-test-component', require( './components/HydroTestApplicationForm.vue' ) )
-Vue.component( 'apply-for-lto-component', require( './components/LtoApplicationForm.vue' ) )
-Vue.component( 'apply-for-lto-renewal-component', require( './components/LtoRenewalApplicationForm.vue' ) )
-Vue.component( 'apply-for-pigging-component', require( './components/PiggingApplicationForm.vue' ) )
-Vue.component( 'apply-for-pressure-test-component', require( './components/PressureTestApplicationForm.vue' ) )
-Vue.component( 'apply-for-site-suitability-inspection-component', require( './components/SiteSuitablityInspectionApplicationForm.vue' ) )
-Vue.component( 'apply-for-takeover-component', require( './components/TakeoverApplicationForm.vue' ) )
-Vue.component( 'atc-inspection-upload-component', require( './components/ATCInspectionDoc.vue' ) )
-Vue.component( 'ati-inspection-upload-component', require( './components/ATIInspectionDoc.vue' ) )
+Vue.component( 'addon-lto-inspection-upload-component', resolve => {
+    require( [ './components/AddonLTOInspectionDoc.vue' ], resolve )
+} )
+Vue.component( 'app-doc-rev-upload-component', resolve => {
+    require( [ './components/SiteSuitablityInspectionReqDoc.vue' ], resolve )
+} )
+Vue.component( 'app-doc-rev-component', resolve => {
+    require( [ './components/ApplicationDocumentReview.vue' ], resolve )
+} )
+Vue.component( 'apply-for-addon-lto-component', resolve => {
+    require( [ './components/AddonLtoApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-atc-component', resolve => {
+    require( [ './components/AtcApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-ati-component', resolve => {
+    require( [ './components/AtiApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-catd-lto-component', resolve => {
+    require( [ './components/CatDLtoApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-hydro-test-component', resolve => {
+    require( [ './components/HydroTestApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-lto-component', resolve => {
+    require( [ './components/LtoApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-lto-renewal-component', resolve => {
+    require( [ './components/LtoRenewalApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-pigging-component', resolve => {
+    require( [ './components/PiggingApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-pressure-test-component', resolve => {
+    require( [ './components/PressureTestApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-site-suitability-inspection-component', resolve => {
+    require( [ './components/SiteSuitablityInspectionApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'apply-for-takeover-component', resolve => {
+    require( [ './components/TakeoverApplicationForm.vue' ], resolve )
+} )
+Vue.component( 'atc-inspection-upload-component', resolve => {
+    require( [ './components/ATCInspectionDoc.vue' ], resolve )
+} )
+Vue.component( 'ati-inspection-upload-component', resolve => {
+    require( [ './components/ATIInspectionDoc.vue' ], resolve )
+} )
 /**
  * Asynchronously load view (Webpack Lazy loading compatible)
  * @param  {string}   name     the filename (basename) of the view to load.

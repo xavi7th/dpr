@@ -250,6 +250,7 @@
         viewDashboard: false
       };
     },
+
     methods: {
       newApplication() {
         swal

@@ -790,16 +790,29 @@ class marketerController extends Controller
 
 	public function handleATCPhase1(Request $request)
 	{
-		// dd($request);
-		$this->validate(request(), [
-			'gas_plant_name' => 'required'
-		]);
+		// return $request->all();
+
+		if ($failedRes = customValidator([
+			'gas_plant_name' => 'required',
+			'company_id' => 'required|exists:companies,company_id',
+			'application_type' => 'required',
+			'plant_type' => 'required',
+			'state' => 'required',
+			'lga' => 'required',
+			'town' => 'required',
+			'address' => 'required',
+			'bank_draft_amount' => 'required',
+			'rru_number' => 'required',
+
+		])) {
+			return $failedRes;
+		}
 
 		// getting the current number of created applications
-		$applicationCount = DB::table('app_doc_reviews')->get();
+		$applicationCount = DB::table('app_doc_reviews')->count();
 
 		// adding 1 to that number
-		$indexIncremented = $applicationCount->count() + 1;
+		$indexIncremented = $applicationCount + 1;
 
 		// padding the number to 4 leading zeros
 		$newApplicationIndex = sprintf('%05d', $indexIncremented);
@@ -809,6 +822,7 @@ class marketerController extends Controller
 
 		// add the application ID to session
 		session(['application_id' => $applicationID]);
+		session(['rru_number' => request('rru_number')]);
 
 		// +++++ might need to do some custom verification here with decision statements
 		AppDocReview::create([
@@ -819,6 +833,8 @@ class marketerController extends Controller
 			'application_type' => request('application_type'),
 			'sub_category' => request('sub_category'),
 			'plant_type' => request('plant_type'),
+			'bank_draft_amount' => request('bank_draft_amount'),
+			'rru_number' => request('rru_number'),
 			'state' => request('state'),
 			'lga' => request('lga'),
 			'town' => request('town'),
@@ -1264,9 +1280,23 @@ class marketerController extends Controller
 	{
 		// dd($request->all());
 
-		$this->validate(request(), [
-			'gas_plant_name' => 'required'
-		]);
+		if ($failedRes = customValidator([
+			'gas_plant_name' => 'required',
+			'company_id' => 'required|exists:companies,company_id',
+			'application_type' => 'required',
+			'plant_type' => 'required',
+			'capacity_of_tank' => 'required',
+			'state' => 'required',
+			'lga' => 'required',
+			'town' => 'required',
+			'address' => 'required',
+			'bank_draft_amount' => 'required',
+			'rru_number' => 'required',
+
+		])) {
+			return $failedRes;
+		}
+
 
 		// getting the current number of created applications
 		$applicationCount = DB::table('app_doc_reviews')->count();
@@ -1294,6 +1324,8 @@ class marketerController extends Controller
 			'sub_category' => request('sub_category'),
 			'plant_type' => request('plant_type'),
 			'capacity_of_tank' => request('capacity_of_tank'),
+			'bank_draft_amount' => request('bank_draft_amount'),
+			'rru_number' => request('rru_number'),
 			'state' => request('state'),
 			'lga' => request('lga'),
 			'town' => request('town'),
