@@ -43,10 +43,10 @@
               <div class="box-body box-profile">
 
                 @if ($applicationReview->sub_category == "CAT-D LTO")
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
                 @else
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
                 @endif
                 <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
@@ -70,7 +70,7 @@
                     <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                   </li>
                   @endif
-                  
+
                   @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
                     <li class="list-group-item">
                       <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
@@ -111,7 +111,7 @@
                       <a href="/displayDocument?pic=/storage/comp_reports/{{ $reportDocument->company_id }}/{{ $reportDocument->staff_id }}/{{ $reportDocument->application_id }}/{{ $reportDocument->report_url }}" class="pull-right"><i class="fa fa-eye" style="font-size: 18px;"></i></a>
                     </li>
                   @endif
-                  
+
                   @if (optional($inboxItem)->to_outbox == 'false')
                     <form role="form" method="post" action="/open_assign_tree">
                       {{ csrf_field() }}
@@ -124,6 +124,12 @@
                     </form>
                     @if ($applicationReview->sub_category == 'ATC')
                       @if ($reportDocument)
+                        {{-- grant_access to issue ATC to both ADO and manager gas --}}
+                        <form id="grant_issue_access" role="form" action="/grant_issue_priviledge" method="post" style="display: flex; position: relative; left: 10px;">
+                          {{ csrf_field() }}
+                          <input type="checkbox" name="grant_access" value="true">
+                          <label for="grant_access" style="padding-left: 5px;">Grant Issue Priviledge to ADO and Manager Gas</label>
+                        </form>
                         <form role="form" method="post" action="/managergas_decides">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
@@ -285,7 +291,7 @@
           <div class="col-md-8">
             <div class="box box-primary">
               <div class="box-header">
-                
+
                 @if ($applicationReview->sub_category == 'Pressure Testing')
                     <h3 class="box-title"><b>Application Details</b></h3>
                 @else
@@ -342,10 +348,15 @@
 @section('pagescript')
   <!-- page script -->
   <script>
- $(function () {
+  $(function () {
     $('#example1').DataTable({
       'ordering'    : false,
     });
+
+    $("#grant_issue_access").on("change", "input:checkbox", function(){
+      $("#grant_issue_access").submit();
+    });
+
   })
   </script>
 @endsection

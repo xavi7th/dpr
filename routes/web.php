@@ -332,6 +332,9 @@ Route::post('/push_down_to_ADO', 'zopsconController@forwardApplicationToADO')->m
 Route::post('/zopscon_decides', 'zopsconController@zopsconApproves')->middleware(['auth', 'zopscon']);
 
 
+Route::post('/grant_issue_priviledge', 'zopsconController@grantIssuePriviledge')->middleware(['auth', 'zopscon']);
+
+
 
 //MANAGER GAS
 Route::get('/managergas', 'managergasController@index')->middleware(['auth', 'managergas']);

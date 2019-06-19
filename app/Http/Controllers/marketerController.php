@@ -580,9 +580,9 @@ class marketerController extends Controller
 	{
 		// dd($request);
 
-		$this->validate(request(), [
-			'gas_plant_name' => 'required|unique::gasplants'
-		]);
+		// $this->validate(request(), [
+		// 	'gas_plant_name' => 'required|unique::gasplants'
+		// ]);
 
 		// getting the current number of created applications
 		$applicationCount = DB::table('app_doc_reviews')->get();
@@ -790,6 +790,9 @@ class marketerController extends Controller
 
 	public function handleATCPhase1(Request $request)
 	{
+
+		// dd($request);
+
 		// return $request->all();
 
 		if ($failedRes = customValidator([

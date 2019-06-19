@@ -231,6 +231,10 @@ class zopsconController extends Controller
     //   // return redirect('/zopscon_job_timeline');
     // }
 
+    public function grantIssuePriviledge(Request $request){
+      dd($request);
+    }
+
     public function zopsconApproves(Request $request){
       // dd($request);
     $verdict = "";

@@ -43,10 +43,10 @@
               <div class="box-body box-profile">
 
                 @if ($applicationReview->sub_category == "CAT-D LTO")
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
                 @else
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
                 @endif
                 <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
@@ -70,7 +70,7 @@
                     <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                   </li>
                   @endif
-                  
+
                   @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
                     <li class="list-group-item">
                       <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
@@ -155,7 +155,7 @@
                     </form>
                     @if (optional($issuedAtcLicense)->implementation_schedule == null)
                       @if ($reportDocument)
-                        <form role="form" method="post" action="/managergas_decides">
+                        {{-- <form role="form" method="post" action="/managergas_decides">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                           <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
@@ -170,7 +170,7 @@
                             <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
                             <input type="submit" name="approve" value="Issue License" class="pull-right btn btn-success">
                           </div>
-                        </form>
+                        </form> --}}
                       @endif
                     @endif
                     @if ($applicationReview->sub_category == 'Site Suitability Inspection')
@@ -192,10 +192,10 @@
                       @endif
                     @endif
                   @endif
-                  
 
-                  
-                  
+
+
+
                   @if ($applicationStatus != null)
                     @if ($applicationReview->to_team_lead == "received" || $applicationReview->to_team_lead == "completed")
                       <li class="list-group-item">
@@ -363,7 +363,7 @@
                 <!-- /.box-body -->
               </div>
               @endif
-              
+
             @endif
 
           </div>  --}}
