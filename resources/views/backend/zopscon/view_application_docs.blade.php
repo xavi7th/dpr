@@ -125,12 +125,18 @@
                     @if ($applicationReview->sub_category == 'ATC')
                       @if ($reportDocument)
                         {{-- grant_access to issue ATC to both ADO and manager gas --}}
-                        <form id="grant_issue_access" role="form" action="/grant_issue_priviledge" method="post" style="display: flex; position: relative; left: 10px;">
-                          {{ csrf_field() }}
-                          <input type="checkbox" name="grant_access" value="true">
-                          <label for="grant_access" style="padding-left: 5px;">Grant Issue Priviledge to ADO and Manager Gas</label>
-                        </form>
-                        <form role="form" method="post" action="/managergas_decides">
+                        @if($AtcGrantAccess == null)
+                          <form id="grant_issue_access" role="form" action="/grant_issue_priviledge" method="post" style="display: flex; position: relative; left: 10px;">
+                            {{ csrf_field() }}
+                            <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                            <input type="checkbox" name="grant_access" value="true">
+                            <label for="grant_access" style="padding-left: 5px;">Grant Issue Priviledge to ADO and Manager Gas</label>
+                          </form>
+                        @else
+                          <b style="position: relative; left: 10px;"><i class="fa fa-check-circle text-green"></i> ATC Issue Priviledge granted to ADO and Manager Gas</b>
+                        @endif
+
+                        <form role="form" method="post" action="/zopscon_decides">
                           {{ csrf_field() }}
                           <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
                           <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">

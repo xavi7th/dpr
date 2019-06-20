@@ -35,6 +35,7 @@ use Carbon\Carbon;
 
 use Auth;
 use DB;
+use App\GrantAtcIssueAccess;
 
 class zopsconController extends Controller
 {
@@ -156,6 +157,8 @@ class zopsconController extends Controller
         $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "ATC") {
         $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+        $AtcGrantAccess = GrantAtcIssueAccess::where('application_id', $applicationReview->application_id)->first();
+        // dd($AtcGrantAccess);
       }elseif($applicationReview->sub_category == "LTO") {
         $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
       }elseif($applicationReview->sub_category == "Renewal") {
@@ -181,7 +184,7 @@ class zopsconController extends Controller
         $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
       }
       $role = Auth::user()->role;
-      return view('backend.zopscon.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments','inboxItem'));
+      return view('backend.zopscon.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments','inboxItem','AtcGrantAccess'));
 
     }
 
@@ -232,7 +235,13 @@ class zopsconController extends Controller
     // }
 
     public function grantIssuePriviledge(Request $request){
-      dd($request);
+      // dd($request);
+      GrantAtcIssueAccess::create([
+        'application_id' => request('application_id'),
+        'granted' => 'true',
+      ]);
+
+      return back();
     }
 
     public function zopsconApproves(Request $request){

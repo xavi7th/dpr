@@ -14,6 +14,7 @@ use App\SiteSuitabilityInspectionDocuments;
 use App\AddonAtiInspectionDocument;
 use App\AddonLtoInspectionDocument;
 use App\AtcInspectionDocuments;
+use App\GrantAtcIssueAccess;
 use App\CatdLtoInspectionDocument;
 use App\SiteSuitabilityReports;
 use App\LtoInspectionDocument;
@@ -142,6 +143,7 @@ class adoController extends Controller
       $applicationID = SiteSuitabilityInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "ATC") {
       $applicationID = AtcInspectionDocuments::where('application_id', $applicationReview->application_id)->first();
+      $AtcGrantAccess = GrantAtcIssueAccess::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "LTO") {
       $applicationID = LtoInspectionDocument::where('application_id', $applicationReview->application_id)->first();
     }elseif($applicationReview->sub_category == "Renewal") {
@@ -168,7 +170,7 @@ class adoController extends Controller
       $applicationID = CatdLtoInspectionDocument::with('catdLtoApplicationExtention')->where('application_id', $applicationReview->application_id)->first();
     }
     $role = Auth::user()->role;
-    return view('backend.ado.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments','inboxItem', 'thisApplicationRenewalDetails'));
+    return view('backend.ado.view_application_docs', compact('role', 'inboxID','applicationID','applicationReview','staffs','applicationStatus','reportDocument','applicationComments','inboxItem', 'thisApplicationRenewalDetails','AtcGrantAccess'));
 
   }
 

@@ -43,10 +43,10 @@
               <div class="box-body box-profile">
 
                 @if ($applicationReview->sub_category == "CAT-D LTO")
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->company->company_name }}</h3>
                 @else
-                  
+
                   <h3 class="profile-username text-center">{{ $applicationReview->name_of_gas_plant }}</h3>
                 @endif
                 <p class="text-muted text-center">{{ $applicationReview->application_id }}</p>
@@ -70,7 +70,7 @@
                     <b>Plant type</b> <a class="pull-right">{{ $applicationReview->plant_type }}</a>
                   </li>
                   @endif
-                  
+
                   @if ($applicationReview->sub_category == "LTO" || $applicationReview->sub_category == "Renewal" || $applicationReview->sub_category == "ADD-ON LTO")
                     <li class="list-group-item">
                       <b>Capacity of tank</b> <a class="pull-right">{{ $applicationReview->capacity_of_tank }}</a>
@@ -123,22 +123,25 @@
                     </form>
                     @if ($applicationReview->sub_category == 'ATC')
                       @if ($reportDocument)
-                        <form role="form" method="post" action="/managergas_decides">
-                          {{ csrf_field() }}
-                          <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
-                          <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
-                          <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
-                          <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
-                          <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
-                          <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
-                          <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
-                          <input type="text" hidden name="inboxID" value="{{ $inboxItem->id }}">
-                          <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
-                          <div class="box-footer">
-                            <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
-                            <input type="submit" name="approve" value="Issue License" class="pull-right btn btn-success">
-                          </div>
-                        </form>
+                        @if($AtcGrantAccess != null)
+                          <form role="form" method="post" action="/ado_decides">
+                            {{ csrf_field() }}
+                            <input type="text" hidden name="application_id" value="{{ $applicationReview->application_id }}">
+                            <input type="text" hidden name="sub_category" value="{{ $applicationReview->sub_category }}">
+                            <input type="text" hidden name="marketer_id" value="{{ $applicationReview->marketer_id }}">
+                            <input type="text" hidden name="company_id" value="{{ $reportDocument->company_id }}">
+                            <input type="text" hidden name="staff_id" value="{{ $reportDocument->staff_id }}">
+                            <input type="text" hidden name="report_url" value="{{ $reportDocument->report_url }}">
+                            <input type="text" hidden name="id" value="{{ $applicationReview->id }}">
+                            <input type="text" hidden name="inboxID" value="{{ $inboxItem->id }}">
+                            <input type="text" hidden name="application_type" value="{{ $applicationReview->application_type }}">
+                            <div class="box-footer">
+                              <input type="submit" style="margin-right: 2px;" name="decline" value="Decline" class="pull-left btn btn-danger">
+                              <input type="submit" name="approve" value="Issue License" class="pull-right btn btn-success">
+                            </div>
+                          </form>
+                        @endif
+
                       @endif
                     @endif
                     @if ($applicationReview->sub_category == 'LTO' && Auth::user()->office != 'HQ')
