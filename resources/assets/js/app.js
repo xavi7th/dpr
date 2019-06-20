@@ -22,7 +22,10 @@ Vue.use( VeeValidate );
  */
 
 Vue.component( 'v-select', vSelect )
-
+/**
+ * Asynchronously load view (Webpack Lazy loading compatible)
+ * @param  {string}   name     the filename (basename) of the view to load.
+ */
 Vue.component( 'addon-lto-inspection-upload-component', resolve => {
     require( [ './components/AddonLTOInspectionDoc.vue' ], resolve )
 } )
@@ -50,6 +53,9 @@ Vue.component( 'apply-for-hydro-test-component', resolve => {
 Vue.component( 'apply-for-lto-component', resolve => {
     require( [ './components/LtoApplicationForm.vue' ], resolve )
 } )
+Vue.component( 'fields-calculate-lto-price', resolve => {
+    require( [ './components/Utilities/FieldsCalculateLTOPrice.vue' ], resolve )
+} )
 Vue.component( 'apply-for-lto-renewal-component', resolve => {
     require( [ './components/LtoRenewalApplicationForm.vue' ], resolve )
 } )
@@ -71,36 +77,46 @@ Vue.component( 'atc-inspection-upload-component', resolve => {
 Vue.component( 'ati-inspection-upload-component', resolve => {
     require( [ './components/ATIInspectionDoc.vue' ], resolve )
 } )
-/**
- * Asynchronously load view (Webpack Lazy loading compatible)
- * @param  {string}   name     the filename (basename) of the view to load.
- */
 Vue.component( 'btn-back-to-marketer', resolve => {
     require( [ './components/Utilities/BtnBackToMarketer.vue' ], resolve )
 } )
-
 Vue.component( 'view-company-details', resolve => {
     require( [ '@partials-components/ViewCompanyDetails.vue' ], resolve )
 } )
 Vue.component( 'btn-resubmit-application', resolve => {
     require( [ './components/Utilities/BtnResubmitApplication.vue' ], resolve )
 } )
-Vue.component( 'catd-lto-inspection-upload-component', require( './components/CatDLTOInspectionDoc.vue' ) )
-Vue.component( 'document-upload-component', require( './components/documentUploads.vue' ) )
-Vue.component( 'lto-inspection-upload-component', require( './components/LTOInspectionDoc.vue' ) )
-Vue.component( 'm-view-application-docs', require( './components/mViewApplicationDocs.vue' ) )
-Vue.component( 'm-view-application-docs-lto-renewal', require( './components/mViewApplicationDocsLtoRenewal.vue' ) )
+
+Vue.component( 'catd-lto-inspection-upload-component', resolve => {
+    require( [ './components/CatDLTOInspectionDoc.vue' ], resolve )
+} )
+Vue.component( 'document-upload-component', resolve => {
+    require( [ './components/documentUploads.vue' ], resolve )
+} )
+Vue.component( 'lto-inspection-upload-component', resolve => {
+    require( [ './components/LTOInspectionDoc.vue' ], resolve )
+} )
+Vue.component( 'm-view-application-docs', resolve => {
+    require( [ './components/mViewApplicationDocs.vue' ], resolve )
+} )
+Vue.component( 'm-view-application-docs-lto-renewal', resolve => {
+    require( [ './components/mViewApplicationDocsLtoRenewal.vue' ], resolve )
+} )
 Vue.component( 'marketers-dashboard', resolve => {
     require( [ './components/Marketers/Dashboard.vue' ], resolve )
 } )
-Vue.component( 'project-monitoring-feed-req-doc', require( './components/ProjectMonitoringFeedReqDoc..vue' ) )
+Vue.component( 'project-monitoring-feed-req-doc', resolve => {
+    require( [ './components/ProjectMonitoringFeedReqDoc..vue' ], resolve )
+} )
 Vue.component( 'reports-controller', resolve => {
     require( [ '@reports-components/ReportsController.vue' ], resolve )
 } )
 Vue.component( 'state-component', resolve => {
     require( [ './components/StateComponent.vue' ], resolve )
 } )
-Vue.component( 'takeover-inspection-upload-component', require( './components/TakeoverInspectionDoc.vue' ) )
+Vue.component( 'takeover-inspection-upload-component', resolve => {
+    require( [ './components/TakeoverInspectionDoc.vue' ], resolve )
+} )
 Vue.component( 'user-notifications', resolve => {
     require( [ './components/UserNotifications.vue' ], resolve )
 } )

@@ -1,6 +1,8 @@
 {
     "/js/vue-app.js": "/js/vue-app.js",
     "/css/custom.css": "/css/custom.css",
+    "/js/vue-app.js.map": "/js/vue-app.js.map",
+    "/css/custom.css.map": "/css/custom.css.map",
     "/css/app.css": "/css/app.css",
     "/js/app.js": "/js/app.js"
 }
