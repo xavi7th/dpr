@@ -55,26 +55,9 @@
         <option value="Pressure Testing">Pressure Testing</option>
       </select>
     </div> -->
-    <div class="row">
-			<div class="col-md-6">
-				<div class="form-group" id="capacity_of_tank">
-					<label>Capacity of Tank (MT)</label>
-					<div class="input-group">
-							<span class="input-group-addon"><i class="ion-beaker"></i></span>
-							<input type="text" name="capacity_of_tank" class="form-control" placeholder="Enter Capacity of tank">
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group" id="amount">
-					<label>Bank Draft Amount</label>
-					<div class="input-group">
-							<span class="input-group-addon"><i class="ion-beaker"></i></span>
-							<input type="text" name="bank_draft_amount" class="form-control" placeholder="Amount:">
-					</div>
-				</div>
-			</div>
-		</div>
+
+		<fields-calculate-lto-price :submitDisabled.sync="submitDisabled"></fields-calculate-lto-price>
+
 		<div class="row">
 			<div class="col-md-12">
 				<div class="form-group" id="rru_number">
@@ -120,6 +103,11 @@
         <input type="text" name="address" class="form-control" placeholder="Enter Address">
       </div>
     </div>
+		<div class="box-footer">
+				<b><a style="float: left;">lat: 34.032233, lng: -118.256015</a></b>
+				<button type="submit" class="btn btn-primary" style="float: right;" :disabled="submitDisabled">Save &
+						Continue</button>
+		</div>
   </div>
 </template>
 
@@ -143,7 +131,8 @@
         state: null,
         application_type: "Select Application Type",
         sub_category: "Select Sub-Category",
-        typeValid: false
+        typeValid: false,
+        submitDisabled: true
       };
     },
     methods: {
