@@ -53,13 +53,15 @@ class marketerController extends Controller
 
 	public function marketerAppDocReview()
 	{
-		$appDocReviews = AppDocReview::with(['company', 'issued_lto_licenses'])->where('marketer_id', Auth::user()->staff_id)
+		$appDocReviews = AppDocReview::with(['company', 'issued_lto_licenses', 'issued_atc_licenses'])->where('marketer_id', Auth::user()->staff_id)
 			// ->where('application_status', 'Application Pending')
 			// ->orWhere('application_status', 'Not Submitted')
 			// ->orWhere('application_status', 'ATC Not Issued')
 			// ->orWhere('application_status', 'LTO Not Issued')
 			// $applicationComments = ApplicationComments::with('staff')->where('application_id', $applicationReview->application_id)->get();
 			->latest()->get();
+
+			// dd($appDocReviews);
 
 		// debug($appDocReviews->toArray());
 		return view('backend.marketer.marketer_app_doc_review', compact('appDocReviews'));

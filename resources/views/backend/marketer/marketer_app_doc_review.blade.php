@@ -79,7 +79,7 @@ DPR {{Auth::user()->role}} | Application Document Records
                                         <th>lga</th>
                                         <th>Status</th>
                                         <th>Application Date</th>
-                                        <th>Expiry Date</th>
+                                        {{--  <th>Expiry Date</th>  --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,33 +87,64 @@ DPR {{Auth::user()->role}} | Application Document Records
                                     <tr class="@if( $item->is_under_review() ) warning @endif">
                                         <td class="sorting_1">
                                             @if ($item->application_status == 'Application Pending')
-                                            <a class="label label-success"
-                                                style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                <a class="label label-primary"
+                                                    style="font-size: 14px;">{{ $item->application_id }}</a>
                                             @elseif( $item->is_under_review() )
-                                            <a href="/mDocument_review/{{ $item->id }}"
-                                                class="label label-danger bg-yellow-gradient"
-                                                style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                <a href="/mDocument_review/{{ $item->id }}"
+                                                    class="label label-danger bg-yellow-gradient"
+                                                    style="font-size: 14px;">{{ $item->application_id }}</a>
                                             @else
-                                            @if ($item->issued_lto_licenses)
-                                                @if($item->issued_lto_licenses['expiry_date'] == "")
-                                                <a href="/mDocument_review/{{ $item->id }}" class="label label-default"
-                                                    style="font-size: 14px;">{{ $item->application_id }}</a>
-                                                @elseif(now()->gte($item->issued_lto_licenses['expiry_date']))
-                                                <a href="/mDocument_review/{{ $item->id }}" class="label label-danger"
-                                                    style="font-size: 14px;">{{ $item->application_id }}</a>
-                                                @elseif(now()->addMonths(3)->gte($item->issued_lto_licenses['expiry_date']))
-                                                <a href="/mDocument_review/{{ $item->id }}" class="label label-warning"
-                                                    style="font-size: 14px;">{{ $item->application_id }}</a>
-                                                @elseif(now()->lte($item->issued_lto_licenses['expiry_date']))
+                                                @if ($item->issued_lto_licenses)
+                                                    @if($item->issued_lto_licenses['expiry_date'] == "")
+                                                    <a href="/mDocument_review/{{ $item->id }}" class="label label-default"
+                                                        style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->gte($item->issued_lto_licenses['expiry_date']))
+                                                    <a class="label label-danger"
+                                                        style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->addMonths(3)->gte($item->issued_lto_licenses['expiry_date']))
+                                                    <a href="/mDocument_review/{{ $item->id }}" class="label label-warning"
+                                                        style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->lte($item->issued_lto_licenses['expiry_date']))
+                                                    <a href="/mDocument_review/{{ $item->id }}" class="label label-success"
+                                                        style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @endif
+                                                @elseif($item->issued_atc_licenses)
+                                                    @if($item->issued_atc_licenses['expiry_date'] == "")
+                                                        <a href="/mDocument_review/{{ $item->id }}" class="label label-default"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->gte($item->issued_atc_licenses['expiry_date']))
+                                                        <a class="label label-danger"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->addMonths(3)->gte($item->issued_atc_licenses['expiry_date']))
+                                                        <a href="/mDocument_review/{{ $item->id }}" class="label label-warning"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->lte($item->issued_atc_licenses['expiry_date']))
+                                                        <a href="/mDocument_review/{{ $item->id }}" class="label label-success"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @endif
+                                                @else
+                                                    <a href="/mDocument_review/{{ $item->id }}" class="label label-default"
+                                                        style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                @endif
+
+                                                {{--  @if($item->issued_atc_licenses)
+                                                    @if($item->issued_atc_licenses['expiry_date'] == "")
+                                                        <a href="/mDocument_review/{{ $item->id }}" class="label label-default"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->gte($item->issued_atc_licenses['expiry_date']))
+                                                        <a href="/mDocument_review/{{ $item->id }}" class="label label-danger"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->addMonths(3)->gte($item->issued_atc_licenses['expiry_date']))
+                                                        <a href="/mDocument_review/{{ $item->id }}" class="label label-warning"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @elseif(now()->lte($item->issued_atc_licenses['expiry_date']))
+                                                        <a href="/mDocument_review/{{ $item->id }}" class="label label-success"
+                                                            style="font-size: 14px;">{{ $item->application_id }}</a>
+                                                    @endif
+                                                @else
                                                 <a href="/mDocument_review/{{ $item->id }}" class="label label-success"
                                                     style="font-size: 14px;">{{ $item->application_id }}</a>
-                                                @endif
-                                            @elseif
-                                            
-                                            @else
-                                            <a href="/mDocument_review/{{ $item->id }}" class="label label-success"
-                                                style="font-size: 14px;">{{ $item->application_id }}</a>
-                                            @endif
+                                                @endif  --}}
                                             @endif
                                         </td>
                                         <td>{{ $item->company['company_name'] }}</td>
@@ -190,11 +221,11 @@ DPR {{Auth::user()->role}} | Application Document Records
 
 @section('pagescript')
 <script>
-    $( function () {
-        $( '#example1' ).DataTable( {
+    $(function () {
+        $('#example1').DataTable({
             'ordering': false,
-        } );
-    } )
+        });
+    })
 
 </script>
 @endsection
