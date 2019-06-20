@@ -128,6 +128,49 @@
     //Initialize Select2 Elements
     $('.select2').select2()
   })
+
+  $( '#saveCont' ).click( evt => {
+        evt.preventDefault();
+        /**
+         * Call $.post() here instead so that we can check if the sumbit was successful before showing the next step prompt
+         */
+
+        $.post( '/old_atc_req_upload', $( "#saveContForm" ).serialize() ).done( rsp => {
+
+            swal
+                .fire( {
+                    title: "How would you like to proceed?",
+                    text: "Old data inputs",
+                    type: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "<i class='fa fa-thumbs-up'></i> Add LTO data",
+                    cancelButtonText: "Exit to main menu",
+                    // cancelButtonColor: "#d33",
+                    reverseButtons: false
+                } )
+                .then( result => {
+                    if ( result.value ) {
+                        location.assign( "/prev_lto_record_get" );
+                    } else if ( result.dismiss === swal.DismissReason.cancel ) {
+                        location.assign( "/previous_records" );
+                    }
+                } );
+
+
+        } ).fail( err => {
+            console.log( err );
+            swal.fire( 'Error', 'We couldn\'t make the request. Try Again',
+                'error' );
+        } )
+
+
+        /**
+         * Show next step prompt
+         */
+
+
+
+    } )
   </script>
 
 @endsection

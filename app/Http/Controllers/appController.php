@@ -895,6 +895,7 @@ class appController extends Controller
 
 	public function prevSSIRecordGet()
 	{
+		return back()->withAlert(['title' => 'OOPS', 'text' => 'Page still under development', 'type' => 'info']);
 		return view('backend.general.previous_ssi_records');
 	}
 
@@ -917,6 +918,7 @@ class appController extends Controller
 
 	public function prevTakeoverRecordGet()
 	{
+		return back()->withAlert(['title' => 'OOPS', 'text' => 'Page still under development', 'type' => 'info']);
 		$companies = Company::all();
 		return view('backend.general.previous_takeover_records', compact('companies'));
 	}
